@@ -1,0 +1,4 @@
+﻿.leaflet-container .leaflet-marker-pane img {
+	max-height: 50px !important;
+	max-width: 50px !important;
+}

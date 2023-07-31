@@ -1,0 +1,19 @@
+﻿@inherits WorldExplorerAuthBaseComponent
+
+@if (string.IsNullOrWhiteSpace(errorMessage))
+{
+	<div id="map-wrapper">
+		@if (isLoading)
+		{
+			<div id="loading-control">
+				<LoadingControl></LoadingControl>
+			</div>
+		}
+		<div id="map"></div>
+	</div>
+}
+else
+{
+	<MudText Typo="Typo.h1">Error</MudText>
+	<MudText>@errorMessage</MudText>
+}

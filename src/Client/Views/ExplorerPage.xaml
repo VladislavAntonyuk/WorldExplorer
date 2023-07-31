@@ -1,0 +1,25 @@
+﻿<framework:BaseContentPage
+	x:TypeArguments="viewModels:ExplorerViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	x:Class="Client.Views.ExplorerPage"
+	x:DataType="viewModels:ExplorerViewModel"
+	Shell.NavBarIsVisible="False">
+	<Map x:Name="Map"
+	     IsZoomEnabled="False"
+	     ItemsSource="{Binding Pins}"
+	     IsShowingUser="True">
+		<Map.ItemTemplate>
+			<DataTemplate x:DataType="{x:Type Pin}">
+				<Pin
+					Location="{Binding Location}"
+					Address="{Binding Address}"
+					Label="{Binding Label}"
+					Type="Place"
+					MarkerClicked="Pin_OnMarkerClicked" />
+			</DataTemplate>
+		</Map.ItemTemplate>
+	</Map>
+</framework:BaseContentPage>
