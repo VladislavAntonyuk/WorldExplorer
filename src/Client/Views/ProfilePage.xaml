@@ -1,0 +1,155 @@
+﻿<framework:BaseContentPage
+	x:TypeArguments="viewModels:ProfileViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+	xmlns:models="clr-namespace:Shared.Models;assembly=Shared"
+	xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
+	x:DataType="viewModels:ProfileViewModel"
+	x:Class="Client.Views.ProfilePage"
+	Shell.NavBarIsVisible="False">
+
+	<framework:BaseContentPage.Resources>
+		<Style x:Key="TitleStyle" TargetType="Label">
+			<Setter Property="FontAttributes" Value="Bold" />
+			<Setter Property="Margin" Value="0,30,0,10" />
+			<Setter Property="FontSize" Value="20" />
+		</Style>
+		<toolkit:BoolToObjectConverter x:Key="ExpanderArrowConverter">
+			<toolkit:BoolToObjectConverter.TrueObject>
+				<FontImageSource
+					FontFamily="FASolid"
+					Glyph="{x:Static fonts:FontAwesomeIcons.ChevronUp}"
+					Size="20" />
+			</toolkit:BoolToObjectConverter.TrueObject>
+			<toolkit:BoolToObjectConverter.FalseObject>
+				<FontImageSource
+					FontFamily="FASolid"
+					Glyph="{x:Static fonts:FontAwesomeIcons.ChevronDown}"
+					Size="20" />
+			</toolkit:BoolToObjectConverter.FalseObject>
+		</toolkit:BoolToObjectConverter>
+	</framework:BaseContentPage.Resources>
+
+	<ScrollView>
+		<VerticalStackLayout Margin="10">
+
+			<toolkit:AvatarView
+				Text="{Binding User.Name}"
+				HorizontalOptions="Center"
+				FontSize="20"
+				WidthRequest="100"
+				HeightRequest="100" />
+
+			<Label
+				Text="{Binding User.Name}"
+				HorizontalOptions="Center" />
+
+			<Button
+				SemanticProperties.Description="Logout"
+				Command="{Binding LogoutCommand}"
+				Text="{x:Static localization:Localization.Logout}" />
+
+			<Label
+				Text="Visited Places"
+				Style="{StaticResource TitleStyle}"
+				IsVisible="{Binding User.VisitedPlaces, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />
+
+			<CollectionView ItemsSource="{Binding User.VisitedPlaces}"
+			                HeightRequest="140"
+			                ItemSizingStrategy="MeasureAllItems"
+			                IsVisible="{Binding User.VisitedPlaces, Converter={StaticResource IsListNotNullOrEmptyConverter}}">
+				<CollectionView.ItemsLayout>
+					<LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
+				</CollectionView.ItemsLayout>
+				<CollectionView.ItemTemplate>
+					<DataTemplate x:DataType="models:Place">
+						<Border StrokeShape="RoundRectangle 20">
+							<Grid>
+								<Image Source="{Binding Images[0]}" HorizontalOptions="Center" Aspect="AspectFit" HeightRequest="140" />
+
+								<Label HorizontalOptions="Center" VerticalOptions="End" Text="{Binding Name}" />
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+
+			<Label
+				Text="Statistics"
+				Style="{StaticResource TitleStyle}"
+				IsVisible="{Binding User.Activities, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />
+
+			<chart:SfCartesianChart>
+
+				<chart:SfCartesianChart.XAxes>
+					<chart:DateTimeAxis IntervalType="Days"
+					                    EdgeLabelsVisibilityMode="AlwaysVisible"
+					                    EdgeLabelsDrawingMode="Center">
+						<chart:DateTimeAxis.Title>
+							<chart:ChartAxisTitle Text="Date" TextColor="Gray" />
+						</chart:DateTimeAxis.Title>
+						<chart:DateTimeAxis.LabelStyle>
+							<chart:ChartAxisLabelStyle TextColor="Gray" />
+						</chart:DateTimeAxis.LabelStyle>
+					</chart:DateTimeAxis>
+				</chart:SfCartesianChart.XAxes>
+
+				<chart:SfCartesianChart.YAxes>
+					<chart:NumericalAxis EdgeLabelsVisibilityMode="AlwaysVisible"
+					                     EdgeLabelsDrawingMode="Center">
+						<chart:DateTimeAxis.Title>
+							<chart:ChartAxisTitle Text="Steps" TextColor="Gray" />
+						</chart:DateTimeAxis.Title>
+						<chart:NumericalAxis.LabelStyle>
+							<chart:ChartAxisLabelStyle TextColor="Gray" />
+						</chart:NumericalAxis.LabelStyle>
+					</chart:NumericalAxis>
+				</chart:SfCartesianChart.YAxes>
+
+				<chart:ColumnSeries
+					ItemsSource="{Binding User.Activities}"
+					XBindingPath="Date"
+					YBindingPath="Steps"
+					EnableTooltip="True"
+					ShowDataLabels="True">
+					<chart:ColumnSeries.DataLabelSettings>
+						<chart:CartesianDataLabelSettings LabelPlacement="Inner" />
+					</chart:ColumnSeries.DataLabelSettings>
+				</chart:ColumnSeries>
+			</chart:SfCartesianChart>
+
+			<toolkit:Expander
+				x:Name="DangerZoneExpander"
+				IsExpanded="True"
+				Margin="0,30">
+				<toolkit:Expander.Header>
+					<Grid
+						ColumnDefinitions="0.9*,0.1*">
+						<Label
+							Text="Danger zone"
+							VerticalOptions="Center"
+							Style="{StaticResource TitleStyle}"
+							Margin="0, 10" />
+						<Image
+							Grid.Column="1"
+							VerticalOptions="Center"
+							HorizontalOptions="End"
+							Source="{Binding Source={x:Reference DangerZoneExpander}, Path=IsExpanded, Converter={StaticResource ExpanderArrowConverter}}" />
+					</Grid>
+				</toolkit:Expander.Header>
+				<toolkit:Expander.Content>
+					<Button
+						SemanticProperties.Description="Delete profile"
+						BackgroundColor="Red"
+						Command="{Binding DeleteCommand}"
+						Text="{x:Static localization:Localization.DeleteProfile}" />
+				</toolkit:Expander.Content>
+			</toolkit:Expander>
+		</VerticalStackLayout>
+	</ScrollView>
+</framework:BaseContentPage>

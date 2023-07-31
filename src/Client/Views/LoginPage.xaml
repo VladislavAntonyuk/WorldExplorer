@@ -1,0 +1,38 @@
+﻿<framework:BaseContentPage
+	x:TypeArguments="viewModels:LoginViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	x:DataType="viewModels:LoginViewModel"
+	x:Class="Client.Views.LoginPage"
+	Shell.NavBarIsVisible="False"
+	Shell.PresentationMode="ModalAnimated">
+
+	<VerticalStackLayout Spacing="{StaticResource DefaultItemSpacing}">
+		<Image Source="appicon.png"
+		       HorizontalOptions="Center"
+		       HeightRequest="200" />
+
+		<Label Text="{x:Static localization:Localization.Slogan}"
+		       HorizontalOptions="Center"
+		       FontSize="{StaticResource TitleViewLabelFontSize}"
+		       FontAttributes="Bold" />
+
+		<Button Command="{Binding LoginCommand}"
+		        Text="Login"
+		        IsVisible="{Binding LoginCommand.IsRunning, Converter={StaticResource InvertedBoolConverter}}"
+		        HorizontalOptions="Center"
+		        FontSize="{StaticResource TitleViewLabelFontSize}"
+		        CornerRadius="{StaticResource DefaultCornerRadius}" />
+
+		<Button Command="{Binding LoginCancelCommand}"
+		        IsVisible="{Binding LoginCommand.IsRunning}"
+		        Text="Cancel Login"
+		        HorizontalOptions="Center"
+		        FontSize="{StaticResource TitleViewLabelFontSize}"
+		        CornerRadius="{StaticResource DefaultCornerRadius}" />
+
+	</VerticalStackLayout>
+</framework:BaseContentPage>

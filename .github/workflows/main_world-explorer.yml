@@ -1,0 +1,139 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+ 
+jobs:
+  buildWebApp:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.x'
+          include-prerelease: true
+
+      - name: Build WebApp
+        run: dotnet build src/WebApp/WebApp.csproj -c Release
+
+      - name: Publish WebApp
+        run: dotnet publish src/WebApp/WebApp.csproj -c Release -o ${{env.DOTNET_ROOT}}/webapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: webapp
+          path: ${{env.DOTNET_ROOT}}/webapp
+          retention-days: 1
+
+  buildClient:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.x'
+          include-prerelease: true
+
+      - name: Install workloads
+        run: dotnet workload install maui
+
+      - name: Install Tizen
+        run: |
+          Invoke-WebRequest 'https://raw.githubusercontent.com/Samsung/Tizen.NET/main/workload/scripts/workload-install.ps1' -OutFile 'workload-install.ps1'
+          .\workload-install.ps1
+
+      - uses: cschleiden/replace-tokens@v1
+        env:
+          ANDROID_MAPS_KEY: ${{ secrets.ANDROID_MAPS_KEY }}
+          WINDOWS_MAPS_KEY: ${{ secrets.WINDOWS_MAPS_KEY }}
+          SYNCFUSION_KEY: ${{ secrets.SYNCFUSION_KEY }}
+        with:
+          tokenPrefix: '#{'
+          tokenSuffix: '}#'
+          files: '["**/appsettings.json", "**/AndroidManifest.xml"]'
+
+      - name: Build Client
+        run: |
+          dotnet build src/Client/Client.csproj -c Release -f net7.0-android -o output/android
+          dotnet build src/Client/Client.csproj -c Release -f net7.0-tizen -o output/tizen
+
+      - name: Build Client (Windows)
+        run: |
+          dotnet build src/Client/Client.csproj -c Release -f net7.0-windows10.0.19041.0
+          copy ".\src\Client\obj\Release\net7.0-windows10.0.19041.0\win10-x64\resizetizer\r\*.*" ".\src\Client\bin\Release\net7.0-windows10.0.19041.0\win10-x64\"
+          copy ".\src\Client\obj\Release\net7.0-windows10.0.19041.0\win10-x64\resizetizer\sp\*.*" ".\src\Client\bin\Release\net7.0-windows10.0.19041.0\win10-x64\"
+          &"${Env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\MakeAppx.exe" pack /v /h SHA256 /d "src\Client\bin\Release\net7.0-windows10.0.19041.0\win10-x64" /p "output\windows\WorldExplorer.msix";
+          
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: client
+          path: output
+          retention-days: 7
+
+  deployWebApp:
+    runs-on: windows-latest
+    needs: buildWebApp
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: webapp
+
+      - uses: cschleiden/replace-tokens@v1
+        env:
+          OPENAI_APIKEY: ${{ secrets.OPENAI_APIKEY }}
+          AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
+        with:
+          tokenPrefix: '#{'
+          tokenSuffix: '}#'
+          files: '["**/appsettings.json"]'
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'world-explorer'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_649309CDF7F74F7B9D0D75A9017C1111 }}
+          package: .
+
+  deployClient:
+    runs-on: windows-latest
+    needs: buildClient
+    environment:
+      name: 'Production'
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: client
+          path: "${{ github.workspace }}/client"
+      
+      # - name: Deploy Windows App to Microsoft Store
+      #   uses: isaacrlevin/windows-store-action
+      #   with:
+      #     tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+      #     client-id: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+      #     client-secret: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+      #     app-id: ${{ secrets.STORE_APP_ID }}
+      #     package-path: "${{ github.workspace }}/client/windows/WorldExplorer.msix"
