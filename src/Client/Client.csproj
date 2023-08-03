@@ -68,9 +68,9 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Identity.Client" Version="4.55.0" />
-		<PackageReference Include="Syncfusion.Maui.Charts" Version="22.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Inputs" Version="22.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.5" />
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="22.2.7" />
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="22.2.7" />
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.7" />
 		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
 	</ItemGroup>
 

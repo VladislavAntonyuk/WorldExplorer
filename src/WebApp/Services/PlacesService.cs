@@ -11,6 +11,7 @@ public interface IPlacesService
 {
 	Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken);
 	Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken);
+	Task ClearPlaces(CancellationToken cancellationToken);
 }
 
 public class PlacesService : IPlacesService
@@ -26,6 +27,12 @@ public class PlacesService : IPlacesService
 		this.dbContextFactory = dbContextFactory;
 		this.aiService = aiService;
 		this.imageSearchService = imageSearchService;
+	}
+
+	public async Task ClearPlaces(CancellationToken cancellationToken)
+	{
+		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		await dbContext.Places.ExecuteDeleteAsync(cancellationToken);
 	}
 
 	public async Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken)

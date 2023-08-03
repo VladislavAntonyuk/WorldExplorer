@@ -47,7 +47,7 @@
 							<TapGestureRecognizer Command="{Binding OpenUrlCommand}"
 												  CommandParameter="{Binding Place.Name}" />
 						</ContentView.GestureRecognizers>
-					<Label Text="Learn more..." TextDecorations="Underline"/>
+					<Label Text="Learn more" TextDecorations="Underline"/>
 				</ContentView>
 
 				<ContentView ControlTemplate="{StaticResource ActionButtonTemplate}">
@@ -70,7 +70,7 @@
 					<Label Text="Live View" TextDecorations="Underline" />
 				</ContentView>
 			</HorizontalStackLayout>
-			<CarouselView ItemsSource="{Binding Place.Images}"
+			<CarouselView ItemsSource="{Binding PlaceImages}"
 						  MaximumHeightRequest="300"
 			              PeekAreaInsets="40"
 			              Loop="false">

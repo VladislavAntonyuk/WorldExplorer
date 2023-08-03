@@ -1,5 +1,6 @@
 ﻿namespace Client.ViewModels;
 
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
@@ -18,16 +19,19 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	[ObservableProperty]
 	private Place? place;
 
+	public ObservableCollection<byte[]> PlaceImages { get; private set; } = new();
+
 	public PlaceDetailsViewModel(IPlacesApi placesApi,
 		ILauncher launcher,
 		IShare share,
-		INavigationService navigationService)
+		INavigationService navigationService,
+		IHttpClientFactory httpClientFactory)
 	{
 		this.placesApi = placesApi;
 		this.launcher = launcher;
 		this.share = share;
 		this.navigationService = navigationService;
-		httpClient = new HttpClient();
+		httpClient = httpClientFactory.CreateClient();
 	}
 
 	public void Dispose()
@@ -52,6 +56,12 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 		if (getDetailsResult.IsSuccessStatusCode)
 		{
 			Place = getDetailsResult.Content;
+			var imageTasks = Place.Images.Select(httpClient.GetByteArrayAsync);
+			var imagesBytes = await Task.WhenAll(imageTasks);
+			foreach (var image in imagesBytes)
+			{
+				PlaceImages.Add(image);
+			}
 		}
 	}
 
@@ -60,8 +70,6 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	{
 		if (Place is not null && Place.Images.Count > 0)
 		{
-			var imageTasks = Place.Images.Select(httpClient.GetByteArrayAsync);
-			var imagesBytes = await Task.WhenAll(imageTasks);
 #if IOS
 			UIKit.UIApplication.SharedApplication.KeyWindow?.RootViewController?.DismissViewController(true, async () =>
 			{
@@ -69,7 +77,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 			await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object?>
 			{
 				{
-					"images", imagesBytes.ToList()
+					"images", PlaceImages
 				}
 			});
 #if IOS

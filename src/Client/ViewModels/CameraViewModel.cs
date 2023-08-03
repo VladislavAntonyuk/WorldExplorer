@@ -9,21 +9,24 @@ using Services;
 public partial class CameraViewModel : BaseViewModel
 {
 	private readonly IDialogService dialogService;
+	private readonly IDeviceDisplay deviceDisplay;
 	private readonly IDispatcher dispatcher;
 	private readonly INavigationService navigationService;
 
 	[ObservableProperty]
 	private bool isCameraLoaded;
 
-	public CameraViewModel(INavigationService navigationService, IDispatcher dispatcher, IDialogService dialogService)
+	public CameraViewModel(INavigationService navigationService, IDispatcher dispatcher, IDialogService dialogService, IDeviceDisplay deviceDisplay)
 	{
 		this.navigationService = navigationService;
 		this.dispatcher = dispatcher;
 		this.dialogService = dialogService;
+		this.deviceDisplay = deviceDisplay;
 	}
 
 	public override async Task InitializeAsync()
 	{
+		deviceDisplay.KeepScreenOn = true;
 		var cameraPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
 		if (cameraPermissionStatus == PermissionStatus.Granted)
 		{
@@ -35,6 +38,7 @@ public partial class CameraViewModel : BaseViewModel
 
 	public override Task UnInitializeAsync()
 	{
+		deviceDisplay.KeepScreenOn = false;
 		CameraView.Current.CamerasLoaded -= CameraView_CamerasLoaded;
 		return base.UnInitializeAsync();
 	}

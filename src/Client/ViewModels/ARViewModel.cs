@@ -8,29 +8,34 @@ using Services;
 public partial class ArViewModel : BaseViewModel, IQueryAttributable
 {
 	private readonly INavigationService navigationService;
+	private readonly IDeviceDisplay deviceDisplay;
 
-	public ArViewModel(INavigationService navigationService)
+	public ArViewModel(INavigationService navigationService, IDeviceDisplay deviceDisplay)
 	{
 		this.navigationService = navigationService;
+		this.deviceDisplay = deviceDisplay;
 		Images = new();
 	}
 
-	public ObservableCollection<byte[]> Images { get; }
+	public override Task InitializeAsync()
+	{
+		deviceDisplay.KeepScreenOn = true;
+		return base.InitializeAsync();
+	}
+
+	public override Task UnInitializeAsync()
+	{
+		deviceDisplay.KeepScreenOn = false;
+		return base.UnInitializeAsync();
+	}
+
+	public ObservableCollection<byte[]> Images { get; private set; }
 
 	public void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
-		if (query.ContainsKey("images"))
+		if (query.TryGetValue("images", out var imagesObject) && imagesObject is ObservableCollection<byte[]> images)
 		{
-			var images = query["images"] as List<byte[]>;
-			if (images is null)
-			{
-				return;
-			}
-
-			foreach (var image in images)
-			{
-				Images.Add(image);
-			}
+			Images = images;
 		}
 	}
 
