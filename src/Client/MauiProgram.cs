@@ -64,6 +64,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IDialogService, DialogService>();
 		builder.Services.AddSingleton(Connectivity.Current);
 
+		builder.Services.AddScoped(_ => DeviceInfo.Current);
 		builder.Services.AddScoped(_ => DeviceDisplay.Current);
 		builder.Services.AddScoped(_ => Share.Default);
 		builder.Services.AddScoped(_ => Launcher.Default);

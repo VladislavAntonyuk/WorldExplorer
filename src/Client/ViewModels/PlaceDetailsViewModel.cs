@@ -14,22 +14,28 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	private readonly INavigationService navigationService;
 	private readonly IPlacesApi placesApi;
 	private readonly IShare share;
+	private readonly IDeviceInfo deviceInfo;
 	private Place? basePlace;
 
 	[ObservableProperty]
 	private Place? place;
+
+	[ObservableProperty]
+	private bool isLiveViewEnabled;
 
 	public ObservableCollection<byte[]> PlaceImages { get; private set; } = new();
 
 	public PlaceDetailsViewModel(IPlacesApi placesApi,
 		ILauncher launcher,
 		IShare share,
+		IDeviceInfo deviceInfo,
 		INavigationService navigationService,
 		IHttpClientFactory httpClientFactory)
 	{
 		this.placesApi = placesApi;
 		this.launcher = launcher;
 		this.share = share;
+		this.deviceInfo = deviceInfo;
 		this.navigationService = navigationService;
 		httpClient = httpClientFactory.CreateClient();
 	}
@@ -62,13 +68,18 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 			{
 				PlaceImages.Add(image);
 			}
+
+			if (PlaceImages.Count > 0 && (deviceInfo.Platform == DevicePlatform.Android || deviceInfo.Platform == DevicePlatform.iOS))
+			{
+				IsLiveViewEnabled = true;
+			}
 		}
 	}
 
 	[RelayCommand]
 	private async Task Ar()
 	{
-		if (Place is not null && Place.Images.Count > 0)
+		if (PlaceImages.Count > 0)
 		{
 #if IOS
 			UIKit.UIApplication.SharedApplication.KeyWindow?.RootViewController?.DismissViewController(true, async () =>

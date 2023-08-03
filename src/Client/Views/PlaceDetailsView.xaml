@@ -58,22 +58,21 @@
 					<Label Text="Share" TextDecorations="Underline"/>
 				</ContentView>
 
-				<ContentView ControlTemplate="{StaticResource ActionButtonTemplate}">
-					<ContentView.IsVisible>
-						<OnPlatform x:TypeArguments="system:Boolean" Default="False">
-							<On Platform="Android,iOS" Value="true" />
-						</OnPlatform>
-					</ContentView.IsVisible>
+				<ContentView
+					ControlTemplate="{StaticResource ActionButtonTemplate}"
+					IsVisible="{Binding IsLiveViewEnabled}">
 					<ContentView.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding ArCommand}" />
 					</ContentView.GestureRecognizers>
 					<Label Text="Live View" TextDecorations="Underline" />
 				</ContentView>
 			</HorizontalStackLayout>
-			<CarouselView ItemsSource="{Binding PlaceImages}"
-						  MaximumHeightRequest="300"
-			              PeekAreaInsets="40"
-			              Loop="false">
+			<CarouselView
+				ItemsSource="{Binding PlaceImages}"
+				IsVisible="{Binding PlaceImages, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
+				MaximumHeightRequest="300"
+				PeekAreaInsets="40"
+				Loop="false">
 				<CarouselView.ItemsLayout>
 					<LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
 				</CarouselView.ItemsLayout>
