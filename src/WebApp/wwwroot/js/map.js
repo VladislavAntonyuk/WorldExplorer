@@ -20,7 +20,7 @@ window.leafletInterop = {
 			(e) => {
 				if (userMarker) {
 					const location = userMarker.getLatLng();
-					if (location.lat === e.latlng.lat && location.lng === e.latlng.lng) {
+					if (isNearbyLocation(location.lat, e.latlng, 100)) {
 						return;
 					}
 
@@ -71,4 +71,17 @@ function createMarker(options) {
 	});
 	return L.marker([options.location.latitude, options.location.longitude], { icon: icon, title: options.title })
 		.addTo(map);
+}
+
+function isNearbyLocation(location1, location2, distance) {
+	const metersPerDegree = 111139; // Approximate for both latitude and longitude
+	const latLongDifferenceEquivalentToM = distance / metersPerDegree;
+
+	const latDifference = Math.abs(location1.lat - location2.lat);
+	const longDifference = Math.abs(location1.lng - location2.lng);
+
+	return (
+		latDifference <= latLongDifferenceEquivalentToM &&
+		longDifference <= latLongDifferenceEquivalentToM
+	);
 }

@@ -1,5 +1,6 @@
-﻿namespace WebApp.Services;
+namespace WebApp.Services;
 
+using System.Linq;
 using System.Linq.Expressions;
 using Infrastructure;
 using Infrastructure.Models;
@@ -7,11 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using Location = global::Shared.Models.Location;
 using Place = global::Shared.Models.Place;
 
+public static class DistanceConstants
+{
+	public const double MetersPerDegree = 111139; // Approximate for both latitude and longitude
+	public const double SettlementDistance = 20000;
+	public const double NearbyDistance = 2000;
+	public const double LocationDistance = 100;
+}
+
 public interface IPlacesService
 {
 	Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken);
 	Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken);
 	Task ClearPlaces(CancellationToken cancellationToken);
+	bool IsNearby(Location location1, Location location2, double distance);
 }
 
 public class PlacesService : IPlacesService
@@ -37,10 +47,10 @@ public class PlacesService : IPlacesService
 
 	public async Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
 	{
+		var result = new List<Place>();
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-		const double distance = 20000;
-		var inSettlementLocation = IsNearbyLocation(location, distance);
+		var inSettlementLocation = IsNearbyLocation(location, DistanceConstants.SettlementDistance);
 		var savedPlaces = await dbContext.Places.Where(inSettlementLocation).ToListAsync(cancellationToken);
 		if (savedPlaces.Count == 0)
 		{
@@ -55,18 +65,22 @@ public class PlacesService : IPlacesService
 
 				await dbContext.Places.AddRangeAsync(newPlaces.Select(ToPlace), cancellationToken);
 				await dbContext.SaveChangesAsync(cancellationToken);
-				return places;
+				result.AddRange(newPlaces);
 			}
 		}
+		else
+		{
+			result.AddRange(savedPlaces.Select(ToPlace));
+		}
 
-		return savedPlaces.Where(IsNearbyLocation(location).Compile()).Select(ToPlace).ToList();
+		return result.Where(place => IsNearby(location, place.Location, DistanceConstants.NearbyDistance)).ToList();
 	}
 
 	public async Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-		var nearbyCondition = IsNearbyLocation(location);
+		var nearbyCondition = IsNearbyLocation(location, DistanceConstants.NearbyDistance);
 		Expression<Func<Infrastructure.Models.Place, bool>> nameCondition = place => place.Name == name;
 
 		var nearbyAndNameCondition = Expression.Lambda<Func<Infrastructure.Models.Place, bool>>(
@@ -76,10 +90,18 @@ public class PlacesService : IPlacesService
 		return savedPlace is null ? null : ToPlace(savedPlace);
 	}
 
-	private Expression<Func<Infrastructure.Models.Place, bool>> IsNearbyLocation(Location location1, double distance = 200)
+	public bool IsNearby(Location location1, Location location2, double distance)
 	{
-		const double kilometersPerDegree = 111.1; // Approximate for both latitude and longitude
-		var latLongDifferenceEquivalentToM = distance / kilometersPerDegree;
+		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
+		return location1.Latitude - location2.Latitude >= -latLongDifferenceEquivalentToM &&
+						location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
+						location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
+						location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
+	}
+
+	private Expression<Func<Infrastructure.Models.Place, bool>> IsNearbyLocation(Location location1, double distance)
+	{
+		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
 		return place => location1.Latitude - place.Location.Latitude >= -latLongDifferenceEquivalentToM &&
 		                location1.Latitude - place.Location.Latitude <= latLongDifferenceEquivalentToM &&
 		                location1.Longitude - place.Location.Longitude >= -latLongDifferenceEquivalentToM &&
