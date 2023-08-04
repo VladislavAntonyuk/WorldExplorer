@@ -61,9 +61,10 @@ public static class MauiProgram
 #else
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 #endif
+		builder.Services.AddSingleton<IArService, ArService>();
 		builder.Services.AddSingleton<IDialogService, DialogService>();
-		builder.Services.AddSingleton(Connectivity.Current);
 
+		builder.Services.AddSingleton(Connectivity.Current);
 		builder.Services.AddScoped(_ => DeviceInfo.Current);
 		builder.Services.AddScoped(_ => DeviceDisplay.Current);
 		builder.Services.AddScoped(_ => Share.Default);

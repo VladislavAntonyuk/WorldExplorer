@@ -10,6 +10,7 @@ using Services;
 public partial class ExplorerViewModel : BaseViewModel
 {
 	private readonly IDialogService dialogService;
+	private readonly IDeviceDisplay deviceDisplay;
 	private readonly IGeolocator geoLocator;
 
 	private readonly IPlacesApi placesApi;
@@ -17,11 +18,12 @@ public partial class ExplorerViewModel : BaseViewModel
 	[ObservableProperty]
 	private Location? currentLocation;
 
-	public ExplorerViewModel(IPlacesApi placesApi, IGeolocator geoLocator, IDialogService dialogService)
+	public ExplorerViewModel(IPlacesApi placesApi, IGeolocator geoLocator, IDialogService dialogService, IDeviceDisplay deviceDisplay)
 	{
 		this.placesApi = placesApi;
 		this.geoLocator = geoLocator;
 		this.dialogService = dialogService;
+		this.deviceDisplay = deviceDisplay;
 	}
 
 	public ObservableCollection<Pin> Pins { get; } = new();
@@ -30,13 +32,21 @@ public partial class ExplorerViewModel : BaseViewModel
 
 	public override async Task InitializeAsync()
 	{
+		deviceDisplay.KeepScreenOn = true;
 		await base.InitializeAsync();
 		await StartTracking(CancellationToken.None);
+	}
+
+	public override Task UnInitializeAsync()
+	{
+		deviceDisplay.KeepScreenOn = false;
+		return base.UnInitializeAsync();
 	}
 
 	[RelayCommand(AllowConcurrentExecutions = false)]
 	private async Task StartTracking(CancellationToken cancellationToken)
 	{
+		await dialogService.ToastAsync("Looking for places near you. It may take some time.", cancellationToken);
 		var progress = new Progress<Location>(location =>
 		{
 			CurrentLocation = location;

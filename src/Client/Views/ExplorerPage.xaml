@@ -8,7 +8,6 @@
 	x:DataType="viewModels:ExplorerViewModel"
 	Shell.NavBarIsVisible="False">
 	<Map x:Name="Map"
-	     IsZoomEnabled="False"
 	     ItemsSource="{Binding Pins}"
 	     IsShowingUser="True">
 		<Map.ItemTemplate>
