@@ -18,6 +18,7 @@ public static class DistanceConstants
 
 public interface IPlacesService
 {
+	Task<List<Place>> GetPlaces(CancellationToken cancellationToken);
 	Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken);
 	Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken);
 	Task ClearPlaces(CancellationToken cancellationToken);
@@ -43,6 +44,13 @@ public class PlacesService : IPlacesService
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		await dbContext.Places.ExecuteDeleteAsync(cancellationToken);
+	}
+
+	public async Task<List<Place>> GetPlaces(CancellationToken cancellationToken)
+	{
+		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		var dbPlaces = await dbContext.Places.ToListAsync(cancellationToken);
+		return dbPlaces.Select(ToPlace).OrderBy(x => x.Name).ToList();
 	}
 
 	public async Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
