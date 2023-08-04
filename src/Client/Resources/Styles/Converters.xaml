@@ -7,4 +7,5 @@
 
 	<toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
 	<toolkit:IsListNotNullOrEmptyConverter x:Key="IsListNotNullOrEmptyConverter" />
+	<toolkit:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
 </ResourceDictionary>

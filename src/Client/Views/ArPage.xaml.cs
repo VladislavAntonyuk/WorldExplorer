@@ -9,4 +9,10 @@ public partial class ArPage : BaseContentPage<ArViewModel>
 	{
 		InitializeComponent();
 	}
+
+	protected override void OnDisappearing()
+	{
+		base.OnDisappearing();
+		arView.Handler?.DisconnectHandler();
+	}
 }

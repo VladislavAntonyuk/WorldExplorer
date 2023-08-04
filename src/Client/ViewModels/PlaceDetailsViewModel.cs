@@ -1,6 +1,5 @@
 ﻿namespace Client.ViewModels;
 
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
@@ -15,6 +14,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	private readonly IPlacesApi placesApi;
 	private readonly IShare share;
 	private readonly IArService arService;
+	private readonly IDialogService dialogService;
 	private Place? basePlace;
 
 	[ObservableProperty]
@@ -23,12 +23,14 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	[ObservableProperty]
 	private bool isLiveViewEnabled;
 
-	public ObservableCollection<byte[]> PlaceImages { get; } = new();
+	[ObservableProperty]
+	public byte[][] placeImages = Array.Empty<byte[]>();
 
 	public PlaceDetailsViewModel(IPlacesApi placesApi,
 		ILauncher launcher,
 		IShare share,
 		IArService arService,
+		IDialogService dialogService,
 		INavigationService navigationService,
 		IHttpClientFactory httpClientFactory)
 	{
@@ -37,6 +39,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 		this.launcher = launcher;
 		this.share = share;
 		this.arService = arService;
+		this.dialogService = dialogService;
 		this.navigationService = navigationService;
 		httpClient = httpClientFactory.CreateClient();
 	}
@@ -59,28 +62,26 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 			return;
 		}
 
+		PlaceImages = Array.Empty<byte[]>();
+		IsLiveViewEnabled = false;
+		await dialogService.ToastAsync("Loading places details...");
 		var getDetailsResult = await placesApi.GetDetails(basePlace.Name, basePlace.Location, CancellationToken.None);
 		if (getDetailsResult.IsSuccessStatusCode)
 		{
 			Place = getDetailsResult.Content;
-			var imageTasks = Place.Images.Select(httpClient.GetByteArrayAsync);
-			var imagesBytes = await Task.WhenAll(imageTasks);
-			foreach (var image in imagesBytes)
-			{
-				PlaceImages.Add(image);
-			}
+			LoadImages();
+		}
 
-			if (PlaceImages.Count > 0 && arService.IsSupported())
-			{
-				IsLiveViewEnabled = true;
-			}
+		if (Place == Place.Default)
+		{
+			await dialogService.ToastAsync("Unable to get place details");
 		}
 	}
 
 	[RelayCommand]
 	private async Task Ar()
 	{
-		if (PlaceImages.Count > 0)
+		if (PlaceImages.Length > 0)
 		{
 #if IOS
 			UIKit.UIApplication.SharedApplication.KeyWindow?.RootViewController?.DismissViewController(true, async () =>
@@ -114,5 +115,16 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 			Subject = placeName,
 			Text = "I'd like to share this place with you"
 		});
+	}
+
+	private async Task LoadImages()
+	{
+		var imageTasks = Place.Images.Take(70).Select(httpClient.GetByteArrayAsync);
+		PlaceImages = await Task.WhenAll(imageTasks);
+
+		if (PlaceImages.Length > 0 && arService.IsSupported())
+		{
+			IsLiveViewEnabled = true;
+		}
 	}
 }

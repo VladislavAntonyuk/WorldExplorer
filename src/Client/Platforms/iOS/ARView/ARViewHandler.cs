@@ -38,7 +38,7 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 		}
 
 		var radius = 1.25f; // 1.25m away from world origin
-		var sides = 14; // images per row
+		var sides = 10; // images per row
 		var rows = 7;
 		var centerNode = new SCNNode
 		{
@@ -47,40 +47,34 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 		handler.PlatformView.Scene.RootNode.AddChildNode(centerNode);
 
 		var imagePlaneNodes = new List<ImagePlaneNode>();
+
 		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-		                                     (ImageHeight * 3) + (VerticalMargin * 3), radius - 0.15f, sides));
+											 (ImageHeight * 3) + (VerticalMargin * 3), radius - 0.15f, sides));
 		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-		                                     (ImageHeight * 2) + (VerticalMargin * 2), radius - 0.075f, sides));
+											 (ImageHeight * 2) + (VerticalMargin * 2), radius - 0.075f, sides));
 		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-		                                     ImageHeight + VerticalMargin, radius, sides));
+											 ImageHeight + VerticalMargin, radius, sides));
 		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode, 0, radius, sides));
 		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-		                                     0 - ImageHeight - VerticalMargin, radius, sides));
+											 0 - ImageHeight - VerticalMargin, radius, sides));
 		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-		                                     0 - (ImageHeight * 2) - (VerticalMargin * 2), radius - 0.075f, sides));
+											 0 - (ImageHeight * 2) - (VerticalMargin * 2), radius - 0.075f, sides));
 		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-		                                     0 - (ImageHeight * 3) - (VerticalMargin * 3), radius - 0.15f, sides));
+											 0 - (ImageHeight * 3) - (VerticalMargin * 3), radius - 0.15f, sides));
 
-		var images = view.Images.Take(sides * rows);
 
-		var x = 0;
+		var images = view.Images.Take(imagePlaneNodes.Count).ToList();
 
-		foreach (var image in images)
+		for (int i = 0; i < images.Count; i++)
 		{
+			var image = images[i];
 			var uiImage = UIImage.LoadFromData(NSData.FromArray(image));
 			if (uiImage is null)
 			{
 				continue;
 			}
 
-			MainThread.BeginInvokeOnMainThread(() =>
-			{
-				if (x < sides * rows)
-				{
-					imagePlaneNodes[x].UpdateImage(uiImage);
-					x++;
-				}
-			});
+			imagePlaneNodes[i].UpdateImage(uiImage);
 		}
 	}
 
@@ -123,7 +117,7 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 	private static IEnumerable<ImagePlaneNode> AddBlankRow(SCNNode rootNode,
 		SCNNode centerNode,
 		float y,
-		float radius,
+		double radius,
 		int sides)
 	{
 		for (var i = 0; i < sides; i++)

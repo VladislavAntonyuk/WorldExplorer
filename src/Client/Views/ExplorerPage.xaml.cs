@@ -42,7 +42,10 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 		});
 
 		await placeDetailsViewModel.InitializeAsync();
-		var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
-		this.ShowBottomSheet(placeDetailsView, true);
+		if (placeDetailsViewModel.Place != Place.Default)
+		{
+			var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
+			this.ShowBottomSheet(placeDetailsView, true);
+		}
 	}
 }

@@ -9,9 +9,11 @@
                            x:Class="Client.Views.ArPage"
                            Shell.PresentationMode="ModalAnimated"
                            x:DataType="viewModels:ArViewModel">
-	<Grid RowDefinitions="Auto, *">
-		<Button Text="X" Command="{Binding CloseCommand}" />
-		<client:ArView Grid.Row="1"
-		               Images="{Binding Images}" />
+	<Grid>
+		<Button Text="X" Command="{Binding CloseCommand}" HorizontalOptions="End" VerticalOptions="Start" ZIndex="1" />
+		<client:ArView
+            x:Name="arView"
+            ZIndex="0"
+            Images="{Binding Images}" />
 	</Grid>
 </framework:BaseContentPage>

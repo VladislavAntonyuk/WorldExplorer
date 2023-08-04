@@ -68,7 +68,6 @@
 			</HorizontalStackLayout>
 			<CarouselView
 				ItemsSource="{Binding PlaceImages}"
-				IsVisible="{Binding PlaceImages, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
 				MaximumHeightRequest="300"
 				PeekAreaInsets="40"
 				Loop="false">
@@ -77,7 +76,7 @@
 				</CarouselView.ItemsLayout>
 				<CarouselView.ItemTemplate>
 					<DataTemplate>
-						<Image Source="{Binding}"
+						<Image Source="{Binding ., Converter={StaticResource ByteArrayToImageSourceConverter}}"
 						       WidthRequest="300"
 						       HeightRequest="300"
 						       Aspect="AspectFit" />

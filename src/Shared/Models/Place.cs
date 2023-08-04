@@ -1,6 +1,6 @@
 ﻿namespace Shared.Models;
 
-public class Place
+public record Place
 {
 	public required string Name { get; set; }
 	public string? Description { get; set; }

@@ -29,13 +29,17 @@ public partial class ArViewModel : BaseViewModel, IQueryAttributable
 		return base.UnInitializeAsync();
 	}
 
-	public ObservableCollection<byte[]> Images { get; private set; }
+	public ObservableCollection<byte[]> Images { get; }
 
 	public void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
-		if (query.TryGetValue("images", out var imagesObject) && imagesObject is ObservableCollection<byte[]> images)
+		if (query.TryGetValue("images", out var imagesObject) && imagesObject is byte[][] images)
 		{
-			Images = images;
+			Images.Clear();
+			foreach (var image in images)
+			{
+				Images.Add(image);
+			}
 		}
 	}
 
