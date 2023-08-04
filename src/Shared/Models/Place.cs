@@ -8,4 +8,5 @@ public class Place
 	public string? MainImage => Images.FirstOrDefault();
 	public List<string> Images { get; set; } = new();
 	public double Rating { get; set; }
+	public static readonly Place Default = new (){ Name = string.Empty, Location = Location.Default };
 }

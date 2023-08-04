@@ -14,28 +14,29 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	private readonly INavigationService navigationService;
 	private readonly IPlacesApi placesApi;
 	private readonly IShare share;
-	private readonly IDeviceInfo deviceInfo;
+	private readonly IArService arService;
 	private Place? basePlace;
 
 	[ObservableProperty]
-	private Place? place;
+	private Place place;
 
 	[ObservableProperty]
 	private bool isLiveViewEnabled;
 
-	public ObservableCollection<byte[]> PlaceImages { get; private set; } = new();
+	public ObservableCollection<byte[]> PlaceImages { get; } = new();
 
 	public PlaceDetailsViewModel(IPlacesApi placesApi,
 		ILauncher launcher,
 		IShare share,
-		IDeviceInfo deviceInfo,
+		IArService arService,
 		INavigationService navigationService,
 		IHttpClientFactory httpClientFactory)
 	{
+		Place = Place.Default;
 		this.placesApi = placesApi;
 		this.launcher = launcher;
 		this.share = share;
-		this.deviceInfo = deviceInfo;
+		this.arService = arService;
 		this.navigationService = navigationService;
 		httpClient = httpClientFactory.CreateClient();
 	}
@@ -69,7 +70,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 				PlaceImages.Add(image);
 			}
 
-			if (PlaceImages.Count > 0 && (deviceInfo.Platform == DevicePlatform.Android || deviceInfo.Platform == DevicePlatform.iOS))
+			if (PlaceImages.Count > 0 && arService.IsSupported())
 			{
 				IsLiveViewEnabled = true;
 			}

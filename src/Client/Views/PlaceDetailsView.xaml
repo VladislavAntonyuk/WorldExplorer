@@ -5,7 +5,6 @@
                            xmlns:viewModels="clr-namespace:Client.ViewModels"
                            xmlns:rating="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
                            xmlns:views="clr-namespace:Client.Views"
-                           xmlns:system="clr-namespace:System;assembly=mscorlib"
                            x:DataType="viewModels:PlaceDetailsViewModel"
                            x:Class="Client.Views.PlaceDetailsView">
 

@@ -39,8 +39,9 @@ public class PlacesService : IPlacesService
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-		var nearbyCondition = IsNearbyLocation(location);
-		var savedPlaces = await dbContext.Places.Where(nearbyCondition).ToListAsync(cancellationToken);
+		const double distance = 20000;
+		var inSettlementLocation = IsNearbyLocation(location, distance);
+		var savedPlaces = await dbContext.Places.Where(inSettlementLocation).ToListAsync(cancellationToken);
 		if (savedPlaces.Count == 0)
 		{
 			var places = await aiService.GetNearByPlaces(location);
@@ -58,7 +59,7 @@ public class PlacesService : IPlacesService
 			}
 		}
 
-		return savedPlaces.Select(ToPlace).ToList();
+		return savedPlaces.Where(IsNearbyLocation(location).Compile()).Select(ToPlace).ToList();
 	}
 
 	public async Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken)
@@ -75,10 +76,10 @@ public class PlacesService : IPlacesService
 		return savedPlace is null ? null : ToPlace(savedPlace);
 	}
 
-	private Expression<Func<Infrastructure.Models.Place, bool>> IsNearbyLocation(Location location1)
+	private Expression<Func<Infrastructure.Models.Place, bool>> IsNearbyLocation(Location location1, double distance = 200)
 	{
 		const double kilometersPerDegree = 111.1; // Approximate for both latitude and longitude
-		const double latLongDifferenceEquivalentToM = 200 / kilometersPerDegree;
+		var latLongDifferenceEquivalentToM = distance / kilometersPerDegree;
 		return place => location1.Latitude - place.Location.Latitude >= -latLongDifferenceEquivalentToM &&
 		                location1.Latitude - place.Location.Latitude <= latLongDifferenceEquivalentToM &&
 		                location1.Longitude - place.Location.Longitude >= -latLongDifferenceEquivalentToM &&
