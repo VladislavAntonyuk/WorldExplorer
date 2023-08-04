@@ -2,6 +2,7 @@
 
 using System.Text.Json;
 using global::Shared.Models;
+using Microsoft.Extensions.Options;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
@@ -14,11 +15,13 @@ public interface IAiService
 public class AiService : IAiService
 {
 	private readonly OpenAIAPI api;
+	private readonly OpenAiSettings openAiSettings;
 	private readonly ILogger<AiService> logger;
 
-	public AiService(IConfiguration configuration, ILogger<AiService> logger)
+	public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> logger)
 	{
-		api = new OpenAIAPI(configuration.GetValue<string>("OpenAI:ApiKey"));
+		this.openAiSettings = openAiSettings.Value;
+		api = new OpenAIAPI(this.openAiSettings.ApiKey);
 		this.logger = logger;
 	}
 
@@ -42,7 +45,7 @@ Example:
 		var result = await api.Chat.CreateChatCompletionAsync(new[]
 		{
 			new ChatMessage(ChatMessageRole.Assistant, generalPrompt)
-		}, Model.GPT4);
+		}, new Model(openAiSettings.Model));
 		if (result.Choices.Count == 0)
 		{
 			return new List<Place>();

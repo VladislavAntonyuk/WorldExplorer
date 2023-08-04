@@ -1,6 +1,6 @@
 ﻿namespace WebApp.Services;
 
-using System.Text.Encodings.Web;
+using System.Web;
 using Newtonsoft.Json.Linq;
 
 public interface IImageSearchService
@@ -24,9 +24,7 @@ public class ImageSearchService : IImageSearchService
 		try
 		{
 			using var httpClient = httpClientFactory.CreateClient("GoogleImages");
-			var result = await httpClient.GetStringAsync(
-				$"search.json?engine=google_images&q={UrlEncoder.Default.Encode(placeName)}&api_key=${apiKey}",
-				cancellationToken);
+			var result = await httpClient.GetStringAsync($"search.json?engine=google_images&q={HttpUtility.UrlEncode(placeName)}&api_key={apiKey}", cancellationToken);
 			var data = JObject.Parse(result);
 			var results = (JArray)data["images_results"];
 

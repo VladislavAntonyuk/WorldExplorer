@@ -8,7 +8,10 @@ public static class ApiExtensions
 	public static void AddApi<T>(this IServiceCollection services, string baseAddress) where T : class
 	{
 		services.AddRefitClient<T>()
-		        .ConfigureHttpClient(c => { c.BaseAddress = new Uri(baseAddress); })
+		        .ConfigureHttpClient(c => {
+					c.BaseAddress = new Uri(baseAddress);
+					c.Timeout = Timeout.InfiniteTimeSpan;
+				})
 		        .AddHttpMessageHandler<AuthHeaderHandler>();
 	}
 

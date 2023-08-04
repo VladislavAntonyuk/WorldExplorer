@@ -28,6 +28,7 @@ builder.Services.AddScoped(_ => new GraphServiceClient(new DefaultAzureCredentia
 builder.Services.AddScoped<IGraphClientService, GraphClientService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IPlacesService, PlacesService>();
+builder.Services.Configure<OpenAiSettings>(builder.Configuration.GetRequiredSection("OpenAI"));
 builder.Services.AddSingleton<IAiService, AiService>();
 builder.Services.AddLogging();
 builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt => opt.UseSqlite("Data Source=WorldExplorer.db")
