@@ -61,6 +61,24 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete profile.
+        /// </summary>
+        internal static string DeleteProfile {
+            get {
+                return ResourceManager.GetString("DeleteProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm?.
+        /// </summary>
+        internal static string DeleteProfileConfirmationText {
+            get {
+                return ResourceManager.GetString("DeleteProfileConfirmationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Explorer.
         /// </summary>
         internal static string Explorer {
@@ -79,11 +97,56 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading places details....
+        /// </summary>
+        internal static string LoadingPlaceDetails {
+            get {
+                return ResourceManager.GetString("LoadingPlaceDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logout.
         /// </summary>
         internal static string Logout {
             get {
                 return ResourceManager.GetString("Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looking for places near you. It may take some time..
+        /// </summary>
+        internal static string LookingForPlaces {
+            get {
+                return ResourceManager.GetString("LookingForPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No internet.
+        /// </summary>
+        internal static string NoInternet {
+            get {
+                return ResourceManager.GetString("NoInternet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No places found.
+        /// </summary>
+        internal static string NoPlacesFound {
+            get {
+                return ResourceManager.GetString("NoPlacesFound", resourceCulture);
             }
         }
         
@@ -97,20 +160,138 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Slogan.
+        ///   Looks up a localized string similar to Unleash the power of AI to explore and learn about places worldwide. Be it an ancient site or a modern city, World Explorer brings it to your smartphone..
+        /// </summary>
+        internal static string PromoText1 {
+            get {
+                return ResourceManager.GetString("PromoText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gets underlying information, history, culture, and interesting facts about any place before you even set foot there..
+        /// </summary>
+        internal static string PromoText2 {
+            get {
+                return ResourceManager.GetString("PromoText2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discover local cuisine, attractions, and hidden gems around your current location or your planned destination, making the exploration more exciting and convenient..
+        /// </summary>
+        internal static string PromoText3 {
+            get {
+                return ResourceManager.GetString("PromoText3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personalize your recommendations according to your interests, and get the best out of your travel experience with World Explorer..
+        /// </summary>
+        internal static string PromoText4 {
+            get {
+                return ResourceManager.GetString("PromoText4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Be part of a global community of explorers who share insights and experiences, adding depth to your understanding of various places..
+        /// </summary>
+        internal static string PromoText5 {
+            get {
+                return ResourceManager.GetString("PromoText5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AI-Powered Exploration.
+        /// </summary>
+        internal static string PromoTitle1 {
+            get {
+                return ResourceManager.GetString("PromoTitle1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comprehensive Place Descriptions.
+        /// </summary>
+        internal static string PromoTitle2 {
+            get {
+                return ResourceManager.GetString("PromoTitle2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nearby Recommendations.
+        /// </summary>
+        internal static string PromoTitle3 {
+            get {
+                return ResourceManager.GetString("PromoTitle3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personalized Experience.
+        /// </summary>
+        internal static string PromoTitle4 {
+            get {
+                return ResourceManager.GetString("PromoTitle4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Community Insights.
+        /// </summary>
+        internal static string PromoTitle5 {
+            get {
+                return ResourceManager.GetString("PromoTitle5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I&apos;d like to share this place with you.
+        /// </summary>
+        internal static string SharePlaceText {
+            get {
+                return ResourceManager.GetString("SharePlaceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to World Explorer: Exploring the world, one place at a time..
         /// </summary>
         internal static string Slogan {
             get {
                 return ResourceManager.GetString("Slogan", resourceCulture);
             }
         }
-
-		internal static string DeleteProfile
-		{
-			get
-			{
-				return ResourceManager.GetString("DeleteProfile", resourceCulture);
-			}
-		}
-	}
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to get place details.
+        /// </summary>
+        internal static string UnableToGetPlaceDetails {
+            get {
+                return ResourceManager.GetString("UnableToGetPlaceDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are near {0}.
+        /// </summary>
+        internal static string YouAreNear {
+            get {
+                return ResourceManager.GetString("YouAreNear", resourceCulture);
+            }
+        }
+    }
 }

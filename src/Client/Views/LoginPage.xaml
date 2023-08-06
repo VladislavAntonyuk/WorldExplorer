@@ -5,6 +5,7 @@
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:views="clr-namespace:Client.Views"
 	x:DataType="viewModels:LoginViewModel"
 	x:Class="Client.Views.LoginPage"
 	Shell.NavBarIsVisible="False"
@@ -17,8 +18,40 @@
 
 		<Label Text="{x:Static localization:Localization.Slogan}"
 		       HorizontalOptions="Center"
+			   HorizontalTextAlignment="Center"
 		       FontSize="{StaticResource TitleViewLabelFontSize}"
 		       FontAttributes="Bold" />
+
+		<CarouselView ItemsSource="{Binding Items}"
+		              IndicatorView="{x:Reference PromosIndicator}"
+		              Loop="True"
+					  IsSwipeEnabled="False"
+		              Margin="0,20,0,0"
+		              Position="{Binding Position}">
+			<CarouselView.ItemsLayout>
+				<LinearItemsLayout ItemSpacing="0" Orientation="Horizontal"/>
+			</CarouselView.ItemsLayout>
+			<CarouselView.ItemTemplate>
+				<DataTemplate>
+					<VerticalStackLayout x:DataType="views:CarouselModel">
+						<Label
+							Text="{Binding Title}"
+							FontSize="20"
+							HorizontalOptions="Center"
+							HorizontalTextAlignment="Center"/>
+						<Label
+							Margin="0, 20, 0, 0"
+							Text="{Binding Detail}"
+							HorizontalOptions="Center"
+							HorizontalTextAlignment="Center"/>
+					</VerticalStackLayout>
+				</DataTemplate>
+			</CarouselView.ItemTemplate>
+		</CarouselView>
+
+		<IndicatorView x:Name="PromosIndicator"
+		               HorizontalOptions="Center"
+		               Margin="0,0,0,20"/>
 
 		<Button Command="{Binding LoginCommand}"
 		        Text="Login"

@@ -14,7 +14,7 @@ public class LoadingViewModel : BaseViewModel
 
 	public override async Task InitializeAsync()
 	{
-		await Task.Delay(2000);
+		await Task.Delay(100);
 		await navigation.NavigateAsync<LoginViewModel, ErrorViewModel>();
 	}
 }

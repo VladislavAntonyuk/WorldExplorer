@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
 using Microsoft.Maui.Controls.Maps;
+using Resources.Localization;
 using Services;
 
 public partial class ExplorerViewModel : BaseViewModel
@@ -46,7 +47,7 @@ public partial class ExplorerViewModel : BaseViewModel
 	[RelayCommand(AllowConcurrentExecutions = false)]
 	private async Task StartTracking(CancellationToken cancellationToken)
 	{
-		await dialogService.ToastAsync("Looking for places near you. It may take some time.", cancellationToken);
+		await dialogService.ToastAsync(Localization.LookingForPlaces, cancellationToken);
 		var progress = new Progress<Location>(location =>
 		{
 			CurrentLocation = location;
@@ -76,7 +77,7 @@ public partial class ExplorerViewModel : BaseViewModel
 
 		if (placesResponse.Content.Count == 0)
 		{
-			await dialogService.ToastAsync("No places found");
+			await dialogService.ToastAsync(Localization.NoPlacesFound);
 			return;
 		}
 
@@ -110,7 +111,7 @@ public partial class ExplorerViewModel : BaseViewModel
 
 		if (closestPlace is not null)
 		{
-			await dialogService.ToastAsync($"You are near {closestPlace.Label}", CancellationToken.None);
+			await dialogService.ToastAsync(string.Format(Localization.YouAreNear, closestPlace.Label), CancellationToken.None);
 		}
 	}
 }

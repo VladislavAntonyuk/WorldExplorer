@@ -23,7 +23,7 @@ public partial class ProfileViewModel : BaseViewModel
 		IDialogService dialogService,
 		IUsersApi usersApi)
 	{
-		Title = "Profile";
+		Title = Localization.Profile;
 		this.authService = authService;
 		this.navigationService = navigationService;
 		this.dialogService = dialogService;
@@ -34,8 +34,7 @@ public partial class ProfileViewModel : BaseViewModel
 	private async Task Delete(CancellationToken cancellationToken)
 	{
 		var confirmationResult =
-			await dialogService.ConfirmAsync("Delete account", "Confirm?", Localization.DeleteProfile,
-			                                 Localization.Logout);
+			await dialogService.ConfirmAsync(Localization.DeleteProfile, Localization.DeleteProfileConfirmationText, Localization.Yes, Localization.No);
 		if (!confirmationResult)
 		{
 			return;

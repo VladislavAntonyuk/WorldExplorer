@@ -1,3 +1,3 @@
 ﻿namespace Client.Views;
 
-public record CarouselModel(string Icon, string Title, string Detail);
+public record CarouselModel(string Title, string Detail);

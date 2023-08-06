@@ -9,6 +9,7 @@
                            Shell.NavBarIsVisible="False"
                            Shell.PresentationMode="ModalAnimated"
                            x:DataType="viewModels:ErrorViewModel">
+	<!--todo lottie-->
 	<Label Text="{Binding ErrorMessage}"
 	       VerticalOptions="Center"
 	       HorizontalOptions="Center" />

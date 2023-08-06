@@ -77,15 +77,12 @@ public partial class CameraViewModel : BaseViewModel
 	private async Task SaveImage(Stream stream)
 	{
 		var savePermissionStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
-		if (savePermissionStatus != PermissionStatus.Granted)
+		if (savePermissionStatus == PermissionStatus.Granted)
 		{
-			return;
+			await stream.SaveAsImage(async error =>
+			{
+				await dialogService.ToastAsync(error);
+			});
 		}
-#if ANDROID || IOS
-		await stream.SaveAsImage(async error =>
-		{
-			await dialogService.ToastAsync(error);
-		});
-#endif
 	}
 }

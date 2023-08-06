@@ -130,9 +130,69 @@
     <value>Profile</value>
   </data>
   <data name="Slogan" xml:space="preserve">
-    <value>Slogan</value>
+    <value>World Explorer: Exploring the world, one place at a time.</value>
   </data>
   <data name="DeleteProfile" xml:space="preserve">
     <value>Delete profile</value>
+  </data>
+  <data name="PromoText1" xml:space="preserve">
+    <value>Unleash the power of AI to explore and learn about places worldwide. Be it an ancient site or a modern city, World Explorer brings it to your smartphone.</value>
+  </data>
+  <data name="PromoText2" xml:space="preserve">
+    <value>Gets underlying information, history, culture, and interesting facts about any place before you even set foot there.</value>
+  </data>
+  <data name="PromoText3" xml:space="preserve">
+    <value>Discover local cuisine, attractions, and hidden gems around your current location or your planned destination, making the exploration more exciting and convenient.</value>
+  </data>
+  <data name="PromoText4" xml:space="preserve">
+    <value>Personalize your recommendations according to your interests, and get the best out of your travel experience with World Explorer.</value>
+  </data>
+  <data name="PromoText5" xml:space="preserve">
+    <value>Be part of a global community of explorers who share insights and experiences, adding depth to your understanding of various places.</value>
+  </data>
+  <data name="PromoTitle1" xml:space="preserve">
+    <value>AI-Powered Exploration</value>
+  </data>
+  <data name="PromoTitle2" xml:space="preserve">
+    <value>Comprehensive Place Descriptions</value>
+  </data>
+  <data name="PromoTitle3" xml:space="preserve">
+    <value>Nearby Recommendations</value>
+  </data>
+  <data name="PromoTitle4" xml:space="preserve">
+    <value>Personalized Experience</value>
+  </data>
+  <data name="PromoTitle5" xml:space="preserve">
+    <value>Community Insights</value>
+  </data>
+  <data name="DeleteProfileConfirmationText" xml:space="preserve">
+    <value>Confirm?</value>
+  </data>
+  <data name="LookingForPlaces" xml:space="preserve">
+    <value>Looking for places near you. It may take some time.</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoInternet" xml:space="preserve">
+    <value>No internet</value>
+  </data>
+  <data name="NoPlacesFound" xml:space="preserve">
+    <value>No places found</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="YouAreNear" xml:space="preserve">
+    <value>You are near {0}</value>
+  </data>
+  <data name="LoadingPlaceDetails" xml:space="preserve">
+    <value>Loading places details...</value>
+  </data>
+  <data name="SharePlaceText" xml:space="preserve">
+    <value>I'd like to share this place with you</value>
+  </data>
+  <data name="UnableToGetPlaceDetails" xml:space="preserve">
+    <value>Unable to get place details</value>
   </data>
 </root>

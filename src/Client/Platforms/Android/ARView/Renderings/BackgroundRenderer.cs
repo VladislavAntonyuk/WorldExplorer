@@ -133,7 +133,7 @@ public class BackgroundRenderer
 		// coordinates for the screen rect, as they may have changed as well.
 		if (frame.HasDisplayGeometryChanged)
 		{
-			frame.TransformDisplayUvCoords(mQuadTexCoord, mQuadTexCoordTransformed);
+			frame.TransformCoordinates2d(Coordinates2d.ViewNormalized, mQuadTexCoord, Coordinates2d.TextureNormalized, mQuadTexCoordTransformed);
 		}
 
 		// No need to test or write depth, the screen quad has arbitrary depth, and is expected

@@ -2,7 +2,9 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Extensions;
 using Framework;
+using Resources.Localization;
 using Services;
 using Shared.Models;
 
@@ -24,7 +26,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	private bool isLiveViewEnabled;
 
 	[ObservableProperty]
-	public byte[][] placeImages = Array.Empty<byte[]>();
+	private byte[][] placeImages = Array.Empty<byte[]>();
 
 	public PlaceDetailsViewModel(IPlacesApi placesApi,
 		ILauncher launcher,
@@ -64,17 +66,17 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 
 		PlaceImages = Array.Empty<byte[]>();
 		IsLiveViewEnabled = false;
-		await dialogService.ToastAsync("Loading places details...");
+		await dialogService.ToastAsync(Localization.LoadingPlaceDetails);
 		var getDetailsResult = await placesApi.GetDetails(basePlace.Name, basePlace.Location, CancellationToken.None);
 		if (getDetailsResult.IsSuccessStatusCode)
 		{
 			Place = getDetailsResult.Content;
-			LoadImages();
+			LoadImages().AndForget(true);
 		}
 
 		if (Place == Place.Default)
 		{
-			await dialogService.ToastAsync("Unable to get place details");
+			await dialogService.ToastAsync(Localization.UnableToGetPlaceDetails);
 		}
 	}
 
@@ -83,19 +85,12 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	{
 		if (PlaceImages.Length > 0)
 		{
-#if IOS
-			UIKit.UIApplication.SharedApplication.KeyWindow?.RootViewController?.DismissViewController(true, async () =>
-			{
-#endif
 			await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object?>
 			{
 				{
 					"images", PlaceImages
 				}
 			});
-#if IOS
-			});
-#endif
 		}
 	}
 
@@ -108,12 +103,10 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	[RelayCommand]
 	private Task SharePlace(string placeName)
 	{
-		return share.RequestAsync(new ShareTextRequest
+		return share.RequestAsync(new ShareTextRequest(Localization.SharePlaceText, placeName)
 		{
 			Uri = $"https://google.com/search?q={placeName}",
-			Title = placeName,
-			Subject = placeName,
-			Text = "I'd like to share this place with you"
+			Subject = placeName
 		});
 	}
 

@@ -45,7 +45,8 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 		if (placeDetailsViewModel.Place != Place.Default)
 		{
 			var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
-			this.ShowBottomSheet(placeDetailsView, true);
+			var bottomSheet = this.ShowBottomSheet(placeDetailsView, true);
+			placeDetailsView.BottomSheet = bottomSheet;
 		}
 	}
 }

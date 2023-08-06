@@ -87,7 +87,7 @@ public class ArViewHandler : ViewHandler<IArView, GLSurfaceView>
 
 	protected override void DisconnectHandler(GLSurfaceView platformView)
 	{
-		PlatformView.OnPause();
+		platformView.OnPause();
 		session?.Pause();
 		session?.Close();
 		base.DisconnectHandler(platformView);
@@ -281,7 +281,10 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 		}
 		catch (IOException)
 		{
-			Toast.MakeText(context, "Failed to read obj file", ToastLength.Long).Show();
+			MainThread.BeginInvokeOnMainThread(() =>
+			{
+				Toast.MakeText(context, "Failed to read obj file", ToastLength.Long).Show();
+			});
 			Log.Error("TAG", "Failed to read obj file");
 		}
 

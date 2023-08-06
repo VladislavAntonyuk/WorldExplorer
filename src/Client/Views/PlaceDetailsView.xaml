@@ -61,7 +61,7 @@
 					ControlTemplate="{StaticResource ActionButtonTemplate}"
 					IsVisible="{Binding IsLiveViewEnabled}">
 					<ContentView.GestureRecognizers>
-						<TapGestureRecognizer Command="{Binding ArCommand}" />
+						<TapGestureRecognizer Tapped="OpenArTapped" />
 					</ContentView.GestureRecognizers>
 					<Label Text="Live View" TextDecorations="Underline" />
 				</ContentView>

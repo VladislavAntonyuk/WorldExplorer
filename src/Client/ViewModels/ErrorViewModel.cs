@@ -3,6 +3,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Enums;
 using Framework;
+using Resources.Localization;
 
 public partial class ErrorViewModel : BaseViewModel, IQueryAttributable
 {
@@ -13,7 +14,7 @@ public partial class ErrorViewModel : BaseViewModel, IQueryAttributable
 
 	public ErrorViewModel()
 	{
-		errors.Add(ErrorCode.NoInternet, "No internet");
+		errors.Add(ErrorCode.NoInternet, Localization.NoInternet);
 	}
 
 	public void ApplyQueryAttributes(IDictionary<string, object> query)
