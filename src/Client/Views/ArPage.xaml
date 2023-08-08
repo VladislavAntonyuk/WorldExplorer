@@ -1,19 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<framework:BaseContentPage x:TypeArguments="viewModels:ArViewModel"
-                           xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                           xmlns:framework="clr-namespace:Client.Framework"
-                           xmlns:viewModels="clr-namespace:Client.ViewModels"
-                           xmlns:client="clr-namespace:Client"
-                           x:Class="Client.Views.ArPage"
-                           Shell.PresentationMode="ModalAnimated"
-                           x:DataType="viewModels:ArViewModel">
+<framework:BaseContentPage
+	x:TypeArguments="viewModels:ArViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:client="clr-namespace:Client"
+	x:Class="Client.Views.ArPage"
+	Shell.PresentationMode="ModalAnimated"
+	x:DataType="viewModels:ArViewModel">
+
 	<Grid>
-		<Button Text="X" Command="{Binding CloseCommand}" HorizontalOptions="End" VerticalOptions="Start" ZIndex="1" />
+		<Button
+			Text="X"
+			Command="{Binding CloseCommand}"
+			HorizontalOptions="End"
+			VerticalOptions="Start"
+			ZIndex="1" />
+
 		<client:ArView
-            x:Name="arView"
-            ZIndex="0"
-            Images="{Binding Images}" />
+			x:Name="ArView"
+			ZIndex="0"
+			Images="{Binding Images}" />
 	</Grid>
 </framework:BaseContentPage>

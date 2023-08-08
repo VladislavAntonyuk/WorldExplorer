@@ -2,11 +2,6 @@
 
 using Microsoft.Graph.Beta;
 
-public interface IGraphClientService
-{
-	Task DeleteUser(string providerId, CancellationToken cancellationToken);
-}
-
 public class GraphClientService : IGraphClientService
 {
 	private readonly GraphServiceClient graphClient;

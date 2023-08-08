@@ -1,4 +1,4 @@
-namespace Client.Views;
+﻿namespace Client.Views;
 
 using Framework;
 using ViewModels;
@@ -13,6 +13,6 @@ public partial class ArPage : BaseContentPage<ArViewModel>
 	protected override void OnDisappearing()
 	{
 		base.OnDisappearing();
-		arView.Handler?.DisconnectHandler();
+		ArView.Handler?.DisconnectHandler();
 	}
 }

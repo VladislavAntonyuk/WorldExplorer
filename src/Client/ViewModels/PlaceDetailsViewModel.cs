@@ -10,20 +10,20 @@ using Shared.Models;
 
 public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttributable, IDisposable
 {
+	private readonly IArService arService;
+	private readonly IDialogService dialogService;
 	private readonly HttpClient httpClient;
 	private readonly ILauncher launcher;
 	private readonly INavigationService navigationService;
 	private readonly IPlacesApi placesApi;
 	private readonly IShare share;
-	private readonly IArService arService;
-	private readonly IDialogService dialogService;
 	private Place? basePlace;
 
 	[ObservableProperty]
-	private Place place;
+	private bool isLiveViewEnabled;
 
 	[ObservableProperty]
-	private bool isLiveViewEnabled;
+	private Place place;
 
 	[ObservableProperty]
 	private byte[][] placeImages = Array.Empty<byte[]>();

@@ -4,31 +4,38 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
+using Models;
+using Resources.Localization;
 using Services;
 using Services.Auth;
-using Views;
 
 public partial class LoginViewModel : BaseViewModel
 {
 	private readonly IAuthService authService;
 	private readonly IDialogService dialogService;
 	private readonly INavigationService navigation;
+
+	[ObservableProperty]
+	private int position;
+
 	private Timer? timer;
 
 	public LoginViewModel(INavigationService navigation, IAuthService authService, IDialogService dialogService)
 	{
 		Items = new ObservableCollection<CarouselModel>
 		{
-			new(Resources.Localization.Localization.PromoTitle1, Resources.Localization.Localization.PromoText1),
-			new(Resources.Localization.Localization.PromoTitle2, Resources.Localization.Localization.PromoText2),
-			new(Resources.Localization.Localization.PromoTitle3, Resources.Localization.Localization.PromoText3),
-			new(Resources.Localization.Localization.PromoTitle4, Resources.Localization.Localization.PromoText4),
-			new(Resources.Localization.Localization.PromoTitle5, Resources.Localization.Localization.PromoText5),
+			new(Localization.PromoTitle1, Localization.PromoText1),
+			new(Localization.PromoTitle2, Localization.PromoText2),
+			new(Localization.PromoTitle3, Localization.PromoText3),
+			new(Localization.PromoTitle4, Localization.PromoText4),
+			new(Localization.PromoTitle5, Localization.PromoText5)
 		};
 		this.navigation = navigation;
 		this.authService = authService;
 		this.dialogService = dialogService;
 	}
+
+	public ObservableCollection<CarouselModel> Items { get; }
 
 	public override Task InitializeAsync()
 	{
@@ -51,11 +58,6 @@ public partial class LoginViewModel : BaseViewModel
 		timer?.Dispose();
 		return base.UnInitializeAsync();
 	}
-
-	public ObservableCollection<CarouselModel> Items { get; }
-
-	[ObservableProperty]
-	private int position;
 
 	[RelayCommand(AllowConcurrentExecutions = false, IncludeCancelCommand = true)]
 	private async Task Login(CancellationToken cancellationToken)

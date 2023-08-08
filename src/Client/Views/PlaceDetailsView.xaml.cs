@@ -1,6 +1,5 @@
 ﻿namespace Client.Views;
 
-using ViewModels;
 #if ANDROID
 using BottomSheet = Google.Android.Material.BottomSheet.BottomSheetDialog;
 #elif IOS
@@ -12,6 +11,7 @@ using BottomSheet = Syncfusion.Maui.Popup.SfPopup;
 #elif TIZEN
 using BottomSheet = Tizen.UIExtensions.NUI.Popup;
 #endif
+using ViewModels;
 
 public partial class PlaceDetailsView
 {

@@ -9,9 +9,15 @@
 	x:Class="Client.Views.LoadingPage"
 	Shell.NavBarIsVisible="False"
 	Shell.PresentationMode="ModalAnimated">
-	<VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-		<ActivityIndicator IsRunning="True"
-		                   IsVisible="True" />
+
+	<VerticalStackLayout
+		VerticalOptions="Center"
+		HorizontalOptions="Center">
+		<ActivityIndicator
+			IsRunning="True"
+			IsVisible="True" />
+
 		<Label Text="{x:Static localization:Localization.Loading}" />
 	</VerticalStackLayout>
+
 </framework:BaseContentPage>

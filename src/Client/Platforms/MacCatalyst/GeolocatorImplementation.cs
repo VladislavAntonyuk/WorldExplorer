@@ -1,5 +1,4 @@
 ﻿using Client.Services;
-using CommunityToolkit.Maui.Alerts;
 using CoreLocation;
 
 namespace Client;

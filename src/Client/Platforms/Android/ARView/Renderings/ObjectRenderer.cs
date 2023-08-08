@@ -42,6 +42,9 @@ public class ObjectRenderer
 		0.0f
 	};
 
+	private static readonly ByteOrder ByteOrder =
+		ByteOrder.NativeOrder() ?? throw new Exception("ByteOrder NativeOrder is null");
+
 	// Temporary matrices allocated here to reduce number of allocations for each frame.
 	private readonly float[] mModelMatrix = new float[16];
 	private readonly float[] mModelViewMatrix = new float[16];
@@ -95,7 +98,7 @@ public class ObjectRenderer
 	public void CreateOnGlThread(Context context, string objAssetName, string diffuseTextureAssetName)
 	{
 		// Read the texture.
-		var textureBitmap = BitmapFactory.DecodeStream(context.Assets.Open(diffuseTextureAssetName));
+		var textureBitmap = BitmapFactory.DecodeStream(context.Assets?.Open(diffuseTextureAssetName));
 
 		GLES20.GlActiveTexture(GLES20.GlTexture0);
 		GLES20.GlGenTextures(mTextures.Length, mTextures, 0);
@@ -107,12 +110,12 @@ public class ObjectRenderer
 		GLES20.GlGenerateMipmap(GLES20.GlTexture2d);
 		GLES20.GlBindTexture(GLES20.GlTexture2d, 0);
 
-		textureBitmap.Recycle();
+		textureBitmap?.Recycle();
 
 		ShaderUtil.CheckGlError(Tag, "Texture loading");
 
 		// Read the obj file.
-		var objInputStream = context.Assets.Open(objAssetName);
+		var objInputStream = context.Assets?.Open(objAssetName);
 		var obj = ObjReader.Read(objInputStream);
 
 		// Prepare the Obj so that its structure is suitable for
@@ -133,7 +136,7 @@ public class ObjectRenderer
 		var normals = ObjData.GetNormals(obj);
 
 		// Convert int indices to shorts for GL ES 2.0 compatibility
-		var indices = ByteBuffer.AllocateDirect(2 * wideIndices.Limit()).Order(ByteOrder.NativeOrder()).AsShortBuffer();
+		var indices = ByteBuffer.AllocateDirect(2 * wideIndices.Limit()).Order(ByteOrder).AsShortBuffer();
 		while (wideIndices.HasRemaining)
 		{
 			indices.Put((short)wideIndices.Get());
@@ -167,9 +170,8 @@ public class ObjectRenderer
 
 		ShaderUtil.CheckGlError(Tag, "OBJ buffer load");
 
-		var vertexShader = ShaderUtil.LoadGlShader(Tag, context, GLES20.GlVertexShader, Resource.Raw.object_vertex);
-		var fragmentShader = ShaderUtil.LoadGlShader(Tag, context,
-		                                             GLES20.GlFragmentShader, Resource.Raw.object_fragment);
+		var vertexShader = ShaderUtil.LoadGlShader(context, GLES20.GlVertexShader, Resource.Raw.object_vertex);
+		var fragmentShader = ShaderUtil.LoadGlShader(context, GLES20.GlFragmentShader, Resource.Raw.object_fragment);
 
 		mProgram = GLES20.GlCreateProgram();
 		GLES20.GlAttachShader(mProgram, vertexShader);
@@ -267,7 +269,7 @@ public class ObjectRenderer
 		Matrix.MultiplyMV(mViewLightDirection, 0, mModelViewMatrix, 0, LightDirection, 0);
 		NormalizeVec3(mViewLightDirection);
 		GLES20.GlUniform4f(mLightingParametersUniform, mViewLightDirection[0], mViewLightDirection[1],
-		                   mViewLightDirection[2], lightIntensity);
+						   mViewLightDirection[2], lightIntensity);
 
 		// Set the object material properties.
 		GLES20.GlUniform4f(mMaterialParametersUniform, mAmbient, mDiffuse, mSpecular, mSpecularPower);
@@ -281,7 +283,7 @@ public class ObjectRenderer
 		GLES20.GlBindBuffer(GLES20.GlArrayBuffer, mVertexBufferId);
 
 		GLES20.GlVertexAttribPointer(mPositionAttribute, CoordsPerVertex, GLES20.GlFloat, false, 0,
-		                             mVerticesBaseAddress);
+									 mVerticesBaseAddress);
 		GLES20.GlVertexAttribPointer(mNormalAttribute, 3, GLES20.GlFloat, false, 0, mNormalsBaseAddress);
 		GLES20.GlVertexAttribPointer(mTexCoordAttribute, 2, GLES20.GlFloat, false, 0, mTexCoordsBaseAddress);
 

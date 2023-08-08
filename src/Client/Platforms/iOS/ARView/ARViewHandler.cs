@@ -19,7 +19,7 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 		};
 
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
-	private bool isReady = false;
+	private bool isReady;
 
 	public ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : base(
 		mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
@@ -39,7 +39,6 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 
 		var radius = 1.25f; // 1.25m away from world origin
 		var sides = 10; // images per row
-		var rows = 7;
 		var centerNode = new SCNNode
 		{
 			Position = new SCNVector3(0, 0, 0)
@@ -65,7 +64,7 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 
 		var images = view.Images.Take(imagePlaneNodes.Count).ToList();
 
-		for (int i = 0; i < images.Count; i++)
+		for (var i = 0; i < images.Count; i++)
 		{
 			var image = images[i];
 			var uiImage = UIImage.LoadFromData(NSData.FromArray(image));
@@ -138,39 +137,6 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 
 			rootNode.AddChildNode(imagePlaneNode);
 			yield return imagePlaneNode;
-		}
-	}
-}
-
-public sealed class ImagePlaneNode : SCNNode
-{
-	public ImagePlaneNode(float width, float height)
-	{
-		Geometry = CreateGeometry(width, height);
-		Opacity = 0.2f;
-	}
-
-	private static SCNGeometry CreateGeometry(float width, float height)
-	{
-		var material = new SCNMaterial();
-		material.Diffuse.Contents = UIColor.White;
-		material.DoubleSided = true;
-
-		var geometry = SCNPlane.Create(width, height);
-		geometry.Materials = new[]
-		{
-			material
-		};
-
-		return geometry;
-	}
-
-	internal void UpdateImage(UIImage uIImage)
-	{
-		if (Geometry?.FirstMaterial is not null)
-		{
-			Geometry.FirstMaterial.Diffuse.Contents = uIImage;
-			RunAction(SCNAction.FadeIn(1));
 		}
 	}
 }

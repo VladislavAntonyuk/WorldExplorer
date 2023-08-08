@@ -5,8 +5,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
-		<NetVersion>net7.0</NetVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -68,10 +66,15 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Identity.Client" Version="4.55.0" />
-		<PackageReference Include="Syncfusion.Maui.Charts" Version="22.2.7" />
-		<PackageReference Include="Syncfusion.Maui.Inputs" Version="22.2.7" />
-		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.7" />
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="22.2.8" />
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="22.2.8" />
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.8" />
 		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == '$(NetVersion)-android'">
+		<PackageReference Include="JavaGl.Obj" Version="0.4.0.1" />
+		<PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -90,8 +93,4 @@
 		<ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
-		<PackageReference Include="JavaGl.Obj" Version="0.4.0.1" />
-		<PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
-	</ItemGroup>
 </Project>

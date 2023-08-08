@@ -15,7 +15,7 @@ internal class CustomShellHandler : ShellRenderer
 		return new CustomShellToolbarAppearanceTracker(this);
 	}
 
-	protected override IShellItemRenderer CreateShellItemRenderer(ShellItem item)
+	protected override IShellItemRenderer CreateShellItemRenderer(ShellItem shellItem)
 	{
 		return new CustomShellItemRenderer(this);
 	}

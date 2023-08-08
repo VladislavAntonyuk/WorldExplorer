@@ -13,6 +13,9 @@ public class BackgroundRenderer
 	private const int TexcoordsPerVertex = 2;
 	private const int FloatSize = 4;
 
+	private static readonly ByteOrder ByteOrder =
+		ByteOrder.NativeOrder() ?? throw new Exception("ByteOrder NativeOrder is null");
+
 	private static readonly float[] QuadCoords =
 	{
 		-1.0f,
@@ -46,11 +49,11 @@ public class BackgroundRenderer
 	private int mQuadPositionParam;
 
 	private int mQuadProgram;
-	private FloatBuffer mQuadTexCoord;
+	private FloatBuffer? mQuadTexCoord;
 	private int mQuadTexCoordParam;
-	private FloatBuffer mQuadTexCoordTransformed;
+	private FloatBuffer? mQuadTexCoordTransformed;
 
-	private FloatBuffer mQuadVertices;
+	private FloatBuffer? mQuadVertices;
 
 	public int TextureId
 	{
@@ -80,28 +83,28 @@ public class BackgroundRenderer
 		var numVertices = 4;
 		if (numVertices != QuadCoords.Length / CoordsPerVertex)
 		{
-			throw new Exception("Unexpected number of vertices in BackgroundRenderer.");
+			throw new InvalidDataException("Unexpected number of vertices in BackgroundRenderer.");
 		}
 
 		var bbVertices = ByteBuffer.AllocateDirect(QuadCoords.Length * FloatSize);
-		bbVertices.Order(ByteOrder.NativeOrder());
+		bbVertices.Order(ByteOrder);
 		mQuadVertices = bbVertices.AsFloatBuffer();
 		mQuadVertices.Put(QuadCoords);
 		mQuadVertices.Position(0);
 
 		var bbTexCoords = ByteBuffer.AllocateDirect(numVertices * TexcoordsPerVertex * FloatSize);
-		bbTexCoords.Order(ByteOrder.NativeOrder());
+		bbTexCoords.Order(ByteOrder);
 		mQuadTexCoord = bbTexCoords.AsFloatBuffer();
 		mQuadTexCoord.Put(QuadTexcoords);
 		mQuadTexCoord.Position(0);
 
 		var bbTexCoordsTransformed = ByteBuffer.AllocateDirect(numVertices * TexcoordsPerVertex * FloatSize);
-		bbTexCoordsTransformed.Order(ByteOrder.NativeOrder());
+		bbTexCoordsTransformed.Order(ByteOrder);
 		mQuadTexCoordTransformed = bbTexCoordsTransformed.AsFloatBuffer();
 
-		var vertexShader = ShaderUtil.LoadGlShader(Tag, context, GLES20.GlVertexShader, Resource.Raw.screenquad_vertex);
-		var fragmentShader = ShaderUtil.LoadGlShader(Tag, context,
-		                                             GLES20.GlFragmentShader, Resource.Raw.screenquad_fragment_oes);
+		var vertexShader = ShaderUtil.LoadGlShader(context, GLES20.GlVertexShader, Resource.Raw.screenquad_vertex);
+		var fragmentShader =
+			ShaderUtil.LoadGlShader(context, GLES20.GlFragmentShader, Resource.Raw.screenquad_fragment_oes);
 
 		mQuadProgram = GLES20.GlCreateProgram();
 		GLES20.GlAttachShader(mQuadProgram, vertexShader);
@@ -133,7 +136,8 @@ public class BackgroundRenderer
 		// coordinates for the screen rect, as they may have changed as well.
 		if (frame.HasDisplayGeometryChanged)
 		{
-			frame.TransformCoordinates2d(Coordinates2d.ViewNormalized, mQuadTexCoord, Coordinates2d.TextureNormalized, mQuadTexCoordTransformed);
+			frame.TransformCoordinates2d(Coordinates2d.ViewNormalized, mQuadTexCoord, Coordinates2d.TextureNormalized,
+										 mQuadTexCoordTransformed);
 		}
 
 		// No need to test or write depth, the screen quad has arbitrary depth, and is expected
@@ -150,7 +154,7 @@ public class BackgroundRenderer
 
 		// Set the texture coordinates.
 		GLES20.GlVertexAttribPointer(mQuadTexCoordParam, TexcoordsPerVertex, GLES20.GlFloat, false, 0,
-		                             mQuadTexCoordTransformed);
+									 mQuadTexCoordTransformed);
 
 		// Enable vertex arrays
 		GLES20.GlEnableVertexAttribArray(mQuadPositionParam);

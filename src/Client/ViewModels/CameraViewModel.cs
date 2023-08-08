@@ -8,15 +8,18 @@ using Services;
 
 public partial class CameraViewModel : BaseViewModel
 {
-	private readonly IDialogService dialogService;
 	private readonly IDeviceDisplay deviceDisplay;
+	private readonly IDialogService dialogService;
 	private readonly IDispatcher dispatcher;
 	private readonly INavigationService navigationService;
 
 	[ObservableProperty]
 	private bool isCameraLoaded;
 
-	public CameraViewModel(INavigationService navigationService, IDispatcher dispatcher, IDialogService dialogService, IDeviceDisplay deviceDisplay)
+	public CameraViewModel(INavigationService navigationService,
+		IDispatcher dispatcher,
+		IDialogService dialogService,
+		IDeviceDisplay deviceDisplay)
 	{
 		this.navigationService = navigationService;
 		this.dispatcher = dispatcher;
@@ -47,7 +50,7 @@ public partial class CameraViewModel : BaseViewModel
 	{
 		if (CameraView.Current.NumCamerasDetected > 0)
 		{
-			CameraView.Current.Camera = CameraView.Current.Cameras.First();
+			CameraView.Current.Camera = CameraView.Current.Cameras[0];
 			await dispatcher.DispatchAsync(async () =>
 			{
 				if (await CameraView.Current.StartCameraAsync() == CameraResult.Success)

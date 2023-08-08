@@ -6,7 +6,7 @@ using Android.Util;
 
 public static class ShaderUtil
 {
-	public static int LoadGlShader(string tag, Context context, int type, int resId)
+	public static int LoadGlShader(Context context, int type, int resId)
 	{
 		var code = ReadRawTextFile(context, resId);
 		var shader = GLES20.GlCreateShader(type);
@@ -25,7 +25,7 @@ public static class ShaderUtil
 
 		if (shader == 0)
 		{
-			throw new Exception("Error creating shader");
+			throw new AndroidException("Error creating shader");
 		}
 
 		return shader;
@@ -37,20 +37,22 @@ public static class ShaderUtil
 		while ((error = GLES20.GlGetError()) != GLES20.GlNoError)
 		{
 			Log.Error(tag, label + ": glError " + error);
-			throw new Exception(label + ": glError " + error);
 		}
 	}
 
 
-	private static string ReadRawTextFile(Context context, int resId)
+	private static string? ReadRawTextFile(Context context, int resId)
 	{
-		string result = null;
+		string? result = null;
 
-		using (var rs = context.Resources.OpenRawResource(resId))
-		using (var sr = new StreamReader(rs))
+		using var rs = context.Resources?.OpenRawResource(resId);
+		if (rs is null)
 		{
-			result = sr.ReadToEnd();
+			return result;
 		}
+
+		using var sr = new StreamReader(rs);
+		result = sr.ReadToEnd();
 
 		return result;
 	}

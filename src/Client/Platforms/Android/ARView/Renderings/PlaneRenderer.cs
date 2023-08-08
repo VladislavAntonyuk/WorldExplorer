@@ -26,9 +26,9 @@ public class PlaneRenderer
 		BytesPerFloat * CoordsPerVertex * VertsPerBoundaryVert * InitialBufferBoundaryVerts;
 
 	private const int InitialIndexBufferSizeBytes = BytesPerShort *
-	                                                IndicesPerBoundaryVert *
-	                                                IndicesPerBoundaryVert *
-	                                                InitialBufferBoundaryVerts;
+													IndicesPerBoundaryVert *
+													IndicesPerBoundaryVert *
+													InitialBufferBoundaryVerts;
 
 	private const float FadeRadiusM = 0.25f;
 	private const float DotsPerMeter = 10.0f;
@@ -67,6 +67,9 @@ public class PlaneRenderer
 		//0xFF9800FF,
 	};
 
+	private static readonly ByteOrder ByteOrder =
+		ByteOrder.NativeOrder() ?? throw new Exception("ByteOrder NativeOrder is null");
+
 	// Temporary lists/matrices allocated here to reduce number of allocations for each frame.
 	private readonly float[] mModelMatrix = new float[16];
 	private readonly float[] mModelViewMatrix = new float[16];
@@ -81,8 +84,8 @@ public class PlaneRenderer
 	private int mGridControlUniform;
 
 	private ShortBuffer mIndexBuffer = ByteBuffer.AllocateDirect(InitialIndexBufferSizeBytes)
-	                                             .Order(ByteOrder.NativeOrder())
-	                                             .AsShortBuffer();
+												 .Order(ByteOrder)
+												 .AsShortBuffer();
 
 	private int mLineColorUniform;
 
@@ -96,8 +99,8 @@ public class PlaneRenderer
 	private int mTextureUniform;
 
 	private FloatBuffer mVertexBuffer = ByteBuffer.AllocateDirect(InitialVertexBufferSizeBytes)
-	                                              .Order(ByteOrder.NativeOrder())
-	                                              .AsFloatBuffer();
+												  .Order(ByteOrder)
+												  .AsFloatBuffer();
 
 	/**
 	 * Allocates and initializes OpenGL resources needed by the plane renderer.  Must be
@@ -109,9 +112,8 @@ public class PlaneRenderer
 	 */
 	public void CreateOnGlThread(Context context, String gridDistanceTextureName)
 	{
-		var vertexShader = ShaderUtil.LoadGlShader(Tag, context, GLES20.GlVertexShader, Resource.Raw.plane_vertex);
-		var passthroughShader = ShaderUtil.LoadGlShader(Tag, context,
-		                                                GLES20.GlFragmentShader, Resource.Raw.plane_fragment);
+		var vertexShader = ShaderUtil.LoadGlShader(context, GLES20.GlVertexShader, Resource.Raw.plane_vertex);
+		var passthroughShader = ShaderUtil.LoadGlShader(context, GLES20.GlFragmentShader, Resource.Raw.plane_fragment);
 
 		mPlaneProgram = GLES20.GlCreateProgram();
 		GLES20.GlAttachShader(mPlaneProgram, vertexShader);
@@ -122,7 +124,7 @@ public class PlaneRenderer
 		ShaderUtil.CheckGlError(Tag, "Program creation");
 
 		// Read the texture.
-		var textureBitmap = BitmapFactory.DecodeStream(context.Assets.Open(gridDistanceTextureName));
+		var textureBitmap = BitmapFactory.DecodeStream(context.Assets?.Open(gridDistanceTextureName));
 
 		GLES20.GlActiveTexture(GLES20.GlTexture0);
 		GLES20.GlGenTextures(mTextures.Length, mTextures, 0);
@@ -152,7 +154,7 @@ public class PlaneRenderer
 	/**
 		 * Updates the plane model transform matrix and extents.
 		 */
-	private void UpdatePlaneParameters(float[] planeMatrix, float extentX, float extentZ, FloatBuffer boundary)
+	private void UpdatePlaneParameters(float[] planeMatrix, float extentX, float extentZ, FloatBuffer? boundary)
 	{
 		Array.Copy(planeMatrix, 0, mModelMatrix, 0, 16);
 		if (boundary == null)
@@ -183,9 +185,7 @@ public class PlaneRenderer
 				size *= 2;
 			}
 
-			mVertexBuffer = ByteBuffer.AllocateDirect(BytesPerFloat * size)
-			                          .Order(ByteOrder.NativeOrder())
-			                          .AsFloatBuffer();
+			mVertexBuffer = ByteBuffer.AllocateDirect(BytesPerFloat * size).Order(ByteOrder).AsFloatBuffer();
 		}
 
 		mVertexBuffer.Rewind();
@@ -200,9 +200,7 @@ public class PlaneRenderer
 				size *= 2;
 			}
 
-			mIndexBuffer = ByteBuffer.AllocateDirect(BytesPerShort * size)
-			                         .Order(ByteOrder.NativeOrder())
-			                         .AsShortBuffer();
+			mIndexBuffer = ByteBuffer.AllocateDirect(BytesPerShort * size).Order(ByteOrder).AsShortBuffer();
 		}
 
 		mIndexBuffer.Rewind();
@@ -261,7 +259,7 @@ public class PlaneRenderer
 		// Set the position of the plane
 		mVertexBuffer.Rewind();
 		GLES20.GlVertexAttribPointer(mPlaneXzPositionAlphaAttribute, CoordsPerVertex, GLES20.GlFloat, false,
-		                             BytesPerFloat * CoordsPerVertex, mVertexBuffer);
+									 BytesPerFloat * CoordsPerVertex, mVertexBuffer);
 
 		// Set the Model and ModelViewProjection matrices in the shader.
 		GLES20.GlUniformMatrix4fv(mPlaneModelUniform, 1, false, mModelMatrix, 0);
@@ -301,8 +299,8 @@ public class PlaneRenderer
 			center.GetTransformedAxis(1, 1.0f, normal, 0);
 			// Compute dot product of plane's normal with vector from camera to plane center.
 			var distance = ((cameraX - center.Tx()) * normal[0]) +
-			               ((cameraY - center.Ty()) * normal[1]) +
-			               ((cameraZ - center.Tz()) * normal[2]);
+						   ((cameraY - center.Ty()) * normal[1]) +
+						   ((cameraZ - center.Tz()) * normal[2]);
 			if (distance < 0)
 			{
 				// Plane is back-facing.
@@ -332,7 +330,7 @@ public class PlaneRenderer
 		// Additive blending, masked by alpha chanel, clearing alpha channel.
 		GLES20.GlEnable(GLES20.GlBlend);
 		GLES20.GlBlendFuncSeparate(GLES20.GlDstAlpha, GLES20.GlOne, // RGB (src, dest)
-		                           GLES20.GlZero, GLES20.GlOneMinusSrcAlpha); // ALPHA (src, dest)
+								   GLES20.GlZero, GLES20.GlOneMinusSrcAlpha); // ALPHA (src, dest)
 
 		// Set up the shader.
 		GLES20.GlUseProgram(mPlaneProgram);
@@ -350,9 +348,8 @@ public class PlaneRenderer
 
 		ShaderUtil.CheckGlError(Tag, "Setting up to draw planes");
 
-		foreach (var sortedPlane in sortedPlanes)
+		foreach (var plane in sortedPlanes.Select(x => x.Plane))
 		{
-			var plane = sortedPlane.Plane;
 			var planeMatrix = new float[16];
 			plane.CenterPose.ToMatrix(planeMatrix, 0);
 

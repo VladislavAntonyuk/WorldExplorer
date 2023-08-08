@@ -17,7 +17,7 @@ public class PointCloudRenderer
 
 	// Keep track of the last point cloud rendered to avoid updating the VBO if point cloud
 	// was not changed.
-	private PointCloud mLastPointCloud;
+	private PointCloud? mLastPointCloud;
 	private int mModelViewProjectionUniform;
 
 	private int mNumPoints;
@@ -51,10 +51,9 @@ public class PointCloudRenderer
 
 		ShaderUtil.CheckGlError(Tag, "buffer alloc");
 
-		var vertexShader = ShaderUtil.LoadGlShader(Tag, context,
-		                                           GLES20.GlVertexShader, Resource.Raw.point_cloud_vertex);
-		var passthroughShader = ShaderUtil.LoadGlShader(Tag, context,
-		                                                GLES20.GlFragmentShader, Resource.Raw.passthrough_fragment);
+		var vertexShader = ShaderUtil.LoadGlShader(context, GLES20.GlVertexShader, Resource.Raw.point_cloud_vertex);
+		var passthroughShader =
+			ShaderUtil.LoadGlShader(context, GLES20.GlFragmentShader, Resource.Raw.passthrough_fragment);
 
 		mProgramName = GLES20.GlCreateProgram();
 		GLES20.GlAttachShader(mProgramName, vertexShader);

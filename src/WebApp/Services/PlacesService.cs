@@ -1,29 +1,11 @@
-namespace WebApp.Services;
+﻿namespace WebApp.Services;
 
-using System.Linq;
 using System.Linq.Expressions;
 using Infrastructure;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Location = global::Shared.Models.Location;
 using Place = global::Shared.Models.Place;
-
-public static class DistanceConstants
-{
-	public const double MetersPerDegree = 111139; // Approximate for both latitude and longitude
-	public const double SettlementDistance = 20000;
-	public const double NearbyDistance = 2000;
-	public const double LocationDistance = 100;
-}
-
-public interface IPlacesService
-{
-	Task<List<Place>> GetPlaces(CancellationToken cancellationToken);
-	Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken);
-	Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken);
-	Task ClearPlaces(CancellationToken cancellationToken);
-	bool IsNearby(Location location1, Location location2, double distance);
-}
 
 public class PlacesService : IPlacesService
 {
@@ -102,18 +84,18 @@ public class PlacesService : IPlacesService
 	{
 		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
 		return location1.Latitude - location2.Latitude >= -latLongDifferenceEquivalentToM &&
-						location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
-						location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
-						location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
+			   location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
+			   location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
+			   location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
 	}
 
 	private Expression<Func<Infrastructure.Models.Place, bool>> IsNearbyLocation(Location location1, double distance)
 	{
 		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
 		return place => location1.Latitude - place.Location.Latitude >= -latLongDifferenceEquivalentToM &&
-		                location1.Latitude - place.Location.Latitude <= latLongDifferenceEquivalentToM &&
-		                location1.Longitude - place.Location.Longitude >= -latLongDifferenceEquivalentToM &&
-		                location1.Longitude - place.Location.Longitude <= latLongDifferenceEquivalentToM;
+						location1.Latitude - place.Location.Latitude <= latLongDifferenceEquivalentToM &&
+						location1.Longitude - place.Location.Longitude >= -latLongDifferenceEquivalentToM &&
+						location1.Longitude - place.Location.Longitude <= latLongDifferenceEquivalentToM;
 	}
 
 	private Infrastructure.Models.Place ToPlace(Place place)
@@ -123,10 +105,10 @@ public class PlacesService : IPlacesService
 			Name = place.Name,
 			Description = place.Description,
 			Images = place.Images.Select(x => new Image
-			              {
-				              Source = x
-			              })
-			              .ToList(),
+			{
+				Source = x
+			})
+						  .ToList(),
 			Location = new Infrastructure.Models.Location
 			{
 				Latitude = place.Location.Latitude,

@@ -12,7 +12,10 @@ public abstract class BaseContentPage<T> : ContentPage where T : BaseViewModel
 		Title = viewModel.Title;
 		On<iOS>().SetUseSafeArea(true);
 #if ANDROID || IOS
-		Behaviors.Add(new StatusBarBehavior() { StatusBarColor = BackgroundColor });
+		Behaviors.Add(new StatusBarBehavior
+		{
+			StatusBarColor = BackgroundColor
+		});
 #endif
 	}
 

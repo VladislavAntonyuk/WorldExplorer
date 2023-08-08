@@ -13,35 +13,61 @@
 	FlyoutBehavior="Disabled"
 	x:DataType="viewModels:ShellViewModel">
 
-	<ShellContent Route="LoadingPage"
-	              ContentTemplate="{DataTemplate views:LoadingPage}" />
+	<ShellContent
+		Route="LoadingPage"
+		ContentTemplate="{DataTemplate views:LoadingPage}" />
 
-	<ShellContent Route="LoginPage" ContentTemplate="{DataTemplate views:LoginPage}" />
-	<ShellContent Route="ErrorPage" ContentTemplate="{DataTemplate views:ErrorPage}" />
+	<ShellContent
+		Route="LoginPage"
+		ContentTemplate="{DataTemplate views:LoginPage}" />
 
-	<client:CustomTabBar Route="home" CenterViewCommand="{Binding OpenCameraCommand}" CenterViewBackgroundColor="#512BD4">
+	<ShellContent
+		Route="ErrorPage"
+		ContentTemplate="{DataTemplate views:ErrorPage}" />
+
+	<client:CustomTabBar
+		Route="home"
+		CenterViewCommand="{Binding OpenCameraCommand}"
+		CenterViewBackgroundColor="#512BD4">
+
 		<client:CustomTabBar.CenterViewVisible>
 			<OnPlatform x:TypeArguments="system:Boolean" Default="False">
 				<On Platform="Android,iOS" Value="true" />
 			</OnPlatform>
 		</client:CustomTabBar.CenterViewVisible>
+
 		<client:CustomTabBar.CenterViewImageSource>
 			<FontImageSource
 				FontFamily="FASolid"
 				Glyph="{x:Static fonts:FontAwesomeIcons.Camera}"
 				Size="40" />
 		</client:CustomTabBar.CenterViewImageSource>
-		<Tab Route="ExplorerPage" Title="{x:Static localization:Localization.Explorer}">
+
+		<Tab
+			Route="ExplorerPage"
+			Title="{x:Static localization:Localization.Explorer}">
+
 			<Tab.Icon>
-				<FontImageSource FontFamily="FASolid" Glyph="{x:Static fonts:FontAwesomeIcons.Globe}" />
+				<FontImageSource
+					FontFamily="FASolid"
+					Glyph="{x:Static fonts:FontAwesomeIcons.Globe}" />
 			</Tab.Icon>
+
 			<ShellContent ContentTemplate="{DataTemplate views:ExplorerPage}" />
 		</Tab>
-		<Tab Route="ProfilePage" Title="{x:Static localization:Localization.Profile}">
+
+		<Tab
+			Route="ProfilePage"
+			Title="{x:Static localization:Localization.Profile}">
+
 			<Tab.Icon>
-				<FontImageSource FontFamily="FASolid" Glyph="{x:Static fonts:FontAwesomeIcons.User}" />
+				<FontImageSource
+					FontFamily="FASolid"
+					Glyph="{x:Static fonts:FontAwesomeIcons.User}" />
 			</Tab.Icon>
+
 			<ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
 		</Tab>
+
 	</client:CustomTabBar>
 </Shell>

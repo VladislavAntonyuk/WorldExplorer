@@ -40,6 +40,7 @@ public class ArViewHandler : ViewHandler<IArView, GLSurfaceView>
 
 	private static void MapImages(ArViewHandler handler, IArView view)
 	{
+		// map images
 	}
 
 	protected override GLSurfaceView CreatePlatformView()
@@ -57,8 +58,8 @@ public class ArViewHandler : ViewHandler<IArView, GLSurfaceView>
 		}
 
 		var result = ArCoreApk.Instance.RequestInstall(Platform.CurrentActivity, true,
-		                                               ArCoreApk.InstallBehavior.Required,
-		                                               ArCoreApk.UserMessageType.Application);
+													   ArCoreApk.InstallBehavior.Required,
+													   ArCoreApk.UserMessageType.Application);
 		if (result != ArCoreApk.InstallStatus.Installed)
 		{
 			return;
@@ -101,7 +102,6 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 
 	private readonly List<Anchor> mAnchors = new();
 
-	//DisplayRotationHelper mDisplayRotationHelper;
 	private readonly BackgroundRenderer mBackgroundRenderer = new();
 	private readonly PlaneRenderer mPlaneRenderer = new();
 	private readonly PointCloudRenderer mPointCloud = new();
@@ -117,9 +117,11 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 		this.session = session;
 		MainThread.BeginInvokeOnMainThread(() =>
 		{
-			mLoadingMessageSnackbar = Snackbar.Make(Platform.CurrentActivity.Window.DecorView,
-			                                        "Searching for surfaces...",
-			                                        BaseTransientBottomBar.LengthIndefinite);
+			mLoadingMessageSnackbar =
+				Snackbar.Make(
+					Platform.CurrentActivity?.Window?.DecorView ??
+					throw new NullReferenceException("MainActivity not found"), "Searching for surfaces...",
+					BaseTransientBottomBar.LengthIndefinite);
 			mLoadingMessageSnackbar.View.SetBackgroundColor(Color.DarkGray);
 			mLoadingMessageSnackbar.Show();
 		});
@@ -129,10 +131,6 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 	{
 		// Clear screen to notify driver it should not load any pixels from previous frame.
 		GLES20.GlClear(GLES20.GlColorBufferBit | GLES20.GlDepthBufferBit);
-
-		// Notify ARCore session that the view size changed so that the perspective matrix and the video background
-		// can be properly adjusted
-		//mDisplayRotationHelper.UpdateSessionIfNeeded(session);
 
 		try
 		{
@@ -215,7 +213,7 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 				foreach (var plane in planes)
 				{
 					if (plane.GetType() == Plane.Type.HorizontalUpwardFacing &&
-					    plane.TrackingState == TrackingState.Tracking)
+						plane.TrackingState == TrackingState.Tracking)
 					{
 						HideLoadingMessage();
 						break;
@@ -283,7 +281,7 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 		{
 			MainThread.BeginInvokeOnMainThread(() =>
 			{
-				Toast.MakeText(context, "Failed to read obj file", ToastLength.Long).Show();
+				Toast.MakeText(context, "Failed to read obj file", ToastLength.Long)?.Show();
 			});
 			Log.Error("TAG", "Failed to read obj file");
 		}
@@ -330,6 +328,11 @@ public class ArTouchListener : Object, View.IOnTouchListener
 
 	public bool OnTouch(View? v, MotionEvent? e)
 	{
+		if (e is null)
+		{
+			return false;
+		}
+
 		return mGestureDetector.OnTouchEvent(e);
 	}
 
@@ -345,9 +348,9 @@ public class ArTouchListener : Object, View.IOnTouchListener
 
 internal class SimpleTapGestureDetector : GestureDetector.SimpleOnGestureListener
 {
-	public Func<MotionEvent, bool> SingleTapUpHandler { get; set; }
+	public Func<MotionEvent, bool>? SingleTapUpHandler { get; set; }
 
-	public Func<MotionEvent, bool> DownHandler { get; set; }
+	public Func<MotionEvent, bool>? DownHandler { get; set; }
 
 	public override bool OnSingleTapUp(MotionEvent e)
 	{

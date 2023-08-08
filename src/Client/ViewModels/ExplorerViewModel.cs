@@ -10,8 +10,8 @@ using Services;
 
 public partial class ExplorerViewModel : BaseViewModel
 {
-	private readonly IDialogService dialogService;
 	private readonly IDeviceDisplay deviceDisplay;
+	private readonly IDialogService dialogService;
 	private readonly IGeolocator geoLocator;
 
 	private readonly IPlacesApi placesApi;
@@ -19,7 +19,10 @@ public partial class ExplorerViewModel : BaseViewModel
 	[ObservableProperty]
 	private Location? currentLocation;
 
-	public ExplorerViewModel(IPlacesApi placesApi, IGeolocator geoLocator, IDialogService dialogService, IDeviceDisplay deviceDisplay)
+	public ExplorerViewModel(IPlacesApi placesApi,
+		IGeolocator geoLocator,
+		IDialogService dialogService,
+		IDeviceDisplay deviceDisplay)
 	{
 		this.placesApi = placesApi;
 		this.geoLocator = geoLocator;
@@ -68,7 +71,7 @@ public partial class ExplorerViewModel : BaseViewModel
 
 		var placesResponse =
 			await placesApi.GetRecommendations(new Shared.Models.Location(value.Latitude, value.Longitude),
-			                                   CancellationToken.None);
+											   CancellationToken.None);
 		if (!placesResponse.IsSuccessStatusCode)
 		{
 			await dialogService.ToastAsync(placesResponse.Error.Message);
@@ -111,12 +114,8 @@ public partial class ExplorerViewModel : BaseViewModel
 
 		if (closestPlace is not null)
 		{
-			await dialogService.ToastAsync(string.Format(Localization.YouAreNear, closestPlace.Label), CancellationToken.None);
+			await dialogService.ToastAsync(string.Format(Localization.YouAreNear, closestPlace.Label),
+										   CancellationToken.None);
 		}
 	}
-}
-
-public class LocationChangedEventArgs : EventArgs
-{
-	public required Location Location { get; init; }
 }

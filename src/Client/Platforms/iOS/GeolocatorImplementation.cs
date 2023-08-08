@@ -1,6 +1,5 @@
 ﻿namespace Client;
 
-using CommunityToolkit.Maui.Alerts;
 using CoreLocation;
 using Services;
 

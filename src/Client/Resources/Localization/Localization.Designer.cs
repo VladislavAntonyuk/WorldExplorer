@@ -61,6 +61,15 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel login.
+        /// </summary>
+        internal static string CancelLogin {
+            get {
+                return ResourceManager.GetString("CancelLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete profile.
         /// </summary>
         internal static string DeleteProfile {
@@ -88,6 +97,24 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn more.
+        /// </summary>
+        internal static string LearnMore {
+            get {
+                return ResourceManager.GetString("LearnMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Live view.
+        /// </summary>
+        internal static string LiveView {
+            get {
+                return ResourceManager.GetString("LiveView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
         internal static string Loading {
@@ -102,6 +129,15 @@ namespace Client.Resources.Localization {
         internal static string LoadingPlaceDetails {
             get {
                 return ResourceManager.GetString("LoadingPlaceDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        internal static string Login {
+            get {
+                return ResourceManager.GetString("Login", resourceCulture);
             }
         }
         
@@ -246,6 +282,15 @@ namespace Client.Resources.Localization {
         internal static string PromoTitle5 {
             get {
                 return ResourceManager.GetString("PromoTitle5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share.
+        /// </summary>
+        internal static string Share {
+            get {
+                return ResourceManager.GetString("Share", resourceCulture);
             }
         }
         

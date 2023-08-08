@@ -33,8 +33,9 @@ public partial class ProfileViewModel : BaseViewModel
 	[RelayCommand]
 	private async Task Delete(CancellationToken cancellationToken)
 	{
-		var confirmationResult =
-			await dialogService.ConfirmAsync(Localization.DeleteProfile, Localization.DeleteProfileConfirmationText, Localization.Yes, Localization.No);
+		var confirmationResult = await dialogService.ConfirmAsync(Localization.DeleteProfile,
+																  Localization.DeleteProfileConfirmationText,
+																  Localization.Yes, Localization.No);
 		if (!confirmationResult)
 		{
 			return;
@@ -78,7 +79,7 @@ public partial class ProfileViewModel : BaseViewModel
 					},
 					new()
 					{
-						Date = new DateTime(2023, 07, 27),
+						Date = DateTime.Today,
 						Steps = 150
 					}
 				}

@@ -1,22 +1,18 @@
 ﻿namespace WebApp.Services;
 
+using System.Text.Json.Serialization;
 using System.Web;
-using Newtonsoft.Json.Linq;
-
-public interface IImageSearchService
-{
-	Task<List<string>> GetPlaceImages(string placeName, CancellationToken cancellationToken);
-}
 
 public class ImageSearchService : IImageSearchService
 {
-	private readonly IHttpClientFactory httpClientFactory;
 	private readonly string apiKey;
+	private readonly IHttpClientFactory httpClientFactory;
 
 	public ImageSearchService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
 	{
 		this.httpClientFactory = httpClientFactory;
-		apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey") ?? throw new ArgumentNullException(nameof(apiKey));
+		apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey") ??
+				 throw new NullReferenceException("GoogleSearch ApiKey is null");
 	}
 
 	public async Task<List<string>> GetPlaceImages(string placeName, CancellationToken cancellationToken)
@@ -24,15 +20,27 @@ public class ImageSearchService : IImageSearchService
 		try
 		{
 			using var httpClient = httpClientFactory.CreateClient("GoogleImages");
-			var result = await httpClient.GetStringAsync($"search.json?engine=google_images&q={HttpUtility.UrlEncode(placeName)}&api_key={apiKey}", cancellationToken);
-			var data = JObject.Parse(result);
-			var results = (JArray)data["images_results"];
-
-			return results.Select(x => x["original"].ToString().Trim()).Where(x => x.StartsWith("https://")).ToList();
+			var response = await httpClient.GetFromJsonAsync<GoogleImagesResponse>(
+				$"search.json?engine=google_images&q={HttpUtility.UrlEncode(placeName)}&api_key={apiKey}",
+				cancellationToken);
+			return response?.ImagesResults.Select(x => x.Url).Where(x => x.StartsWith("https://")).ToList() ??
+				   new List<string>();
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			return new List<string>();
 		}
 	}
+}
+
+public class GoogleImagesResponse
+{
+	[JsonPropertyName("images_results")]
+	public List<GoogleImagesResult> ImagesResults { get; set; } = new();
+}
+
+public class GoogleImagesResult
+{
+	[JsonPropertyName("original")]
+	public required string Url { get; set; }
 }

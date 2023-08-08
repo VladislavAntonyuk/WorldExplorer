@@ -4,7 +4,7 @@ using Enums;
 using Framework;
 using ViewModels;
 
-internal class NavigationService : INavigationService, IDisposable
+internal sealed class NavigationService : INavigationService, IDisposable
 {
 	private readonly IConnectivity connectivity;
 	private ShellNavigationState? currentState;
@@ -71,11 +71,11 @@ internal class NavigationService : INavigationService, IDisposable
 
 	private static string GetPagePathForViewModel(Type viewModelType)
 	{
-		if (!ViewModelLocator.Mappings.ContainsKey(viewModelType))
+		if (!ViewModelLocator.Mappings.TryGetValue(viewModelType, out var value))
 		{
 			throw new KeyNotFoundException($"No map for ${viewModelType} was found on navigation mappings");
 		}
 
-		return ViewModelLocator.Mappings[viewModelType];
+		return value;
 	}
 }

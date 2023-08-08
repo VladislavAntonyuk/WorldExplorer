@@ -9,9 +9,3 @@ public class UserDetails
 	public List<Place> VisitedPlaces { get; set; } = new();
 	public List<UserActivity> Activities { get; set; } = new();
 }
-
-public class UserActivity
-{
-	public DateTime Date { get; set; }
-	public int Steps { get; set; }
-}

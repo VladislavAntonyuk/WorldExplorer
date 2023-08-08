@@ -14,8 +14,3 @@ public class ArView : View, IArView
 		set => SetValue(ImagesProperty, value);
 	}
 }
-
-public interface IArView : IView
-{
-	ObservableCollection<byte[]> Images { get; }
-}

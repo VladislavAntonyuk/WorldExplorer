@@ -195,4 +195,19 @@
   <data name="UnableToGetPlaceDetails" xml:space="preserve">
     <value>Unable to get place details</value>
   </data>
+  <data name="CancelLogin" xml:space="preserve">
+    <value>Cancel login</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Learn more</value>
+  </data>
+  <data name="LiveView" xml:space="preserve">
+    <value>Live view</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
 </root>

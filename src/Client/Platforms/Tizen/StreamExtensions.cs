@@ -6,7 +6,11 @@ public static class StreamExtensions
 	{
 		try
 		{
-			
+			var memoryStream = new MemoryStream();
+			await stream.CopyToAsync(memoryStream);
+			await File.WriteAllBytesAsync(
+				Environment.GetFolderPath(Environment.SpecialFolder.MyPictures, Environment.SpecialFolderOption.Create),
+				memoryStream.ToArray());
 		}
 		catch (Exception e)
 		{

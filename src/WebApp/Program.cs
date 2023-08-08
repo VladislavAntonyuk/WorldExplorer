@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-       .AddMicrosoftIdentityWebApp(options => builder.Configuration.Bind("AzureAdB2C", options));
+	   .AddMicrosoftIdentityWebApp(options => builder.Configuration.Bind("AzureAdB2C", options));
 builder.Services.AddAuthentication().AddMicrosoftIdentityWebApi(builder.Configuration, "AzureAdB2C");
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
@@ -32,9 +32,9 @@ builder.Services.Configure<OpenAiSettings>(builder.Configuration.GetRequiredSect
 builder.Services.AddSingleton<IAiService, AiService>();
 builder.Services.AddLogging();
 builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt => opt.UseSqlite("Data Source=WorldExplorer.db")
-                                                                             .UseQueryTrackingBehavior(
-	                                                                             QueryTrackingBehavior
-		                                                                             .NoTrackingWithIdentityResolution));
+																			 .UseQueryTrackingBehavior(
+																				 QueryTrackingBehavior
+																					 .NoTrackingWithIdentityResolution));
 builder.Services.AddI18nText();
 
 var app = builder.Build();

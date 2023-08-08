@@ -5,67 +5,78 @@
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
-	xmlns:views="clr-namespace:Client.Views"
+	xmlns:models="clr-namespace:Client.Models"
 	x:DataType="viewModels:LoginViewModel"
 	x:Class="Client.Views.LoginPage"
 	Shell.NavBarIsVisible="False"
 	Shell.PresentationMode="ModalAnimated">
 
 	<VerticalStackLayout Spacing="{StaticResource DefaultItemSpacing}">
-		<Image Source="appicon.png"
-		       HorizontalOptions="Center"
-		       HeightRequest="200" />
+		<Image
+			Source="appicon.png"
+			HorizontalOptions="Center"
+			HeightRequest="200" />
 
-		<Label Text="{x:Static localization:Localization.Slogan}"
-		       HorizontalOptions="Center"
-			   HorizontalTextAlignment="Center"
-		       FontSize="{StaticResource TitleViewLabelFontSize}"
-		       FontAttributes="Bold" />
+		<Label
+			Text="{x:Static localization:Localization.Slogan}"
+			HorizontalOptions="Center"
+			HorizontalTextAlignment="Center"
+			FontSize="{StaticResource TitleViewLabelFontSize}"
+			FontAttributes="Bold" />
 
-		<CarouselView ItemsSource="{Binding Items}"
-		              IndicatorView="{x:Reference PromosIndicator}"
-		              Loop="True"
-					  IsSwipeEnabled="False"
-		              Margin="0,20,0,0"
-		              Position="{Binding Position}">
+		<CarouselView
+			ItemsSource="{Binding Items}"
+			IndicatorView="{x:Reference PromosIndicator}"
+			Loop="True"
+			IsSwipeEnabled="False"
+			Margin="0,20,0,0"
+			Position="{Binding Position}">
+
 			<CarouselView.ItemsLayout>
-				<LinearItemsLayout ItemSpacing="0" Orientation="Horizontal"/>
+				<LinearItemsLayout
+					ItemSpacing="0"
+					Orientation="Horizontal" />
 			</CarouselView.ItemsLayout>
+
 			<CarouselView.ItemTemplate>
 				<DataTemplate>
-					<VerticalStackLayout x:DataType="views:CarouselModel">
+					<VerticalStackLayout x:DataType="models:CarouselModel">
 						<Label
 							Text="{Binding Title}"
 							FontSize="20"
 							HorizontalOptions="Center"
-							HorizontalTextAlignment="Center"/>
+							HorizontalTextAlignment="Center" />
+
 						<Label
 							Margin="0, 20, 0, 0"
 							Text="{Binding Detail}"
 							HorizontalOptions="Center"
-							HorizontalTextAlignment="Center"/>
+							HorizontalTextAlignment="Center" />
 					</VerticalStackLayout>
 				</DataTemplate>
 			</CarouselView.ItemTemplate>
 		</CarouselView>
 
-		<IndicatorView x:Name="PromosIndicator"
-		               HorizontalOptions="Center"
-		               Margin="0,0,0,20"/>
+		<IndicatorView
+			x:Name="PromosIndicator"
+			HorizontalOptions="Center"
+			Margin="0,0,0,20" />
 
-		<Button Command="{Binding LoginCommand}"
-		        Text="Login"
-		        IsVisible="{Binding LoginCommand.IsRunning, Converter={StaticResource InvertedBoolConverter}}"
-		        HorizontalOptions="Center"
-		        FontSize="{StaticResource TitleViewLabelFontSize}"
-		        CornerRadius="{StaticResource DefaultCornerRadius}" />
+		<Button
+			Command="{Binding LoginCommand}"
+			Text="{x:Static localization:Localization.Login}"
+			IsVisible="{Binding LoginCommand.IsRunning, Converter={StaticResource InvertedBoolConverter}}"
+			HorizontalOptions="Center"
+			FontSize="{StaticResource TitleViewLabelFontSize}"
+			CornerRadius="{StaticResource DefaultCornerRadius}" />
 
-		<Button Command="{Binding LoginCancelCommand}"
-		        IsVisible="{Binding LoginCommand.IsRunning}"
-		        Text="Cancel Login"
-		        HorizontalOptions="Center"
-		        FontSize="{StaticResource TitleViewLabelFontSize}"
-		        CornerRadius="{StaticResource DefaultCornerRadius}" />
+		<Button
+			Command="{Binding LoginCancelCommand}"
+			IsVisible="{Binding LoginCommand.IsRunning}"
+			Text="{x:Static localization:Localization.CancelLogin}"
+			HorizontalOptions="Center"
+			FontSize="{StaticResource TitleViewLabelFontSize}"
+			CornerRadius="{StaticResource DefaultCornerRadius}" />
 
 	</VerticalStackLayout>
 </framework:BaseContentPage>

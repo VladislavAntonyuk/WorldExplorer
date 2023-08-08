@@ -59,7 +59,8 @@ public partial class WorldExplorerMap : WorldExplorerAuthBaseComponent, IAsyncDi
 	[JSInvokable]
 	public async Task UpdatePosition(Location location)
 	{
-		if (currentLocation is null || !PlacesService.IsNearby(currentLocation, location, DistanceConstants.LocationDistance))
+		if (currentLocation is null ||
+			!PlacesService.IsNearby(currentLocation, location, DistanceConstants.LocationDistance))
 		{
 			currentLocation = location;
 			isLoading = false;

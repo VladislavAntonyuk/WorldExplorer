@@ -7,9 +7,12 @@
 	x:Class="Client.Views.ExplorerPage"
 	x:DataType="viewModels:ExplorerViewModel"
 	Shell.NavBarIsVisible="False">
-	<Map x:Name="Map"
-	     ItemsSource="{Binding Pins}"
-	     IsShowingUser="True">
+
+	<Map
+		x:Name="Map"
+		ItemsSource="{Binding Pins}"
+		IsShowingUser="True">
+
 		<Map.ItemTemplate>
 			<DataTemplate x:DataType="{x:Type Pin}">
 				<Pin

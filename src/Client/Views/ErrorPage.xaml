@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<framework:BaseContentPage x:TypeArguments="viewModels:ErrorViewModel"
-                           xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                           xmlns:framework="clr-namespace:Client.Framework"
-                           xmlns:viewModels="clr-namespace:Client.ViewModels"
-                           x:Class="Client.Views.ErrorPage"
-                           Shell.NavBarIsVisible="False"
-                           Shell.PresentationMode="ModalAnimated"
-                           x:DataType="viewModels:ErrorViewModel">
+<framework:BaseContentPage
+	x:TypeArguments="viewModels:ErrorViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	x:Class="Client.Views.ErrorPage"
+	Shell.NavBarIsVisible="False"
+	Shell.PresentationMode="ModalAnimated"
+	x:DataType="viewModels:ErrorViewModel">
+
 	<!--todo lottie-->
-	<Label Text="{Binding ErrorMessage}"
-	       VerticalOptions="Center"
-	       HorizontalOptions="Center" />
+	<Label
+		Text="{Binding ErrorMessage}"
+		VerticalOptions="Center"
+		HorizontalOptions="Center" />
 </framework:BaseContentPage>

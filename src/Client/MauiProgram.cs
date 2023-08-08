@@ -27,21 +27,21 @@ public static class MauiProgram
 		ArgumentNullException.ThrowIfNull(keysSettings);
 
 		builder.UseMauiApp<App>()
-		       .UseMauiCommunityToolkitMaps(keysSettings.WindowsMaps)
+			   .UseMauiCommunityToolkitMaps(keysSettings.WindowsMaps)
 			   .UseMauiCameraView()
 			   .ConfigureFonts(fonts =>
-		       {
-			       fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
-			       fonts.AddFont("Font Awesome 6 Brands-Regular-400.otf", "FABrands");
-			       fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
-		       })
-		       .ConfigureMauiHandlers(handlers =>
-		       {
-			       handlers.AddHandler<Shell, CustomShellHandler>();
+			   {
+				   fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
+				   fonts.AddFont("Font Awesome 6 Brands-Regular-400.otf", "FABrands");
+				   fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
+			   })
+			   .ConfigureMauiHandlers(handlers =>
+			   {
+				   handlers.AddHandler<Shell, CustomShellHandler>();
 #if ANDROID || IOS
-			       handlers.AddHandler<ArView, ArViewHandler>();
+				   handlers.AddHandler<ArView, ArViewHandler>();
 #endif
-		       });
+			   });
 
 		builder.UseMauiCommunityToolkit(x =>
 		{

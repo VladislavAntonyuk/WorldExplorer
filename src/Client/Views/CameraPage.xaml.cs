@@ -1,4 +1,4 @@
-namespace Client.Views;
+﻿namespace Client.Views;
 
 using Framework;
 using ViewModels;

@@ -7,26 +7,14 @@ using Services;
 
 public partial class ArViewModel : BaseViewModel, IQueryAttributable
 {
-	private readonly INavigationService navigationService;
 	private readonly IDeviceDisplay deviceDisplay;
+	private readonly INavigationService navigationService;
 
 	public ArViewModel(INavigationService navigationService, IDeviceDisplay deviceDisplay)
 	{
 		this.navigationService = navigationService;
 		this.deviceDisplay = deviceDisplay;
-		Images = new();
-	}
-
-	public override Task InitializeAsync()
-	{
-		deviceDisplay.KeepScreenOn = true;
-		return base.InitializeAsync();
-	}
-
-	public override Task UnInitializeAsync()
-	{
-		deviceDisplay.KeepScreenOn = false;
-		return base.UnInitializeAsync();
+		Images = new ObservableCollection<byte[]>();
 	}
 
 	public ObservableCollection<byte[]> Images { get; }
@@ -41,6 +29,18 @@ public partial class ArViewModel : BaseViewModel, IQueryAttributable
 				Images.Add(image);
 			}
 		}
+	}
+
+	public override Task InitializeAsync()
+	{
+		deviceDisplay.KeepScreenOn = true;
+		return base.InitializeAsync();
+	}
+
+	public override Task UnInitializeAsync()
+	{
+		deviceDisplay.KeepScreenOn = false;
+		return base.UnInitializeAsync();
 	}
 
 	[RelayCommand]

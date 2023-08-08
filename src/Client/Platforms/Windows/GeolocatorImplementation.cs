@@ -1,7 +1,7 @@
 ﻿namespace Client;
 
-using Windows.Devices.Geolocation;
 using Services;
+using Windows.Devices.Geolocation;
 using Geolocator = Windows.Devices.Geolocation.Geolocator;
 
 public class GeolocatorImplementation : IGeolocator
@@ -21,7 +21,7 @@ public class GeolocatorImplementation : IGeolocator
 		void PositionChanged(Geolocator sender, PositionChangedEventArgs args)
 		{
 			positionChangedProgress.Report(new Location(args.Position.Coordinate.Latitude,
-			                                            args.Position.Coordinate.Longitude));
+														args.Position.Coordinate.Longitude));
 		}
 
 		locator.MovementThreshold = 100;

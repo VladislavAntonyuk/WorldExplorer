@@ -7,16 +7,11 @@ using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
 
-public interface IAiService
-{
-	Task<List<Place>> GetNearByPlaces(Location location);
-}
-
 public class AiService : IAiService
 {
 	private readonly OpenAIAPI api;
-	private readonly OpenAiSettings openAiSettings;
 	private readonly ILogger<AiService> logger;
+	private readonly OpenAiSettings openAiSettings;
 
 	public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> logger)
 	{
@@ -53,9 +48,9 @@ Example:
 
 		logger.LogInformation("Received a response from AI: {Response}", result.Choices[0].Message.Content);
 		return JsonSerializer.Deserialize<List<Place>>(result.Choices[0].Message.Content, new JsonSerializerOptions
-		       {
-			       PropertyNameCaseInsensitive = true
-		       }) ??
-		       new List<Place>();
+		{
+			PropertyNameCaseInsensitive = true
+		}) ??
+			   new List<Place>();
 	}
 }

@@ -1,12 +1,14 @@
-﻿<framework:BaseContentView x:TypeArguments="viewModels:PlaceDetailsViewModel"
-                           xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                           xmlns:framework="clr-namespace:Client.Framework"
-                           xmlns:viewModels="clr-namespace:Client.ViewModels"
-                           xmlns:rating="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
-                           xmlns:views="clr-namespace:Client.Views"
-                           x:DataType="viewModels:PlaceDetailsViewModel"
-                           x:Class="Client.Views.PlaceDetailsView">
+﻿<framework:BaseContentView
+	x:TypeArguments="viewModels:PlaceDetailsViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:rating="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+	xmlns:views="clr-namespace:Client.Views"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	x:DataType="viewModels:PlaceDetailsViewModel"
+	x:Class="Client.Views.PlaceDetailsView">
 
 	<views:PlaceDetailsView.Resources>
 		<ControlTemplate x:Key="ActionButtonTemplate">
@@ -14,9 +16,11 @@
 				Background="#2B0B98"
 				StrokeThickness="4"
 				HorizontalOptions="Center">
+
 				<Border.StrokeShape>
 					<RoundRectangle CornerRadius="30" />
 				</Border.StrokeShape>
+
 				<ContentPresenter Padding="20,8" />
 			</Border>
 		</ControlTemplate>
@@ -30,31 +34,43 @@
 
 	<ScrollView Margin="10">
 		<VerticalStackLayout Spacing="10">
-			<Label Text="{Binding Place.Name}"
-			       HorizontalOptions="Center"
-			       FontSize="Large" />
-			<rating:SfRating Value="{Binding Place.Rating}"
-			                 ItemCount="5"
-			                 Precision="Exact"
-			                 ItemSize="20"
-			                 IsReadOnly="True"
-			                 BackgroundColor="Transparent" />
+			<Label
+				Text="{Binding Place.Name}"
+				HorizontalOptions="Center"
+				FontSize="Large" />
+
+			<rating:SfRating
+				Value="{Binding Place.Rating}"
+				ItemCount="5"
+				Precision="Exact"
+				ItemSize="20"
+				IsReadOnly="True"
+				BackgroundColor="Transparent" />
+
 			<Label Text="{Binding Place.Description}" />
-			<HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+
+			<HorizontalStackLayout
+				HorizontalOptions="Center"
+				Spacing="10">
+
 				<ContentView ControlTemplate="{StaticResource ActionButtonTemplate}">
-						<ContentView.GestureRecognizers>
-							<TapGestureRecognizer Command="{Binding OpenUrlCommand}"
-												  CommandParameter="{Binding Place.Name}" />
-						</ContentView.GestureRecognizers>
-					<Label Text="Learn more" TextDecorations="Underline"/>
+					<ContentView.GestureRecognizers>
+						<TapGestureRecognizer
+							Command="{Binding OpenUrlCommand}"
+							CommandParameter="{Binding Place.Name}" />
+					</ContentView.GestureRecognizers>
+
+					<Label Text="{x:Static localization:Localization.LearnMore}" />
 				</ContentView>
 
 				<ContentView ControlTemplate="{StaticResource ActionButtonTemplate}">
-						<ContentView.GestureRecognizers>
-							<TapGestureRecognizer Command="{Binding SharePlaceCommand}"
-												  CommandParameter="{Binding Place.Name}" />
-						</ContentView.GestureRecognizers>
-					<Label Text="Share" TextDecorations="Underline"/>
+					<ContentView.GestureRecognizers>
+						<TapGestureRecognizer
+							Command="{Binding SharePlaceCommand}"
+							CommandParameter="{Binding Place.Name}" />
+					</ContentView.GestureRecognizers>
+
+					<Label Text="{x:Static localization:Localization.Share}" />
 				</ContentView>
 
 				<ContentView
@@ -63,23 +79,30 @@
 					<ContentView.GestureRecognizers>
 						<TapGestureRecognizer Tapped="OpenArTapped" />
 					</ContentView.GestureRecognizers>
-					<Label Text="Live View" TextDecorations="Underline" />
+
+					<Label Text="{x:Static localization:Localization.LiveView}" />
 				</ContentView>
 			</HorizontalStackLayout>
+
 			<CarouselView
 				ItemsSource="{Binding PlaceImages}"
 				MaximumHeightRequest="300"
 				PeekAreaInsets="40"
 				Loop="false">
+
 				<CarouselView.ItemsLayout>
-					<LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+					<LinearItemsLayout
+						Orientation="Horizontal"
+						ItemSpacing="10" />
 				</CarouselView.ItemsLayout>
+
 				<CarouselView.ItemTemplate>
 					<DataTemplate>
-						<Image Source="{Binding ., Converter={StaticResource ByteArrayToImageSourceConverter}}"
-						       WidthRequest="300"
-						       HeightRequest="300"
-						       Aspect="AspectFit" />
+						<Image
+							Source="{Binding ., Converter={StaticResource ByteArrayToImageSourceConverter}}"
+							WidthRequest="300"
+							HeightRequest="300"
+							Aspect="AspectFit" />
 					</DataTemplate>
 				</CarouselView.ItemTemplate>
 			</CarouselView>

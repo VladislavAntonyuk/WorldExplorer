@@ -1,7 +1,5 @@
 ﻿namespace Client;
 
-using Android.Content;
-using Android.Net;
 using Android.OS;
 
 public static class StreamExtensions
@@ -20,9 +18,6 @@ public static class StreamExtensions
 
 			var path = Path.Combine(storagePath.ToString(), Path.GetRandomFileName());
 			await File.WriteAllBytesAsync(path, memoryStream.ToArray());
-			var mediaScanIntent = new Intent(Intent.ActionMediaScannerScanFile);
-			mediaScanIntent.SetData(Uri.FromFile(new Java.IO.File(path)));
-			Platform.CurrentActivity?.SendBroadcast(mediaScanIntent);
 		}
 		catch (Exception ex)
 		{

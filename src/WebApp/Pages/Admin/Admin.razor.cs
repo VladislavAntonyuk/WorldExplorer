@@ -2,14 +2,14 @@
 
 using global::Shared.Models;
 using Microsoft.AspNetCore.Components;
-using WebApp.Services;
+using Services;
 
 public partial class Admin : WorldExplorerAuthBaseComponent
 {
+	private List<Place> places = new();
+
 	[Inject]
 	public required IPlacesService PlacesService { get; set; }
-
-	private List<Place> places = new();
 
 	private Task ClearPlaces()
 	{
