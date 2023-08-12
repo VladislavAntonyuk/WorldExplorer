@@ -6,32 +6,16 @@ using Android.Locations;
 using Android.OS;
 using Android.Runtime;
 using Java.Lang;
+using Models;
 using Services;
-using Location = Microsoft.Maui.Devices.Sensors.Location;
 
 public class GeolocatorImplementation : IGeolocator
 {
-	private readonly IDialogService dialogService;
 	private GeolocationContinuousListener? locator;
 
-	public GeolocatorImplementation(IDialogService dialogService)
+	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress,
+		CancellationToken cancellationToken)
 	{
-		this.dialogService = dialogService;
-	}
-
-	public async Task StartListening(IProgress<Location> positionChangedProgress, CancellationToken cancellationToken)
-	{
-		var permission = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-		if (permission != PermissionStatus.Granted)
-		{
-			permission = await Permissions.RequestAsync<Permissions.LocationAlways>();
-			if (permission != PermissionStatus.Granted)
-			{
-				await dialogService.ToastAsync("No permission", CancellationToken.None);
-				return;
-			}
-		}
-
 		locator = new GeolocationContinuousListener();
 		var taskCompletionSource = new TaskCompletionSource();
 		cancellationToken.Register(() =>
@@ -41,7 +25,8 @@ public class GeolocatorImplementation : IGeolocator
 			taskCompletionSource.TrySetResult();
 		});
 		locator.OnLocationChangedAction = location =>
-			positionChangedProgress.Report(new Location(location.Latitude, location.Longitude));
+			positionChangedProgress.Report(
+				new GeolocatorData(new(location.Latitude, location.Longitude), location.Speed));
 		await taskCompletionSource.Task;
 	}
 }
@@ -56,12 +41,7 @@ internal class GeolocationContinuousListener : Object, ILocationListener
 		locationManager?.RequestLocationUpdates(LocationManager.GpsProvider, 1000, 100, this);
 	}
 
-	public Action<Android.Locations.Location>? OnLocationChangedAction { get; set; }
-
-	public void OnLocationChanged(Android.Locations.Location location)
-	{
-		OnLocationChangedAction?.Invoke(location);
-	}
+	public Action<Location>? OnLocationChangedAction { get; set; }
 
 	public void OnProviderDisabled(string provider)
 	{
@@ -73,6 +53,11 @@ internal class GeolocationContinuousListener : Object, ILocationListener
 
 	public void OnStatusChanged(string? provider, [GeneratedEnum] Availability status, Bundle? extras)
 	{
+	}
+
+	public void OnLocationChanged(Location location)
+	{
+		OnLocationChangedAction?.Invoke(location);
 	}
 
 	protected override void Dispose(bool disposing)

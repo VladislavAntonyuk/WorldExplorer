@@ -106,7 +106,7 @@ public class PlaneRenderer
 	 * Allocates and initializes OpenGL resources needed by the plane renderer.  Must be
 	 * called on the OpenGL thread, typically in
 	 * {@link GLSurfaceView.Renderer#onSurfaceCreated(GL10, EGLConfig)}.
-	 *
+	 * 
 	 * @param context Needed to access shader source and texture PNG.
 	 * @param gridDistanceTextureName  Name of the PNG file containing the grid texture.
 	 */
@@ -272,7 +272,7 @@ public class PlaneRenderer
 
 	/**
 	 * Draws the collection of tracked planes, with closer planes hiding more distant ones.
-	 *
+	 * 
 	 * @param allPlanes The collection of planes to draw.
 	 * @param cameraPose The pose of the camera, as returned by {@link Frame#getPose()}
 	 * @param cameraPerspective The projection matrix, as returned by

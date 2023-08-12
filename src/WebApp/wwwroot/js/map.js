@@ -1,7 +1,7 @@
 ﻿let map;
 let userMarker;
 window.leafletInterop = {
-	initMap: function(dotnetRef, options) {
+	initMap: function (dotnetRef, options) {
 		map = L.map("map",
 			{
 				zoom: options.zoom
@@ -36,23 +36,23 @@ window.leafletInterop = {
 					title: "My location"
 				});
 				map.setView(e.latlng, options.zoom);
-				dotnetRef.invokeMethodAsync("UpdatePosition", { latitude: e.latlng.lat, longitude: e.latlng.lng });
+				dotnetRef.invokeMethodAsync("UpdatePosition", {latitude: e.latlng.lat, longitude: e.latlng.lng});
 			});
 		map.on("locationerror",
 			(e) => {
 				dotnetRef.invokeMethodAsync("UpdatePositionError", e.message);
 			});
 	},
-	addMarker: function(dotnetRef, options) {
+	addMarker: function (dotnetRef, options) {
 		const marker = createMarker(options);
 		marker.on("click",
 			(e) => {
 				dotnetRef.invokeMethodAsync("OpenDetails",
 					options.title,
-					{ latitude: e.latlng.lat, longitude: e.latlng.lng });
+					{latitude: e.latlng.lat, longitude: e.latlng.lng});
 			});
 	},
-	destroyMap: function() {
+	destroyMap: function () {
 		if (userMarker) {
 			userMarker.remove();
 			userMarker = undefined;
@@ -69,7 +69,7 @@ function createMarker(options) {
 	const icon = L.icon({
 		iconUrl: options.icon
 	});
-	return L.marker([options.location.latitude, options.location.longitude], { icon: icon, title: options.title })
+	return L.marker([options.location.latitude, options.location.longitude], {icon: icon, title: options.title})
 		.addTo(map);
 }
 

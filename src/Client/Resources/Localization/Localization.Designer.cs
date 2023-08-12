@@ -70,6 +70,24 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Danger zone.
+        /// </summary>
+        internal static string DangerZone {
+            get {
+                return ResourceManager.GetString("DangerZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        internal static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete profile.
         /// </summary>
         internal static string DeleteProfile {
@@ -313,11 +331,47 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Speed: {0} m/s.
+        /// </summary>
+        internal static string Speed {
+            get {
+                return ResourceManager.GetString("Speed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statistics.
+        /// </summary>
+        internal static string Statistics {
+            get {
+                return ResourceManager.GetString("Statistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steps.
+        /// </summary>
+        internal static string Steps {
+            get {
+                return ResourceManager.GetString("Steps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to get place details.
         /// </summary>
         internal static string UnableToGetPlaceDetails {
             get {
                 return ResourceManager.GetString("UnableToGetPlaceDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visited places.
+        /// </summary>
+        internal static string VisitedPlaces {
+            get {
+                return ResourceManager.GetString("VisitedPlaces", resourceCulture);
             }
         }
         

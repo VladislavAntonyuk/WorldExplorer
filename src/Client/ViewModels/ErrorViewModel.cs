@@ -10,7 +10,10 @@ public partial class ErrorViewModel : BaseViewModel, IQueryAttributable
 	private readonly Dictionary<ErrorCode, string> errors = new();
 
 	[ObservableProperty]
-	private string? errorMessage;
+	private ErrorCode? code;
+
+	[ObservableProperty]
+	private string? message;
 
 	public ErrorViewModel()
 	{
@@ -20,6 +23,7 @@ public partial class ErrorViewModel : BaseViewModel, IQueryAttributable
 	public void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
 		Enum.TryParse<ErrorCode>(query["errorCode"].ToString(), true, out var errorCode);
-		ErrorMessage = errors[errorCode];
+		Code = errorCode;
+		Message = errors[errorCode];
 	}
 }

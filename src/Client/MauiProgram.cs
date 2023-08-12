@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Services;
 using Services.API;
 using Services.Auth;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Licensing;
 using Syncfusion.Maui.Core.Hosting;
 using ViewModels;
@@ -29,6 +30,7 @@ public static class MauiProgram
 		builder.UseMauiApp<App>()
 			   .UseMauiCommunityToolkitMaps(keysSettings.WindowsMaps)
 			   .UseMauiCameraView()
+			   .UseSkiaSharp()
 			   .ConfigureFonts(fonts =>
 			   {
 				   fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");

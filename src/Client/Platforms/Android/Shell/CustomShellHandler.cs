@@ -19,4 +19,9 @@ internal class CustomShellHandler : ShellRenderer
 	{
 		return new CustomShellItemRenderer(this);
 	}
+
+	protected override IShellSectionRenderer CreateShellSectionRenderer(ShellSection shellSection)
+	{
+		return new CustomShellSectionRenderer(this);
+	}
 }

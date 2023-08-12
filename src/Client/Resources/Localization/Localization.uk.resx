@@ -210,4 +210,22 @@
   <data name="Share" xml:space="preserve">
     <value>Share</value>
   </data>
+  <data name="DangerZone" xml:space="preserve">
+    <value>Danger zone</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Speed: {0} m/s</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="Steps" xml:space="preserve">
+    <value>Steps</value>
+  </data>
+  <data name="VisitedPlaces" xml:space="preserve">
+    <value>Visited places</value>
+  </data>
 </root>

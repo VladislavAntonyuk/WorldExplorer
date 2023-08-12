@@ -1,14 +1,15 @@
 ﻿namespace Client;
 
+using Models;
 using Services;
 using Windows.Devices.Geolocation;
-using Geolocator = Windows.Devices.Geolocation.Geolocator;
 
 public class GeolocatorImplementation : IGeolocator
 {
 	private readonly Geolocator locator = new();
 
-	public async Task StartListening(IProgress<Location> positionChangedProgress, CancellationToken cancellationToken)
+	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress,
+		CancellationToken cancellationToken)
 	{
 		var taskCompletionSource = new TaskCompletionSource();
 		cancellationToken.Register(() =>
@@ -20,11 +21,14 @@ public class GeolocatorImplementation : IGeolocator
 
 		void PositionChanged(Geolocator sender, PositionChangedEventArgs args)
 		{
-			positionChangedProgress.Report(new Location(args.Position.Coordinate.Latitude,
-														args.Position.Coordinate.Longitude));
+			positionChangedProgress.Report(new GeolocatorData(
+											   new Location(args.Position.Coordinate.Latitude,
+															args.Position.Coordinate.Longitude),
+											   args.Position.Coordinate.Speed ?? 0));
 		}
 
 		locator.MovementThreshold = 100;
+		locator.DesiredAccuracyInMeters = 100;
 
 		await taskCompletionSource.Task;
 	}

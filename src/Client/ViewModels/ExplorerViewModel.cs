@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
 using Microsoft.Maui.Controls.Maps;
+using Models;
 using Resources.Localization;
 using Services;
 
@@ -17,7 +18,7 @@ public partial class ExplorerViewModel : BaseViewModel
 	private readonly IPlacesApi placesApi;
 
 	[ObservableProperty]
-	private Location? currentLocation;
+	private GeolocatorData? currentGeolocatorData;
 
 	public ExplorerViewModel(IPlacesApi placesApi,
 		IGeolocator geoLocator,
@@ -50,28 +51,35 @@ public partial class ExplorerViewModel : BaseViewModel
 	[RelayCommand(AllowConcurrentExecutions = false)]
 	private async Task StartTracking(CancellationToken cancellationToken)
 	{
-		await dialogService.ToastAsync(Localization.LookingForPlaces, cancellationToken);
-		var progress = new Progress<Location>(location =>
+		var permission = await Permissions.RequestAsync<Permissions.LocationAlways>();
+		if (permission != PermissionStatus.Granted)
 		{
-			CurrentLocation = location;
+			await dialogService.ToastAsync("No permission", CancellationToken.None);
+			return;
+		}
+
+		await dialogService.ToastAsync(Localization.LookingForPlaces, cancellationToken);
+		var progress = new Progress<GeolocatorData>(geoLocatorData =>
+		{
+			CurrentGeolocatorData = geoLocatorData;
 			LocationChanged?.Invoke(this, new LocationChangedEventArgs
 			{
-				Location = location
+				Location = geoLocatorData.Location
 			});
 		});
+
 		await geoLocator.StartListening(progress, cancellationToken);
 	}
 
-	async partial void OnCurrentLocationChanged(Location? value)
+	async partial void OnCurrentGeolocatorDataChanged(GeolocatorData? value)
 	{
 		if (value is null)
 		{
 			return;
 		}
 
-		var placesResponse =
-			await placesApi.GetRecommendations(new Shared.Models.Location(value.Latitude, value.Longitude),
-											   CancellationToken.None);
+		var placesResponse = await placesApi.GetRecommendations(
+			new Shared.Models.Location(value.Location.Latitude, value.Location.Longitude), CancellationToken.None);
 		if (!placesResponse.IsSuccessStatusCode)
 		{
 			await dialogService.ToastAsync(placesResponse.Error.Message);
@@ -95,7 +103,7 @@ public partial class ExplorerViewModel : BaseViewModel
 			});
 		}
 
-		await CheckLocation(value);
+		await CheckLocation(value.Location);
 	}
 
 	private async Task CheckLocation(Location location)

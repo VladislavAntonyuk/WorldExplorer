@@ -13,9 +13,21 @@ public class CustomShellHandler : ShellHandler
 	protected override ShellView CreatePlatformView()
 	{
 		var shellView = base.CreatePlatformView();
-		shellView.Loaded += ShellViewOnLoaded;
-		shellView.LayoutUpdated += ShellView_LayoutUpdated;
 		return shellView;
+	}
+
+	protected override void ConnectHandler(ShellView platformView)
+	{
+		platformView.Loaded += ShellViewOnLoaded;
+		platformView.LayoutUpdated += ShellView_LayoutUpdated;
+		base.ConnectHandler(platformView);
+	}
+
+	protected override void DisconnectHandler(ShellView platformView)
+	{
+		platformView.Loaded -= ShellViewOnLoaded;
+		platformView.LayoutUpdated -= ShellView_LayoutUpdated;
+		base.DisconnectHandler(platformView);
 	}
 
 	private void ShellView_LayoutUpdated(object? sender, object e)
@@ -64,16 +76,16 @@ public class CustomShellHandler : ShellHandler
 	private static DataTemplate CreateNavigationViewItemDataTemplate()
 	{
 		var xaml = """
-<DataTemplate xmlns = 'http://schemas.microsoft.com/winfx/2006/xaml/presentation'>
-  <NavigationViewItem BackgroundSizing = "OuterBorderEdge"
-				Content = "{Binding Content}"
-				Foreground = "{Binding Foreground}"
-				Background = "{Binding Background}"
-				IsSelected = "{Binding IsSelected, Mode=TwoWay}"
-				MenuItemsSource = "{Binding MenuItemsSource}"
-				Icon = "{Binding Icon}" />
-</DataTemplate>
-""";
+		           <DataTemplate xmlns = 'http://schemas.microsoft.com/winfx/2006/xaml/presentation'>
+		             <NavigationViewItem BackgroundSizing = "OuterBorderEdge"
+		           				Content = "{Binding Content}"
+		           				Foreground = "{Binding Foreground}"
+		           				Background = "{Binding Background}"
+		           				IsSelected = "{Binding IsSelected, Mode=TwoWay}"
+		           				MenuItemsSource = "{Binding MenuItemsSource}"
+		           				Icon = "{Binding Icon}" />
+		           </DataTemplate>
+		           """;
 
 		var dataTemplate = (DataTemplate)XamlReader.Load(xaml);
 		return dataTemplate;

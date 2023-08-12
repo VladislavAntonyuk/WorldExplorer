@@ -1,14 +1,14 @@
 ﻿namespace Client;
 
+using Models;
 using Services;
 using Tizen.Location;
-using Location = Microsoft.Maui.Devices.Sensors.Location;
 
 public class GeolocatorImplementation : IGeolocator
 {
 	private readonly Locator locator = new(LocationType.Gps);
 
-	public async Task StartListening(IProgress<Location> positionChangedProgress, CancellationToken cancellationToken)
+	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress, CancellationToken cancellationToken)
 	{
 		var taskCompletionSource = new TaskCompletionSource();
 		cancellationToken.Register(() =>
@@ -21,7 +21,7 @@ public class GeolocatorImplementation : IGeolocator
 
 		void PositionChanged(object? sender, LocationChangedEventArgs args)
 		{
-			positionChangedProgress.Report(new Location(args.Location.Latitude, args.Location.Longitude));
+			positionChangedProgress.Report(new GeolocatorData(new (args.Location.Latitude, args.Location.Longitude), args.Location.Speed));
 		}
 
 		locator.Distance = 100;

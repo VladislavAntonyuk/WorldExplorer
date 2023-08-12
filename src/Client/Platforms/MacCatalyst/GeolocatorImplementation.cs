@@ -1,31 +1,16 @@
-﻿using Client.Services;
-using CoreLocation;
+﻿namespace Client;
 
-namespace Client;
+using CoreLocation;
+using Models;
+using Services;
 
 public class GeolocatorImplementation : IGeolocator
 {
-	private readonly IDialogService dialogService;
-	readonly CLLocationManager manager = new();
+	private readonly CLLocationManager manager = new();
 
-	public GeolocatorImplementation(IDialogService dialogService)
+	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress,
+		CancellationToken cancellationToken)
 	{
-		this.dialogService = dialogService;
-	}
-
-	public async Task StartListening(IProgress<Location> positionChangedProgress, CancellationToken cancellationToken)
-	{
-		var permission = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-		if (permission != PermissionStatus.Granted)
-		{
-			permission = await Permissions.RequestAsync<Permissions.LocationAlways>();
-			if (permission != PermissionStatus.Granted)
-			{
-				await dialogService.ToastAsync("No permission", CancellationToken.None);
-				return;
-			}
-		}
-
 		var taskCompletionSource = new TaskCompletionSource();
 		cancellationToken.Register(() =>
 		{
@@ -41,8 +26,10 @@ public class GeolocatorImplementation : IGeolocator
 		{
 			if (args.Locations.Length > 0)
 			{
-				var coordinate = args.Locations[^1].Coordinate;
-				positionChangedProgress.Report(new Location(coordinate.Latitude, coordinate.Longitude));
+				var lastLocation = args.Locations[^1];
+				positionChangedProgress.Report(new GeolocatorData(
+												   new(lastLocation.Coordinate.Latitude,
+													   lastLocation.Coordinate.Longitude), lastLocation.Speed));
 			}
 		}
 

@@ -14,7 +14,7 @@ internal class CustomShellItemRenderer : ShellItemRenderer
 	{
 	}
 
-	public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public override View? OnCreateView(LayoutInflater inflater, ViewGroup? container, Bundle? savedInstanceState)
 	{
 		var view = base.OnCreateView(inflater, container, savedInstanceState);
 		if (Context is not null && ShellItem is CustomTabBar { CenterViewVisible: true } tabBar)

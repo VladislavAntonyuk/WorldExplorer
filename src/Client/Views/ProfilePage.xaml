@@ -52,12 +52,12 @@
 				HorizontalOptions="Center" />
 
 			<Button
-				SemanticProperties.Description="Logout"
+				SemanticProperties.Description="{x:Static localization:Localization.Logout}"
 				Command="{Binding LogoutCommand}"
 				Text="{x:Static localization:Localization.Logout}" />
 
 			<Label
-				Text="Visited Places"
+				Text="{x:Static localization:Localization.VisitedPlaces}"
 				Style="{StaticResource TitleStyle}"
 				IsVisible="{Binding User.VisitedPlaces, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />
 
@@ -94,7 +94,7 @@
 			</CollectionView>
 
 			<Label
-				Text="Statistics"
+				Text="{x:Static localization:Localization.Statistics}"
 				Style="{StaticResource TitleStyle}"
 				IsVisible="{Binding User.Activities, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />
 
@@ -108,7 +108,7 @@
 
 						<chart:DateTimeAxis.Title>
 							<chart:ChartAxisTitle
-								Text="Date"
+								Text="{x:Static localization:Localization.Date}"
 								TextColor="Gray" />
 						</chart:DateTimeAxis.Title>
 
@@ -125,7 +125,7 @@
 
 						<chart:DateTimeAxis.Title>
 							<chart:ChartAxisTitle
-								Text="Steps"
+								Text="{x:Static localization:Localization.Steps}"
 								TextColor="Gray" />
 						</chart:DateTimeAxis.Title>
 
@@ -154,9 +154,9 @@
 				Margin="0,30">
 				<toolkit:Expander.Header>
 					<Grid
-						ColumnDefinitions="0.9*,0.1*">
+						ColumnDefinitions="*,Auto">
 						<Label
-							Text="Danger zone"
+							Text="{x:Static localization:Localization.DangerZone}"
 							VerticalOptions="Center"
 							Style="{StaticResource TitleStyle}"
 							Margin="0, 10" />
@@ -170,7 +170,7 @@
 
 				<toolkit:Expander.Content>
 					<Button
-						SemanticProperties.Description="Delete profile"
+						SemanticProperties.Description="{x:Static localization:Localization.DeleteProfile}"
 						BackgroundColor="Red"
 						Command="{Binding DeleteCommand}"
 						Text="{x:Static localization:Localization.DeleteProfile}" />
