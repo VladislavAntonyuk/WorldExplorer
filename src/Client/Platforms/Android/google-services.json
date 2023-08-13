@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "721096298396",
+    "project_id": "vladislavantonyukworldexplorer",
+    "storage_bucket": "vladislavantonyukworldexplorer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721096298396:android:3c50deef3f577270ba8259",
+        "android_client_info": {
+          "package_name": "com.vladislavantonyuk.worldexplorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721096298396-16rb77ld3v5f6i1snmafbrvurdgjl8n0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAURBHj_7okmIAhZUutQiCNnH0pyBVJN_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721096298396-16rb77ld3v5f6i1snmafbrvurdgjl8n0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
