@@ -1,25 +1,127 @@
 ﻿@inherits WorldExplorerBaseComponent
 
-<PageTitle>@Constants.ProductName</PageTitle>
-
-<AuthorizeView>
-	<NotAuthorized>
-		<MudButton OnClick="SignIn">Sign in</MudButton>
-	</NotAuthorized>
-</AuthorizeView>
-Short Description:
-Explore the globe like never before with World Explorer. Our AI-powered app gives you in-depth insights about any place worldwide, provides a comprehensive description, and recommends local attractions with your personalized travel guide.
-
-Long Description:
-A journey is not just about reaching the destination; it's about the experiences, insights, and memories you create along the way. With the World Explorer app, you can add a personal travel guide to your pocket with a mere tap of a button. Leverage the power of AI to uncover the secrets of any place worldwide. From historic locations to modern sites, World Explorer provides a detailed description of your desired place, shaped by community insights and tailored to your interests. Discover the local cuisine, must-visit spots, cultural attractions, hidden gems, and more with our nearby recommendations feature. Venture into the unexplored and make your journey memorable with World Explorer.
-
-Slogan:
-World Explorer: Exploring the world, one place at a time.
-
-Features for Promo Page:
-
-AI-Powered Exploration: Unleash the power of AI to explore and learn about places worldwide. Be it an ancient site or a modern city, World Explorer brings it to your smartphone.
-Comprehensive Place Descriptions: Gets underlying information, history, culture, and interesting facts about any place before you even set foot there.
-Nearby Recommendations: Discover local cuisine, attractions, and hidden gems around your current location or your planned destination, making the exploration more exciting and convenient.
-Personalized Experience: Personalize your recommendations according to your interests, and get the best out of your travel experience with World Explorer.
-Community Insights: Be part of a global community of explorers who share insights and experiences, adding depth to your understanding of various places.
+<MudContainer>
+    <MudGrid Justify="Justify.Center">
+        <MudItem md="5" Class="d-flex flex-column justify-center align-center flex-wrap">
+            <MudText Typo="Typo.h1" Align="Align.Center">@Constants.ProductName</MudText>
+            <MudText Align="Align.Center" Class="my-6">@Translation.Promo</MudText>
+            <MudGrid>
+                <MudItem xs="4">
+                    <MudLink Href="https://play.google.com/store/apps/details?id=com.vladislavantonyuk.worldexplorer" Target="_blank">
+                        <MudImage Src="https://ik.imagekit.io/VladislavAntonyuk/projects/drawgo/google-play.png" Alt="Google Play" Style="width: 100%" />
+                    </MudLink>
+                </MudItem>
+                <MudItem xs="4">
+                    <MudLink Href="https://apps.apple.com/us/app/%D0%B4%D1%96%D1%8F/id1489717872" Target="_blank">
+                        <MudImage Src="https://ik.imagekit.io/VladislavAntonyuk/projects/drawgo/app-store.png" Alt="App Store" Style="width: 100%" />
+                    </MudLink>
+                </MudItem>
+                <MudItem xs="4">
+                    <MudLink Href="https://apps.microsoft.com/store/detail/draw-free/9WZDNCRFJB21" Target="_blank">
+                        <MudImage Src="https://ik.imagekit.io/VladislavAntonyuk/projects/drawgo/microsoft-store.png" Alt="Microsoft Store" Style="width: 100%" />
+                    </MudLink>
+                </MudItem>
+            </MudGrid>
+            <AuthorizeView>
+                <NotAuthorized>
+                    <MudButton FullWidth="true" class="my-1 p-2 custom-button" OnClick="SignIn" ButtonType="ButtonType.Button" Color="Color.Secondary">@Translation.Register</MudButton>
+                </NotAuthorized>
+            </AuthorizeView>
+        </MudItem>
+        <MudItem md="5">
+            <iframe class="video" src="https://www.youtube.com/embed/4YfLBOJTNaU?controls=0" title="@Constants.ProductName" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-3">@Translation.PromoShortDescription</MudText>
+        </MudItem>
+    </MudGrid>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+        <linearGradient id="linear-gradient">
+            <stop offset="0%" stop-color="rgb(5, 39, 103)" />
+            <stop offset="70%" stop-color="#3a0647" />
+        </linearGradient>
+        <path fill="url(#linear-gradient)"
+              fill-opacity="1"
+              d="M0,128L48,117.3C96,107,192,85,288,80C384,75,480,85,576,112C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+        </path>
+    </svg>
+    <MudText Typo="Typo.h2" Align="Align.Center" Class="mt-8">@Translation.PromoCheckoutWhatYouCanDo</MudText>
+    <MudGrid Class="mt-8">
+        <MudItem xs="12" md="3">
+            <MudCard Elevation="25" Class="rounded-lg pb-4">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudPaper Class="d-flex justify-center mb-6" Elevation="0">
+                            <MudIcon Class="icon" Icon="@Icons.Material.Filled.Laptop" Size="Size.Large"></MudIcon>
+                        </MudPaper>
+                        <MudText Typo="Typo.h5" Align="Align.Center">@Translation.PromoAIPoweredExploration</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Align="Align.Center">@Translation.PromoAIPoweredExplorationDescription</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" md="3">
+            <MudCard Elevation="25" Class="rounded-lg pb-4">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudPaper Class="d-flex justify-center mb-6" Elevation="0">
+                            <MudIcon Class="icon" Icon="@Icons.Material.Filled.Lock" Size="Size.Large"></MudIcon>
+                        </MudPaper>
+                        <MudText Typo="Typo.h5" Align="Align.Center">@Translation.PromoComprehensivePlaceDescriptions</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Align="Align.Center">@Translation.PromoComprehensivePlaceDescriptionsDescription</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" md="3">
+            <MudCard Elevation="25" Class="rounded-lg pb-4">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudPaper Class="d-flex justify-center mb-6" Elevation="0">
+                            <MudIcon Class="icon" Icon="@Icons.Material.Filled.Share" Size="Size.Large"></MudIcon>
+                        </MudPaper>
+                        <MudText Typo="Typo.h5" Align="Align.Center">@Translation.PromoNearbyRecommendations</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Align="Align.Center">@Translation.PromoNearbyRecommendationsDescription</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" md="3">
+            <MudCard Elevation="25" Class="rounded-lg pb-4">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudPaper Class="d-flex justify-center mb-6" Elevation="0">
+                            <MudIcon Class="icon" Icon="@Icons.Material.Filled.Language" Size="Size.Large"></MudIcon>
+                        </MudPaper>
+                        <MudText Typo="Typo.h5" Align="Align.Center">@Translation.PromoPersonalizedExperience</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Align="Align.Center">@Translation.PromoPersonalizedExperienceDescription</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 220">
+        <path fill="url(#linear-gradient)"
+              fill-opacity="1"
+              d="M0,96L34.3,106.7C68.6,117,137,139,206,122.7C274.3,107,343,53,411,53.3C480,53,549,107,617,117.3C685.7,128,754,96,823,96C891.4,96,960,128,1029,154.7C1097.1,181,1166,203,1234,202.7C1302.9,203,1371,181,1406,170.7L1440,160L1440,0L1405.7,0C1371.4,0,1303,0,1234,0C1165.7,0,1097,0,1029,0C960,0,891,0,823,0C754.3,0,686,0,617,0C548.6,0,480,0,411,0C342.9,0,274,0,206,0C137.1,0,69,0,34,0L0,0Z">
+        </path>
+    </svg>
+    <MudImage Src="favicon.ico" Alt="Logo" ObjectPosition="ObjectPosition.Center" Style="width:100%" Height="150" ObjectFit="ObjectFit.Contain" />
+    <MudText Typo="Typo.h5" Align="Align.Justify">
+        @Translation.PromoLongDescription
+    </MudText>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 210">
+        <path fill="url(#linear-gradient)"
+              fill-opacity="1"
+              d="M0,96L34.3,106.7C68.6,117,137,139,206,122.7C274.3,107,343,53,411,53.3C480,53,549,107,617,117.3C685.7,128,754,96,823,96C891.4,96,960,128,1029,154.7C1097.1,181,1166,203,1234,202.7C1302.9,203,1371,181,1406,170.7L1440,160L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z">
+        </path>
+    </svg>
+</MudContainer>

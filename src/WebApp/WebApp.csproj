@@ -5,24 +5,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Shared\Shared.csproj"/>
+		<ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MudBlazor" Version="6.8.0"/>
-		<PackageReference Include="OwaspHeaders.Core" Version="7.5.1"/>
-		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="12.0.2"/>
-		<PackageReference Include="Microsoft.Identity.Web.UI" Version="2.13.2"/>
+		<PackageReference Include="MudBlazor" Version="6.8.0" />
+		<PackageReference Include="OwaspHeaders.Core" Version="7.5.1" />
+		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="12.0.2" />
+		<PackageReference Include="Microsoft.Identity.Web.UI" Version="2.13.2" />
 
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.6.23329.4"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.6.23329.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.6.23329.4">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 
-		<PackageReference Include="OpenAI" Version="1.7.2"/>
+		<PackageReference Include="OpenAI" Version="1.7.2" />
 
-		<PackageReference Include="Azure.Identity" Version="1.10.0-beta.1"/>
-		<PackageReference Include="Microsoft.Graph.Beta" Version="5.42.0-preview"/>
+		<PackageReference Include="Azure.Identity" Version="1.10.0" />
+		<PackageReference Include="Microsoft.Graph.Beta" Version="5.43.0-preview" />
 	</ItemGroup>
 </Project>

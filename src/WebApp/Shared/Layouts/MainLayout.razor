@@ -44,16 +44,19 @@
 			</AuthorizeView>
 		</MudAppBar>
 
-		<MudDrawer @bind-Open="drawerOpen" Elevation="1" ClipMode="DrawerClipMode.Always">
-			<NavMenu/>
-			<AuthorizeView>
-				<Authorized>
-					<MudHidden Breakpoint="Breakpoint.MdAndUp">
-						<SearchControl/>
-					</MudHidden>
-				</Authorized>
-			</AuthorizeView>
-		</MudDrawer>
+        <MudDrawer @bind-Open="drawerOpen" Elevation="1" ClipMode="DrawerClipMode.Always">
+            <NavMenu />
+            <AuthorizeView>
+                <NotAuthorized>
+                    <LanguageControl />
+                </NotAuthorized>
+                <Authorized>
+                    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                        <SearchControl />
+                    </MudHidden>
+                </Authorized>
+            </AuthorizeView>
+        </MudDrawer>
 		<MudMainContent>
 			<MudContainer MaxWidth="MaxWidth.False">
 				@Body
