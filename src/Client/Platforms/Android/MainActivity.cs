@@ -14,9 +14,4 @@ using Android.OS;
 								 ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity
 {
-	protected override async void OnCreate(Bundle? savedInstanceState)
-	{
-		base.OnCreate(savedInstanceState);
-		await DeviceInstallationService.RegisterDevice("drawgo", "p7fcbXEbiLKwdv7uX/XpFCRSmP5AEaxuBLmSOluzXhE=");
-	}
 }

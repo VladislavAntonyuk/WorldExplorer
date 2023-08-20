@@ -2,7 +2,7 @@
 
 public record HasErrorResult : IHasErrorResult
 {
-	public bool IsSuccessful => !Errors.Any();
+	public bool IsSuccessful => Errors.Count == 0;
 	public ICollection<Error> Errors { get; } = new List<Error>();
 
 	public void AddError(string description, int errorCode)

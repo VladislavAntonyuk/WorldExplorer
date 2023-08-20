@@ -1,9 +1,13 @@
 ﻿{
+	"Error": "Error",
 	"Languages": "Languages",
+	"Loading": "Loading",
+	"Logout": "Logout",
 	"MenuAbout": "About",
 	"MenuFaq": "FAQ",
 	"MenuPrivacy": "Privacy",
 	"MenuPlaces": "My Places",
+	"Profile": "Profile",
 	"Promo": "Uncovering the World with Every Step!",
 	"PromoCheckoutWhatYouCanDo": "Check out what you can do!",
 	"PromoAIPoweredExploration": "AI-Powered Exploration",

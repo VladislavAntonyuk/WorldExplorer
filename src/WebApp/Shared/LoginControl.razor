@@ -8,10 +8,10 @@
 		<MudText Class="ma-2">@CurrentUser.Name</MudText>
 		<MudDivider Class="mb-2"/>
 		<MudMenuItem Href="Identity/Account/Manage">
-			<MudAlert Icon="@Icons.Material.Outlined.Person" Dense="true">Profile</MudAlert>
+			<MudAlert Icon="@Icons.Material.Outlined.Person" Dense="true">@Translation.Profile</MudAlert>
 		</MudMenuItem>
 		<MudMenuItem OnClick="Logout">
-			<MudAlert Icon="@Icons.Material.Outlined.Logout" Dense="true">HeaderLogout</MudAlert>
+			<MudAlert Icon="@Icons.Material.Outlined.Logout" Dense="true">@Translation.Logout</MudAlert>
 		</MudMenuItem>
 	</ChildContent>
 </MudMenu>
