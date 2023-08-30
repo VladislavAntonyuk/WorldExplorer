@@ -237,7 +237,9 @@ public class PlaneRenderer
 		// for boundary verts n-1 and 0.
 
 		// step 2, interior:
+#pragma warning disable S2583
 		for (var i = 1; i < boundaryVertices / 2; ++i)
+#pragma warning restore S2583
 		{
 			mIndexBuffer.Put((short)(((boundaryVertices - 1 - i) * 2) + 1));
 			mIndexBuffer.Put((short)((i * 2) + 1));
@@ -358,8 +360,7 @@ public class PlaneRenderer
 
 			// Get plane index. Keep a map to assign same indices to same planes.
 
-			var planeIndex = -1;
-			if (!mPlaneIndexMap.TryGetValue(plane, out planeIndex))
+			if (!mPlaneIndexMap.TryGetValue(plane, out var planeIndex))
 			{
 				planeIndex = Integer.ValueOf(mPlaneIndexMap.Count).IntValue();
 				mPlaneIndexMap.Add(plane, planeIndex);

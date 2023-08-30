@@ -61,13 +61,12 @@
 		<PackageReference Include="M.BindableProperty.Generator" Version="0.11.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Identity.Client" Version="4.55.0" />
-		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.61" />
-		<PackageReference Include="Syncfusion.Maui.Charts" Version="22.2.9" />
-		<PackageReference Include="Syncfusion.Maui.Inputs" Version="22.2.9" />
-		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.9" />
+		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.80" />
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="22.2.11" />
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="22.2.11" />
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.11" />
 		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
 	</ItemGroup>
 
@@ -77,6 +76,10 @@
 		<PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
 		<PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0" />
 		<PackageReference Include="Xamarin.Google.Dagger" Version="2.39.1" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.0-preview.7.8842" />
 	</ItemGroup>
 
 	<ItemGroup>

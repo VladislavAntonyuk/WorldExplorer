@@ -5,7 +5,6 @@ using Camera.MAUI;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Maps;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Services;
 using Services.API;
 using Services.Auth;
@@ -85,10 +84,6 @@ public static class MauiProgram
 		builder.Services.AddTransientWithShellRoute<ArPage, ArViewModel>($"//home/{nameof(ArPage)}");
 		builder.Services.AddTransientWithShellRoute<CameraPage, CameraViewModel>($"//home/{nameof(CameraPage)}");
 		builder.Services.AddSingleton<ShellViewModel>();
-
-#if DEBUG
-		builder.Logging.AddDebug();
-#endif
 
 		return builder.Build();
 	}
