@@ -47,7 +47,7 @@ public partial class WorldExplorerMap : WorldExplorerAuthBaseComponent, IAsyncDi
 		var places = await PlacesService.GetNearByPlaces(location, CancellationToken.None);
 		if (places.Count == 0)
 		{
-			await DialogService.ShowMessageBox(string.Empty, "No places found nearby");
+			Snackbar.Add("No places found nearby");
 		}
 
 		foreach (var place in places)

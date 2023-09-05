@@ -7,7 +7,8 @@ public static class PageExtensions
 {
 	public static UIViewController ShowBottomSheet(this Page page, IView bottomSheetContent, bool dimDismiss)
 	{
-		var mauiContext = page.Handler?.MauiContext ?? throw new Exception("MauiContext is null");
+		ArgumentNullException.ThrowIfNull(page.Handler?.MauiContext);
+		var mauiContext = page.Handler.MauiContext;
 		var viewController = page.ToUIViewController(mauiContext);
 		var viewControllerToPresent = bottomSheetContent.ToUIViewController(mauiContext);
 

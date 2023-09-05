@@ -1,9 +1,10 @@
 ﻿namespace WebApp.Services;
 
-using System.Linq.Expressions;
+using System.Threading;
 using Infrastructure;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 using Location = global::Shared.Models.Location;
 using Place = global::Shared.Models.Place;
 
@@ -37,65 +38,63 @@ public class PlacesService : IPlacesService
 
 	public async Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
 	{
-		var result = new List<Place>();
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-
-		var inSettlementLocation = IsNearbyLocation(location, DistanceConstants.SettlementDistance);
-		var savedPlaces = await dbContext.Places.Where(inSettlementLocation).ToListAsync(cancellationToken);
-		if (savedPlaces.Count == 0)
+		var userLocation = new Point(location.Longitude, location.Latitude)
 		{
-			var places = await aiService.GetNearByPlaces(location);
-			if (places.Count > 0)
-			{
-				var newPlaces = places.ExceptBy(savedPlaces.Select(x => x.Name), x => x.Name).ToList();
-				foreach (var place in newPlaces)
-				{
-					place.Images.AddRange(await imageSearchService.GetPlaceImages(place.Name, cancellationToken));
-				}
-
-				await dbContext.Places.AddRangeAsync(newPlaces.Select(ToPlace), cancellationToken);
-				await dbContext.SaveChangesAsync(cancellationToken);
-				result.AddRange(newPlaces);
-			}
-		}
-		else
+			SRID = 4326
+		};
+		var nearestPlaces = await dbContext.Places.OrderBy(c => c.Location.Distance(userLocation)).Take(5).ToListAsync(cancellationToken);
+		var nearestPlacesNearby = nearestPlaces.Where(x => x.Location.IsWithinDistance(userLocation, DistanceConstants.NearbyDistance)).ToList();
+		if (nearestPlacesNearby.Count > 0)
 		{
-			result.AddRange(savedPlaces.Select(ToPlace));
+			return nearestPlacesNearby.Select(ToPlace).ToList();
 		}
 
-		return result.Where(place => IsNearby(location, place.Location, DistanceConstants.NearbyDistance)).ToList();
+		// to do send request new places event
+		await RequestNewPlaces(location, cancellationToken);
+		return nearestPlaces.Select(ToPlace).ToList();
 	}
 
 	public async Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-
-		var nearbyCondition = IsNearbyLocation(location, DistanceConstants.NearbyDistance);
-		Expression<Func<Infrastructure.Models.Place, bool>> nameCondition = place => place.Name == name;
-
-		var nearbyAndNameCondition = Expression.Lambda<Func<Infrastructure.Models.Place, bool>>(
-			Expression.AndAlso(nearbyCondition.Body, Expression.Invoke(nameCondition, nearbyCondition.Parameters)),
-			nearbyCondition.Parameters);
-		var savedPlace = await dbContext.Places.FirstOrDefaultAsync(nearbyAndNameCondition, cancellationToken);
+		var savedPlace = await dbContext.Places.FirstOrDefaultAsync(place => place.Name == name && place.Location.IsWithinDistance(new Point(location.Longitude, location.Latitude), DistanceConstants.NearbyDistance), cancellationToken);
 		return savedPlace is null ? null : ToPlace(savedPlace);
 	}
-
 	public bool IsNearby(Location location1, Location location2, double distance)
 	{
 		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
 		return location1.Latitude - location2.Latitude >= -latLongDifferenceEquivalentToM &&
-			   location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
-			   location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
-			   location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
+		       location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
+		       location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
+		       location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
 	}
 
-	private Expression<Func<Infrastructure.Models.Place, bool>> IsNearbyLocation(Location location1, double distance)
+	public async Task RequestNewPlaces(Location location, CancellationToken cancellationToken)
 	{
-		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
-		return place => location1.Latitude - place.Location.Latitude >= -latLongDifferenceEquivalentToM &&
-						location1.Latitude - place.Location.Latitude <= latLongDifferenceEquivalentToM &&
-						location1.Longitude - place.Location.Longitude >= -latLongDifferenceEquivalentToM &&
-						location1.Longitude - place.Location.Longitude <= latLongDifferenceEquivalentToM;
+		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		var places = await aiService.GetNearByPlaces(location);
+		if (places.Count > 0)
+		{
+			var newPlaceNames = places.Select(x => x.Name);
+			var existingPlaceNames = await dbContext.Places
+			                                        .Where(place => newPlaceNames.Contains(place.Name))
+			                                        .Select(place => place.Name)
+			                                        .ToListAsync(cancellationToken);
+
+			var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name).ToList();
+
+			var getImagesTasks = newPlaces.Select(async place =>
+			{
+				var images = await imageSearchService.GetPlaceImages(place.Name, cancellationToken);
+				place.Images.AddRange(images);
+			}).ToList();
+
+			await Task.WhenAll(getImagesTasks);
+
+			await dbContext.Places.AddRangeAsync(newPlaces.Select(ToPlace), cancellationToken);
+			await dbContext.SaveChangesAsync(cancellationToken);
+		}
 	}
 
 	private Infrastructure.Models.Place ToPlace(Place place)
@@ -107,13 +106,8 @@ public class PlacesService : IPlacesService
 			Images = place.Images.Select(x => new Image
 			{
 				Source = x
-			})
-						  .ToList(),
-			Location = new Infrastructure.Models.Location
-			{
-				Latitude = place.Location.Latitude,
-				Longitude = place.Location.Longitude
-			}
+			}).ToList(),
+			Location = new Point(place.Location.Longitude, place.Location.Latitude)
 		};
 	}
 
@@ -124,7 +118,7 @@ public class PlacesService : IPlacesService
 			Name = place.Name,
 			Description = place.Description,
 			Images = place.Images.Select(x => x.Source).ToList(),
-			Location = new Location(place.Location.Latitude, place.Location.Longitude)
+			Location = new Location(place.Location.Y, place.Location.X)
 		};
 	}
 }

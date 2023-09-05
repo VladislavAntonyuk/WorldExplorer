@@ -7,60 +7,26 @@ using Services;
 public class UsersController : ApiAuthControllerBase
 {
 	private readonly ICurrentUserService currentUserService;
-	private readonly IGraphClientService graphClientService;
+	private readonly IUserService userService;
 
-	public UsersController(ICurrentUserService currentUserService, IGraphClientService graphClientService)
+	public UsersController(ICurrentUserService currentUserService, IUserService userService)
 	{
 		this.currentUserService = currentUserService;
-		this.graphClientService = graphClientService;
+		this.userService = userService;
 	}
 
 	[HttpGet("self")]
-	public User GetCurrentUser()
+	public Task<User?> GetCurrentUser(CancellationToken cancellationToken)
 	{
 		var currentUser = currentUserService.GetCurrentUser();
-		return new User
-		{
-			Email = currentUser.Email,
-			Name = currentUser.Name,
-			VisitedPlaces = new List<Place>
-			{
-				new()
-				{
-					Name = "Place1",
-					Location = new Location(38, 45),
-					Images = new List<string>
-					{
-						"https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
-					}
-				},
-				new()
-				{
-					Name = "Place2 Place2",
-					Location = new Location(38, 45),
-					Images = new List<string>
-					{
-						"https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
-					}
-				},
-				new()
-				{
-					Name = "Place3 Place3 Place3",
-					Location = new Location(38, 45),
-					Images = new List<string>
-					{
-						"https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
-					}
-				}
-			}
-		};
+		return userService.GetUser(currentUser.ProviderId, cancellationToken);
 	}
 
 	[HttpDelete("self")]
 	public async Task<IActionResult> DeleteCurrentUser(CancellationToken cancellationToken)
 	{
 		var currentUserId = currentUserService.GetCurrentUser().ProviderId;
-		await graphClientService.DeleteUser(currentUserId, cancellationToken);
+		await userService.DeleteUser(currentUserId, cancellationToken);
 		return NoContent();
 	}
 }

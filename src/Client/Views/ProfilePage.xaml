@@ -59,13 +59,13 @@
 			<Label
 				Text="{x:Static localization:Localization.VisitedPlaces}"
 				Style="{StaticResource TitleStyle}"
-				IsVisible="{Binding User.VisitedPlaces, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />
+				IsVisible="{Binding User.Visits, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />
 
 			<CollectionView
-				ItemsSource="{Binding User.VisitedPlaces}"
+				ItemsSource="{Binding User.Visits}"
 				HeightRequest="140"
 				ItemSizingStrategy="MeasureAllItems"
-				IsVisible="{Binding User.VisitedPlaces, Converter={StaticResource IsListNotNullOrEmptyConverter}}">
+				IsVisible="{Binding User.Visits, Converter={StaticResource IsListNotNullOrEmptyConverter}}">
 
 				<CollectionView.ItemsLayout>
 					<LinearItemsLayout
@@ -74,11 +74,11 @@
 				</CollectionView.ItemsLayout>
 
 				<CollectionView.ItemTemplate>
-					<DataTemplate x:DataType="models:Place">
+					<DataTemplate x:DataType="models:Visit">
 						<Border StrokeShape="RoundRectangle 20">
 							<Grid>
 								<Image
-									Source="{Binding Images[0]}"
+									Source="{Binding Place.Images[0]}"
 									HorizontalOptions="Center"
 									Aspect="AspectFit"
 									HeightRequest="140" />
@@ -86,7 +86,11 @@
 								<Label
 									HorizontalOptions="Center"
 									VerticalOptions="End"
-									Text="{Binding Name}" />
+									Text="{Binding Place.Name}" />
+								<Label
+									HorizontalOptions="Center"
+									VerticalOptions="End"
+									Text="{Binding VisitDate}" />
 							</Grid>
 						</Border>
 					</DataTemplate>

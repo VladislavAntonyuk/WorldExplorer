@@ -117,10 +117,10 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 		this.session = session;
 		MainThread.BeginInvokeOnMainThread(() =>
 		{
+			ArgumentNullException.ThrowIfNull(Platform.CurrentActivity?.Window?.DecorView);
 			mLoadingMessageSnackbar =
 				Snackbar.Make(
-					Platform.CurrentActivity?.Window?.DecorView ??
-					throw new NullReferenceException("MainActivity not found"), "Searching for surfaces...",
+					Platform.CurrentActivity.Window.DecorView, "Searching for surfaces...",
 					BaseTransientBottomBar.LengthIndefinite);
 			mLoadingMessageSnackbar.View.SetBackgroundColor(Color.DarkGray);
 			mLoadingMessageSnackbar.Show();

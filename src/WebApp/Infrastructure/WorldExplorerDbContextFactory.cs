@@ -10,7 +10,7 @@ public class WorldExplorerDbContextFactory : IDesignTimeDbContextFactory<WorldEx
 	{
 		var optionsBuilder = new DbContextOptionsBuilder<WorldExplorerDbContext>();
 		const string connectionString = "Data Source=migration.db";
-		optionsBuilder.UseSqlite(connectionString);
+		optionsBuilder.UseSqlite(connectionString, options => options.UseNetTopologySuite());
 		return new WorldExplorerDbContext(optionsBuilder.Options);
 	}
 }

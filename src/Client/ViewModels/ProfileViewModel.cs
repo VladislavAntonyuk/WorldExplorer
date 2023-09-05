@@ -7,6 +7,7 @@ using Models;
 using Resources.Localization;
 using Services;
 using Services.Auth;
+using Shared.Models;
 
 public partial class ProfileViewModel : BaseViewModel
 {
@@ -16,7 +17,7 @@ public partial class ProfileViewModel : BaseViewModel
 	private readonly IUsersApi usersApi;
 
 	[ObservableProperty]
-	private UserDetails? user;
+	private User? user;
 
 	public ProfileViewModel(IAuthService authService,
 		INavigationService navigationService,
@@ -65,12 +66,8 @@ public partial class ProfileViewModel : BaseViewModel
 		var getUserResult = await usersApi.GetCurrentUser(CancellationToken.None);
 		if (getUserResult.IsSuccessStatusCode)
 		{
-			User = new UserDetails
-			{
-				Email = getUserResult.Content.Email,
-				Name = getUserResult.Content.Name,
-				VisitedPlaces = getUserResult.Content.VisitedPlaces,
-				Activities = new List<UserActivity>
+			User = getUserResult.Content;
+			User.Activities = new List<UserActivity>
 				{
 					new()
 					{
@@ -82,8 +79,7 @@ public partial class ProfileViewModel : BaseViewModel
 						Date = DateTime.Today,
 						Steps = 150
 					}
-				}
-			};
+				};
 		}
 		else
 		{

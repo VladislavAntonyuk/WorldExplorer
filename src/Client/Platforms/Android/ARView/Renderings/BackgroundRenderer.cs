@@ -13,8 +13,7 @@ public class BackgroundRenderer
 	private const int TexcoordsPerVertex = 2;
 	private const int FloatSize = 4;
 
-	private static readonly ByteOrder ByteOrder =
-		ByteOrder.NativeOrder() ?? throw new Exception("ByteOrder NativeOrder is null");
+	private static readonly ByteOrder? ByteOrder = ByteOrder.NativeOrder();
 
 	private static readonly float[] QuadCoords =
 	{
@@ -87,6 +86,7 @@ public class BackgroundRenderer
 		}
 
 		var bbVertices = ByteBuffer.AllocateDirect(QuadCoords.Length * FloatSize);
+		ArgumentNullException.ThrowIfNull(ByteOrder);
 		bbVertices.Order(ByteOrder);
 		mQuadVertices = bbVertices.AsFloatBuffer();
 		mQuadVertices.Put(QuadCoords);
