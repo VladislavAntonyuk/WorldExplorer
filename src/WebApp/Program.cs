@@ -25,16 +25,17 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
 builder.Services.AddScoped<IImageSearchService, ImageSearchService>();
 builder.Services.AddScoped(_ => new GraphServiceClient(new DefaultAzureCredential()));
-builder.Services.AddScoped<IGraphClientService, GraphClientService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IPlacesService, PlacesService>();
 builder.Services.Configure<OpenAiSettings>(builder.Configuration.GetRequiredSection("OpenAI"));
 builder.Services.AddSingleton<IAiService, AiService>();
 builder.Services.AddLogging();
-builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt => opt.UseSqlite("Data Source=WorldExplorer.db")
-																			 .UseQueryTrackingBehavior(
-																				 QueryTrackingBehavior
-																					 .NoTrackingWithIdentityResolution));
+builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt =>
+{
+	opt.UseSqlite("Data Source=WorldExplorer.db", optionsBuilder => optionsBuilder.UseNetTopologySuite())
+	   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
+});
 builder.Services.AddI18nText();
 
 var app = builder.Build();

@@ -8,8 +8,8 @@ public static class PageExtensions
 {
 	public static Popup ShowBottomSheet(this Page page, IView bottomSheetContent, bool dimDismiss)
 	{
-		var mauiContext = page.Handler?.MauiContext ?? throw new Exception("MauiContext is null");
-		var content = bottomSheetContent.ToPlatform(mauiContext);
+		ArgumentNullException.ThrowIfNull(page.Handler?.MauiContext);
+		var content = bottomSheetContent.ToPlatform(page.Handler.MauiContext);
 		var contentSize = bottomSheetContent.Measure(double.PositiveInfinity, double.PositiveInfinity).ToPixel();
 		var popup = new Popup
 		{

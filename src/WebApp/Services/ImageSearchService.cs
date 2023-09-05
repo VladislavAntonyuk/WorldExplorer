@@ -5,14 +5,13 @@ using System.Web;
 
 public class ImageSearchService : IImageSearchService
 {
-	private readonly string apiKey;
+	private readonly string? apiKey;
 	private readonly IHttpClientFactory httpClientFactory;
 
 	public ImageSearchService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
 	{
 		this.httpClientFactory = httpClientFactory;
-		apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey") ??
-				 throw new NullReferenceException("GoogleSearch ApiKey is null");
+		apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey");
 	}
 
 	public async Task<List<string>> GetPlaceImages(string placeName, CancellationToken cancellationToken)

@@ -10,8 +10,8 @@ public static class PageExtensions
 		var bottomSheetDialog = new BottomSheetDialog(
 			Platform.CurrentActivity?.Window?.DecorView.FindViewById(Android.Resource.Id.Content)?.Context ??
 			throw new InvalidOperationException("Context is null"), Resource.Style.AppBottomSheetDialogTheme);
-		bottomSheetDialog.SetContentView(
-			bottomSheetContent.ToPlatform(page.Handler?.MauiContext ?? throw new Exception("MauiContext is null")));
+		ArgumentNullException.ThrowIfNull(page.Handler?.MauiContext);
+		bottomSheetDialog.SetContentView(bottomSheetContent.ToPlatform(page.Handler.MauiContext));
 		bottomSheetDialog.Behavior.Hideable = dimDismiss;
 		bottomSheetDialog.Behavior.FitToContents = true;
 		bottomSheetDialog.Show();

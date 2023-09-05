@@ -42,8 +42,7 @@ public class ObjectRenderer
 		0.0f
 	};
 
-	private static readonly ByteOrder ByteOrder =
-		ByteOrder.NativeOrder() ?? throw new Exception("ByteOrder NativeOrder is null");
+	private static readonly ByteOrder? ByteOrder = ByteOrder.NativeOrder();
 
 	// Temporary matrices allocated here to reduce number of allocations for each frame.
 	private readonly float[] mModelMatrix = new float[16];
@@ -136,6 +135,7 @@ public class ObjectRenderer
 		var normals = ObjData.GetNormals(obj);
 
 		// Convert int indices to shorts for GL ES 2.0 compatibility
+		ArgumentNullException.ThrowIfNull(ByteOrder);
 		var indices = ByteBuffer.AllocateDirect(2 * wideIndices.Limit()).Order(ByteOrder).AsShortBuffer();
 		while (wideIndices.HasRemaining)
 		{
