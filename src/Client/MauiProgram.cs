@@ -5,6 +5,7 @@ using Camera.MAUI;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Maps;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.API;
 using Services.Auth;
@@ -61,6 +62,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IAuthService, MockAuthService>();
 #else
 		builder.Services.AddSingleton<IAuthService, AuthService>();
+		builder.Services.Configure<AzureB2CConfiguration>(configuration => builder.Configuration.GetRequiredSection("AzureAdB2C").Bind(configuration));
 #endif
 		builder.Services.AddSingleton<IArService, ArService>();
 		builder.Services.AddSingleton<IDialogService, DialogService>();
