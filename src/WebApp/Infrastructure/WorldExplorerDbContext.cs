@@ -53,5 +53,11 @@ public class WorldExplorerDbContext : DbContext
 				  .HasForeignKey(d => d.UserId)
 				  .OnDelete(DeleteBehavior.Cascade); // On user deletion, associated reviews will be deleted
 		});
+
+		modelBuilder.Entity<User>()
+		            .HasData(new User
+		            {
+			            Id = "19d3b2c7-8714-4851-ac73-95aeecfba3a6"
+		            });
 	}
 }

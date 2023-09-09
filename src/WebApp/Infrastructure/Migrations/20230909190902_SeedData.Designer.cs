@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using WebApp.Infrastructure;
@@ -11,9 +12,11 @@ using WebApp.Infrastructure;
 namespace WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(WorldExplorerDbContext))]
-    partial class WorldExplorerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230909190902_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0-preview.6.23329.4");
