@@ -22,9 +22,9 @@ public class WorldExplorerDbContext : DbContext
 		modelBuilder.Entity<Place>(entity =>
 		{
 			entity.HasKey(e => e.Id);
-			entity.HasMany(x=>x.Reviews)
-			      .WithOne().HasForeignKey(d => d.PlaceId)
-			      .OnDelete(DeleteBehavior.Cascade);
+			entity.HasMany(x => x.Reviews)
+				  .WithOne().HasForeignKey(d => d.PlaceId)
+				  .OnDelete(DeleteBehavior.Cascade);
 		});
 
 		modelBuilder.Entity<User>(entity =>
@@ -55,9 +55,9 @@ public class WorldExplorerDbContext : DbContext
 		});
 
 		modelBuilder.Entity<User>()
-		            .HasData(new User
-		            {
-			            Id = "19d3b2c7-8714-4851-ac73-95aeecfba3a6"
-		            });
+					.HasData(new User
+					{
+						Id = "19d3b2c7-8714-4851-ac73-95aeecfba3a6"
+					});
 	}
 }

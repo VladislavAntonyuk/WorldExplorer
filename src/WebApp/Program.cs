@@ -27,7 +27,7 @@ builder.Services.AddScoped<IImageSearchService, ImageSearchService>();
 builder.Services.AddScoped(_ =>
 {
 	var config = builder.Configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
-	                          .Get<AzureAdB2CGraphClientConfiguration>();
+							  .Get<AzureAdB2CGraphClientConfiguration>();
 	ArgumentNullException.ThrowIfNull(config);
 	var clientSecretCredential =
 		new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret);

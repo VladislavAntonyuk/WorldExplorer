@@ -2,7 +2,6 @@
 
 using Android.App;
 using Android.Content.PM;
-using Android.OS;
 
 [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true,
 		  LaunchMode = LaunchMode.SingleTop,

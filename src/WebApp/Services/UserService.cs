@@ -67,28 +67,28 @@ public class UserService : IUserService
 					Steps = 150
 				}
 			}
-	};
-}
+		};
+	}
 
-private global::Shared.Models.Visit ToDto(Visit arg)
-{
-	return new global::Shared.Models.Visit()
+	private global::Shared.Models.Visit ToDto(Visit arg)
 	{
-		Id = arg.Id,
-		Place = new Place
+		return new global::Shared.Models.Visit()
 		{
-			Id = arg.PlaceId,
-			Name = string.Empty,
-			Location = new Location(0, 0)
-		},
-		VisitDate = arg.VisitDate
-	};
-}
+			Id = arg.Id,
+			Place = new Place
+			{
+				Id = arg.PlaceId,
+				Name = string.Empty,
+				Location = new Location(0, 0)
+			},
+			VisitDate = arg.VisitDate
+		};
+	}
 
-public async Task DeleteUser(string providerId, CancellationToken cancellationToken)
-{
-	await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
-	await dbContext.Users.Where(x => x.Id == providerId).ExecuteDeleteAsync(cancellationToken);
-	await graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
-}
+	public async Task DeleteUser(string providerId, CancellationToken cancellationToken)
+	{
+		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
+		await dbContext.Users.Where(x => x.Id == providerId).ExecuteDeleteAsync(cancellationToken);
+		await graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
+	}
 }

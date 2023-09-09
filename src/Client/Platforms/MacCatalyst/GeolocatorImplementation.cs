@@ -2,7 +2,6 @@
 
 using CoreLocation;
 using Models;
-using Services;
 
 public partial class GeolocatorImplementation
 {

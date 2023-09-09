@@ -7,7 +7,6 @@ using Android.OS;
 using Android.Runtime;
 using Java.Lang;
 using Models;
-using Services;
 
 public partial class GeolocatorImplementation
 {

@@ -14,7 +14,7 @@ public class ClaimsController : ApiControllerBase
 	private readonly ILogger<ClaimsController> logger;
 
 	public ClaimsController(ILogger<ClaimsController> logger,
-		IConfiguration configuration,IDbContextFactory<WorldExplorerDbContext> factory)
+		IConfiguration configuration, IDbContextFactory<WorldExplorerDbContext> factory)
 	{
 		this.logger = logger;
 		this.configuration = configuration;
@@ -52,17 +52,17 @@ public class ClaimsController : ApiControllerBase
 
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
-		var existedUser = await dbContext.Users.FirstOrDefaultAsync(x=>x.Id == requestConnector.ObjectId,
+		var existedUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == requestConnector.ObjectId,
 																	cancellationToken);
 		if (existedUser is null)
 		{
-			await dbContext.Users.AddAsync(new User(){Id = requestConnector.ObjectId}, cancellationToken);
+			await dbContext.Users.AddAsync(new User() { Id = requestConnector.ObjectId }, cancellationToken);
 			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 
 		var result = new ResponseContent
 		{
-			
+
 		};
 
 		return Ok(result);

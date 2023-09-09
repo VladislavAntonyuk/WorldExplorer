@@ -65,9 +65,9 @@ public class PlacesService : IPlacesService
 	{
 		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
 		return location1.Latitude - location2.Latitude >= -latLongDifferenceEquivalentToM &&
-		       location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
-		       location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
-		       location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
+			   location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
+			   location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
+			   location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
 	}
 
 	public async Task RequestNewPlaces(Location location, CancellationToken cancellationToken)
@@ -78,9 +78,9 @@ public class PlacesService : IPlacesService
 		{
 			var newPlaceNames = places.Select(x => x.Name);
 			var existingPlaceNames = await dbContext.Places
-			                                        .Where(place => newPlaceNames.Contains(place.Name))
-			                                        .Select(place => place.Name)
-			                                        .ToListAsync(cancellationToken);
+													.Where(place => newPlaceNames.Contains(place.Name))
+													.Select(place => place.Name)
+													.ToListAsync(cancellationToken);
 
 			var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name).ToList();
 

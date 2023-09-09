@@ -38,16 +38,20 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 	private void GeoLocator_PositionChanged(object? sender, GeolocatorData e)
 	{
 		CurrentGeolocatorData = e;
-		LocationChanged?.Invoke(this, new LocationChangedEventArgs
+		weakEventManager.HandleEvent(this, new LocationChangedEventArgs
 		{
 			Location = e.Location
-		});
+		}, nameof(LocationChanged));
 	}
 
 	public ObservableCollection<Pin> Pins { get; } = new();
 
-	public event EventHandler<LocationChangedEventArgs>? LocationChanged;
-
+	private readonly WeakEventManager weakEventManager = new();
+	public event EventHandler<LocationChangedEventArgs> LocationChanged
+	{
+		add => weakEventManager.AddEventHandler(value);
+		remove => weakEventManager.RemoveEventHandler(value);
+	}
 	public override async Task InitializeAsync()
 	{
 		deviceDisplay.KeepScreenOn = true;
@@ -100,7 +104,7 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 
 		dispatcher.Dispatch((() =>
 		{
-			foreach (var place in placesResponse.Content)
+			foreach (var place in placesResponse.Content.Where(x => Pins.All(pin => pin.Label != x.Name)))
 			{
 				Pins.Add(new Pin
 				{

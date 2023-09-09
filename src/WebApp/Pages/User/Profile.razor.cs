@@ -26,7 +26,7 @@ public partial class Profile : WorldExplorerAuthBaseComponent
 			Email = CurrentUser.Email,
 			Id = CurrentUser.ProviderId
 		};
-		
+
 		if (currentUser.Email == string.Empty)
 		{
 			NavigationManager.NavigateTo("MicrosoftIdentity/Account/SignOut", true);
