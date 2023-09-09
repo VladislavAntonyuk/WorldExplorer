@@ -104,6 +104,7 @@ jobs:
                     GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
                     OPENAI_APIKEY: ${{ secrets.OPENAI_APIKEY }}
                     AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
+                    AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
                 with:
                     tokenPrefix: '#{'
                     tokenSuffix: '}#'

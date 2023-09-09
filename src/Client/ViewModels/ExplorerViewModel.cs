@@ -9,10 +9,11 @@ using Models;
 using Resources.Localization;
 using Services;
 
-public partial class ExplorerViewModel : BaseViewModel
+public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 {
 	private readonly IDeviceDisplay deviceDisplay;
 	private readonly IDialogService dialogService;
+	private readonly IDispatcher dispatcher;
 	private readonly IGeolocator geoLocator;
 
 	private readonly IPlacesApi placesApi;
@@ -23,12 +24,24 @@ public partial class ExplorerViewModel : BaseViewModel
 	public ExplorerViewModel(IPlacesApi placesApi,
 		IGeolocator geoLocator,
 		IDialogService dialogService,
+		IDispatcher dispatcher,
 		IDeviceDisplay deviceDisplay)
 	{
 		this.placesApi = placesApi;
 		this.geoLocator = geoLocator;
+		geoLocator.PositionChanged += GeoLocator_PositionChanged;
 		this.dialogService = dialogService;
+		this.dispatcher = dispatcher;
 		this.deviceDisplay = deviceDisplay;
+	}
+
+	private void GeoLocator_PositionChanged(object? sender, GeolocatorData e)
+	{
+		CurrentGeolocatorData = e;
+		LocationChanged?.Invoke(this, new LocationChangedEventArgs
+		{
+			Location = e.Location
+		});
 	}
 
 	public ObservableCollection<Pin> Pins { get; } = new();
@@ -44,6 +57,7 @@ public partial class ExplorerViewModel : BaseViewModel
 
 	public override Task UnInitializeAsync()
 	{
+		geoLocator.StopListening();
 		deviceDisplay.KeepScreenOn = false;
 		return base.UnInitializeAsync();
 	}
@@ -59,16 +73,7 @@ public partial class ExplorerViewModel : BaseViewModel
 		}
 
 		await dialogService.ToastAsync(Localization.LookingForPlaces, cancellationToken);
-		var progress = new Progress<GeolocatorData>(geoLocatorData =>
-		{
-			CurrentGeolocatorData = geoLocatorData;
-			LocationChanged?.Invoke(this, new LocationChangedEventArgs
-			{
-				Location = geoLocatorData.Location
-			});
-		});
-
-		await geoLocator.StartListening(progress, cancellationToken);
+		geoLocator.StartListening();
 	}
 
 	async partial void OnCurrentGeolocatorDataChanged(GeolocatorData? value)
@@ -80,6 +85,7 @@ public partial class ExplorerViewModel : BaseViewModel
 
 		var placesResponse = await placesApi.GetRecommendations(
 			new Shared.Models.Location(value.Location.Latitude, value.Location.Longitude), CancellationToken.None);
+
 		if (!placesResponse.IsSuccessStatusCode)
 		{
 			await dialogService.ToastAsync(placesResponse.Error.Message);
@@ -92,16 +98,19 @@ public partial class ExplorerViewModel : BaseViewModel
 			return;
 		}
 
-		foreach (var place in placesResponse.Content)
+		dispatcher.Dispatch((() =>
 		{
-			Pins.Add(new Pin
+			foreach (var place in placesResponse.Content)
 			{
-				Location = new Location(place.Location.Latitude, place.Location.Longitude),
-				Label = place.Name,
-				Type = PinType.Place,
-				Address = place.Description ?? string.Empty
-			});
-		}
+				Pins.Add(new Pin
+				{
+					Location = new Location(place.Location.Latitude, place.Location.Longitude),
+					Label = place.Name,
+					Type = PinType.Place,
+					Address = place.Description ?? string.Empty
+				});
+			}
+		}));
 
 		await CheckLocation(value.Location);
 	}
@@ -125,5 +134,10 @@ public partial class ExplorerViewModel : BaseViewModel
 			await dialogService.ToastAsync(string.Format(Localization.YouAreNear, closestPlace.Label),
 										   CancellationToken.None);
 		}
+	}
+
+	public void Dispose()
+	{
+		geoLocator.PositionChanged -= GeoLocator_PositionChanged;
 	}
 }

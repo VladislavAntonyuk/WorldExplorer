@@ -7,7 +7,7 @@ public class Place
 	public string? Description { get; set; }
 	public List<string> Images { get; set; } = new();
 	public required Location Location { get; set; }
-	public double Rating => Reviews.Average(x => x.Rating);
+	public double Rating => Reviews.Count > 0 ? Reviews.Average(x => x.Rating) : 0;
 	public ICollection<Review> Reviews { get; set; } = new List<Review>();
 	public string? MainImage => Images.FirstOrDefault();
 	public static readonly Place Default = new()

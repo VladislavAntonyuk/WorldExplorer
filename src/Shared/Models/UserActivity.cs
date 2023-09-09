@@ -1,4 +1,4 @@
-﻿namespace Client.Models;
+﻿namespace Shared.Models;
 
 public class UserActivity
 {

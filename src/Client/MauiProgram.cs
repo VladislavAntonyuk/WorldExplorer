@@ -68,21 +68,21 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IDialogService, DialogService>();
 
 		builder.Services.AddSingleton(Connectivity.Current);
-		builder.Services.AddScoped(_ => DeviceInfo.Current);
-		builder.Services.AddScoped(_ => DeviceDisplay.Current);
-		builder.Services.AddScoped(_ => Share.Default);
-		builder.Services.AddScoped(_ => Launcher.Default);
-		builder.Services.AddScoped<IGeolocator, GeolocatorImplementation>();
+		builder.Services.AddSingleton(_ => DeviceInfo.Current);
+		builder.Services.AddSingleton(_ => DeviceDisplay.Current);
+		builder.Services.AddSingleton(_ => Share.Default);
+		builder.Services.AddSingleton(_ => Launcher.Default);
+		builder.Services.AddSingleton<IGeolocator, GeolocatorImplementation>();
 		builder.Services.AddTransient<AuthHeaderHandler>();
 		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
 		builder.Services.AddApi<IUsersApi>(apiSettings.Users);
 
-		builder.Services.AddScoped<ProfilePage, ProfileViewModel>();
-		builder.Services.AddScoped<PlaceDetailsView, PlaceDetailsViewModel>();
-		builder.Services.AddScoped<LoginPage, LoginViewModel>();
-		builder.Services.AddScoped<ExplorerPage, ExplorerViewModel>();
-		builder.Services.AddScoped<LoadingPage, LoadingViewModel>();
-		builder.Services.AddScoped<ErrorPage, ErrorViewModel>();
+		builder.Services.AddSingleton<ProfilePage, ProfileViewModel>();
+		builder.Services.AddSingleton<PlaceDetailsView, PlaceDetailsViewModel>();
+		builder.Services.AddSingleton<LoginPage, LoginViewModel>();
+		builder.Services.AddSingleton<ExplorerPage, ExplorerViewModel>();
+		builder.Services.AddSingleton<LoadingPage, LoadingViewModel>();
+		builder.Services.AddSingleton<ErrorPage, ErrorViewModel>();
 		builder.Services.AddTransientWithShellRoute<ArPage, ArViewModel>($"//home/{nameof(ArPage)}");
 		builder.Services.AddTransientWithShellRoute<CameraPage, CameraViewModel>($"//home/{nameof(CameraPage)}");
 		builder.Services.AddSingleton<ShellViewModel>();

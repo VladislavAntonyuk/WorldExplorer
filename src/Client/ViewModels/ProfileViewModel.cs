@@ -67,19 +67,6 @@ public partial class ProfileViewModel : BaseViewModel
 		if (getUserResult.IsSuccessStatusCode)
 		{
 			User = getUserResult.Content;
-			User.Activities = new List<UserActivity>
-				{
-					new()
-					{
-						Date = DateTime.Today,
-						Steps = 50
-					},
-					new()
-					{
-						Date = DateTime.Today,
-						Steps = 150
-					}
-				};
 		}
 		else
 		{

@@ -4,28 +4,34 @@ using Models;
 using Services;
 using Tizen.Location;
 
-public class GeolocatorImplementation : IGeolocator
+public partial class GeolocatorImplementation
 {
-	private readonly Locator locator = new(LocationType.Gps);
-
-	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress, CancellationToken cancellationToken)
+	private readonly Locator locator = new(LocationType.Gps)
 	{
-		var taskCompletionSource = new TaskCompletionSource();
-		cancellationToken.Register(() =>
-		{
-			locator.DistanceBasedLocationChanged -= PositionChanged;
-			locator.Stop();
-			taskCompletionSource.TrySetResult();
-		});
-		locator.DistanceBasedLocationChanged += PositionChanged;
+		Distance = 100
+	};
 
-		void PositionChanged(object? sender, LocationChangedEventArgs args)
-		{
-			positionChangedProgress.Report(new GeolocatorData(new (args.Location.Latitude, args.Location.Longitude), args.Location.Speed));
-		}
-
-		locator.Distance = 100;
+	public void StartListening()
+	{
+		locator.DistanceBasedLocationChanged += OnPositionChanged;
 		locator.Start();
-		await taskCompletionSource.Task;
+	}
+
+	public void StopListening()
+	{
+		locator.DistanceBasedLocationChanged -= OnPositionChanged;
+		locator.Stop();
+	}
+
+	void OnPositionChanged(object? sender, LocationChangedEventArgs args)
+	{
+		if (args.Locations.Length > 0)
+		{
+			var lastLocation = args.Locations[^1];
+			weakEventManager.HandleEvent(
+				this,
+				new GeolocatorData(new(args.Location.Latitude, args.Location.Longitude), args.Location.Speed),
+				nameof(PositionChanged));
+		}
 	}
 }

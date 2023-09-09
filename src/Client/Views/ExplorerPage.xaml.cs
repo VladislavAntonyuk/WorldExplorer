@@ -9,17 +9,22 @@ using ViewModels;
 public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 {
 	private readonly PlaceDetailsViewModel placeDetailsViewModel;
+	private readonly IDispatcher dispatcher;
 
-	public ExplorerPage(ExplorerViewModel viewModel, PlaceDetailsViewModel placeDetailsViewModel) : base(viewModel)
+	public ExplorerPage(ExplorerViewModel viewModel, PlaceDetailsViewModel placeDetailsViewModel, IDispatcher dispatcher) : base(viewModel)
 	{
 		this.placeDetailsViewModel = placeDetailsViewModel;
+		this.dispatcher = dispatcher;
 		viewModel.LocationChanged += OnLocationChanged;
 		InitializeComponent();
 	}
 
 	private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
 	{
-		Map.MoveToRegion(MapSpan.FromCenterAndRadius(e.Location, Distance.FromKilometers(1)));
+		dispatcher.Dispatch(() =>
+		{
+			Map.MoveToRegion(MapSpan.FromCenterAndRadius(e.Location, Distance.FromKilometers(1)));
+		});
 	}
 
 	private async void Pin_OnMarkerClicked(object? sender, PinClickedEventArgs e)

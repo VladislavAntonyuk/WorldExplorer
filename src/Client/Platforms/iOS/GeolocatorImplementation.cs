@@ -4,35 +4,32 @@ using CoreLocation;
 using Models;
 using Services;
 
-public class GeolocatorImplementation : IGeolocator
+public partial class GeolocatorImplementation
 {
 	private readonly CLLocationManager manager = new();
 
-	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress,
-		CancellationToken cancellationToken)
+	public void StartListening()
 	{
-		var taskCompletionSource = new TaskCompletionSource();
-		cancellationToken.Register(() =>
-		{
-			manager.LocationsUpdated -= PositionChanged;
-			manager.StopUpdatingLocation();
-			taskCompletionSource.TrySetResult();
-		});
-		manager.LocationsUpdated += PositionChanged;
+		manager.LocationsUpdated += OnPositionChanged;
 		manager.DistanceFilter = 100;
 		manager.StartUpdatingLocation();
+	}
 
-		void PositionChanged(object? sender, CLLocationsUpdatedEventArgs args)
+	public void StopListening()
+	{
+		manager.LocationsUpdated -= OnPositionChanged;
+		manager.StopUpdatingLocation();
+	}
+
+	void OnPositionChanged(object? sender, CLLocationsUpdatedEventArgs args)
+	{
+		if (args.Locations.Length > 0)
 		{
-			if (args.Locations.Length > 0)
-			{
-				var lastLocation = args.Locations[^1];
-				positionChangedProgress.Report(new GeolocatorData(
-												   new(lastLocation.Coordinate.Latitude,
-													   lastLocation.Coordinate.Longitude), lastLocation.Speed));
-			}
+			var lastLocation = args.Locations[^1];
+			weakEventManager.HandleEvent(
+				this,
+				new GeolocatorData(new(lastLocation.Coordinate.Latitude, lastLocation.Coordinate.Longitude), lastLocation.Speed),
+				nameof(PositionChanged));
 		}
-
-		await taskCompletionSource.Task;
 	}
 }

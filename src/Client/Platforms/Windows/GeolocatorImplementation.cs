@@ -1,35 +1,31 @@
 ﻿namespace Client;
 
 using Models;
-using Services;
 using Windows.Devices.Geolocation;
 
-public class GeolocatorImplementation : IGeolocator
+public partial class GeolocatorImplementation
 {
 	private readonly Geolocator locator = new();
 
-	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress,
-		CancellationToken cancellationToken)
+	public void StartListening()
 	{
-		var taskCompletionSource = new TaskCompletionSource();
-		cancellationToken.Register(() =>
-		{
-			locator.PositionChanged -= PositionChanged;
-			taskCompletionSource.TrySetResult();
-		});
-		locator.PositionChanged += PositionChanged;
+		locator.PositionChanged += OnPositionChanged;
 
-		void PositionChanged(Geolocator sender, PositionChangedEventArgs args)
-		{
-			positionChangedProgress.Report(new GeolocatorData(
-											   new Location(args.Position.Coordinate.Latitude,
-															args.Position.Coordinate.Longitude),
-											   args.Position.Coordinate.Speed ?? 0));
-		}
 
 		locator.MovementThreshold = 100;
 		locator.DesiredAccuracyInMeters = 100;
+	}
 
-		await taskCompletionSource.Task;
+	public void StopListening()
+	{
+		locator.PositionChanged -= OnPositionChanged;
+	}
+
+	void OnPositionChanged(Geolocator sender, Windows.Devices.Geolocation.PositionChangedEventArgs args)
+	{
+		weakEventManager.HandleEvent(
+			this,
+			new GeolocatorData(new Location(args.Position.Coordinate.Latitude, args.Position.Coordinate.Longitude), args.Position.Coordinate.Speed ?? 0),
+			nameof(PositionChanged));
 	}
 }

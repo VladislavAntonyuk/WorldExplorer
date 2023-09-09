@@ -9,25 +9,24 @@ using Java.Lang;
 using Models;
 using Services;
 
-public class GeolocatorImplementation : IGeolocator
+public partial class GeolocatorImplementation
 {
 	private GeolocationContinuousListener? locator;
 
-	public async Task StartListening(IProgress<GeolocatorData> positionChangedProgress,
-		CancellationToken cancellationToken)
+	public void StartListening()
 	{
-		locator = new GeolocationContinuousListener();
-		var taskCompletionSource = new TaskCompletionSource();
-		cancellationToken.Register(() =>
-		{
-			locator.Dispose();
-			locator = null;
-			taskCompletionSource.TrySetResult();
-		});
+		locator = new();
 		locator.OnLocationChangedAction = location =>
-			positionChangedProgress.Report(
-				new GeolocatorData(new(location.Latitude, location.Longitude), location.Speed));
-		await taskCompletionSource.Task;
+			weakEventManager.HandleEvent(
+				this,
+				new GeolocatorData(new(location.Latitude, location.Longitude), location.Speed),
+				nameof(PositionChanged));
+	}
+
+	public void StopListening()
+	{
+		locator?.Dispose();
+		locator = null;
 	}
 }
 

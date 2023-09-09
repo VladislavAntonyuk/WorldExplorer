@@ -24,7 +24,15 @@ builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
 builder.Services.AddScoped<IImageSearchService, ImageSearchService>();
-builder.Services.AddScoped(_ => new GraphServiceClient(new DefaultAzureCredential()));
+builder.Services.AddScoped(_ =>
+{
+	var config = builder.Configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
+	                          .Get<AzureAdB2CGraphClientConfiguration>();
+	ArgumentNullException.ThrowIfNull(config);
+	var clientSecretCredential =
+		new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret);
+	return new GraphServiceClient(clientSecretCredential);
+});
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IPlacesService, PlacesService>();

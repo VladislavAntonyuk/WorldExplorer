@@ -1,8 +1,20 @@
-﻿namespace Client.Services;
+﻿namespace Client;
 
 using Models;
 
 public interface IGeolocator
 {
-	Task StartListening(IProgress<GeolocatorData> positionChangedProgress, CancellationToken cancellationToken);
+	event EventHandler<GeolocatorData> PositionChanged;
+	void StartListening();
+	void StopListening();
+}
+
+public partial class GeolocatorImplementation : IGeolocator
+{
+	private readonly WeakEventManager weakEventManager = new();
+	public event EventHandler<GeolocatorData> PositionChanged
+	{
+		add => weakEventManager.AddEventHandler(value);
+		remove => weakEventManager.RemoveEventHandler(value);
+	}
 }
