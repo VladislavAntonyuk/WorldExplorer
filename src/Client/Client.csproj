@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Condition="'$(CI)' == 'true' and $([MSBuild]::IsOSPlatform('windows')) == 'true'">
 		<IncludeTizenTargetFrameworks>true</IncludeTizenTargetFrameworks>
@@ -79,7 +79,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.0-preview.7.8842" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.0-rc.1.9171" />
 	</ItemGroup>
 
 	<ItemGroup>
