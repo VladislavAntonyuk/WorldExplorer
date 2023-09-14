@@ -1,0 +1,22 @@
+﻿@using global::Shared.Models
+@inherits WorldExplorerAuthBaseComponent
+@page "/admin"
+@attribute [Authorize(Policy = "IsAdministrator")]
+@attribute [StreamRendering(true)]
+
+<MudButton OnClick="ClearPlaces">Clear places</MudButton>
+
+<MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="Place">
+	<HeaderContent>
+		<MudTh>Name</MudTh>
+		<MudTh>Location</MudTh>
+		<MudTh>Rating</MudTh>
+		<MudTh>Images count</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Name">@context.Name</MudTd>
+		<MudTd DataLabel="Sign">@context.Location</MudTd>
+		<MudTd DataLabel="Name">@context.Rating</MudTd>
+		<MudTd DataLabel="Position">@context.Images.Count</MudTd>
+	</RowTemplate>
+</MudTable>

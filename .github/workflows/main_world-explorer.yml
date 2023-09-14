@@ -68,15 +68,15 @@ jobs:
 
             -   name: Build Client
                 run: |
-                    dotnet build src/Client/Client.csproj -c Release -f net7.0-android -o output/android
-                    dotnet build src/Client/Client.csproj -c Release -f net7.0-tizen -o output/tizen
+                    dotnet build src/Client/Client.csproj -c Release -f net8.0-android -o output/android
+                    dotnet build src/Client/Client.csproj -c Release -f net8.0-tizen -o output/tizen
 
             -   name: Build Client (Windows)
                 run: |
-                    dotnet build src/Client/Client.csproj -c Release -f net7.0-windows10.0.19041.0
-                    copy ".\src\Client\obj\Release\net7.0-windows10.0.19041.0\win10-x64\resizetizer\r\*.*" ".\src\Client\bin\Release\net7.0-windows10.0.19041.0\win10-x64\"
-                    copy ".\src\Client\obj\Release\net7.0-windows10.0.19041.0\win10-x64\resizetizer\sp\*.*" ".\src\Client\bin\Release\net7.0-windows10.0.19041.0\win10-x64\"
-                    &"${Env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\MakeAppx.exe" pack /v /h SHA256 /d "src\Client\bin\Release\net7.0-windows10.0.19041.0\win10-x64" /p "output\windows\WorldExplorer.msix";
+                    dotnet build src/Client/Client.csproj -c Release -f net8.0-windows10.0.19041.0
+                    copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
+                    copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
+                    &"${Env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\MakeAppx.exe" pack /v /h SHA256 /d "src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64" /p "output\windows\WorldExplorer.msix";
 
             -   name: Upload artifact for deployment job
                 uses: actions/upload-artifact@v2

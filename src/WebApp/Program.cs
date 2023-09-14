@@ -7,6 +7,7 @@ using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using OwaspHeaders.Core.Extensions;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using WebApp.Components;
 using WebApp.Infrastructure;
 using WebApp.Services;
 
@@ -16,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorComponents().AddServerComponents();
 builder.Services.AddServerSideBlazor().AddMicrosoftIdentityConsentHandler();
 builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
@@ -64,14 +65,11 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseCookiePolicy();
-app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapRazorComponents<App>().AddServerRenderMode();
 
 var db = app.Services.GetRequiredService<IDbContextFactory<WorldExplorerDbContext>>();
 using var dbContext = db.CreateDbContext();
