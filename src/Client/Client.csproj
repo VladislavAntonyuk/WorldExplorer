@@ -59,8 +59,8 @@
 		<PackageReference Include="CommunityToolkit.Maui.Maps" Version="1.0.4" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="M.BindableProperty.Generator" Version="0.11.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0-rc.1.23419.4" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-rc.1.23419.4" />
 		<PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Identity.Client" Version="4.56.0" />
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.83" />
