@@ -1,6 +1,7 @@
 ﻿@using global::Shared.Models
 @inherits WorldExplorerAuthBaseComponent
 @page "/admin"
+@attribute [Authorize]
 
 <MudButton OnClick="ClearPlaces">Clear places</MudButton>
 
