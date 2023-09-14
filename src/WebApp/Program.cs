@@ -13,9 +13,7 @@ using WebApp.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-	   .AddMicrosoftIdentityWebApp(options => builder.Configuration.Bind("AzureAdB2C", options));
-builder.Services.AddAuthentication().AddMicrosoftIdentityWebApi(builder.Configuration, "AzureAdB2C");
+builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
 builder.Services.AddRazorPages();
@@ -44,8 +42,13 @@ builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt =>
 	opt.UseSqlite("Data Source=WorldExplorer.db", optionsBuilder => optionsBuilder.UseNetTopologySuite())
 	   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
 });
-builder.Services.AddI18nText();
+builder.Services.AddTranslations();
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+	options.CheckConsentNeeded = _ => true;
+	options.MinimumSameSitePolicy = SameSiteMode.None;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,15 +59,15 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
+app.UseSecureHeadersMiddleware();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-
+app.UseCookiePolicy();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSecureHeadersMiddleware();
 
 app.MapControllers();
 app.MapBlazorHub();
