@@ -58,7 +58,7 @@ public static class MauiProgram
 		builder.ConfigureSyncfusionCore();
 
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
-#if DEBUG
+#if !DEBUG
 		builder.Services.AddSingleton<IAuthService, MockAuthService>();
 #else
 		builder.Services.AddSingleton<IAuthService, AuthService>();

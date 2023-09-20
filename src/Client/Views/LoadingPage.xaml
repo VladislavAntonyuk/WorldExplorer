@@ -13,6 +13,12 @@
 	<VerticalStackLayout
 		VerticalOptions="Center"
 		HorizontalOptions="Center">
+
+		<Image
+			Source="logo.png"
+			HorizontalOptions="Center"
+			HeightRequest="200" />
+
 		<ActivityIndicator
 			IsRunning="True"
 			IsVisible="True" />
