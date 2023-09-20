@@ -1,14 +1,8 @@
 ﻿@inherits WorldExplorerBaseComponent
 @page "/"
 @attribute [RenderModeServer]
+@attribute [Authorize]
 
 <PageTitle>@Constants.ProductName</PageTitle>
 
-<AuthorizeView>
-	<NotAuthorized>
-		<Promo></Promo>
-	</NotAuthorized>
-	<Authorized>
-		<WorldExplorerMap></WorldExplorerMap>
-	</Authorized>
-</AuthorizeView>
+<WorldExplorerMap></WorldExplorerMap>
