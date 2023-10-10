@@ -64,7 +64,7 @@
 		<PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Identity.Client" Version="4.56.0" />
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.83" />
-		<PackageReference Include="Syncfusion.Maui.Charts" Version="22.2.12" />
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="23.1.40" />
 		<PackageReference Include="Syncfusion.Maui.Inputs" Version="22.2.12" />
 		<PackageReference Include="Syncfusion.Maui.Popup" Version="22.2.12" />
 		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
