@@ -4,15 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using Framework;
 using Services;
 
-public partial class ShellViewModel : BaseViewModel
+public partial class ShellViewModel(INavigationService navigationService) : BaseViewModel
 {
-	private readonly INavigationService navigationService;
-
-	public ShellViewModel(INavigationService navigationService)
-	{
-		this.navigationService = navigationService;
-	}
-
 	[RelayCommand]
 	private Task OpenCamera()
 	{

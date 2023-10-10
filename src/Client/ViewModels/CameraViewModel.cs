@@ -6,26 +6,13 @@ using CommunityToolkit.Mvvm.Input;
 using Framework;
 using Services;
 
-public partial class CameraViewModel : BaseViewModel
+public partial class CameraViewModel(INavigationService navigationService,
+	IDispatcher dispatcher,
+	IDialogService dialogService,
+	IDeviceDisplay deviceDisplay) : BaseViewModel
 {
-	private readonly IDeviceDisplay deviceDisplay;
-	private readonly IDialogService dialogService;
-	private readonly IDispatcher dispatcher;
-	private readonly INavigationService navigationService;
-
 	[ObservableProperty]
 	private bool isCameraLoaded;
-
-	public CameraViewModel(INavigationService navigationService,
-		IDispatcher dispatcher,
-		IDialogService dialogService,
-		IDeviceDisplay deviceDisplay)
-	{
-		this.navigationService = navigationService;
-		this.dispatcher = dispatcher;
-		this.dialogService = dialogService;
-		this.deviceDisplay = deviceDisplay;
-	}
 
 	public override async Task InitializeAsync()
 	{

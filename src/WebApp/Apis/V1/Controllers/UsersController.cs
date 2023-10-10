@@ -4,17 +4,8 @@ using global::Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
-public class UsersController : ApiAuthControllerBase
+public class UsersController(ICurrentUserService currentUserService, IUserService userService) : ApiAuthControllerBase
 {
-	private readonly ICurrentUserService currentUserService;
-	private readonly IUserService userService;
-
-	public UsersController(ICurrentUserService currentUserService, IUserService userService)
-	{
-		this.currentUserService = currentUserService;
-		this.userService = userService;
-	}
-
 	[HttpGet("self")]
 	public Task<User?> GetCurrentUser(CancellationToken cancellationToken)
 	{

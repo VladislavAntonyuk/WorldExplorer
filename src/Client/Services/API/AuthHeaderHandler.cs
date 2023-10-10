@@ -3,15 +3,8 @@
 using System.Net.Http.Headers;
 using Auth;
 
-internal class AuthHeaderHandler : DelegatingHandler
+internal class AuthHeaderHandler(IAuthService authService) : DelegatingHandler
 {
-	private readonly IAuthService authService;
-
-	public AuthHeaderHandler(IAuthService authService)
-	{
-		this.authService = authService;
-	}
-
 	protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
 		CancellationToken cancellationToken)
 	{

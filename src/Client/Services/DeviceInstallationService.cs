@@ -12,6 +12,11 @@ public static partial class DeviceInstallationService
 {
 	public static async Task RegisterDevice(string notificationHub, string key)
 	{
+		if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+		{
+			return;
+		}
+
 		var deviceInstallation = await GetDeviceInstallation();
 		if (deviceInstallation == null)
 		{

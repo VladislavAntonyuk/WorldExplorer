@@ -6,7 +6,7 @@ using Microsoft.Maui.Handlers;
 using SceneKit;
 using UIKit;
 
-public class ArViewHandler : ViewHandler<IArView, ARSCNView>
+public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, ARSCNView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
 {
 	private const float ImageHeight = 0.2f;
 	private const float ImageWidth = 0.3f;
@@ -20,11 +20,6 @@ public class ArViewHandler : ViewHandler<IArView, ARSCNView>
 
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
 	private bool isReady;
-
-	public ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : base(
-		mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
-	{
-	}
 
 	public ArViewHandler() : this(ArViewMapper, ArViewCommandMapper)
 	{

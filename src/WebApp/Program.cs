@@ -1,10 +1,13 @@
 ﻿using Azure.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Beta;
-using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using WebApp.Components;
+using WebApp.Identity;
 using WebApp.Infrastructure;
 using WebApp.Services;
 
@@ -13,8 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
+builder.Services.AddRazorComponents()
+	.AddInteractiveServerComponents();
 
-builder.Services.AddRazorComponents().AddServerComponents().AddMicrosoftIdentityConsentHandler();
 builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
@@ -41,17 +45,15 @@ builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt =>
 });
 builder.Services.AddTranslations();
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-	options.CheckConsentNeeded = _ => true;
-	options.MinimumSameSitePolicy = SameSiteMode.None;
-});
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-	app.UseExceptionHandler("/Error");
+	app.UseExceptionHandler("/Error", createScopeForErrors: true);
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
 }
@@ -59,12 +61,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseCookiePolicy();
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAntiforgery();
 
 app.MapControllers();
-app.MapRazorComponents<App>().AddServerRenderMode();
+app.MapRazorComponents<App>()
+	.AddInteractiveServerRenderMode();
 
 var db = app.Services.GetRequiredService<IDbContextFactory<WorldExplorerDbContext>>();
 using var dbContext = db.CreateDbContext();

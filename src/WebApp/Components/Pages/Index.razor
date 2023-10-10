@@ -1,8 +1,20 @@
 ﻿@inherits WorldExplorerBaseComponent
 @page "/"
-@attribute [RenderModeServer]
-@attribute [Authorize]
+@attribute [RenderModeInteractiveServer]
 
 <PageTitle>@Constants.ProductName</PageTitle>
-
-<WorldExplorerMap></WorldExplorerMap>
+<AuthorizeView>
+	<Authorized>
+		<WorldExplorerMap></WorldExplorerMap>
+	</Authorized>
+	<NotAuthorized>
+		@if (context.User.Identity is { IsAuthenticated: false })
+		{
+			<Promo/>
+		}
+		else
+		{
+			<p>You are not authorized to access this resource.</p>
+		}
+	</NotAuthorized>
+</AuthorizeView>

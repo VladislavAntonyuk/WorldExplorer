@@ -5,19 +5,10 @@ using CommunityToolkit.Mvvm.Input;
 using Framework;
 using Services;
 
-public partial class ArViewModel : BaseViewModel, IQueryAttributable
+public partial class ArViewModel
+	(INavigationService navigationService, IDeviceDisplay deviceDisplay) : BaseViewModel, IQueryAttributable
 {
-	private readonly IDeviceDisplay deviceDisplay;
-	private readonly INavigationService navigationService;
-
-	public ArViewModel(INavigationService navigationService, IDeviceDisplay deviceDisplay)
-	{
-		this.navigationService = navigationService;
-		this.deviceDisplay = deviceDisplay;
-		Images = new ObservableCollection<byte[]>();
-	}
-
-	public ObservableCollection<byte[]> Images { get; }
+	public ObservableCollection<byte[]> Images { get; } = [];
 
 	public void ApplyQueryAttributes(IDictionary<string, object> query)
 	{

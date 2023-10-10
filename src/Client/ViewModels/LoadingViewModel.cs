@@ -3,15 +3,8 @@
 using Framework;
 using Services;
 
-public class LoadingViewModel : BaseViewModel
+public class LoadingViewModel(INavigationService navigation) : BaseViewModel
 {
-	private readonly INavigationService navigation;
-
-	public LoadingViewModel(INavigationService navigation)
-	{
-		this.navigation = navigation;
-	}
-
 	public override async Task InitializeAsync()
 	{
 		await Task.Delay(100);

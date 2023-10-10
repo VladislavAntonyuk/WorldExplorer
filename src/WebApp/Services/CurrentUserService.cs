@@ -3,15 +3,8 @@
 using System.Security.Claims;
 using Microsoft.Identity.Web;
 
-public class CurrentUserService : ICurrentUserService
+public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {
-	private readonly IHttpContextAccessor httpContextAccessor;
-
-	public CurrentUserService(IHttpContextAccessor httpContextAccessor)
-	{
-		this.httpContextAccessor = httpContextAccessor;
-	}
-
 	public UserInfo GetCurrentUser()
 	{
 		var user = httpContextAccessor.HttpContext?.User;

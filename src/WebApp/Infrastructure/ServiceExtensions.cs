@@ -18,7 +18,11 @@ public static class ServiceExtensions
 {
 	public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
 	{
+
+#pragma warning disable S125 // Sections of code should not be commented out
+							// test with services.AddAuthentication(IdentityConstants.ApplicationScheme)AddIdentityCookies();
 		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
+#pragma warning restore S125 // Sections of code should not be commented out
 		services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 				.AddMicrosoftIdentityWebApp(options =>
 				{

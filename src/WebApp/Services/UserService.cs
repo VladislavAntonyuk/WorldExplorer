@@ -14,16 +14,11 @@ public class AzureAdB2CGraphClientConfiguration
 	public string? TenantId { get; set; }
 }
 
-public class UserService : IUserService
+public class UserService
+	(GraphServiceClient graphClient, IDbContextFactory<WorldExplorerDbContext> factory) : IUserService
 {
-	private readonly GraphServiceClient graphClient;
-	private readonly IDbContextFactory<WorldExplorerDbContext> factory;
-
-	public UserService(GraphServiceClient graphClient, IDbContextFactory<WorldExplorerDbContext> factory)
-	{
-		this.graphClient = graphClient;
-		this.factory = factory;
-	}
+	private readonly GraphServiceClient graphClient = graphClient;
+	private readonly IDbContextFactory<WorldExplorerDbContext> factory = factory;
 
 	public async Task<User?> GetUser(string providerId, CancellationToken cancellationToken)
 	{

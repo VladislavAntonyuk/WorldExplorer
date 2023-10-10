@@ -18,7 +18,7 @@ using Config = Google.AR.Core.Config;
 using EGLConfig = Javax.Microedition.Khronos.Egl.EGLConfig;
 using Exception = System.Exception;
 
-public class ArViewHandler : ViewHandler<IArView, GLSurfaceView>
+public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, GLSurfaceView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
 {
 	public static readonly IPropertyMapper<IArView, ArViewHandler> ArViewMapper =
 		new PropertyMapper<IArView, ArViewHandler>(ViewMapper)
@@ -28,11 +28,6 @@ public class ArViewHandler : ViewHandler<IArView, GLSurfaceView>
 
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
 	private Session? session;
-
-	public ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : base(
-		mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
-	{
-	}
 
 	public ArViewHandler() : this(ArViewMapper, ArViewCommandMapper)
 	{

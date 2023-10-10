@@ -7,19 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-public class ClaimsController : ApiControllerBase
+public class ClaimsController(ILogger<ClaimsController> logger,
+	IConfiguration configuration,
+	IDbContextFactory<WorldExplorerDbContext> factory) : ApiControllerBase
 {
-	private readonly IConfiguration configuration;
-	private readonly IDbContextFactory<WorldExplorerDbContext> factory;
-	private readonly ILogger<ClaimsController> logger;
-
-	public ClaimsController(ILogger<ClaimsController> logger,
-		IConfiguration configuration, IDbContextFactory<WorldExplorerDbContext> factory)
-	{
-		this.logger = logger;
-		this.configuration = configuration;
-		this.factory = factory;
-	}
+	private readonly IDbContextFactory<WorldExplorerDbContext> factory = factory;
 
 	[HttpPost]
 	public async Task<IActionResult> Post([FromBody] RequestConnector? requestConnector,

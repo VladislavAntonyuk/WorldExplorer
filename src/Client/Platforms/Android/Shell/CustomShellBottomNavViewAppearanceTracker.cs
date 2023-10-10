@@ -7,16 +7,9 @@ using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Platform;
 
-internal class CustomShellBottomNavViewAppearanceTracker : ShellBottomNavViewAppearanceTracker
+internal class CustomShellBottomNavViewAppearanceTracker
+	(IShellContext shellContext, ShellItem shellItem) : ShellBottomNavViewAppearanceTracker(shellContext, shellItem)
 {
-	private readonly IShellContext shellContext;
-
-	public CustomShellBottomNavViewAppearanceTracker(IShellContext shellContext, ShellItem shellItem) : base(
-		shellContext, shellItem)
-	{
-		this.shellContext = shellContext;
-	}
-
 	public override void SetAppearance(BottomNavigationView bottomView, IShellAppearanceElement appearance)
 	{
 		base.SetAppearance(bottomView, appearance);
