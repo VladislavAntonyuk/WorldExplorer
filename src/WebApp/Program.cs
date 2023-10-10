@@ -1,12 +1,9 @@
 ﻿using Azure.Identity;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Beta;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
-using OwaspHeaders.Core.Extensions;
-using Toolbelt.Blazor.Extensions.DependencyInjection;
 using WebApp.Components;
 using WebApp.Infrastructure;
 using WebApp.Services;
@@ -17,8 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
-builder.Services.AddRazorComponents().AddServerComponents();
-builder.Services.AddServerSideBlazor().AddMicrosoftIdentityConsentHandler();
+builder.Services.AddRazorComponents().AddServerComponents().AddMicrosoftIdentityConsentHandler();
 builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
@@ -60,7 +56,6 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
-app.UseSecureHeadersMiddleware();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
