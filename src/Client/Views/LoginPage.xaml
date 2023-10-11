@@ -13,7 +13,7 @@
 
 	<VerticalStackLayout Spacing="{StaticResource DefaultItemSpacing}">
 		<Image
-			Source="appicon.png"
+			Source="logo.png"
 			HorizontalOptions="Center"
 			HeightRequest="200" />
 

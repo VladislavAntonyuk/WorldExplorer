@@ -7,6 +7,7 @@
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:client="clr-namespace:Client"
+	xmlns:controls="clr-namespace:Client.Controls"
 	x:Class="Client.Views.ArPage"
 	Shell.PresentationMode="ModalAnimated"
 	x:DataType="viewModels:ArViewModel">
@@ -19,7 +20,7 @@
 			VerticalOptions="Start"
 			ZIndex="1" />
 
-		<client:ArView
+		<controls:ArView
 			x:Name="ArView"
 			ZIndex="0"
 			Images="{Binding Images}" />

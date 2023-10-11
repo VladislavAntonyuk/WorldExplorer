@@ -3,16 +3,10 @@
 using System.Text.Json.Serialization;
 using System.Web;
 
-public class ImageSearchService : IImageSearchService
+public class ImageSearchService
+	(IHttpClientFactory httpClientFactory, IConfiguration configuration) : IImageSearchService
 {
-	private readonly string? apiKey;
-	private readonly IHttpClientFactory httpClientFactory;
-
-	public ImageSearchService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
-	{
-		this.httpClientFactory = httpClientFactory;
-		apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey");
-	}
+	private readonly string? apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey");
 
 	public async Task<List<string>> GetPlaceImages(string placeName, CancellationToken cancellationToken)
 	{

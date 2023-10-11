@@ -1,18 +1,11 @@
 ﻿namespace WebApp.Apis.V1.Controllers;
 
-using global::Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Shared.Models;
 
-public class PlacesController : ApiAuthControllerBase
+public class PlacesController(IPlacesService placesService) : ApiAuthControllerBase
 {
-	private readonly IPlacesService placesService;
-
-	public PlacesController(IPlacesService placesService)
-	{
-		this.placesService = placesService;
-	}
-
 	[HttpGet("recommendations")]
 	[ProducesResponseType(typeof(List<Place>), StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]

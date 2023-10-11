@@ -405,15 +405,9 @@ public class PlaneRenderer
 		planeColor[3] = ((colorRgba >> 0) & 0xff) / 255.0f;
 	}
 
-	public class SortablePlane
+	public class SortablePlane(float distance, Plane plane)
 	{
-		public SortablePlane(float distance, Plane plane)
-		{
-			Distance = distance;
-			Plane = plane;
-		}
-
-		public float Distance { get; }
-		public Plane Plane { get; }
+		public float Distance { get; } = distance;
+		public Plane Plane { get; } = plane;
 	}
 }

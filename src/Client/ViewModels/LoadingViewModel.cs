@@ -2,19 +2,20 @@
 
 using Framework;
 using Services;
+using Services.Navigation;
 
-public class LoadingViewModel : BaseViewModel
+public class LoadingViewModel(INavigationService navigation, IUsersApi usersApi) : BaseViewModel
 {
-	private readonly INavigationService navigation;
-
-	public LoadingViewModel(INavigationService navigation)
-	{
-		this.navigation = navigation;
-	}
-
 	public override async Task InitializeAsync()
 	{
-		await Task.Delay(100);
-		await navigation.NavigateAsync<LoginViewModel, ErrorViewModel>();
+		var user = await usersApi.GetCurrentUser(CancellationToken.None);
+		if (user.IsSuccessStatusCode)
+		{
+			await navigation.NavigateAsync<ExplorerViewModel, ErrorViewModel>();
+		}
+		else
+		{
+			await navigation.NavigateAsync<LoginViewModel, ErrorViewModel>();
+		}
 	}
 }

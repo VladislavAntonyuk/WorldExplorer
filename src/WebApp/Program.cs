@@ -1,12 +1,9 @@
 ﻿using Azure.Identity;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Beta;
-using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
-using OwaspHeaders.Core.Extensions;
-using Toolbelt.Blazor.Extensions.DependencyInjection;
+using WebApp.Components;
 using WebApp.Infrastructure;
 using WebApp.Services;
 
@@ -15,9 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
+builder.Services.AddRazorComponents()
+	.AddInteractiveServerComponents();
 
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor().AddMicrosoftIdentityConsentHandler();
 builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
@@ -44,34 +41,26 @@ builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt =>
 });
 builder.Services.AddTranslations();
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-	options.CheckConsentNeeded = _ => true;
-	options.MinimumSameSitePolicy = SameSiteMode.None;
-});
+builder.Services.AddCascadingAuthenticationState();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-	app.UseExceptionHandler("/Error");
+	app.UseExceptionHandler("/Error", createScopeForErrors: true);
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
 }
 
-app.UseSecureHeadersMiddleware();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseCookiePolicy();
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAntiforgery();
 
 app.MapControllers();
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapRazorComponents<App>()
+	.AddInteractiveServerRenderMode();
 
 var db = app.Services.GetRequiredService<IDbContextFactory<WorldExplorerDbContext>>();
 using var dbContext = db.CreateDbContext();

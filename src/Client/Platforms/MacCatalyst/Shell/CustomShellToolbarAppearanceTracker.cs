@@ -1,22 +1,14 @@
 ﻿namespace Client;
 
 using CoreAnimation;
-using Microsoft.Maui.Controls;
+using CoreGraphics;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Platform;
 using UIKit;
 
-sealed class CustomShellToolbarAppearanceTracker : IShellNavBarAppearanceTracker
+sealed class CustomShellToolbarAppearanceTracker
+	(IShellContext shellContext, IShellNavBarAppearanceTracker baseTracker) : IShellNavBarAppearanceTracker
 {
-	private readonly IShellNavBarAppearanceTracker baseTracker;
-	private readonly IShellContext shellContext;
-
-	public CustomShellToolbarAppearanceTracker(IShellContext shellContext, IShellNavBarAppearanceTracker baseTracker)
-	{
-		this.shellContext = shellContext;
-		this.baseTracker = baseTracker;
-	}
-
 	public void Dispose()
 	{
 		baseTracker.Dispose();
@@ -40,14 +32,14 @@ sealed class CustomShellToolbarAppearanceTracker : IShellNavBarAppearanceTracker
 	{
 		baseTracker.UpdateLayout(controller);
 		var topSpace = controller.NavigationBar.Bounds.Height / 2;
-		controller.NavigationBar.Frame = new CoreGraphics.CGRect(controller.NavigationBar.Frame.X + topSpace,
-																 controller.NavigationBar.Frame.Y + topSpace,
-																 controller.NavigationBar.Frame.Width - 2 * topSpace,
-																 controller.NavigationBar.Frame.Height);
+		controller.NavigationBar.Frame = new CGRect(controller.NavigationBar.Frame.X + topSpace,
+		                                            controller.NavigationBar.Frame.Y + topSpace,
+		                                            controller.NavigationBar.Frame.Width - 2 * topSpace,
+		                                            controller.NavigationBar.Frame.Height);
 
 		const int cornerRadius = 30;
 		var uIBezierPath = UIBezierPath.FromRoundedRect(controller.NavigationBar.Bounds, UIRectCorner.AllCorners,
-														new CoreGraphics.CGSize(cornerRadius, cornerRadius));
+														new CGSize(cornerRadius, cornerRadius));
 
 		var cAShapeLayer = new CAShapeLayer
 		{

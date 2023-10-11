@@ -2,23 +2,15 @@
 
 using Google.AR.Core;
 
-public class PlaneAttachment
+public class PlaneAttachment(Plane plane, Anchor anchor)
 {
-	private readonly Anchor anchor;
 	private readonly float[] mPoseRotation = new float[4];
 
 	// Allocate temporary storage to avoid multiple allocations per frame.
 	private readonly float[] mPoseTranslation = new float[3];
-	private readonly Plane plane;
-
-	public PlaneAttachment(Plane plane, Anchor anchor)
-	{
-		this.plane = plane;
-		this.anchor = anchor;
-	}
 
 	public bool IsTracking => /*true if*/plane.TrackingState == TrackingState.Tracking &&
-										 anchor.TrackingState == TrackingState.Tracking;
+	                                     anchor.TrackingState == TrackingState.Tracking;
 
 	public Pose GetPose()
 	{

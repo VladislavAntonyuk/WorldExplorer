@@ -1,27 +1,17 @@
 ﻿namespace WebApp.Services;
 
-using System.Threading;
 using Infrastructure;
-using Infrastructure.Models;
+using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using Location = global::Shared.Models.Location;
-using Place = global::Shared.Models.Place;
+using Location = Shared.Models.Location;
+using Place = Shared.Models.Place;
 
-public class PlacesService : IPlacesService
+public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFactory,
+	IAiService aiService,
+	IImageSearchService imageSearchService) : IPlacesService
 {
-	private readonly IAiService aiService;
-	private readonly IDbContextFactory<WorldExplorerDbContext> dbContextFactory;
-	private readonly IImageSearchService imageSearchService;
-
-	public PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFactory,
-		IAiService aiService,
-		IImageSearchService imageSearchService)
-	{
-		this.dbContextFactory = dbContextFactory;
-		this.aiService = aiService;
-		this.imageSearchService = imageSearchService;
-	}
+	private readonly IDbContextFactory<WorldExplorerDbContext> dbContextFactory = dbContextFactory;
 
 	public async Task ClearPlaces(CancellationToken cancellationToken)
 	{
@@ -97,9 +87,9 @@ public class PlacesService : IPlacesService
 		}
 	}
 
-	private Infrastructure.Models.Place ToPlace(Place place)
+	private Infrastructure.Entities.Place ToPlace(Place place)
 	{
-		return new Infrastructure.Models.Place
+		return new Infrastructure.Entities.Place
 		{
 			Name = place.Name,
 			Description = place.Description,
@@ -111,7 +101,7 @@ public class PlacesService : IPlacesService
 		};
 	}
 
-	private Place ToPlace(Infrastructure.Models.Place place)
+	private Place ToPlace(Infrastructure.Entities.Place place)
 	{
 		return new Place
 		{

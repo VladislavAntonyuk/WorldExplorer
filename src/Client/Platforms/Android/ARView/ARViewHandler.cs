@@ -1,12 +1,15 @@
 ﻿namespace Client;
 
 using System.Collections.Concurrent;
+using System.Numerics;
 using Android.Content;
 using Android.Graphics;
 using Android.Opengl;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using CommunityToolkit.Maui.Alerts;
+using Controls;
 using Google.Android.Material.Snackbar;
 using Google.AR.Core;
 using Java.IO;
@@ -14,11 +17,16 @@ using Java.Lang;
 using Javax.Microedition.Khronos.Opengles;
 using Microsoft.Maui.Handlers;
 using Renderings;
+using Syncfusion.Maui.Core.Internals;
 using Config = Google.AR.Core.Config;
 using EGLConfig = Javax.Microedition.Khronos.Egl.EGLConfig;
 using Exception = System.Exception;
+using GestureDetector = Android.Views.GestureDetector;
+using Plane = Google.AR.Core.Plane;
+using Snackbar = Google.Android.Material.Snackbar.Snackbar;
+using Toast = Android.Widget.Toast;
 
-public class ArViewHandler : ViewHandler<IArView, GLSurfaceView>
+public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, GLSurfaceView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
 {
 	public static readonly IPropertyMapper<IArView, ArViewHandler> ArViewMapper =
 		new PropertyMapper<IArView, ArViewHandler>(ViewMapper)
@@ -28,11 +36,6 @@ public class ArViewHandler : ViewHandler<IArView, GLSurfaceView>
 
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
 	private Session? session;
-
-	public ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : base(
-		mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
-	{
-	}
 
 	public ArViewHandler() : this(ArViewMapper, ArViewCommandMapper)
 	{

@@ -14,6 +14,6 @@ public partial class App : Application
 	protected override async void OnStart()
 	{
 		base.OnStart();
-		await DeviceInstallationService.RegisterDevice("drawgo", "p7fcbXEbiLKwdv7uX/XpFCRSmP5AEaxuBLmSOluzXhE=");
+		await Services.DeviceInstallationService.RegisterDevice("drawgo", "p7fcbXEbiLKwdv7uX/XpFCRSmP5AEaxuBLmSOluzXhE=");
 	}
 }

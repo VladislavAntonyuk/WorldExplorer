@@ -9,11 +9,11 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
-		<NoWarn>$(NoWarn);S3011;S1075;CA1416;S3168;NU1603</NoWarn>
+		<NoWarn>$(NoWarn);S3011;S1075;CA1416;S3168;NU1603;NU1605;S3604</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.9.0.77355">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.11.0.78383">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

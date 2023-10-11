@@ -1,6 +1,4 @@
-﻿namespace Client;
-
-using Services;
+﻿namespace Client.Services;
 
 public class ArService : IArService
 {

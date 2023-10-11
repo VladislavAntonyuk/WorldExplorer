@@ -1,17 +1,14 @@
 ﻿namespace Client;
 
+using Controls;
 using CoreGraphics;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Platform;
 using UIKit;
 
-internal class CustomShellItemRenderer : ShellItemRenderer
+internal class CustomShellItemRenderer(IShellContext context) : ShellItemRenderer(context)
 {
 	private UIButton? middleView;
-
-	public CustomShellItemRenderer(IShellContext context) : base(context)
-	{
-	}
 
 	public override async void ViewWillLayoutSubviews()
 	{

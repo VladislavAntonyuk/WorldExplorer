@@ -6,17 +6,13 @@ using Android.Widget;
 using AndroidX.CoordinatorLayout.Widget;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 
-internal class CustomShellSectionRenderer : ShellSectionRenderer
+internal class CustomShellSectionRenderer(IShellContext shellContext) : ShellSectionRenderer(shellContext)
 {
-	public CustomShellSectionRenderer(IShellContext shellContext) : base(shellContext)
-	{
-	}
-
 	public override View? OnCreateView(LayoutInflater inflater, ViewGroup? container, Bundle? savedInstanceState)
 	{
 		var relativeLayout = new RelativeLayout(Context);
 		relativeLayout.LayoutParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
-																		  ViewGroup.LayoutParams.MatchParent);
+		                                                                  ViewGroup.LayoutParams.MatchParent);
 
 		var view = base.OnCreateView(inflater, container, savedInstanceState);
 		if (view is not CoordinatorLayout coordinatorLayout)

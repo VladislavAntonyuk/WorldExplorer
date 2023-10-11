@@ -1,6 +1,6 @@
 ﻿namespace WebApp.Services;
 
-using global::Shared.Models;
+using Shared.Models;
 
 public interface IUserService
 {

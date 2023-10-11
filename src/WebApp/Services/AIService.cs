@@ -1,11 +1,11 @@
 ﻿namespace WebApp.Services;
 
 using System.Text.Json;
-using global::Shared.Models;
 using Microsoft.Extensions.Options;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
+using Shared.Models;
 
 public class AiService : IAiService
 {

@@ -15,6 +15,7 @@ internal class AuthService : IAuthService
 															 .WithIosKeychainSecurityGroup(
 																 azureB2COptions.Value.IosKeychainSecurityGroups)
 															 .WithB2CAuthority(azureB2COptions.Value.AuthoritySignIn)
+															 .WithHttpClientFactory(new AuthHttpClientFactory())
 #if WINDOWS
 															 .WithRedirectUri("http://localhost")
 #else
@@ -43,6 +44,12 @@ internal class AuthService : IAuthService
 			};
 		}
 		catch (MsalClientException ex)
+		{
+			var operationResult = new OperationResult<string>();
+			operationResult.AddError(ex.Message);
+			return operationResult;
+		}
+		catch (MsalServiceException ex)
 		{
 			var operationResult = new OperationResult<string>();
 			operationResult.AddError(ex.Message);

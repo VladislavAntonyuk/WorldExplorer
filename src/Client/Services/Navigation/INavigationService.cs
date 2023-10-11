@@ -1,4 +1,4 @@
-﻿namespace Client.Services;
+﻿namespace Client.Services.Navigation;
 
 using Framework;
 

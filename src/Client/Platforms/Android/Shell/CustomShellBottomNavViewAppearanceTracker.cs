@@ -11,8 +11,7 @@ internal class CustomShellBottomNavViewAppearanceTracker : ShellBottomNavViewApp
 {
 	private readonly IShellContext shellContext;
 
-	public CustomShellBottomNavViewAppearanceTracker(IShellContext shellContext, ShellItem shellItem) : base(
-		shellContext, shellItem)
+	public CustomShellBottomNavViewAppearanceTracker(IShellContext shellContext, ShellItem shellItem) : base(shellContext, shellItem)
 	{
 		this.shellContext = shellContext;
 	}

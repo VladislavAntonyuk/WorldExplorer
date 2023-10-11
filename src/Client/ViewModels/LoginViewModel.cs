@@ -8,34 +8,25 @@ using Models;
 using Resources.Localization;
 using Services;
 using Services.Auth;
+using Services.Navigation;
 
-public partial class LoginViewModel : BaseViewModel
+public partial class LoginViewModel(INavigationService navigation,
+	IAuthService authService,
+	IDialogService dialogService) : BaseViewModel
 {
-	private readonly IAuthService authService;
-	private readonly IDialogService dialogService;
-	private readonly INavigationService navigation;
-
 	[ObservableProperty]
 	private int position;
 
 	private Timer? timer;
 
-	public LoginViewModel(INavigationService navigation, IAuthService authService, IDialogService dialogService)
+	public ObservableCollection<CarouselModel> Items { get; } = new()
 	{
-		Items = new ObservableCollection<CarouselModel>
-		{
-			new(Localization.PromoTitle1, Localization.PromoText1),
-			new(Localization.PromoTitle2, Localization.PromoText2),
-			new(Localization.PromoTitle3, Localization.PromoText3),
-			new(Localization.PromoTitle4, Localization.PromoText4),
-			new(Localization.PromoTitle5, Localization.PromoText5)
-		};
-		this.navigation = navigation;
-		this.authService = authService;
-		this.dialogService = dialogService;
-	}
-
-	public ObservableCollection<CarouselModel> Items { get; }
+		new(Localization.PromoTitle1, Localization.PromoText1),
+		new(Localization.PromoTitle2, Localization.PromoText2),
+		new(Localization.PromoTitle3, Localization.PromoText3),
+		new(Localization.PromoTitle4, Localization.PromoText4),
+		new(Localization.PromoTitle5, Localization.PromoText5)
+	};
 
 	public override Task InitializeAsync()
 	{

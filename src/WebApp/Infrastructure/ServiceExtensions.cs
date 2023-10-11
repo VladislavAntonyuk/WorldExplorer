@@ -1,13 +1,13 @@
 ﻿namespace WebApp.Infrastructure;
 
-using global::Shared.Enums;
-using global::Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Identity.Web;
 using Policies;
+using Shared.Enums;
+using Shared.Extensions;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 public static class Constants
@@ -18,7 +18,11 @@ public static class ServiceExtensions
 {
 	public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
 	{
+
+#pragma warning disable S125 // Sections of code should not be commented out
+							// test with services.AddAuthentication(IdentityConstants.ApplicationScheme)AddIdentityCookies();
 		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
+#pragma warning restore S125 // Sections of code should not be commented out
 		services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 				.AddMicrosoftIdentityWebApp(options =>
 				{
