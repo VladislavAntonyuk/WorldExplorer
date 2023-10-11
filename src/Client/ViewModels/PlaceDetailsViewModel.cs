@@ -6,6 +6,7 @@ using Extensions;
 using Framework;
 using Resources.Localization;
 using Services;
+using Services.Navigation;
 using Shared.Models;
 
 public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttributable, IDisposable

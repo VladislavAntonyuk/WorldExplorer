@@ -1,7 +1,7 @@
-﻿using Microsoft.Maui.Controls.Handlers.Compatibility;
-using Microsoft.Maui.Controls.Platform.Compatibility;
+﻿namespace Client;
 
-namespace Client;
+using Microsoft.Maui.Controls.Handlers.Compatibility;
+using Microsoft.Maui.Controls.Platform.Compatibility;
 
 class CustomShellHandler : ShellRenderer
 {

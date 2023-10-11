@@ -112,7 +112,4 @@
     <UseHardenedRuntime>true</UseHardenedRuntime>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.0-rc.2.9373" />
-  </ItemGroup>
 </Project>

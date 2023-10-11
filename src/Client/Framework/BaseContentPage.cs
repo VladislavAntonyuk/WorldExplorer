@@ -1,6 +1,5 @@
 ﻿namespace Client.Framework;
 
-using CommunityToolkit.Maui.Behaviors;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 
@@ -12,7 +11,7 @@ public abstract class BaseContentPage<T> : ContentPage where T : BaseViewModel
 		Title = viewModel.Title;
 		On<iOS>().SetUseSafeArea(true);
 #if ANDROID || IOS
-		Behaviors.Add(new StatusBarBehavior
+		Behaviors.Add(new CommunityToolkit.Maui.Behaviors.StatusBarBehavior
 		{
 			StatusBarColor = BackgroundColor
 		});

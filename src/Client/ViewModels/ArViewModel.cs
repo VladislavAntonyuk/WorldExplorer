@@ -3,7 +3,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
-using Services;
+using Services.Navigation;
 
 public partial class ArViewModel
 	(INavigationService navigationService, IDeviceDisplay deviceDisplay) : BaseViewModel, IQueryAttributable

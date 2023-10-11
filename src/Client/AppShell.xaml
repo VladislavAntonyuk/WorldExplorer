@@ -9,6 +9,7 @@
 	xmlns:client="clr-namespace:Client"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:controls="clr-namespace:Client.Controls"
 	x:Class="Client.AppShell"
 	FlyoutBehavior="Disabled"
 	x:DataType="viewModels:ShellViewModel">
@@ -25,23 +26,23 @@
 		Route="ErrorPage"
 		ContentTemplate="{DataTemplate views:ErrorPage}" />
 
-	<client:CustomTabBar
+	<controls:CustomTabBar
 		Route="home"
 		CenterViewCommand="{Binding OpenCameraCommand}"
 		CenterViewBackgroundColor="#512BD4">
 
-		<client:CustomTabBar.CenterViewVisible>
+		<controls:CustomTabBar.CenterViewVisible>
 			<OnPlatform x:TypeArguments="system:Boolean" Default="False">
 				<On Platform="Android,iOS" Value="true" />
 			</OnPlatform>
-		</client:CustomTabBar.CenterViewVisible>
+		</controls:CustomTabBar.CenterViewVisible>
 
-		<client:CustomTabBar.CenterViewImageSource>
+		<controls:CustomTabBar.CenterViewImageSource>
 			<FontImageSource
 				FontFamily="FASolid"
 				Glyph="{x:Static fonts:FontAwesomeIcons.Camera}"
 				Size="40" />
-		</client:CustomTabBar.CenterViewImageSource>
+		</controls:CustomTabBar.CenterViewImageSource>
 
 		<Tab
 			Route="ExplorerPage"
@@ -69,5 +70,5 @@
 			<ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
 		</Tab>
 
-	</client:CustomTabBar>
+	</controls:CustomTabBar>
 </Shell>

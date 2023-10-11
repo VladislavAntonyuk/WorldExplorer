@@ -1,7 +1,7 @@
-﻿namespace Client;
+﻿namespace Client.Services;
 
-using Models;
 using Windows.Devices.Geolocation;
+using Models;
 
 public partial class GeolocatorImplementation
 {
@@ -21,7 +21,7 @@ public partial class GeolocatorImplementation
 		locator.PositionChanged -= OnPositionChanged;
 	}
 
-	void OnPositionChanged(Geolocator sender, Windows.Devices.Geolocation.PositionChangedEventArgs args)
+	void OnPositionChanged(Geolocator sender, PositionChangedEventArgs args)
 	{
 		weakEventManager.HandleEvent(
 			this,

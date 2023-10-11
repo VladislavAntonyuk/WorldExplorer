@@ -1,10 +1,8 @@
-﻿namespace Client;
+﻿namespace Client.Services;
 
-using System;
-using System.Threading.Tasks;
-using CommunityToolkit.Maui.Alerts;
 using Windows.Networking.PushNotifications;
 using Windows.Security.ExchangeActiveSyncProvisioning;
+using CommunityToolkit.Maui.Alerts;
 
 public static partial class DeviceInstallationService
 {

@@ -1,4 +1,4 @@
-﻿namespace Client;
+﻿namespace Client.Services;
 
 using CoreLocation;
 using Models;

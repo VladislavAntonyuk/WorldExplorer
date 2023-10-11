@@ -1,4 +1,4 @@
-﻿namespace Client;
+﻿namespace Client.Controls;
 
 using System.Collections.ObjectModel;
 

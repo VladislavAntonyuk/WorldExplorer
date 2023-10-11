@@ -1,5 +1,6 @@
 ﻿namespace Client;
 
+using Controls;
 using CoreGraphics;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Platform;

@@ -8,6 +8,7 @@ using Models;
 using Resources.Localization;
 using Services;
 using Services.Auth;
+using Services.Navigation;
 
 public partial class LoginViewModel(INavigationService navigation,
 	IAuthService authService,

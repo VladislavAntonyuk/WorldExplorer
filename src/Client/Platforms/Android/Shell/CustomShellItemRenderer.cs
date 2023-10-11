@@ -4,6 +4,7 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Controls;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Platform;
@@ -24,9 +25,9 @@ internal class CustomShellItemRenderer(IShellContext context) : ShellItemRendere
 			rootLayout.AddView(view);
 			const int middleViewSize = 150;
 			var middleViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-																	  ViewGroup.LayoutParams.WrapContent,
-																	  GravityFlags.CenterHorizontal |
-																	  GravityFlags.Bottom)
+			                                                          ViewGroup.LayoutParams.WrapContent,
+			                                                          GravityFlags.CenterHorizontal |
+			                                                          GravityFlags.Bottom)
 			{
 				BottomMargin = 100,
 				Width = middleViewSize,

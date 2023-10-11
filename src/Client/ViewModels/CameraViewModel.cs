@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
 using Services;
+using Services.Navigation;
 
 public partial class CameraViewModel(INavigationService navigationService,
 	IDispatcher dispatcher,

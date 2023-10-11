@@ -1,6 +1,6 @@
-﻿using UIKit;
+﻿namespace Client;
 
-namespace Client;
+using UIKit;
 
 public static class Program
 {

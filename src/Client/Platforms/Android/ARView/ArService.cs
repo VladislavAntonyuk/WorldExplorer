@@ -1,8 +1,7 @@
-﻿namespace Client;
+﻿namespace Client.Services;
 
 using Android.App;
 using Google.AR.Core;
-using Services;
 
 public class ArService : IArService
 {

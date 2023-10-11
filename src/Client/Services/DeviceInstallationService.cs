@@ -1,4 +1,4 @@
-﻿namespace Client;
+﻿namespace Client.Services;
 
 using System.Globalization;
 using System.Net.Http.Json;

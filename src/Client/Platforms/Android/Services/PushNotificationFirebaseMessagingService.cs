@@ -1,10 +1,11 @@
-﻿namespace Client;
+﻿namespace Client.Services;
 
 using Android;
 using Android.App;
 using Android.Content.PM;
 using AndroidX.Core.Content;
 using Firebase.Messaging;
+using Constants = Shared.Constants;
 
 [Service(Exported = false)]
 [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
@@ -27,14 +28,14 @@ public class PushNotificationFirebaseMessagingService : FirebaseMessagingService
 			var manager = (NotificationManager?)Application.Context.GetSystemService(NotificationService);
 			if (OperatingSystem.IsAndroidVersionAtLeast(26))
 			{
-				var channel = new NotificationChannel(pushNotification.ChannelId, Shared.Constants.ProductName, NotificationImportance.Max);
+				var channel = new NotificationChannel(pushNotification.ChannelId, Constants.ProductName, NotificationImportance.Max);
 				manager?.CreateNotificationChannel(channel);
 			}
 
 			var notification = new Notification.Builder(Application.Context, pushNotification.ChannelId)
 										.SetContentTitle(pushNotification.Title)
 										.SetContentText(pushNotification.Body)
-										.SetSmallIcon(Resource.Mipmap.appicon)
+										.SetSmallIcon(Resource.Mipmap.SymDefAppIcon)
 										.Build();
 
 			manager?.Notify(messageId++, notification);

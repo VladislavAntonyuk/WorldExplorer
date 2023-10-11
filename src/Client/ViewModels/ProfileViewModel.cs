@@ -6,6 +6,7 @@ using Framework;
 using Resources.Localization;
 using Services;
 using Services.Auth;
+using Services.Navigation;
 using Shared.Models;
 
 public partial class ProfileViewModel : BaseViewModel

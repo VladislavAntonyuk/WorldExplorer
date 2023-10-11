@@ -5,10 +5,10 @@ using Camera.MAUI;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Maps;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.API;
 using Services.Auth;
+using Services.Navigation;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Licensing;
 using Syncfusion.Maui.Core.Hosting;
@@ -41,7 +41,7 @@ public static class MauiProgram
 			   {
 				   handlers.AddHandler<Shell, CustomShellHandler>();
 #if ANDROID || IOS
-				   handlers.AddHandler<ArView, ArViewHandler>();
+				   handlers.AddHandler<Controls.ArView, ArViewHandler>();
 #endif
 			   });
 
@@ -72,7 +72,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton(_ => DeviceDisplay.Current);
 		builder.Services.AddSingleton(_ => Share.Default);
 		builder.Services.AddSingleton(_ => Launcher.Default);
-		builder.Services.AddSingleton<IGeolocator, GeolocatorImplementation>();
+		builder.Services.AddSingleton<IGeolocator, Services.GeolocatorImplementation>();
 		builder.Services.AddTransient<AuthHeaderHandler>();
 		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
 		builder.Services.AddApi<IUsersApi>(apiSettings.Users);

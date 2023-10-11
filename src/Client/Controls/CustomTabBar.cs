@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CS0169
 #pragma warning disable CS0414
-namespace Client;
+namespace Client.Controls;
 
 using System.Windows.Input;
 using Maui.BindableProperty.Generator.Core;

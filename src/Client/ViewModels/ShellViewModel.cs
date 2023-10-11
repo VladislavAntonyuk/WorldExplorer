@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.Input;
 using Framework;
-using Services;
+using Services.Navigation;
 
 public partial class ShellViewModel(INavigationService navigationService) : BaseViewModel
 {

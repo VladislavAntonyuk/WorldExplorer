@@ -1,10 +1,10 @@
-﻿using CoreGraphics;
+﻿namespace Client;
+
+using Controls;
+using CoreGraphics;
 using Microsoft.Maui.Controls.Platform.Compatibility;
-using UIKit;
-
-namespace Client;
-
 using Microsoft.Maui.Platform;
+using UIKit;
 
 class CustomShellItemRenderer(IShellContext context) : ShellItemRenderer(context)
 {

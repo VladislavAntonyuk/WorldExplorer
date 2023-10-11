@@ -1,6 +1,4 @@
-﻿namespace Client;
-
-using System.Threading.Tasks;
+﻿namespace Client.Services;
 
 public static partial class DeviceInstallationService
 {
