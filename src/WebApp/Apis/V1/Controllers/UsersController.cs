@@ -1,8 +1,8 @@
 ﻿namespace WebApp.Apis.V1.Controllers;
 
-using global::Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Shared.Models;
 
 public class UsersController(ICurrentUserService currentUserService, IUserService userService) : ApiAuthControllerBase
 {

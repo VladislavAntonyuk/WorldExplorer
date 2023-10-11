@@ -1,8 +1,8 @@
 ﻿namespace WebApp.Components.Pages.Admin;
 
 using Microsoft.AspNetCore.Components;
+using Services;
 using Shared.Models;
-using WebApp.Services;
 
 public partial class Admin : WorldExplorerAuthBaseComponent
 {

@@ -2,7 +2,7 @@
 
 using System.Text;
 using Infrastructure;
-using Infrastructure.Models;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -11,8 +11,6 @@ public class ClaimsController(ILogger<ClaimsController> logger,
 	IConfiguration configuration,
 	IDbContextFactory<WorldExplorerDbContext> factory) : ApiControllerBase
 {
-	private readonly IDbContextFactory<WorldExplorerDbContext> factory = factory;
-
 	[HttpPost]
 	public async Task<IActionResult> Post([FromBody] RequestConnector? requestConnector,
 		CancellationToken cancellationToken)
@@ -48,14 +46,12 @@ public class ClaimsController(ILogger<ClaimsController> logger,
 																	cancellationToken);
 		if (existedUser is null)
 		{
-			await dbContext.Users.AddAsync(new User() { Id = requestConnector.ObjectId }, cancellationToken);
+			await dbContext.Users.AddAsync(new User
+				                               { Id = requestConnector.ObjectId }, cancellationToken);
 			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 
-		var result = new ResponseContent
-		{
-
-		};
+		var result = new ResponseContent();
 
 		return Ok(result);
 	}

@@ -2,6 +2,7 @@
 
 using Shared.Enums;
 using Shared.Extensions;
+using Toolbelt.Blazor.I18nText;
 
 public sealed partial class LanguageControl : WorldExplorerBaseComponent, IDisposable
 {
@@ -13,7 +14,7 @@ public sealed partial class LanguageControl : WorldExplorerBaseComponent, IDispo
 		return base.OnInitializedAsync();
 	}
 
-	private void I18NText_ChangeLanguage(object? sender, Toolbelt.Blazor.I18nText.I18nTextChangeLanguageEventArgs e)
+	private void I18NText_ChangeLanguage(object? sender, I18nTextChangeLanguageEventArgs e)
 	{
 		currentLang = e.LanguageCode.GetValueFromDescription<Language>();
 	}

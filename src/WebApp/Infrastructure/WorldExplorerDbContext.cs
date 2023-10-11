@@ -1,7 +1,7 @@
 ﻿namespace WebApp.Infrastructure;
 
+using Entities;
 using Microsoft.EntityFrameworkCore;
-using Models;
 
 public class WorldExplorerDbContext : DbContext
 {

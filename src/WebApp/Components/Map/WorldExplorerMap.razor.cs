@@ -4,10 +4,10 @@ using Dialogs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using Services;
 using Shared.Models;
-using WebApp.Services;
 
-public partial class WorldExplorerMap : WorldExplorerAuthBaseComponent, IAsyncDisposable
+public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
 {
 	private Location? currentLocation;
 	private string? errorMessage;

@@ -1,10 +1,10 @@
 ﻿namespace WebApp.Services;
 
-using global::Shared.Models;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Beta;
-using Visit = Infrastructure.Models.Visit;
+using Shared.Models;
+
 public class AzureAdB2CGraphClientConfiguration
 {
 	public const string ConfigurationName = "AzureAdB2CGraphClient";
@@ -65,9 +65,9 @@ public class UserService
 		};
 	}
 
-	private global::Shared.Models.Visit ToDto(Visit arg)
+	private Visit ToDto(Infrastructure.Entities.Visit arg)
 	{
-		return new global::Shared.Models.Visit()
+		return new Visit
 		{
 			Id = arg.Id,
 			Place = new Place

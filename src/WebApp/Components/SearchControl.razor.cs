@@ -1,5 +1,5 @@
 ﻿namespace WebApp.Components;
 
-public partial class SearchControl : WorldExplorerAuthBaseComponent
+public partial class SearchControl : WorldExplorerBaseComponent
 {
 }

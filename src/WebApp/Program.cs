@@ -1,13 +1,9 @@
 ﻿using Azure.Identity;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Beta;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using WebApp.Components;
-using WebApp.Identity;
 using WebApp.Infrastructure;
 using WebApp.Services;
 
@@ -46,7 +42,6 @@ builder.Services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt =>
 builder.Services.AddTranslations();
 
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 var app = builder.Build();
 

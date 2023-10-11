@@ -1,8 +1,8 @@
-﻿@using global::Shared.Models
+﻿@using Shared.Models
 @inherits WorldExplorerAuthBaseComponent
 @page "/admin"
 @attribute [Authorize(Policy = "IsAdministrator")]
-@attribute [StreamRendering(true)]
+@attribute [StreamRendering()]
 
 <MudButton OnClick="ClearPlaces">Clear places</MudButton>
 

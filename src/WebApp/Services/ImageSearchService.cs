@@ -6,7 +6,7 @@ using System.Web;
 public class ImageSearchService
 	(IHttpClientFactory httpClientFactory, IConfiguration configuration) : IImageSearchService
 {
-	private readonly string? apiKey = ConfigurationBinder.GetValue<string>(configuration, "GoogleSearch:ApiKey");
+	private readonly string? apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey");
 
 	public async Task<List<string>> GetPlaceImages(string placeName, CancellationToken cancellationToken)
 	{
