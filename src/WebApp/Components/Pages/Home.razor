@@ -3,4 +3,11 @@
 
 <PageTitle>@Constants.ProductName</PageTitle>
 
-<Promo/>
+<AuthorizeView>
+	<Authorized>
+		<WorldExplorerMap></WorldExplorerMap>
+	</Authorized>
+	<NotAuthorized>
+		<Promo/>
+	</NotAuthorized>
+</AuthorizeView>
