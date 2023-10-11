@@ -15,13 +15,12 @@ jobs:
         runs-on: windows-latest
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Set up .NET
-                uses: actions/setup-dotnet@v1
+                uses: actions/setup-dotnet@v3
                 with:
                     dotnet-version: '8.x'
-                    include-prerelease: true
 
             -   name: Build WebApp
                 run: dotnet build src/WebApp/WebApp.csproj -c Release
