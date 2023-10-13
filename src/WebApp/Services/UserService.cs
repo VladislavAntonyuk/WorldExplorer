@@ -55,7 +55,7 @@ public class UserService
 				},
 				new()
 				{
-					Date = DateTime.Today,
+					Date = DateTime.Today.AddDays(-1),
 					Steps = 150
 				}
 			}
