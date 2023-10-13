@@ -22,11 +22,8 @@ jobs:
                 with:
                     dotnet-version: '8.x'
 
-            -   name: Build WebApp
-                run: dotnet build src/WebApp/WebApp.csproj -c Release
-
             -   name: Publish WebApp
-                run: dotnet publish src/WebApp/WebApp.csproj -c Release -o ${{env.DOTNET_ROOT}}/webapp
+                run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp'
 
             -   name: Upload artifact for deployment job
                 uses: actions/upload-artifact@v2
@@ -39,13 +36,12 @@ jobs:
         runs-on: windows-latest
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Set up .NET
-                uses: actions/setup-dotnet@v1
+                uses: actions/setup-dotnet@v3
                 with:
                     dotnet-version: '8.x'
-                    include-prerelease: true
 
             -   name: Install workloads
                 run: dotnet workload install maui
