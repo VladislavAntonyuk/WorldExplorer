@@ -24,12 +24,20 @@ public static class ServiceExtensions
 		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
 #pragma warning restore S125 // Sections of code should not be commented out
 		services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-				.AddMicrosoftIdentityWebApp(options =>
-				{
-					configuration.Bind("AzureAdB2C", options);
-					options.TokenValidationParameters.ValidateIssuer = false;
-				});
-		services.AddAuthentication().AddMicrosoftIdentityWebApi(configuration, "AzureAdB2C");
+		        .AddMicrosoftIdentityWebApp(options =>
+		        {
+			        configuration.Bind(Microsoft.Identity.Web.Constants.AzureAdB2C, options);
+			        options.TokenValidationParameters.ValidateIssuer = false;
+		        });
+		services.AddAuthentication()
+		        .AddMicrosoftIdentityWebApi(options =>
+		        {
+			        options.TokenValidationParameters.ValidateIssuer = false;
+		        }, options =>
+		        {
+			        configuration.Bind(Microsoft.Identity.Web.Constants.AzureAdB2C, options);
+			        options.TokenValidationParameters.ValidateIssuer = false;
+		        });
 		services.AddAuthorization(options =>
 		{
 			var administratorOrHigherPolicyBuilder =

@@ -27,11 +27,8 @@ public class UserService
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
 		var dbUser = await dbContext.Users
-									.GroupJoin(dbContext.Visits,
-											   user => user.Id,
-											   visit => visit.UserId,
-											   (user, visits) => new { User = user, Visits = visits.DefaultIfEmpty() })
-									.FirstOrDefaultAsync(u => u.User.Id == providerId, cancellationToken);
+									.Include(user => user.Visits)
+									.FirstOrDefaultAsync(u => u.Id == providerId, cancellationToken);
 		if (dbUser is null)
 		{
 			return null;
@@ -45,8 +42,8 @@ public class UserService
 
 		return new User
 		{
-			Id = dbUser.User.Id,
-			Visits = dbUser.Visits.Where(x => x != null).Select(ToDto!).ToList(),
+			Id = dbUser.Id,
+			Visits = dbUser.Visits.Select(ToDto).ToList(),
 			Name = profile.DisplayName ?? string.Empty,
 			Email = profile.OtherMails?.FirstOrDefault() ?? string.Empty,
 			Activities = new List<UserActivity>
@@ -65,7 +62,14 @@ public class UserService
 		};
 	}
 
-	private Visit ToDto(Infrastructure.Entities.Visit arg)
+	public async Task DeleteUser(string providerId, CancellationToken cancellationToken)
+	{
+		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
+		await dbContext.Users.Where(x => x.Id == providerId).ExecuteDeleteAsync(cancellationToken);
+		await graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
+	}
+
+	private static Visit ToDto(Infrastructure.Entities.Visit arg)
 	{
 		return new Visit
 		{
@@ -78,12 +82,5 @@ public class UserService
 			},
 			VisitDate = arg.VisitDate
 		};
-	}
-
-	public async Task DeleteUser(string providerId, CancellationToken cancellationToken)
-	{
-		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
-		await dbContext.Users.Where(x => x.Id == providerId).ExecuteDeleteAsync(cancellationToken);
-		await graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
 	}
 }
