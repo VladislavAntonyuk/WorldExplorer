@@ -228,4 +228,10 @@
   <data name="VisitedPlaces" xml:space="preserve">
     <value>Visited places</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Created by Vladislav Antonyuk</value>
+  </data>
 </root>

@@ -11,6 +11,7 @@ public class WorldExplorerDbContext : DbContext
 
 	public DbSet<Place> Places => Set<Place>();
 	public DbSet<User> Users => Set<User>();
+	public DbSet<Visit> Visits => Set<Visit>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

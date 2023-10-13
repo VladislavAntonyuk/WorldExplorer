@@ -16,10 +16,37 @@
 			VerticalOptions="Center" />
 	</Shell.TitleView>
 
+	<framework:BaseContentPage.MenuBarItems>
+		<MenuBarItem Text="Preferences">
+			<MenuFlyoutItem
+				Text="Toggle My Location"
+				Command="{Binding ToggleUserLocationCommand}">
+				<MenuFlyoutItem.KeyboardAccelerators>
+					<KeyboardAccelerator Modifiers="Ctrl" Key="u"></KeyboardAccelerator>
+				</MenuFlyoutItem.KeyboardAccelerators>
+			</MenuFlyoutItem>
+		</MenuBarItem>
+
+		<MenuBarItem Text="About">
+			<MenuFlyoutItem
+				Text="Help"
+				Command="{Binding HelpCommand}">
+				<MenuFlyoutItem.KeyboardAccelerators>
+					<KeyboardAccelerator Modifiers="Ctrl" Key="h"></KeyboardAccelerator>
+				</MenuFlyoutItem.KeyboardAccelerators>
+			</MenuFlyoutItem>
+
+			<MenuFlyoutItem
+				Text="About"
+				Command="{Binding AboutCommand}"/>
+		</MenuBarItem>
+		
+	</framework:BaseContentPage.MenuBarItems>
+
 	<Map
 		x:Name="Map"
 		ItemsSource="{Binding Pins}"
-		IsShowingUser="True">
+		IsShowingUser="{Binding IsShowingUser}">
 
 		<Map.ItemTemplate>
 			<DataTemplate x:DataType="{x:Type Pin}">

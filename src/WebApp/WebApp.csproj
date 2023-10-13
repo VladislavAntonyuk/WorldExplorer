@@ -24,6 +24,6 @@
 		<PackageReference Include="OpenAI" Version="1.7.2" />
 
 		<PackageReference Include="Azure.Identity" Version="1.10.2" />
-		<PackageReference Include="Microsoft.Graph.Beta" Version="5.50.0-preview" />
+		<PackageReference Include="Microsoft.Graph.Beta" Version="5.51.0-preview" />
 	</ItemGroup>
 </Project>

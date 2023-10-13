@@ -11,8 +11,6 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 	IAiService aiService,
 	IImageSearchService imageSearchService) : IPlacesService
 {
-	private readonly IDbContextFactory<WorldExplorerDbContext> dbContextFactory = dbContextFactory;
-
 	public async Task ClearPlaces(CancellationToken cancellationToken)
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);

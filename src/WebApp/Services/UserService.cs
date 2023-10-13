@@ -17,9 +17,6 @@ public class AzureAdB2CGraphClientConfiguration
 public class UserService
 	(GraphServiceClient graphClient, IDbContextFactory<WorldExplorerDbContext> factory) : IUserService
 {
-	private readonly GraphServiceClient graphClient = graphClient;
-	private readonly IDbContextFactory<WorldExplorerDbContext> factory = factory;
-
 	public async Task<User?> GetUser(string providerId, CancellationToken cancellationToken)
 	{
 		if (string.IsNullOrEmpty(providerId))
@@ -30,8 +27,11 @@ public class UserService
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
 		var dbUser = await dbContext.Users
-									.Include(x => x.Visits)
-									.FirstOrDefaultAsync(x => x.Id == providerId, cancellationToken);
+									.GroupJoin(dbContext.Visits,
+											   user => user.Id,
+											   visit => visit.UserId,
+											   (user, visits) => new { User = user, Visits = visits.DefaultIfEmpty() })
+									.FirstOrDefaultAsync(u => u.User.Id == providerId, cancellationToken);
 		if (dbUser is null)
 		{
 			return null;
@@ -45,8 +45,8 @@ public class UserService
 
 		return new User
 		{
-			Id = dbUser.Id,
-			Visits = dbUser.Visits.Select(ToDto).ToList(),
+			Id = dbUser.User.Id,
+			Visits = dbUser.Visits.Where(x => x != null).Select(ToDto!).ToList(),
 			Name = profile.DisplayName ?? string.Empty,
 			Email = profile.OtherMails?.FirstOrDefault() ?? string.Empty,
 			Activities = new List<UserActivity>

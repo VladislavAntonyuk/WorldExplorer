@@ -1,0 +1,22 @@
+<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	x:Class="Client.Views.AboutPage"
+	Shell.NavBarIsVisible="False"
+	Shell.PresentationMode="ModalAnimated"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	Title="{x:Static localization:Localization.About}">
+
+	<VerticalStackLayout
+		VerticalOptions="Center"
+		HorizontalOptions="Center">
+
+		<Image
+			Source="logo.png"
+			HorizontalOptions="Center"
+			HeightRequest="200" />
+
+		<Label Text="{x:Static localization:Localization.CreatedBy}" />
+	</VerticalStackLayout>
+
+</ContentPage>

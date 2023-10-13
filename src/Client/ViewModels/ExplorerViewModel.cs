@@ -8,6 +8,7 @@ using Microsoft.Maui.Controls.Maps;
 using Models;
 using Resources.Localization;
 using Services;
+using Views;
 
 public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 {
@@ -17,17 +18,23 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 	private readonly IGeolocator geoLocator;
 
 	private readonly IPlacesApi placesApi;
+	private readonly ILauncher launcher;
+
+	[ObservableProperty]
+	private bool isShowingUser = true;
 
 	[ObservableProperty]
 	private GeolocatorData? currentGeolocatorData;
 
 	public ExplorerViewModel(IPlacesApi placesApi,
+		ILauncher launcher,
 		IGeolocator geoLocator,
 		IDialogService dialogService,
 		IDispatcher dispatcher,
 		IDeviceDisplay deviceDisplay)
 	{
 		this.placesApi = placesApi;
+		this.launcher = launcher;
 		this.geoLocator = geoLocator;
 		geoLocator.PositionChanged += GeoLocator_PositionChanged;
 		this.dialogService = dialogService;
@@ -64,6 +71,24 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 		geoLocator.StopListening();
 		deviceDisplay.KeepScreenOn = false;
 		return base.UnInitializeAsync();
+	}
+
+	[RelayCommand]
+	private void ToggleUserLocation()
+	{
+		IsShowingUser = !IsShowingUser;
+	}
+
+	[RelayCommand]
+	private Task Help()
+	{
+		return launcher.TryOpenAsync("https://world-explorer.azurewebsites.net");
+	}
+
+	[RelayCommand]
+	private void About()
+	{
+		Application.Current?.OpenWindow(new Window(new AboutPage()));
 	}
 
 	[RelayCommand(AllowConcurrentExecutions = false)]
