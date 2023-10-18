@@ -7,13 +7,22 @@ using Shared.Models;
 public partial class Admin : WorldExplorerAuthBaseComponent
 {
 	private List<Place> places = new();
+	private List<User> users = new();
 
 	[Inject]
 	public required IPlacesService PlacesService { get; set; }
 
+	[Inject]
+	public required IUserService UsersService { get; set; }
+
 	private Task ClearPlaces()
 	{
 		return PlacesService.ClearPlaces(CancellationToken.None);
+	}
+
+	private async Task GetUsers()
+	{
+		users = await UsersService.GetUsers(CancellationToken.None);
 	}
 
 	private async Task GetPlaces()
@@ -25,5 +34,6 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 	{
 		await base.OnInitializedAsync();
 		await GetPlaces();
+		await GetUsers();
 	}
 }

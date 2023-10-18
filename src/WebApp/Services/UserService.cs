@@ -17,6 +17,13 @@ public class AzureAdB2CGraphClientConfiguration
 public class UserService
 	(GraphServiceClient graphClient, IDbContextFactory<WorldExplorerDbContext> factory) : IUserService
 {
+	public async Task<List<User>> GetUsers(CancellationToken cancellationToken)
+	{
+		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		var dbUsers = await dbContext.Users.ToListAsync(cancellationToken);
+		return dbUsers.Select(ToModel).ToList();
+	}
+
 	public async Task<User?> GetUser(string providerId, CancellationToken cancellationToken)
 	{
 		if (string.IsNullOrEmpty(providerId))
@@ -26,9 +33,8 @@ public class UserService
 
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
-		var dbUser = await dbContext.Users
-									.Include(user => user.Visits)
-									.FirstOrDefaultAsync(u => u.Id == providerId, cancellationToken);
+		var dbUser = await dbContext.Users.Include(user => user.Visits)
+		                            .FirstOrDefaultAsync(u => u.Id == providerId, cancellationToken);
 		if (dbUser is null)
 		{
 			return null;
@@ -67,6 +73,16 @@ public class UserService
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 		await dbContext.Users.Where(x => x.Id == providerId).ExecuteDeleteAsync(cancellationToken);
 		await graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
+	}
+
+	private static User ToModel(Infrastructure.Entities.User arg)
+	{
+		return new User
+		{
+			Id = arg.Id,
+			Name = string.Empty,
+			Email = string.Empty
+		};
 	}
 
 	private static Visit ToDto(Infrastructure.Entities.Visit arg)
