@@ -19,7 +19,7 @@ public class UserService
 {
 	public async Task<List<User>> GetUsers(CancellationToken cancellationToken)
 	{
-		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 		var dbUsers = await dbContext.Users.ToListAsync(cancellationToken);
 		return dbUsers.Select(ToModel).ToList();
 	}

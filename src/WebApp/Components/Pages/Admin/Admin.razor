@@ -10,20 +10,20 @@
             <MudTabPanel Text="Places">
                 <MudButton OnClick="ClearPlaces">Clear places</MudButton>
 
-                		<MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="Place">
-                			<HeaderContent>
-                				<MudTh>Name</MudTh>
-                				<MudTh>Location</MudTh>
-                				<MudTh>Rating</MudTh>
-                				<MudTh>Images count</MudTh>
-                			</HeaderContent>
-                			<RowTemplate>
-                				<MudTd DataLabel="Name">@context.Name</MudTd>
-                				<MudTd DataLabel="Location">@context.Location</MudTd>
-                				<MudTd DataLabel="Rating">@context.Rating</MudTd>
-                				<MudTd DataLabel="Images count">@context.Images.Count</MudTd>
-                			</RowTemplate>
-                		</MudTable>
+                <MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="Place">
+                	<HeaderContent>
+                		<MudTh>Name</MudTh>
+                		<MudTh>Location</MudTh>
+                		<MudTh>Rating</MudTh>
+                		<MudTh>Images count</MudTh>
+                	</HeaderContent>
+                	<RowTemplate Context="place">
+                		<MudTd DataLabel="Name">@place.Name</MudTd>
+                		<MudTd DataLabel="Location">@place.Location</MudTd>
+                		<MudTd DataLabel="Rating">@place.Rating</MudTd>
+                		<MudTd DataLabel="Images count">@place.Images.Count</MudTd>
+                	</RowTemplate>
+                </MudTable>
             </MudTabPanel>
             <MudTabPanel Text="Users">
                 <MudTable Items="@users" Breakpoint="Breakpoint.Sm" T="User">
@@ -32,10 +32,10 @@
                 		<MudTh>Name</MudTh>
                 		<MudTh>Email</MudTh>
                 	</HeaderContent>
-                	<RowTemplate>
-                		<MudTd DataLabel="Id">@context.Id</MudTd>
-                		<MudTd DataLabel="Name">@context.Name</MudTd>
-                		<MudTd DataLabel="Email">@context.Email</MudTd>
+                	<RowTemplate Context="user">
+                		<MudTd DataLabel="Id">@user.Id</MudTd>
+                		<MudTd DataLabel="Name">@user.Name</MudTd>
+                		<MudTd DataLabel="Email">@user.Email</MudTd>
                 	</RowTemplate>
                 </MudTable>
             </MudTabPanel>
