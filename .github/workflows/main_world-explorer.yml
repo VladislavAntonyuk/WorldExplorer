@@ -105,6 +105,8 @@ jobs:
                     OPENAI_APIKEY: ${{ secrets.OPENAI_APIKEY }}
                     AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
                     AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
+                    AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME }}
+                    AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD }}
                 with:
                     tokenPrefix: '#{'
                     tokenSuffix: '}#'
