@@ -6,8 +6,11 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Services;
+using WebApp.Services.User;
 
-public class ClaimsController(ILogger<ClaimsController> logger,
+public class ClaimsController(IGraphClientService graphClientService,
+	ILogger<ClaimsController> logger,
 	IConfiguration configuration,
 	IDbContextFactory<WorldExplorerDbContext> factory) : ApiControllerBase
 {
@@ -51,7 +54,12 @@ public class ClaimsController(ILogger<ClaimsController> logger,
 			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 
-		var result = new ResponseContent();
+		var user = await graphClientService.GetUser(requestConnector.ObjectId, cancellationToken);
+		var result = new ResponseContent
+		{
+			Groups = string.Join(',', user.Groups.Select(x => x.DisplayName)),
+			Language = user.Language.ToString()
+		};
 
 		return Ok(result);
 	}

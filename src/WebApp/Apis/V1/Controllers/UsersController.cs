@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Shared.Models;
+using WebApp.Services.User;
 
 public class UsersController(ICurrentUserService currentUserService, IUserService userService) : ApiAuthControllerBase
 {

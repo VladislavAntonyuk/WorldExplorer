@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services;
+﻿namespace WebApp.Services.User;
 
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +12,7 @@ public class AzureAdB2CGraphClientConfiguration
 
 	public string? ClientSecret { get; set; }
 	public string? TenantId { get; set; }
+	public string? DefaultApplicationId { get; set; }
 }
 
 public class UserService
@@ -34,7 +35,7 @@ public class UserService
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
 		var dbUser = await dbContext.Users.Include(user => user.Visits)
-		                            .FirstOrDefaultAsync(u => u.Id == providerId, cancellationToken);
+									.FirstOrDefaultAsync(u => u.Id == providerId, cancellationToken);
 		if (dbUser is null)
 		{
 			return null;

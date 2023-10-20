@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services;
+﻿namespace WebApp.Services.AI;
 
 public class OpenAiSettings
 {

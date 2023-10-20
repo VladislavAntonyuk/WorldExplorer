@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services;
+﻿namespace WebApp.Services.Image;
 
 using System.Text.Json.Serialization;
 using System.Web;

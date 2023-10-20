@@ -5,7 +5,10 @@ using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using WebApp.Components;
 using WebApp.Infrastructure;
-using WebApp.Services;
+using WebApp.Services.AI;
+using WebApp.Services.Image;
+using WebApp.Services.Place;
+using WebApp.Services.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,15 @@ builder.Services.AddScoped(_ =>
 });
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddSingleton<IGraphClientService>(_ =>
+{
+	var config = builder.Configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
+	                          .Get<AzureAdB2CGraphClientConfiguration>();
+	ArgumentNullException.ThrowIfNull(config);
+	var clientSecretCredential =
+		new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret);
+	return new GraphClientService(new GraphServiceClient(clientSecretCredential), config.DefaultApplicationId);
+});
 builder.Services.AddScoped<IPlacesService, PlacesService>();
 builder.Services.Configure<OpenAiSettings>(builder.Configuration.GetRequiredSection("OpenAI"));
 builder.Services.AddSingleton<IAiService, AiService>();

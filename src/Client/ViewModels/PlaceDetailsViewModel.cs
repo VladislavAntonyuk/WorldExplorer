@@ -27,7 +27,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	private Place place;
 
 	[ObservableProperty]
-	private byte[][] placeImages = Array.Empty<byte[]>();
+	private byte[][] placeImages = [];
 
 	public PlaceDetailsViewModel(IPlacesApi placesApi,
 		ILauncher launcher,
@@ -65,7 +65,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 			return;
 		}
 
-		PlaceImages = Array.Empty<byte[]>();
+		PlaceImages = [];
 		IsLiveViewEnabled = false;
 		await dialogService.ToastAsync(Localization.LoadingPlaceDetails);
 		var getDetailsResult = await placesApi.GetDetails(basePlace.Name, basePlace.Location, CancellationToken.None);
@@ -96,9 +96,9 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	}
 
 	[RelayCommand]
-	private Task OpenUrl(string placeName)
+	private Task<bool> OpenUrl(string placeName)
 	{
-		return launcher.OpenAsync(new Uri($"https://google.com/search?q={placeName}"));
+		return launcher.TryOpenAsync(new Uri($"https://google.com/search?q={placeName}"));
 	}
 
 	[RelayCommand]

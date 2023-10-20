@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services;
+﻿namespace WebApp.Services.AI;
 
 using System.Text.Json;
 using Microsoft.Extensions.Options;

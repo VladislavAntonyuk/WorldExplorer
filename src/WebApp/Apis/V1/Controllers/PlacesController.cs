@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Shared.Models;
+using WebApp.Services.Place;
 
 public class PlacesController(IPlacesService placesService) : ApiAuthControllerBase
 {

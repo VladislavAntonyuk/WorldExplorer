@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Identity.Web;
 using Services;
+using WebApp.Services.User;
 
 public abstract class WorldExplorerAuthBaseComponent : WorldExplorerBaseComponent
 {
@@ -24,6 +25,7 @@ public abstract class WorldExplorerAuthBaseComponent : WorldExplorerBaseComponen
 			Email = authenticationStateUser.FindFirstValue("emails") ?? string.Empty,
 			IsNew = Convert.ToBoolean(authenticationStateUser.FindFirstValue("newUser"))
 		};
+		await I18NText.SetCurrentLanguageAsync(authenticationStateUser.FindFirstValue("extension_Language") ?? "en-US");
 		await base.OnInitializedAsync();
 	}
 }

@@ -1,9 +1,11 @@
-﻿namespace WebApp.Services;
+﻿namespace WebApp.Services.Place;
 
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
+using WebApp.Services.AI;
+using WebApp.Services.Image;
 using Location = Shared.Models.Location;
 using Place = Shared.Models.Place;
 

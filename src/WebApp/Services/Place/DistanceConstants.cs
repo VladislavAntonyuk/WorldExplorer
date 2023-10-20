@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services;
+﻿namespace WebApp.Services.Place;
 
 public static class DistanceConstants
 {
