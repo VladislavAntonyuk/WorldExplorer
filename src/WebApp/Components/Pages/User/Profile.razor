@@ -12,8 +12,8 @@ else
 		<MudExpansionPanel Text="@Translation.Profile" IsInitiallyExpanded="true">
 			<MudText>@CurrentUser.Name</MudText>
 		</MudExpansionPanel>
-		<MudExpansionPanel Text="Translation.DangerZone" IsInitiallyExpanded="true" class="mt-1">
-			<MudButton OnClick="DeleteAccount" Color="Color.Error" ButtonType="ButtonType.Button">Translation.DeleteAccount</MudButton>
+		<MudExpansionPanel Text="@Translation.DangerZone" IsInitiallyExpanded="true" class="mt-1">
+			<MudButton OnClick="DeleteAccount" Color="Color.Error" ButtonType="ButtonType.Button">@Translation.DeleteAccount</MudButton>
 		</MudExpansionPanel>
 	</MudExpansionPanels>
 }
