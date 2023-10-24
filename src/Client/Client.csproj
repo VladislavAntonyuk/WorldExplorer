@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Condition="'$(CI)' == 'true' and $([MSBuild]::IsOSPlatform('windows')) == 'true'">
 		<IncludeTizenTargetFrameworks>true</IncludeTizenTargetFrameworks>
@@ -72,7 +72,7 @@
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.86" />
 		<PackageReference Include="Syncfusion.Maui.Charts" Version="23.1.41" />
 		<PackageReference Include="Syncfusion.Maui.Inputs" Version="23.1.41" />
-		<PackageReference Include="Syncfusion.Maui.Popup" Version="23.1.41" />
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="23.1.42" />
 		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.0-rc.2.9373" />
 	</ItemGroup>
