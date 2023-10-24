@@ -1,9 +1,8 @@
 ﻿namespace WebApp.Apis.V1.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Services.Place;
 using Shared.Models;
-using WebApp.Services.Place;
 
 public class PlacesController(IPlacesService placesService) : ApiAuthControllerBase
 {

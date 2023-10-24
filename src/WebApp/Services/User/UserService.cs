@@ -5,16 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Beta;
 using Shared.Models;
 
-public class AzureAdB2CGraphClientConfiguration
-{
-	public const string ConfigurationName = "AzureAdB2CGraphClient";
-	public string? ClientId { get; set; }
-
-	public string? ClientSecret { get; set; }
-	public string? TenantId { get; set; }
-	public string? DefaultApplicationId { get; set; }
-}
-
 public class UserService
 	(GraphServiceClient graphClient, IDbContextFactory<WorldExplorerDbContext> factory) : IUserService
 {

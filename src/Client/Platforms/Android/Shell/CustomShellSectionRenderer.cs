@@ -12,7 +12,7 @@ internal class CustomShellSectionRenderer(IShellContext shellContext) : ShellSec
 	{
 		var relativeLayout = new RelativeLayout(Context);
 		relativeLayout.LayoutParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
-		                                                                  ViewGroup.LayoutParams.MatchParent);
+																		  ViewGroup.LayoutParams.MatchParent);
 
 		var view = base.OnCreateView(inflater, container, savedInstanceState);
 		if (view is not CoordinatorLayout coordinatorLayout)

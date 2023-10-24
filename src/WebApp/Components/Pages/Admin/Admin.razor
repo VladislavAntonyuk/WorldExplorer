@@ -2,7 +2,7 @@
 @inherits WorldExplorerAuthBaseComponent
 @page "/admin"
 @attribute [Authorize(Policy = "IsAdministrator")]
-@attribute [StreamRendering()]
+@attribute [StreamRendering]
 
 <AuthorizeView Policy="IsAdministrator">
 	<Authorized>

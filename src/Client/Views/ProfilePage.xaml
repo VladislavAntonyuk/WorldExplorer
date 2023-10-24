@@ -9,6 +9,7 @@
 	xmlns:models="clr-namespace:Shared.Models;assembly=Shared"
 	xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
 	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
+	xmlns:controls="clr-namespace:AlohaKit.Controls;assembly=AlohaKit"
 	x:DataType="viewModels:ProfileViewModel"
 	x:Class="Client.Views.ProfilePage"
 	Shell.NavBarIsVisible="False">
@@ -38,14 +39,12 @@
 	</framework:BaseContentPage.Resources>
 
 	<ScrollView>
-		<VerticalStackLayout Margin="10">
+		<VerticalStackLayout Margin="10" Spacing="10">
 
-			<toolkit:AvatarView
-				Text="{Binding User.Name}"
+			<controls:Avatar
+				Name="{Binding User.Name}"
 				HorizontalOptions="Center"
-				FontSize="20"
-				WidthRequest="100"
-				HeightRequest="100" />
+				AvatarSize="Large" />
 
 			<Label
 				Text="{Binding User.Name}"

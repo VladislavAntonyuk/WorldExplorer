@@ -1,11 +1,11 @@
 ﻿namespace WebApp.Services.Place;
 
+using AI;
+using Image;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using WebApp.Services.AI;
-using WebApp.Services.Image;
 using Location = Shared.Models.Location;
 using Place = Shared.Models.Place;
 
@@ -51,6 +51,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		var savedPlace = await dbContext.Places.FirstOrDefaultAsync(place => place.Name == name && place.Location.IsWithinDistance(new Point(location.Longitude, location.Latitude), DistanceConstants.NearbyDistance), cancellationToken);
 		return savedPlace is null ? null : ToPlace(savedPlace);
 	}
+
 	public bool IsNearby(Location location1, Location location2, double distance)
 	{
 		var latLongDifferenceEquivalentToM = distance / DistanceConstants.MetersPerDegree;
@@ -60,7 +61,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 			   location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
 	}
 
-	public async Task RequestNewPlaces(Location location, CancellationToken cancellationToken)
+	private async Task RequestNewPlaces(Location location, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		var places = await aiService.GetNearByPlaces(location);
@@ -87,7 +88,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		}
 	}
 
-	private Infrastructure.Entities.Place ToPlace(Place place)
+	private static Infrastructure.Entities.Place ToPlace(Place place)
 	{
 		return new Infrastructure.Entities.Place
 		{
@@ -101,7 +102,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		};
 	}
 
-	private Place ToPlace(Infrastructure.Entities.Place place)
+	private static Place ToPlace(Infrastructure.Entities.Place place)
 	{
 		return new Place
 		{

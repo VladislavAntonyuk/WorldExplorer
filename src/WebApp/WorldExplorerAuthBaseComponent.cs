@@ -4,8 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Identity.Web;
-using Services;
-using WebApp.Services.User;
+using Services.User;
 
 public abstract class WorldExplorerAuthBaseComponent : WorldExplorerBaseComponent
 {

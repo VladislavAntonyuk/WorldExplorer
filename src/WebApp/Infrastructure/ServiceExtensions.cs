@@ -20,24 +20,24 @@ public static class ServiceExtensions
 	{
 
 #pragma warning disable S125 // Sections of code should not be commented out
-							// test with services.AddAuthentication(IdentityConstants.ApplicationScheme)AddIdentityCookies();
+		// test with services.AddAuthentication(IdentityConstants.ApplicationScheme)AddIdentityCookies();
 		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
 #pragma warning restore S125 // Sections of code should not be commented out
 		services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-		        .AddMicrosoftIdentityWebApp(options =>
-		        {
-			        configuration.Bind(Microsoft.Identity.Web.Constants.AzureAdB2C, options);
-			        options.TokenValidationParameters.ValidateIssuer = false;
-		        });
+				.AddMicrosoftIdentityWebApp(options =>
+				{
+					configuration.Bind(Microsoft.Identity.Web.Constants.AzureAdB2C, options);
+					options.TokenValidationParameters.ValidateIssuer = false;
+				});
 		services.AddAuthentication()
-		        .AddMicrosoftIdentityWebApi(options =>
-		        {
-			        options.TokenValidationParameters.ValidateIssuer = false;
-		        }, options =>
-		        {
-			        configuration.Bind(Microsoft.Identity.Web.Constants.AzureAdB2C, options);
-			        options.TokenValidationParameters.ValidateIssuer = false;
-		        });
+				.AddMicrosoftIdentityWebApi(options =>
+				{
+					options.TokenValidationParameters.ValidateIssuer = false;
+				}, options =>
+				{
+					configuration.Bind(Microsoft.Identity.Web.Constants.AzureAdB2C, options);
+					options.TokenValidationParameters.ValidateIssuer = false;
+				});
 		services.AddAuthorization(options =>
 		{
 			var administratorOrHigherPolicyBuilder =

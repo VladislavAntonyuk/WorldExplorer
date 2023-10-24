@@ -4,9 +4,8 @@ using Dialogs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using Services;
+using Services.Place;
 using Shared.Models;
-using WebApp.Services.Place;
 
 public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
 {

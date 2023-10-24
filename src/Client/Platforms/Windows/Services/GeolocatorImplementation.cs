@@ -1,7 +1,7 @@
 ﻿namespace Client.Services;
 
-using Windows.Devices.Geolocation;
 using Models;
+using Windows.Devices.Geolocation;
 
 public partial class GeolocatorImplementation
 {

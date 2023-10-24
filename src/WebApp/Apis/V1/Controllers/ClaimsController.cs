@@ -6,8 +6,7 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Services;
-using WebApp.Services.User;
+using Services.User;
 
 public class ClaimsController(IGraphClientService graphClientService,
 	ILogger<ClaimsController> logger,
@@ -49,8 +48,7 @@ public class ClaimsController(IGraphClientService graphClientService,
 																	cancellationToken);
 		if (existedUser is null)
 		{
-			await dbContext.Users.AddAsync(new User
-				                               { Id = requestConnector.ObjectId }, cancellationToken);
+			await dbContext.Users.AddAsync(new User { Id = requestConnector.ObjectId }, cancellationToken);
 			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 

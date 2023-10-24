@@ -10,7 +10,7 @@ public class PlaneAttachment(Plane plane, Anchor anchor)
 	private readonly float[] mPoseTranslation = new float[3];
 
 	public bool IsTracking => /*true if*/plane.TrackingState == TrackingState.Tracking &&
-	                                     anchor.TrackingState == TrackingState.Tracking;
+										 anchor.TrackingState == TrackingState.Tracking;
 
 	public Pose GetPose()
 	{

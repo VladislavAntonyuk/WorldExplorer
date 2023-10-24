@@ -1,7 +1,7 @@
 ﻿namespace WebApp.Services.User;
 
-using Microsoft.Graph.Beta;
 using System.Globalization;
+using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models;
 using Shared.Enums;
 using Shared.Extensions;
@@ -96,4 +96,3 @@ class GraphClientService : IGraphClientService
 						  .LastOrDefault(x => x.EnglishName.Contains(countryName), defaultCultureInfo);
 	}
 }
-

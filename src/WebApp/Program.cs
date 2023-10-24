@@ -36,7 +36,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddSingleton<IGraphClientService>(_ =>
 {
 	var config = builder.Configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
-	                          .Get<AzureAdB2CGraphClientConfiguration>();
+							  .Get<AzureAdB2CGraphClientConfiguration>();
 	ArgumentNullException.ThrowIfNull(config);
 	var clientSecretCredential =
 		new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret);
