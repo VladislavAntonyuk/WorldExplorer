@@ -11,7 +11,7 @@ public static class ApiExtensions
 				.ConfigureHttpClient(c =>
 				{
 					c.BaseAddress = new Uri(baseAddress);
-					c.Timeout = TimeSpan.FromSeconds(15);
+					c.Timeout = TimeSpan.FromSeconds(90);
 				})
 				.AddHttpMessageHandler<AuthHeaderHandler>();
 	}

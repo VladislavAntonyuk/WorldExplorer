@@ -31,6 +31,18 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 		places = await PlacesService.GetPlaces(CancellationToken.None);
 	}
 
+	private async Task DeleteUser(string userId)
+	{
+		await UsersService.DeleteUser(userId, CancellationToken.None);
+		await GetUsers();
+	}
+
+	private async Task DeletePlace(Guid placeId)
+	{
+		await PlacesService.Delete(placeId, CancellationToken.None);
+		await GetPlaces();
+	}
+
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();

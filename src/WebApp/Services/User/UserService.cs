@@ -1,5 +1,6 @@
 ﻿namespace WebApp.Services.User;
 
+using System.Threading;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Beta;
@@ -12,7 +13,16 @@ public class UserService
 	{
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 		var dbUsers = await dbContext.Users.ToListAsync(cancellationToken);
-		return dbUsers.Select(ToModel).ToList();
+		var users = new List<User>();
+		foreach (var user in dbUsers.Select(ToModel))
+		{
+			var profile = await graphClient.Users[user.Id].GetAsync(cancellationToken: cancellationToken);
+			user.Name = profile?.DisplayName ?? string.Empty;
+			user.Email = profile?.OtherMails?.FirstOrDefault() ?? string.Empty;
+			users.Add(user);
+		}
+
+		return users;
 	}
 
 	public async Task<User?> GetUser(string providerId, CancellationToken cancellationToken)
@@ -66,28 +76,28 @@ public class UserService
 		await graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
 	}
 
-	private static User ToModel(Infrastructure.Entities.User arg)
+	private static User ToModel(Infrastructure.Entities.User user)
 	{
 		return new User
 		{
-			Id = arg.Id,
+			Id = user.Id,
 			Name = string.Empty,
 			Email = string.Empty
 		};
 	}
 
-	private static Visit ToDto(Infrastructure.Entities.Visit arg)
+	private static Visit ToDto(Infrastructure.Entities.Visit user)
 	{
 		return new Visit
 		{
-			Id = arg.Id,
+			Id = user.Id,
 			Place = new Place
 			{
-				Id = arg.PlaceId,
+				Id = user.PlaceId,
 				Name = string.Empty,
 				Location = new Location(0, 0)
 			},
-			VisitDate = arg.VisitDate
+			VisitDate = user.VisitDate
 		};
 	}
 }

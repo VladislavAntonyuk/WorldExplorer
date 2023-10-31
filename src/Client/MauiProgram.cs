@@ -58,12 +58,9 @@ public static class MauiProgram
 		builder.ConfigureSyncfusionCore();
 
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
-#if !DEBUG
-		builder.Services.AddSingleton<IAuthService, MockAuthService>();
-#else
+
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 		builder.Services.Configure<AzureB2CConfiguration>(configuration => builder.Configuration.GetRequiredSection("AzureAdB2C").Bind(configuration));
-#endif
 		builder.Services.AddSingleton<IArService, ArService>();
 		builder.Services.AddSingleton<IDialogService, DialogService>();
 

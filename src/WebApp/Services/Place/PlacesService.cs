@@ -1,5 +1,6 @@
 ﻿namespace WebApp.Services.Place;
 
+using System.Threading;
 using AI;
 using Image;
 using Infrastructure;
@@ -59,6 +60,12 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 			   location1.Latitude - location2.Latitude <= latLongDifferenceEquivalentToM &&
 			   location1.Longitude - location2.Longitude >= -latLongDifferenceEquivalentToM &&
 			   location1.Longitude - location2.Longitude <= latLongDifferenceEquivalentToM;
+	}
+
+	public async Task Delete(Guid placeId, CancellationToken cancellationToken)
+	{
+		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		await dbContext.Places.Where(x => x.Id == placeId).ExecuteDeleteAsync(cancellationToken);
 	}
 
 	private async Task RequestNewPlaces(Location location, CancellationToken cancellationToken)

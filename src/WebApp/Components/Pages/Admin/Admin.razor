@@ -16,12 +16,14 @@
                 		<MudTh>Location</MudTh>
                 		<MudTh>Rating</MudTh>
                 		<MudTh>Images count</MudTh>
+                		<MudTh></MudTh>
                 	</HeaderContent>
                 	<RowTemplate Context="place">
                 		<MudTd DataLabel="Name">@place.Name</MudTd>
                 		<MudTd DataLabel="Location">@place.Location</MudTd>
                 		<MudTd DataLabel="Rating">@place.Rating</MudTd>
                 		<MudTd DataLabel="Images count">@place.Images.Count</MudTd>
+		                <MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeletePlace(place.Id)">Delete</MudButton></MudTd>
                 	</RowTemplate>
                 </MudTable>
             </MudTabPanel>
@@ -31,11 +33,13 @@
                 		<MudTh>Id</MudTh>
                 		<MudTh>Name</MudTh>
                 		<MudTh>Email</MudTh>
+                		<MudTh></MudTh>
                 	</HeaderContent>
                 	<RowTemplate Context="user">
                 		<MudTd DataLabel="Id">@user.Id</MudTd>
                 		<MudTd DataLabel="Name">@user.Name</MudTd>
-                		<MudTd DataLabel="Email">@user.Email</MudTd>
+		                <MudTd DataLabel="Email">@user.Email</MudTd>
+		                <MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeleteUser(user.Id)">Delete</MudButton></MudTd>
                 	</RowTemplate>
                 </MudTable>
             </MudTabPanel>
