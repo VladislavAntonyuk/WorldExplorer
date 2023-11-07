@@ -3,11 +3,9 @@
 using System.Threading;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph.Beta;
 using Shared.Models;
 
-public class UserService
-	(GraphServiceClient graphClient, IDbContextFactory<WorldExplorerDbContext> factory) : IUserService
+public class UserService(IGraphClientService graphClient, IDbContextFactory<WorldExplorerDbContext> factory) : IUserService
 {
 	public async Task<List<User>> GetUsers(CancellationToken cancellationToken)
 	{
@@ -16,9 +14,9 @@ public class UserService
 		var users = new List<User>();
 		foreach (var user in dbUsers.Select(ToModel))
 		{
-			var profile = await graphClient.Users[user.Id].GetAsync(cancellationToken: cancellationToken);
-			user.Name = profile?.DisplayName ?? string.Empty;
-			user.Email = profile?.OtherMails?.FirstOrDefault() ?? string.Empty;
+			var profile = await graphClient.GetUser(user.Id, cancellationToken);
+			user.Name = profile.DisplayName ?? string.Empty;
+			user.Email = profile.OtherMails.FirstOrDefault() ?? string.Empty;
 			users.Add(user);
 		}
 
@@ -41,11 +39,7 @@ public class UserService
 			return null;
 		}
 
-		var profile = await graphClient.Users[providerId].GetAsync(cancellationToken: cancellationToken);
-		if (profile is null)
-		{
-			return null;
-		}
+		var profile = await graphClient.GetUser(providerId, cancellationToken);
 
 		return new User
 		{
@@ -73,7 +67,7 @@ public class UserService
 	{
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 		await dbContext.Users.Where(x => x.Id == providerId).ExecuteDeleteAsync(cancellationToken);
-		await graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
+		await graphClient.DeleteAsync(providerId, cancellationToken);
 	}
 
 	private static User ToModel(Infrastructure.Entities.User user)

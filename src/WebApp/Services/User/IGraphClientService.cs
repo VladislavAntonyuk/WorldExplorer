@@ -9,13 +9,16 @@ using Shared.Extensions;
 public interface IGraphClientService
 {
 	Task<AzureUser> GetUser(string providerId, CancellationToken cancellationToken);
+	Task DeleteAsync(string providerId, CancellationToken cancellationToken);
 }
 public class AzureUser
 {
 	public string Id { get; set; } = string.Empty;
-	public IEnumerable<AzureGroup> Groups { get; set; } = new List<AzureGroup>();
+	public IEnumerable<AzureGroup> Groups { get; set; } = Enumerable.Empty<AzureGroup>();
 	public bool EnableAccessibility { get; set; }
 	public Language Language { get; set; }
+	public string? DisplayName { get; set; }
+	public IEnumerable<string> OtherMails { get; set; } = Enumerable.Empty<string>();
 }
 
 public class AzureGroup
@@ -24,7 +27,7 @@ public class AzureGroup
 	public string? DisplayName { get; set; }
 }
 
-class GraphClientService : IGraphClientService
+public class GraphClientService : IGraphClientService
 {
 	private readonly string accessibilityKey;
 	private readonly CultureInfo defaultCultureInfo;
@@ -47,6 +50,8 @@ class GraphClientService : IGraphClientService
 		return new AzureUser
 		{
 			Id = user.Id,
+			DisplayName = user.DisplayName,
+			OtherMails = user.OtherMails ?? Enumerable.Empty<string>(),
 			EnableAccessibility = Convert.ToBoolean(GetAdditionalData(user, accessibilityKey)),
 			Language = culture.TwoLetterISOLanguageName.GetValueFromDescription<Language>(),
 			Groups = await GetUserGroups(providerId, cancellationToken)
@@ -94,5 +99,10 @@ class GraphClientService : IGraphClientService
 
 		return CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures)
 						  .LastOrDefault(x => x.EnglishName.Contains(countryName), defaultCultureInfo);
+	}
+
+	public Task DeleteAsync(string providerId, CancellationToken cancellationToken)
+	{
+		return graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
 	}
 }

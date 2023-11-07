@@ -9,13 +9,13 @@ updates:
   assignees:
       - "VladislavAntonyuk"
   open-pull-requests-limit: 10
-groups:
-  Microsoft:
-    patterns:
-    - "Microsoft*"
-  Syncfusion:
-    patterns:
-    - "Syncfusion*"
-  CommunityToolkit:
-    patterns:
-    - "CommunityToolkit*"
+  groups:
+    Microsoft:
+      patterns:
+      - "Microsoft*"
+    Syncfusion:
+      patterns:
+      - "Syncfusion*"
+    CommunityToolkit:
+      patterns:
+      - "CommunityToolkit*"
