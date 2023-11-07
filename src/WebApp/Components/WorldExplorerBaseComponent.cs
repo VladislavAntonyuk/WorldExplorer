@@ -1,4 +1,4 @@
-﻿namespace WebApp;
+﻿namespace WebApp.Components;
 
 using I18nText;
 using Microsoft.AspNetCore.Components;

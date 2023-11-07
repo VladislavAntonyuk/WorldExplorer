@@ -1,4 +1,4 @@
-﻿namespace WebApp.Policies;
+﻿namespace WebApp.Infrastructure.Policies;
 
 public class AdministratorAuthorizationRequirement : RoleAuthorizationRequirement
 {

@@ -92,9 +92,6 @@
 			<AutoGen>True</AutoGen>
 			<DependentUpon>Localization.resx</DependentUpon>
 		</Compile>
-		<Compile Update="Views\AboutPage.xaml.cs">
-		  <DependentUpon>AboutPage.xaml</DependentUpon>
-		</Compile>
 		<EmbeddedResource Update="Resources\Localization\Localization.resx">
 			<Generator>ResXFileCodeGenerator</Generator>
 			<LastGenOutput>Localization.Designer.cs</LastGenOutput>

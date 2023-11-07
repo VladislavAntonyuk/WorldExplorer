@@ -1,4 +1,4 @@
-﻿namespace WebApp;
+﻿namespace WebApp.Components;
 using Microsoft.AspNetCore.Components;
 using Services.User;
 using Shared.Extensions;

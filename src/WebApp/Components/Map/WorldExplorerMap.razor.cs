@@ -6,6 +6,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using Services.Place;
 using Shared.Models;
+using WebApp.Components;
 
 public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
 {
