@@ -113,10 +113,18 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 	{
 		return new Place
 		{
+			Id = place.Id,
 			Name = place.Name,
 			Description = place.Description,
 			Images = place.Images.Select(x => x.Source).ToList(),
-			Location = new Location(place.Location.Y, place.Location.X)
+			Location = new Location(place.Location.Y, place.Location.X),
+			Reviews = place.Reviews.Select(x => new Shared.Models.Review
+			{
+				Id = x.Id,
+				Comment = x.Comment,
+				Rating = x.Rating,
+				ReviewDate = x.ReviewDate
+			}).ToList()
 		};
 	}
 }

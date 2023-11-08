@@ -349,7 +349,7 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Speed: {0} m/s.
+        ///   Looks up a localized string similar to Speed: {0:N1} m/s.
         /// </summary>
         internal static string Speed {
             get {

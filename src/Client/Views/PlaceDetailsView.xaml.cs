@@ -22,7 +22,7 @@ public partial class PlaceDetailsView
 
 	public BottomSheet? BottomSheet { get; set; }
 
-	private void OpenArTapped(object? sender, TappedEventArgs e)
+	private void OpenArClicked(object? sender, EventArgs e)
 	{
 		ViewModel.ArCommand.Execute(null);
 		BottomSheet?.CloseBottomSheet();

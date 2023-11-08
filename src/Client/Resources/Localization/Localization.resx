@@ -217,7 +217,7 @@
     <value>Date</value>
   </data>
   <data name="Speed" xml:space="preserve">
-    <value>Speed: {0} m/s</value>
+    <value>Speed: {0:N1} m/s</value>
   </data>
   <data name="Statistics" xml:space="preserve">
     <value>Statistics</value>

@@ -12,6 +12,7 @@
 	<Shell.TitleView>
 		<Label
 			Text="{Binding CurrentGeolocatorData.Speed, StringFormat={x:Static localization:Localization.Speed}, FallbackValue=0}"
+			TextColor="{StaticResource White}"
 			HorizontalOptions="Center"
 			VerticalOptions="Center" />
 	</Shell.TitleView>

@@ -10,22 +10,6 @@
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView">
 
-	<views:PlaceDetailsView.Resources>
-		<ControlTemplate x:Key="ActionButtonTemplate">
-			<Border
-				Background="#2B0B98"
-				StrokeThickness="4"
-				HorizontalOptions="Center">
-
-				<Border.StrokeShape>
-					<RoundRectangle CornerRadius="30" />
-				</Border.StrokeShape>
-
-				<ContentPresenter Padding="20,8" />
-			</Border>
-		</ControlTemplate>
-	</views:PlaceDetailsView.Resources>
-
 	<views:PlaceDetailsView.BackgroundColor>
 		<OnPlatform x:TypeArguments="Color">
 			<On Platform="MacCatalyst, WinUI" Value="Gray" />
@@ -53,35 +37,23 @@
 				HorizontalOptions="Center"
 				Spacing="10">
 
-				<ContentView ControlTemplate="{StaticResource ActionButtonTemplate}">
-					<ContentView.GestureRecognizers>
-						<TapGestureRecognizer
-							Command="{Binding OpenUrlCommand}"
-							CommandParameter="{Binding Place.Name}" />
-					</ContentView.GestureRecognizers>
+				<Button
+					Text="{x:Static localization:Localization.LearnMore}"
+					TextColor="{StaticResource White}"
+					Command="{Binding OpenUrlCommand}"
+					CommandParameter="{Binding Place.Name}"/>
 
-					<Label Text="{x:Static localization:Localization.LearnMore}" />
-				</ContentView>
+				<Button
+					Text="{x:Static localization:Localization.Share}"
+					TextColor="{StaticResource White}"
+					Command="{Binding SharePlaceCommand}"
+					CommandParameter="{Binding Place.Name}"/>
 
-				<ContentView ControlTemplate="{StaticResource ActionButtonTemplate}">
-					<ContentView.GestureRecognizers>
-						<TapGestureRecognizer
-							Command="{Binding SharePlaceCommand}"
-							CommandParameter="{Binding Place.Name}" />
-					</ContentView.GestureRecognizers>
-
-					<Label Text="{x:Static localization:Localization.Share}" />
-				</ContentView>
-
-				<ContentView
-					ControlTemplate="{StaticResource ActionButtonTemplate}"
-					IsVisible="{Binding IsLiveViewEnabled}">
-					<ContentView.GestureRecognizers>
-						<TapGestureRecognizer Tapped="OpenArTapped" />
-					</ContentView.GestureRecognizers>
-
-					<Label Text="{x:Static localization:Localization.LiveView}" />
-				</ContentView>
+				<Button
+					IsVisible="{Binding IsLiveViewEnabled}"
+					Text="{x:Static localization:Localization.LiveView}"
+					TextColor="{StaticResource White}"
+					Clicked="OpenArClicked"/>
 			</HorizontalStackLayout>
 
 			<CarouselView

@@ -1,7 +1,9 @@
 ﻿namespace Client;
 
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
+using Microsoft.Identity.Client;
 
 [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true,
 		  LaunchMode = LaunchMode.SingleTop,
@@ -13,4 +15,9 @@ using Android.Content.PM;
 								 ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity
 {
+	protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
+	{
+		base.OnActivityResult(requestCode, resultCode, data);
+		AuthenticationContinuationHelper.SetAuthenticationContinuationEventArgs(requestCode, resultCode, data);
+	}
 }

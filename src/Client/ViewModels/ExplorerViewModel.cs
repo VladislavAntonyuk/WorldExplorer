@@ -59,11 +59,12 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 		add => weakEventManager.AddEventHandler(value);
 		remove => weakEventManager.RemoveEventHandler(value);
 	}
+
 	public override async Task InitializeAsync()
 	{
 		deviceDisplay.KeepScreenOn = true;
 		await base.InitializeAsync();
-		await StartTracking(CancellationToken.None);
+		await StartTracking();
 	}
 
 	public override Task UnInitializeAsync()
@@ -92,16 +93,16 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 	}
 
 	[RelayCommand(AllowConcurrentExecutions = false)]
-	private async Task StartTracking(CancellationToken cancellationToken)
+	private async Task StartTracking()
 	{
 		var permission = await Permissions.RequestAsync<Permissions.LocationAlways>();
 		if (permission != PermissionStatus.Granted)
 		{
-			await dialogService.ToastAsync("No permission", CancellationToken.None);
+			await dialogService.ToastAsync("No permission");
 			return;
 		}
 
-		await dialogService.ToastAsync(Localization.LookingForPlaces, cancellationToken);
+		await dialogService.ToastAsync(Localization.LookingForPlaces);
 		geoLocator.StartListening();
 	}
 

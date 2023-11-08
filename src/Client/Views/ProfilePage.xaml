@@ -25,6 +25,7 @@
 			<toolkit:BoolToObjectConverter.TrueObject>
 				<FontImageSource
 					FontFamily="FASolid"
+					Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
 					Glyph="{x:Static fonts:FontAwesomeIcons.ChevronUp}"
 					Size="20" />
 			</toolkit:BoolToObjectConverter.TrueObject>
@@ -32,6 +33,7 @@
 			<toolkit:BoolToObjectConverter.FalseObject>
 				<FontImageSource
 					FontFamily="FASolid"
+					Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
 					Glyph="{x:Static fonts:FontAwesomeIcons.ChevronDown}"
 					Size="20" />
 			</toolkit:BoolToObjectConverter.FalseObject>

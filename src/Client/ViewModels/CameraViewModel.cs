@@ -22,9 +22,12 @@ public partial class CameraViewModel(INavigationService navigationService,
 		if (cameraPermissionStatus == PermissionStatus.Granted)
 		{
 			CameraView.Current.CamerasLoaded += CameraView_CamerasLoaded;
+			await base.InitializeAsync();
 		}
-
-		await base.InitializeAsync();
+		else
+		{
+			await Close();
+		}
 	}
 
 	public override Task UnInitializeAsync()
