@@ -1,4 +1,4 @@
-﻿<framework:BaseContentView
+<framework:BaseContentView
 	x:TypeArguments="viewModels:PlaceDetailsViewModel"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -38,18 +38,21 @@
 				Spacing="10">
 
 				<Button
+					Background="{StaticResource Primary}"
 					Text="{x:Static localization:Localization.LearnMore}"
 					TextColor="{StaticResource White}"
 					Command="{Binding OpenUrlCommand}"
 					CommandParameter="{Binding Place.Name}"/>
 
 				<Button
+					Background="{StaticResource Primary}"
 					Text="{x:Static localization:Localization.Share}"
 					TextColor="{StaticResource White}"
 					Command="{Binding SharePlaceCommand}"
 					CommandParameter="{Binding Place.Name}"/>
 
 				<Button
+					Background="{StaticResource Primary}"
 					IsVisible="{Binding IsLiveViewEnabled}"
 					Text="{x:Static localization:Localization.LiveView}"
 					TextColor="{StaticResource White}"

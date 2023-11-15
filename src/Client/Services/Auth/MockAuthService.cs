@@ -7,7 +7,7 @@ internal class MockAuthService : IAuthService
 		await Task.Delay(1, cancellationToken);
 		return new OperationResult<string>
 		{
-			Value = "token"
+			Value = ""
 		};
 	}
 
