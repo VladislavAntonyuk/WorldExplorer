@@ -43,47 +43,47 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4"/>
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128"/>
 
 		<!-- Images -->
-		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<MauiImage Include="Resources\Images\*"/>
+		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208"/>
 
 		<!-- Custom Fonts -->
-		<MauiFont Include="Resources\Fonts\*" />
+		<MauiFont Include="Resources\Fonts\*"/>
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-		<EmbeddedResource Include="appsettings*.json" />
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)"/>
+		<EmbeddedResource Include="appsettings*.json"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AlohaKit" Version="1.0.74" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
-		<PackageReference Include="CommunityToolkit.Maui.Maps" Version="1.0.4" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="M.BindableProperty.Generator" Version="0.11.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-		<PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Identity.Client" Version="4.57.0" />
-		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.86" />
-		<PackageReference Include="Syncfusion.Maui.Charts" Version="23.1.44" />
-		<PackageReference Include="Syncfusion.Maui.Inputs" Version="23.1.44" />
-		<PackageReference Include="Syncfusion.Maui.Popup" Version="23.1.44" />
-		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.3" />
+		<PackageReference Include="AlohaKit" Version="1.0.74"/>
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui.Maps" Version="2.0.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2"/>
+		<PackageReference Include="M.BindableProperty.Generator" Version="0.11.1"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0"/>
+		<PackageReference Include="Refit.HttpClientFactory" Version="7.0.0"/>
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.57.0"/>
+		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.86"/>
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="23.1.44"/>
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="23.1.44"/>
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="23.1.44"/>
+		<PackageReference Include="Camera.MAUI" Version="1.4.4"/>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.3"/>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == '$(NetVersion)-android'">
-		<GoogleServicesJson Include="Platforms\Android\google-services.json" />
-		<PackageReference Include="JavaGl.Obj" Version="0.4.0.1" />
-		<PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
-		<PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0" />
-		<PackageReference Include="Xamarin.Google.Dagger" Version="2.39.1" />
+		<GoogleServicesJson Include="Platforms\Android\google-services.json"/>
+		<PackageReference Include="JavaGl.Obj" Version="0.4.0.1"/>
+		<PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0"/>
+		<PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0"/>
+		<PackageReference Include="Xamarin.Google.Dagger" Version="2.39.1"/>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -99,18 +99,29 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\Shared\Shared.csproj"/>
 	</ItemGroup>
 
 	<!-- Build Properties must be defined within these property groups to ensure successful publishing
        to the Mac App Store. See: https://aka.ms/maui-publish-app-store#define-build-properties-in-your-project-file -->
-  <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">
-    <CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Debug.plist</CodesignEntitlements>
-  </PropertyGroup>
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">
+		<CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Debug.plist</CodesignEntitlements>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Release'">
-    <CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Release.plist</CodesignEntitlements>
-    <UseHardenedRuntime>true</UseHardenedRuntime>
-  </PropertyGroup>
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Release'">
+		<CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Release.plist</CodesignEntitlements>
+		<UseHardenedRuntime>true</UseHardenedRuntime>
+	</PropertyGroup>
 
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('windows')) == 'false' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' and $(Configuration) == 'Release'">
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+		<CodesignEntitlement>Entitlements.plist</CodesignEntitlement>
+		<ArchiveOnBuild>true</ArchiveOnBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('windows')) == 'false' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' and $(Configuration) == 'Debug'">
+		<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+		<CreatePackage>false</CreatePackage>
+	</PropertyGroup>
 </Project>

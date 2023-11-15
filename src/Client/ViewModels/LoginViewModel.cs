@@ -32,7 +32,7 @@ public partial class LoginViewModel(INavigationService navigation,
 	{
 		timer = new Timer(_ =>
 		{
-			if (Position == Items.Count - 1)
+			if (Position >= Items.Count - 1)
 			{
 				Position = 0;
 			}

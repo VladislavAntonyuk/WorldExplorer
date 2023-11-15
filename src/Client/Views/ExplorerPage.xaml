@@ -5,6 +5,7 @@
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:localization="using:Client.Resources.Localization"
+	xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
 	x:Class="Client.Views.ExplorerPage"
 	x:DataType="viewModels:ExplorerViewModel"
 	Shell.NavBarIsVisible="True">
@@ -41,23 +42,23 @@
 				Text="About"
 				Command="{Binding AboutCommand}"/>
 		</MenuBarItem>
-		
+
 	</framework:BaseContentPage.MenuBarItems>
 
-	<Map
+	<maps:Map
 		x:Name="Map"
 		ItemsSource="{Binding Pins}"
 		IsShowingUser="{Binding IsShowingUser}">
 
-		<Map.ItemTemplate>
-			<DataTemplate x:DataType="{x:Type Pin}">
-				<Pin
+		<maps:Map.ItemTemplate>
+			<DataTemplate x:DataType="{x:Type maps:Pin}">
+				<maps:Pin
 					Location="{Binding Location}"
 					Address="{Binding Address}"
 					Label="{Binding Label}"
 					Type="Place"
 					MarkerClicked="Pin_OnMarkerClicked" />
 			</DataTemplate>
-		</Map.ItemTemplate>
-	</Map>
+		</maps:Map.ItemTemplate>
+	</maps:Map>
 </framework:BaseContentPage>

@@ -59,7 +59,11 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 
+#if IOS || MACCATALYST
+		builder.Services.AddSingleton<IAuthService, MockAuthService>();
+#else
 		builder.Services.AddSingleton<IAuthService, AuthService>();
+#endif
 		builder.Services.Configure<AzureB2CConfiguration>(configuration => builder.Configuration.GetRequiredSection("AzureAdB2C").Bind(configuration));
 		builder.Services.AddSingleton<IArService, ArService>();
 		builder.Services.AddSingleton<IDialogService, DialogService>();

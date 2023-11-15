@@ -30,7 +30,8 @@
 			Loop="True"
 			IsSwipeEnabled="False"
 			Margin="0,20,0,0"
-			Position="{Binding Position}">
+			Position="{Binding Position}"
+			HeightRequest="{OnPlatform iOS=150, MacCatalyst=150}">
 
 			<CarouselView.ItemsLayout>
 				<LinearItemsLayout
