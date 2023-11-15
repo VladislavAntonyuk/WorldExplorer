@@ -59,7 +59,7 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 
-#if IOS || MACCATALYST
+#if MACCATALYST
 		builder.Services.AddSingleton<IAuthService, MockAuthService>();
 #else
 		builder.Services.AddSingleton<IAuthService, AuthService>();

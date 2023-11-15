@@ -1,4 +1,4 @@
-﻿namespace Client.ViewModels;
+namespace Client.ViewModels;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -113,9 +113,11 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 
 	private async Task LoadImages()
 	{
-		var imageTasks = Place.Images.Take(70).Select(httpClient.GetByteArrayAsync);
-		PlaceImages = await Task.WhenAll(imageTasks);
+		var imageTasks = Place.Images.Take(70)
+		                      .Select(x=> httpClient.GetByteArrayAsync(x).AndSafe(Array.Empty<byte>()));
+		var images = await Task.WhenAll(imageTasks);
 
+		PlaceImages = images.Where(x => x.Length > 0).ToArray();
 		if (PlaceImages.Length > 0 && arService.IsSupported())
 		{
 			IsLiveViewEnabled = true;

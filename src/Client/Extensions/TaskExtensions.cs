@@ -20,4 +20,16 @@ public static class TaskExtensions
 			await exceptionHandler(ex);
 		}
 	}
+
+	public static async Task<T> AndSafe<T>(this Task<T> task, T defaultValue)
+	{
+		try
+		{
+			return await task;
+		}
+		catch
+		{
+			return defaultValue;
+		}
+	}
 }

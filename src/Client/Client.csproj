@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Condition="'$(CI)' == 'true' and $([MSBuild]::IsOSPlatform('windows')) == 'true'">
 		<IncludeTizenTargetFrameworks>true</IncludeTizenTargetFrameworks>
@@ -87,19 +87,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Shared\Shared.csproj"/>
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Update="Resources\Localization\Localization.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
 			<DependentUpon>Localization.resx</DependentUpon>
 		</Compile>
+
 		<EmbeddedResource Update="Resources\Localization\Localization.resx">
 			<Generator>ResXFileCodeGenerator</Generator>
 			<LastGenOutput>Localization.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Shared\Shared.csproj"/>
 	</ItemGroup>
 
 	<!-- Build Properties must be defined within these property groups to ensure successful publishing
@@ -113,15 +114,25 @@
 		<UseHardenedRuntime>true</UseHardenedRuntime>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('windows')) == 'false' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' and $(Configuration) == 'Release'">
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' and $(Configuration) == 'Debug'">
 		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-		<CodesignEntitlement>Entitlements.plist</CodesignEntitlement>
-		<ArchiveOnBuild>true</ArchiveOnBuild>
+		<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('windows')) == 'false' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' and $(Configuration) == 'Debug'">
-		<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
-		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-		<CreatePackage>false</CreatePackage>
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('windows')) == 'false' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))=='maccatalyst'">
+		<RuntimeIdentifiers>maccatalyst-arm64;maccatalyst-x64</RuntimeIdentifiers>
 	</PropertyGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+		<RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' and '$(Configuration)' == 'Release'">
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' and '$(Configuration)' == 'Debug'">
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+
 </Project>
