@@ -14,8 +14,9 @@
 		<Label
 			Text="{Binding CurrentGeolocatorData.Speed, StringFormat={x:Static localization:Localization.Speed}, FallbackValue=0}"
 			TextColor="{StaticResource White}"
+			IsVisible="{OnIdiom Phone=true, Default=false}"
 			HorizontalOptions="Center"
-			VerticalOptions="Center" />
+			VerticalOptions="Center"/>
 	</Shell.TitleView>
 
 	<framework:BaseContentPage.MenuBarItems>

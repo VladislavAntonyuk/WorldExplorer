@@ -66,19 +66,18 @@
 					Clicked="OpenArClicked"/>
 			</HorizontalStackLayout>
 
-			<CarouselView
+			<CollectionView
 				IsVisible="{OnPlatform Default=true, iOS=false}"
 				ItemsSource="{Binding PlaceImages}"
-				PeekAreaInsets="40"
-				Loop="false">
+				HeightRequest="300">
 
-				<CarouselView.ItemsLayout>
+				<CollectionView.ItemsLayout>
 					<LinearItemsLayout
 						Orientation="Horizontal"
 						ItemSpacing="10" />
-				</CarouselView.ItemsLayout>
+				</CollectionView.ItemsLayout>
 
-				<CarouselView.ItemTemplate>
+				<CollectionView.ItemTemplate>
 					<DataTemplate>
 						<VerticalStackLayout>
 							<Image
@@ -89,8 +88,8 @@
 								 Aspect="AspectFit" />
 						</VerticalStackLayout>
 					</DataTemplate>
-				</CarouselView.ItemTemplate>
-			</CarouselView>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
 		</VerticalStackLayout>
 	</ScrollView>
 </framework:BaseContentView>
