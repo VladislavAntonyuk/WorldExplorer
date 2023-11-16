@@ -44,5 +44,23 @@
 	<array>
 		<string>location</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.vladislavantonyuk.worldexplorer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>msal6328b085-4cf0-4ea9-89fe-41456ab47e6a</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>msauthv2</string>
+		<string>msauthv3</string>
+	</array>
 </dict>
 </plist>

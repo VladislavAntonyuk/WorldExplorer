@@ -60,7 +60,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 
 #if MACCATALYST
-		builder.Services.AddSingleton<IAuthService, MockAuthService>();
+		builder.Services.AddSingleton<IAuthService, MacCatalystAuthService>();
 #else
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 #endif
@@ -73,7 +73,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton(_ => DeviceDisplay.Current);
 		builder.Services.AddSingleton(_ => Share.Default);
 		builder.Services.AddSingleton(_ => Launcher.Default);
-		builder.Services.AddSingleton<IGeolocator, Services.GeolocatorImplementation>();
+		builder.Services.AddSingleton<IGeolocator, GeolocatorImplementation>();
 		builder.Services.AddTransient<AuthHeaderHandler>();
 		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
 		builder.Services.AddApi<IUsersApi>(apiSettings.Users);
