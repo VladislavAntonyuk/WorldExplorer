@@ -6,7 +6,6 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
-	xmlns:client="clr-namespace:Client"
 	xmlns:controls="clr-namespace:Client.Controls"
 	x:Class="Client.Views.ArPage"
 	Shell.PresentationMode="ModalAnimated"

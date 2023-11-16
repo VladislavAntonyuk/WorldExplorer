@@ -1,5 +1,6 @@
 namespace Client.ViewModels;
 
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Extensions;
@@ -9,13 +10,13 @@ using Services;
 using Services.Navigation;
 using Shared.Models;
 
-public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttributable, IDisposable
+public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttributable
 {
 	private readonly IArService arService;
 	private readonly IDialogService dialogService;
-	private readonly HttpClient httpClient;
 	private readonly ILauncher launcher;
 	private readonly INavigationService navigationService;
+	private readonly IHttpClientFactory httpClientFactory;
 	private readonly IPlacesApi placesApi;
 	private readonly IShare share;
 	private Place? basePlace;
@@ -26,8 +27,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	[ObservableProperty]
 	private Place place;
 
-	[ObservableProperty]
-	private byte[][] placeImages = [];
+	public ObservableCollection<byte[]> PlaceImages { get; } = [];
 
 	public PlaceDetailsViewModel(IPlacesApi placesApi,
 		ILauncher launcher,
@@ -44,12 +44,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 		this.arService = arService;
 		this.dialogService = dialogService;
 		this.navigationService = navigationService;
-		httpClient = httpClientFactory.CreateClient();
-	}
-
-	public void Dispose()
-	{
-		httpClient.Dispose();
+		this.httpClientFactory = httpClientFactory;
 	}
 
 	public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -65,7 +60,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 			return;
 		}
 
-		PlaceImages = [];
+		PlaceImages.Clear();
 		IsLiveViewEnabled = false;
 		await dialogService.ToastAsync(Localization.LoadingPlaceDetails);
 		var getDetailsResult = await placesApi.GetDetails(basePlace.Name, basePlace.Location, CancellationToken.None);
@@ -84,15 +79,13 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 	[RelayCommand]
 	private async Task Ar()
 	{
-		if (PlaceImages.Length > 0)
+		await dialogService.ToastAsync("Opening AR...");
+		await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object?>
 		{
-			await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object?>
 			{
-				{
-					"images", PlaceImages
-				}
-			});
-		}
+				"images", PlaceImages.ToArray()
+			}
+		});
 	}
 
 	[RelayCommand]
@@ -113,12 +106,17 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 
 	private async Task LoadImages()
 	{
-		var imageTasks = Place.Images.Take(70)
-		                      .Select(x=> httpClient.GetByteArrayAsync(x).AndSafe(Array.Empty<byte>()));
-		var images = await Task.WhenAll(imageTasks);
+		var httpClient = httpClientFactory.CreateClient();
+		var tasks = Place.Images.Take(70).Select(x => httpClient.GetByteArrayAsync(x).FallbackTimeout(Array.Empty<byte>(), TimeSpan.FromSeconds(3)));
+		foreach (var imageBytes in await Task.WhenAll(tasks))
+		{
+			if (imageBytes.Length > 0)
+			{
+				PlaceImages.Add(imageBytes);
+			}
+		}
 
-		PlaceImages = images.Where(x => x.Length > 0).ToArray();
-		if (PlaceImages.Length > 0 && arService.IsSupported())
+		if (PlaceImages.Count > 0 && arService.IsSupported())
 		{
 			IsLiveViewEnabled = true;
 		}

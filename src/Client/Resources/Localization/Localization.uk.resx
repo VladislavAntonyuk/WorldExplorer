@@ -163,19 +163,19 @@
     <value>Community Insights</value>
   </data>
   <data name="DeleteProfileConfirmationText" xml:space="preserve">
-    <value>Confirm?</value>
+	  <value>Підтвердити?</value>
   </data>
   <data name="LookingForPlaces" xml:space="preserve">
-    <value>Looking for places near you. It may take some time.</value>
+	  <value>Пошук місць поряд з вами. Це може зайняти певний час.</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>Ні</value>
   </data>
   <data name="NoInternet" xml:space="preserve">
-    <value>No internet</value>
+	  <value>Немає інтернету</value>
   </data>
   <data name="NoPlacesFound" xml:space="preserve">
-    <value>No places found</value>
+	  <value>Місця не знайдені</value>
   </data>
   <data name="Slogan" xml:space="preserve">
     <value>World Explorer: Exploring the world, one place at a time.</value>
@@ -184,54 +184,57 @@
     <value>Так</value>
   </data>
   <data name="YouAreNear" xml:space="preserve">
-    <value>You are near {0}</value>
+	  <value>Ви знаходитесь біля {0}</value>
   </data>
   <data name="LoadingPlaceDetails" xml:space="preserve">
-    <value>Loading places details...</value>
+	  <value>Завантаження інформації...</value>
   </data>
   <data name="SharePlaceText" xml:space="preserve">
     <value>I'd like to share this place with you</value>
   </data>
   <data name="UnableToGetPlaceDetails" xml:space="preserve">
-    <value>Unable to get place details</value>
+	  <value>Не можу отримати інформацю про місце</value>
   </data>
   <data name="CancelLogin" xml:space="preserve">
-    <value>Cancel login</value>
+	  <value>Відмінити вхід</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn more</value>
+	  <value>Дізнатися більше</value>
   </data>
   <data name="LiveView" xml:space="preserve">
-    <value>Live view</value>
+	  <value>Віртуальний режим</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+	  <value>Логін</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+	  <value>Поділитися</value>
   </data>
   <data name="DangerZone" xml:space="preserve">
-    <value>Danger zone</value>
+	  <value>Небезпечна зона</value>
   </data>
   <data name="Date" xml:space="preserve">
-    <value>Date</value>
+	  <value>Дата</value>
   </data>
   <data name="Speed" xml:space="preserve">
-    <value>Speed: {0:N1} m/s</value>
+	  <value>Швидкість: {0:N1} м/с</value>
   </data>
   <data name="Statistics" xml:space="preserve">
-    <value>Statistics</value>
+	  <value>Статистика</value>
   </data>
   <data name="Steps" xml:space="preserve">
-    <value>Steps</value>
+	  <value>Кроки</value>
   </data>
   <data name="VisitedPlaces" xml:space="preserve">
-    <value>Visited places</value>
+	  <value>Відвідані місця</value>
   </data>
   <data name="About" xml:space="preserve">
-    <value>About</value>
+	  <value>Про нас</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Created by Vladislav Antonyuk</value>
+	  <value>Розробник Vladislav Antonyuk</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+	  <value>Допомога</value>
   </data>
 </root>

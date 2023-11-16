@@ -22,25 +22,25 @@
 		<MenuBarItem Text="Preferences">
 			<MenuFlyoutItem
 				Text="Toggle My Location"
-				Command="{Binding ToggleUserLocationCommand}">
+				Clicked="ToggleUserLocationClicked">
 				<MenuFlyoutItem.KeyboardAccelerators>
 					<KeyboardAccelerator Modifiers="Ctrl" Key="u"></KeyboardAccelerator>
 				</MenuFlyoutItem.KeyboardAccelerators>
 			</MenuFlyoutItem>
 		</MenuBarItem>
 
-		<MenuBarItem Text="About">
+		<MenuBarItem Text="{x:Static localization:Localization.About}">
 			<MenuFlyoutItem
-				Text="Help"
-				Command="{Binding HelpCommand}">
+				Text="{x:Static localization:Localization.Help}"
+				Clicked="HelpMenuItemClicked">
 				<MenuFlyoutItem.KeyboardAccelerators>
 					<KeyboardAccelerator Modifiers="Ctrl" Key="h"></KeyboardAccelerator>
 				</MenuFlyoutItem.KeyboardAccelerators>
 			</MenuFlyoutItem>
 
 			<MenuFlyoutItem
-				Text="About"
-				Command="{Binding AboutCommand}"/>
+				Text="{x:Static localization:Localization.About}"
+				Clicked="AboutMenuItemClicked"/>
 		</MenuBarItem>
 
 	</framework:BaseContentPage.MenuBarItems>

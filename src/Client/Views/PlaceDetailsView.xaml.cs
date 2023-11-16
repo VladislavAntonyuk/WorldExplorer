@@ -24,7 +24,7 @@ public partial class PlaceDetailsView
 
 	private void OpenArClicked(object? sender, EventArgs e)
 	{
-		ViewModel.ArCommand.Execute(null);
 		BottomSheet?.CloseBottomSheet();
+		ViewModel.ArCommand.Execute(null);
 	}
 }

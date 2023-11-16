@@ -18,6 +18,13 @@
 
 	<ScrollView Margin="10">
 		<VerticalStackLayout Spacing="10">
+			<Image
+				IsVisible="{OnPlatform Default=false, iOS=true}"
+				Background="{DynamicResource Gray500}"
+				Source="{Binding Place.Images[0]}"
+				MaximumHeightRequest="300"
+				Aspect="AspectFit" />
+
 			<Label
 				Text="{Binding Place.Name}"
 				HorizontalOptions="Center"
@@ -60,8 +67,8 @@
 			</HorizontalStackLayout>
 
 			<CarouselView
+				IsVisible="{OnPlatform Default=true, iOS=false}"
 				ItemsSource="{Binding PlaceImages}"
-				MaximumHeightRequest="300"
 				PeekAreaInsets="40"
 				Loop="false">
 
@@ -73,11 +80,14 @@
 
 				<CarouselView.ItemTemplate>
 					<DataTemplate>
-						<Image
-							Source="{Binding ., Converter={StaticResource ByteArrayToImageSourceConverter}}"
-							WidthRequest="300"
-							HeightRequest="300"
-							Aspect="AspectFit" />
+						<VerticalStackLayout>
+							<Image
+								 Background="{DynamicResource Gray500}"
+								 Source="{Binding ., Converter={StaticResource ByteArrayToImageSourceConverter}}"
+								 WidthRequest="300"
+								 HeightRequest="300"
+								 Aspect="AspectFit" />
+						</VerticalStackLayout>
 					</DataTemplate>
 				</CarouselView.ItemTemplate>
 			</CarouselView>

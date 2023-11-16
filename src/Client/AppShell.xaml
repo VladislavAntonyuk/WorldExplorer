@@ -50,6 +50,7 @@
 
 			<Tab.Icon>
 				<FontImageSource
+					Color="{StaticResource Gray500}"
 					FontFamily="FASolid"
 					Glyph="{x:Static fonts:FontAwesomeIcons.Globe}" />
 			</Tab.Icon>
@@ -63,6 +64,7 @@
 
 			<Tab.Icon>
 				<FontImageSource
+					Color="{StaticResource Gray500}"
 					FontFamily="FASolid"
 					Glyph="{x:Static fonts:FontAwesomeIcons.User}" />
 			</Tab.Icon>

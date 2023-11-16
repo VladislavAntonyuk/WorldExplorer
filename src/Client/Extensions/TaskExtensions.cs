@@ -21,11 +21,11 @@ public static class TaskExtensions
 		}
 	}
 
-	public static async Task<T> AndSafe<T>(this Task<T> task, T defaultValue)
+	public static async Task<T> FallbackTimeout<T>(this Task<T> task, T defaultValue, TimeSpan timeout)
 	{
 		try
 		{
-			return await task;
+			return await task.WaitAsync(timeout);
 		}
 		catch
 		{

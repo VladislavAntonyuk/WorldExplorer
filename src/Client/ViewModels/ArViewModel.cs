@@ -22,10 +22,10 @@ public partial class ArViewModel
 		}
 	}
 
-	public override Task InitializeAsync()
+	public override async Task InitializeAsync()
 	{
+		await base.InitializeAsync();
 		deviceDisplay.KeepScreenOn = true;
-		return base.InitializeAsync();
 	}
 
 	public override Task UnInitializeAsync()
