@@ -1,88 +1,61 @@
 ﻿#if MACCATALYST
 namespace Client.Services.Auth;
 
-using IdentityModel.Client;
-using IdentityModel.OidcClient;
-using IdentityModel.OidcClient.Browser;
 using Microsoft.Extensions.Options;
 
-public class WebBrowserAuthenticator : IBrowser
+internal class MacCatalystAuthService(IOptions<AzureB2CConfiguration> options) : IAuthService
 {
-	public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
-	{
-		try
-		{
-			WebAuthenticatorResult result = await WebAuthenticator.Default.AuthenticateAsync(
-				new Uri(options.StartUrl),
-				new Uri(options.EndUrl));
-
-			var url = new RequestUrl(options.EndUrl)
-				.Create(new Parameters(result.Properties));
-
-			// Workaround for Facebook issue
-			if (url.EndsWith("%23_%3D_"))
-			{
-				url = url.Substring(0, url.LastIndexOf("%23_%3D_", StringComparison.Ordinal));
-			}
-
-			return new BrowserResult
-			{
-				Response = url,
-				ResultType = BrowserResultType.Success
-			};
-		}
-		catch (TaskCanceledException)
-		{
-			return new BrowserResult
-			{
-				ResultType = BrowserResultType.UserCancel,
-				ErrorDescription = "Login canceled by the user."
-			};
-		}
-	}
-}
-
-internal class MacCatalystAuthService : IAuthService
-{
-	private readonly OidcClient oidcClient;
-
-	public MacCatalystAuthService(IOptions<AzureB2CConfiguration> options)
-	{
-		var configuration = options.Value;
-		oidcClient = new OidcClient(new OidcClientOptions
-		{
-			Authority = configuration.AuthoritySignIn,
-			ClientId = configuration.ClientId,
-			Scope = string.Join(' ', configuration.Scopes),
-			RedirectUri = $"msal{configuration.ClientId}://auth",
-			Browser = new WebBrowserAuthenticator()
-		});
-	}
+	private string? currentUserToken;
 
 	public async Task<IOperationResult<string>> SignInInteractively(CancellationToken cancellationToken)
 	{
-		var loginResult = await oidcClient.LoginAsync(cancellationToken: cancellationToken);
-		if (!loginResult.IsError)
+		try
 		{
+			var loginUrl = GetLoginUrl();
+			var authResult = await WebAuthenticator.Default.AuthenticateAsync(
+				loginUrl,
+				new Uri($"msal{options.Value.ClientId}://auth"));
+
+			currentUserToken = authResult.AccessToken;
 			return new OperationResult<string>()
 			{
-				Value = loginResult.AccessToken
+				Value = authResult.AccessToken
 			};
 		}
-
-		var operationResult = new OperationResult<string>();
-		operationResult.AddError(loginResult.Error ?? loginResult.ErrorDescription);
-		return operationResult;
+		catch (Exception e)
+		{
+			var operationResult = new OperationResult<string>();
+			operationResult.AddError(e.Message);
+			return operationResult;
+		}
 	}
 
-	public Task<IOperationResult<string>> AcquireTokenSilent(CancellationToken cancellationToken)
+	private Uri GetLoginUrl()
 	{
-		return SignInInteractively(cancellationToken);
+		return new Uri(
+			$"https://drawgo.b2clogin.com/drawgo.onmicrosoft.com/oauth2/v2.0/authorize?p={options.Value.SignInPolicy}&client_id={options.Value.ClientId}&nonce=defaultNonce&redirect_uri=msal{options.Value.ClientId}%3A%2F%2Fauth&scope={string.Join("%20", options.Value.Scopes)}&response_type=id_token%20token&prompt=login");
+	}
+
+	public async Task<IOperationResult<string>> AcquireTokenSilent(CancellationToken cancellationToken)
+	{
+		await Task.CompletedTask;
+		if (string.IsNullOrEmpty(currentUserToken))
+		{
+			var operationResult = new OperationResult<string>();
+            operationResult.AddError("User not found");
+            return operationResult;
+		}
+
+		return new OperationResult<string>()
+		{
+			Value = currentUserToken
+		};
 	}
 
 	public Task LogoutAsync(CancellationToken cancellationToken)
 	{
-		return oidcClient.LogoutAsync(cancellationToken: cancellationToken);
+		currentUserToken = null;
+		return Task.CompletedTask;
 	}
 }
 #endif

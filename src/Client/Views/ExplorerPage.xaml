@@ -8,7 +8,7 @@
 	xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
 	x:Class="Client.Views.ExplorerPage"
 	x:DataType="viewModels:ExplorerViewModel"
-	Shell.NavBarIsVisible="True">
+	Shell.NavBarIsVisible="{OnPlatform Default=true, MacCatalyst=false}">
 
 	<Shell.TitleView>
 		<Label

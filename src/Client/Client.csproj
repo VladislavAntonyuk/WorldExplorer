@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Condition="'$(CI)' == 'true' and $([MSBuild]::IsOSPlatform('windows')) == 'true'">
 		<IncludeTizenTargetFrameworks>true</IncludeTizenTargetFrameworks>
@@ -86,10 +86,6 @@
 		<PackageReference Include="Xamarin.Google.Dagger" Version="2.39.1"/>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == '$(NetVersion)-maccatalyst'">
-		<PackageReference Include="IdentityModel.OidcClient" Version="5.3.0-preview.1"/>
-	</ItemGroup>
-	
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\Shared.csproj"/>
 	</ItemGroup>
