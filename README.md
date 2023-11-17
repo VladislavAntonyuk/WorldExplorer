@@ -21,5 +21,5 @@ dotnet build -t:Run -c Release -f net8.0-ios -p:_DeviceName=:v2:udid=7D850AFF-24
 Run on Device
 
 ```bash
-dotnet build -t:Run -c Release -f net8.0-ios -p:_DeviceName=IDENTIFIER
+dotnet build -t:Run -c Release -f net8.0-ios -r ios-arm64 -p:_DeviceName=IDENTIFIER
 ```

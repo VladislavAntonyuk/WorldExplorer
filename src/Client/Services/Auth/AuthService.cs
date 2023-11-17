@@ -12,7 +12,6 @@ internal class AuthService : IAuthService
 	{
 		this.azureB2COptions = azureB2COptions;
 		authenticationClient = PublicClientApplicationBuilder.Create(azureB2COptions.Value.ClientId)
-															 .WithIosKeychainSecurityGroup(azureB2COptions.Value.IosKeychainSecurityGroups)
 															 .WithB2CAuthority(azureB2COptions.Value.AuthoritySignIn)
 															 .WithHttpClientFactory(new AuthHttpClientFactory())
 #if WINDOWS

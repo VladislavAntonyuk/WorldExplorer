@@ -59,8 +59,8 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 
-#if MACCATALYST
-		builder.Services.AddSingleton<IAuthService, MacCatalystAuthService>();
+#if IOS || MACCATALYST
+		builder.Services.AddSingleton<IAuthService, AppleAuthService>();
 #else
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 #endif
