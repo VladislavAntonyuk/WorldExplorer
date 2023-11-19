@@ -23,3 +23,16 @@ Run on Device
 ```bash
 dotnet build -t:Run -c Release -f net8.0-ios -r ios-arm64 -p:_DeviceName=IDENTIFIER
 ```
+
+### Android
+
+Generate jks
+
+```bash
+keytool -genkey -v -keystore world-explorer.jks -alias world-explorer -keyalg RSA -keysize 2048 -validity 10000
+```
+
+Sign aab
+```bash
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore world-explorer.jks com.vladislavantonyuk.worldexplorer.aab world-explorer  -storepass YOUR_PASSWORD
+```

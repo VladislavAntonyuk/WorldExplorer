@@ -71,9 +71,12 @@ jobs:
 
             -   name: Build Client
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-android -o output/android -p:PackageVersion="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net8.0-android -p:PackageVersion="${{ env.VERSION }}"
                     dotnet publish src/Client/Client.csproj -f net8.0-tizen -p:PackageVersion="${{ env.VERSION }}"
-                    copy ".\src\Client\bin\Release\net8.0-tizen\*.tpk" "output\tizen"
+                    mkdir output\android
+                    mkdir output\tizen
+                    copy ".\src\Client\bin\Release\net8.0-android\com.vladislavantonyuk.worldexplorer.aab" "output\android"
+                    copy ".\src\Client\bin\Release\net8.0-tizen\tizen-x86\*.tpk" "output\tizen"
 
             -   name: Build Client (Apple)
                 run: |
