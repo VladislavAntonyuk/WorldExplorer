@@ -12,7 +12,7 @@
 
 	<views:PlaceDetailsView.BackgroundColor>
 		<OnPlatform x:TypeArguments="Color">
-			<On Platform="MacCatalyst, WinUI" Value="Gray" />
+			<On Platform="MacCatalyst, WinUI" Value="{StaticResource Gray300}" />
 		</OnPlatform>
 	</views:PlaceDetailsView.BackgroundColor>
 
@@ -36,7 +36,12 @@
 				Precision="Exact"
 				ItemSize="20"
 				IsReadOnly="True"
-				BackgroundColor="Transparent" />
+				BackgroundColor="Transparent">
+				<rating:SfRating.RatingSettings>
+					<rating:RatingSettings
+						UnratedStroke="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
+				</rating:SfRating.RatingSettings>
+			</rating:SfRating>
 
 			<Label Text="{Binding Place.Description}" />
 

@@ -7,6 +7,7 @@ using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Markup;
+using Application = Microsoft.Maui.Controls.Application;
 
 public class CustomShellHandler : ShellHandler
 {
@@ -18,13 +19,28 @@ public class CustomShellHandler : ShellHandler
 
 	protected override void ConnectHandler(ShellView platformView)
 	{
+		if (Application.Current is not null)
+		{
+			Application.Current.RequestedThemeChanged += ThemeChanged;
+		}
+
 		platformView.Loaded += ShellViewOnLoaded;
 		platformView.LayoutUpdated += ShellView_LayoutUpdated;
 		base.ConnectHandler(platformView);
 	}
 
+	private void ThemeChanged(object? sender, AppThemeChangedEventArgs e)
+	{
+		UpdateNavigationView(e.RequestedTheme);
+	}
+
 	protected override void DisconnectHandler(ShellView platformView)
 	{
+		if (Application.Current is not null)
+		{
+			Application.Current.RequestedThemeChanged -= ThemeChanged;
+		}
+
 		platformView.Loaded -= ShellViewOnLoaded;
 		platformView.LayoutUpdated -= ShellView_LayoutUpdated;
 		base.DisconnectHandler(platformView);
@@ -59,33 +75,22 @@ public class CustomShellHandler : ShellHandler
 			header.Margin = new Thickness(30);
 		}
 
-		if (PlatformView.Content is MauiNavigationView content)
-		{
-			// Modify Top Nav Area Items (Tab1, Tab2)
-			var menuItemsGrid = MenuItemsGrid(content);
-			if (menuItemsGrid is not null)
-			{
-				menuItemsGrid.Margin = new Thickness(30, 0, 30, 0);
-				menuItemsGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
-				menuItemsGrid.CornerRadius = new CornerRadius(30);
-				menuItemsGrid.Background = Colors.LightBlue.ToPlatform();
-			}
-		}
+		UpdateNavigationView(Application.Current?.RequestedTheme ?? AppTheme.Unspecified);
 	}
 
 	private static DataTemplate CreateNavigationViewItemDataTemplate()
 	{
-		var xaml = """
-		           <DataTemplate xmlns = 'http://schemas.microsoft.com/winfx/2006/xaml/presentation'>
-		             <NavigationViewItem BackgroundSizing = "OuterBorderEdge"
-		           				Content = "{Binding Content}"
-		           				Foreground = "{Binding Foreground}"
-		           				Background = "{Binding Background}"
-		           				IsSelected = "{Binding IsSelected, Mode=TwoWay}"
-		           				MenuItemsSource = "{Binding MenuItemsSource}"
-		           				Icon = "{Binding Icon}" />
-		           </DataTemplate>
-		           """;
+		const string xaml = """
+		                    <DataTemplate xmlns = 'http://schemas.microsoft.com/winfx/2006/xaml/presentation'>
+		                      <NavigationViewItem BackgroundSizing = "OuterBorderEdge"
+		                    				Content = "{Binding Content}"
+		                    				Foreground = "{Binding Foreground}"
+		                    				Background = "{Binding Background}"
+		                    				IsSelected = "{Binding IsSelected, Mode=TwoWay}"
+		                    				MenuItemsSource = "{Binding MenuItemsSource}"
+		                    				Icon = "{Binding Icon}" />
+		                    </DataTemplate>
+		                    """;
 
 		var dataTemplate = (DataTemplate)XamlReader.Load(xaml);
 		return dataTemplate;
@@ -130,5 +135,25 @@ public class CustomShellHandler : ShellHandler
 		var topNavAreaProperty =
 			content.GetType().GetProperty("ContentGrid", BindingFlags.NonPublic | BindingFlags.Instance);
 		return topNavAreaProperty?.GetValue(content) as Grid;
+	}
+
+	private void UpdateNavigationView(AppTheme appTheme)
+	{
+		if (PlatformView.Content is not MauiNavigationView content)
+		{
+			return;
+		}
+
+		// Modify Top Nav Area Items (Tab1, Tab2)
+		var menuItemsGrid = MenuItemsGrid(content);
+		if (menuItemsGrid is null)
+		{
+			return;
+		}
+
+		menuItemsGrid.Margin = new Thickness(30, 0, 30, 0);
+		menuItemsGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+		menuItemsGrid.CornerRadius = new CornerRadius(30);
+		menuItemsGrid.Background = appTheme == AppTheme.Dark ? Color.FromRgba(64, 64, 64, 255).ToPlatform() : Color.FromRgba(210, 210, 210, 255).ToPlatform();
 	}
 }

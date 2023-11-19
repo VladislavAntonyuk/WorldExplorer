@@ -385,7 +385,7 @@
 
 	<Style TargetType="Shell" ApplyToDerivedTypes="True">
 		<Setter Property="Shell.BackgroundColor"
-		        Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}" />
+		        Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray600}}" />
 		<Setter Property="Shell.ForegroundColor"
 		        Value="{OnPlatform WinUI={StaticResource Primary}, Default={StaticResource White}}" />
 		<Setter Property="Shell.TitleColor"
@@ -396,7 +396,7 @@
 		        Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
 		<Setter Property="Shell.NavBarHasShadow" Value="False" />
 		<Setter Property="Shell.TabBarBackgroundColor"
-		        Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray600}}" />
+		        Value="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray850}}" />
 		<Setter Property="Shell.TabBarForegroundColor"
 		        Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
 		<Setter Property="Shell.TabBarTitleColor"
