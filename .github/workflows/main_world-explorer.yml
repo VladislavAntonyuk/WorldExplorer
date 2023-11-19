@@ -11,7 +11,7 @@ concurrency:
     cancel-in-progress: true
 
 env:  
-  VERSION: 1.0.${{github.run_number}}
+  VERSION: 1.0.${{github.run_number}}.0
 
 jobs:
     buildWebApp:
@@ -26,10 +26,10 @@ jobs:
                     dotnet-version: '8.x'
 
             -   name: Publish WebApp
-                run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp' -p:PackageVersion="${{ env.VERSION }}"
+                run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp' /p:Version="${{ env.VERSION }}"
 
             -   name: Upload artifact for deployment job
-                uses: actions/upload-artifact@v2
+                uses: actions/upload-artifact@v3
                 with:
                     name: webapp
                     path: ${{env.DOTNET_ROOT}}/webapp
@@ -69,10 +69,14 @@ jobs:
                     tokenSuffix: '}#'
                     files: '["**/appsettings.json", "**/AndroidManifest.xml"]'
 
+            -   name: Prepare build
+                run: |
+                    (Get-Content src\Client\Platforms\Windows\Package.appxmanifest).Replace('1.0.0.0', '${{ env.VERSION }}') | Set-Content src\Client\Platforms\Windows\Package.appxmanifest
+
             -   name: Build Client
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-android -p:PackageVersion="${{ env.VERSION }}"
-                    dotnet publish src/Client/Client.csproj -f net8.0-tizen -p:PackageVersion="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net8.0-android /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net8.0-tizen /p:Version="${{ env.VERSION }}"
                     mkdir output\android
                     mkdir output\tizen
                     copy ".\src\Client\bin\Release\net8.0-android\com.vladislavantonyuk.worldexplorer.aab" "output\android"
@@ -80,18 +84,18 @@ jobs:
 
             -   name: Build Client (Apple)
                 run: |
-                    dotnet build src/Client/Client.csproj -f net8.0-ios -p:PackageVersion="${{ env.VERSION }}"
-                    dotnet build src/Client/Client.csproj -f net8.0-maccatalyst -p:PackageVersion="${{ env.VERSION }}"
+                    dotnet build src/Client/Client.csproj -f net8.0-ios /p:Version="${{ env.VERSION }}"
+                    dotnet build src/Client/Client.csproj -f net8.0-maccatalyst /p:Version="${{ env.VERSION }}"
 
             -   name: Build Client (Windows)
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-windows10.0.19041.0 -p:PackageVersion="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net8.0-windows10.0.19041.0 /p:Version="${{ env.VERSION }}"
                     copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
                     copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
                     &"${Env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\MakeAppx.exe" pack /v /h SHA256 /d "src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64" /p "output\windows\WorldExplorer.msix";
 
             -   name: Upload artifact for deployment job
-                uses: actions/upload-artifact@v2
+                uses: actions/upload-artifact@v3
                 with:
                     name: client
                     path: output
@@ -107,7 +111,7 @@ jobs:
 
         steps:
             -   name: Download artifact from build job
-                uses: actions/download-artifact@v2
+                uses: actions/download-artifact@v3
                 with:
                     name: webapp
 
@@ -142,7 +146,7 @@ jobs:
 
         steps:
             -   name: Download artifact from build job
-                uses: actions/download-artifact@v2
+                uses: actions/download-artifact@v3
                 with:
                     name: client
                     path: "${{ github.workspace }}/client"
