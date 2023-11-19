@@ -22,7 +22,14 @@ public static partial class DeviceInstallationService
 			return null;
 		}
 
-		var firebaseToken = await FirebaseMessaging.Instance.GetToken();
-		return new DeviceInstallation(GetDeviceId(), "gcm", firebaseToken.ToString());
+		try
+		{
+			var firebaseToken = await FirebaseMessaging.Instance.GetToken();
+			return new DeviceInstallation(GetDeviceId(), "gcm", firebaseToken.ToString());
+		}
+		catch
+		{
+			return null;
+		}
 	}
 }

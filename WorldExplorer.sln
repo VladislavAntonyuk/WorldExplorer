@@ -12,7 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.github\dependabot.yml = .github\dependabot.yml
 		Directory.Build.props = Directory.Build.props
-		.github\workflows\main_world-explorer.yml = .github\workflows\main_world-explorer.yml
+		.github\workflows\main_world-explorer_client.yml = .github\workflows\main_world-explorer_client.yml
+		.github\workflows\main_world-explorer_webapp.yml = .github\workflows\main_world-explorer_webapp.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
