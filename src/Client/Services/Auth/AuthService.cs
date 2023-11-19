@@ -30,6 +30,9 @@ internal class AuthService : IAuthService
 		cancellationToken.ThrowIfCancellationRequested();
 		try
 		{
+#if WINDOWS
+			await AttachTokenCache();
+#endif
 			var result = await authenticationClient.AcquireTokenInteractive(azureB2COptions.Value.Scopes)
 #if WINDOWS
 				.WithUseEmbeddedWebView(authenticationClient.IsEmbeddedWebViewAvailable())
@@ -65,6 +68,9 @@ internal class AuthService : IAuthService
 		cancellationToken.ThrowIfCancellationRequested();
 		try
 		{
+#if WINDOWS
+			await AttachTokenCache();
+#endif
 			var accounts = await authenticationClient.GetAccountsAsync(azureB2COptions.Value.SignInPolicy);
 			var firstAccount = accounts.FirstOrDefault();
 			if (firstAccount is null)
@@ -92,10 +98,24 @@ internal class AuthService : IAuthService
 	public async Task LogoutAsync(CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
+#if WINDOWS
+		await AttachTokenCache();
+#endif
 		var accounts = await authenticationClient.GetAccountsAsync();
 		foreach (var account in accounts)
 		{
 			await authenticationClient.RemoveAsync(account);
 		}
 	}
+
+#if WINDOWS
+	private async Task AttachTokenCache()
+	{
+		var cacheDir = Path.Join(Path.GetTempPath(), "WorldExplorer");
+		// Cache configuration and hook-up to public application. Refer to https://github.com/AzureAD/microsoft-authentication-extensions-for-dotnet/wiki/Cross-platform-Token-Cache#configuring-the-token-cache
+		var storageProperties = new Microsoft.Identity.Client.Extensions.Msal.StorageCreationPropertiesBuilder("WorldExplorerCache.cache", cacheDir).Build();
+		var msalCacheHelper = await Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.CreateAsync(storageProperties);
+		msalCacheHelper.RegisterCache(authenticationClient.UserTokenCache);
+	}
+#endif
 }

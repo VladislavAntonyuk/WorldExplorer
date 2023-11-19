@@ -10,6 +10,9 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
     cancel-in-progress: true
 
+env:  
+  VERSION: 1.0.${{github.run_number}}
+
 jobs:
     buildWebApp:
         runs-on: windows-latest
@@ -23,7 +26,7 @@ jobs:
                     dotnet-version: '8.x'
 
             -   name: Publish WebApp
-                run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp'
+                run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp' -p:PackageVersion="${{ env.VERSION }}"
 
             -   name: Upload artifact for deployment job
                 uses: actions/upload-artifact@v2
@@ -33,10 +36,15 @@ jobs:
                     retention-days: 1
 
     buildClient:
-        runs-on: windows-latest
+        runs-on: ${{ matrix.os }}
+        strategy:
+          fail-fast: false
+          matrix:
+            os: [windows-latest]
+            #os: [windows-latest, macos-latest]
 
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Set up .NET
                 uses: actions/setup-dotnet@v3
@@ -63,17 +71,18 @@ jobs:
 
             -   name: Build Client
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-android -o output/android
-                    dotnet publish src/Client/Client.csproj -f net8.0-tizen -o output/tizen
+                    dotnet publish src/Client/Client.csproj -f net8.0-android -o output/android -p:PackageVersion="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net8.0-tizen -p:PackageVersion="${{ env.VERSION }}"
+                    copy ".\src\Client\bin\Release\net8.0-tizen\*.tpk" "output\tizen"
 
             -   name: Build Client (Apple)
                 run: |
-                    dotnet build src/Client/Client.csproj -f net8.0-ios
-                    dotnet build src/Client/Client.csproj -f net8.0-maccatalyst
+                    dotnet build src/Client/Client.csproj -f net8.0-ios -p:PackageVersion="${{ env.VERSION }}"
+                    dotnet build src/Client/Client.csproj -f net8.0-maccatalyst -p:PackageVersion="${{ env.VERSION }}"
 
             -   name: Build Client (Windows)
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-windows10.0.19041.0
+                    dotnet publish src/Client/Client.csproj -f net8.0-windows10.0.19041.0 -p:PackageVersion="${{ env.VERSION }}"
                     copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
                     copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
                     &"${Env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\MakeAppx.exe" pack /v /h SHA256 /d "src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64" /p "output\windows\WorldExplorer.msix";

@@ -33,43 +33,38 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 			return;
 		}
 
-		var radius = 1.25f; // 1.25m away from world origin
-		var sides = 10; // images per row
-		var centerNode = new SCNNode
-		{
-			Position = new SCNVector3(0, 0, 0)
-		};
-		handler.PlatformView.Scene.RootNode.AddChildNode(centerNode);
-
 		var imagePlaneNodes = new List<ImagePlaneNode>();
+		BuildImagePlaceholders(handler.PlatformView.Scene.RootNode, imagePlaneNodes);
 
-		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-											 (ImageHeight * 3) + (VerticalMargin * 3), radius - 0.15f, sides));
-		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-											 (ImageHeight * 2) + (VerticalMargin * 2), radius - 0.075f, sides));
-		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-											 ImageHeight + VerticalMargin, radius, sides));
-		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode, 0, radius, sides));
-		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-											 0 - ImageHeight - VerticalMargin, radius, sides));
-		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-											 0 - (ImageHeight * 2) - (VerticalMargin * 2), radius - 0.075f, sides));
-		imagePlaneNodes.AddRange(AddBlankRow(handler.PlatformView.Scene.RootNode, centerNode,
-											 0 - (ImageHeight * 3) - (VerticalMargin * 3), radius - 0.15f, sides));
-
-
-		var images = view.Images.Take(imagePlaneNodes.Count).ToList();
-
-		for (var i = 0; i < images.Count; i++)
+		int imageNumber = 0;
+		foreach (var imageUrl in view.Images)
 		{
-			var image = images[i];
-			var uiImage = UIImage.LoadFromData(NSData.FromArray(image));
-			if (uiImage is null)
+			if (imageNumber >= imagePlaneNodes.Count - 1)
 			{
-				continue;
+				break;
 			}
 
-			imagePlaneNodes[i].UpdateImage(uiImage);
+			try
+			{
+				var url = NSUrl.FromString(imageUrl);
+				if (url is null)
+				{
+					continue;
+				}
+
+				var uiImage = UIImage.LoadFromData(NSData.FromUrl(url));
+				if (uiImage is null)
+				{
+					continue;
+				}
+
+				imagePlaneNodes[imageNumber].UpdateImage(uiImage);
+				imageNumber++;
+			}
+			catch
+			{
+				// ignore invalid image
+			}
 		}
 	}
 
@@ -85,20 +80,22 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 	{
 		base.ConnectHandler(platformView);
 		var cameraPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
-		if (cameraPermissionStatus == PermissionStatus.Granted)
+		if (cameraPermissionStatus != PermissionStatus.Granted)
 		{
-			platformView.Session = new ARSession();
-			platformView.Scene = new SCNScene();
-			platformView.Session.Run(new ARWorldTrackingConfiguration
-			{
-				AutoFocusEnabled = true,
-				PlaneDetection = ARPlaneDetection.Horizontal,
-				LightEstimationEnabled = true,
-				WorldAlignment = ARWorldAlignment.GravityAndHeading
-			}, ARSessionRunOptions.ResetTracking | ARSessionRunOptions.RemoveExistingAnchors);
-			isReady = true;
-			UpdateValue(nameof(IArView.Images));
+			return;
 		}
+
+		platformView.Session = new ARSession();
+		platformView.Scene = new SCNScene();
+		platformView.Session.Run(new ARWorldTrackingConfiguration
+		{
+			AutoFocusEnabled = true,
+			PlaneDetection = ARPlaneDetection.Horizontal,
+			LightEstimationEnabled = true,
+			WorldAlignment = ARWorldAlignment.GravityAndHeading
+		}, ARSessionRunOptions.ResetTracking | ARSessionRunOptions.RemoveExistingAnchors);
+		isReady = true;
+		UpdateValue(nameof(IArView.Images));
 	}
 
 	protected override void DisconnectHandler(ARSCNView platformView)
@@ -109,27 +106,41 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		base.DisconnectHandler(platformView);
 	}
 
+	private static void BuildImagePlaceholders(SCNNode rootNode, List<ImagePlaneNode> imagePlaneNodes)
+	{
+		var centerNode = new SCNNode
+		{
+			Position = new SCNVector3(0, 0, 0)
+		};
+		rootNode.AddChildNode(centerNode);
+		const float radius = 1.25f; // 1.25m away from world origin
+		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, (ImageHeight * 3) + (VerticalMargin * 3), radius - 0.15f));
+		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, (ImageHeight * 2) + (VerticalMargin * 2), radius - 0.075f));
+		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, ImageHeight + VerticalMargin, radius));
+		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, 0, radius));
+		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, 0 - ImageHeight - VerticalMargin, radius));
+		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, 0 - (ImageHeight * 2) - (VerticalMargin * 2), radius - 0.075f));
+		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, 0 - (ImageHeight * 3) - (VerticalMargin * 3), radius - 0.15f));
+	}
+
 	private static IEnumerable<ImagePlaneNode> AddBlankRow(SCNNode rootNode,
 		SCNNode centerNode,
 		float y,
-		double radius,
-		int sides)
+		double radius)
 	{
-		for (var i = 0; i < sides; i++)
+		const int imagesPerRow = 10;
+		for (var i = 0; i < imagesPerRow; i++)
 		{
 			var imagePlaneNode = new ImagePlaneNode(ImageWidth, ImageHeight);
 
-			var x = (float)(radius * Math.Cos(2 * Math.PI * i / sides));
-			var z = (float)(radius * Math.Sin(2 * Math.PI * i / sides));
+			var x = (float)(radius * Math.Cos(2 * Math.PI * i / imagesPerRow));
+			var z = (float)(radius * Math.Sin(2 * Math.PI * i / imagesPerRow));
 
 			imagePlaneNode.Position = new SCNVector3(x, y, z);
 
 			var lookConstraint = SCNLookAtConstraint.Create(centerNode);
 			lookConstraint.GimbalLockEnabled = true;
-			imagePlaneNode.Constraints = new SCNConstraint[]
-			{
-				lookConstraint
-			};
+			imagePlaneNode.Constraints = [lookConstraint];
 
 			rootNode.AddChildNode(imagePlaneNode);
 			yield return imagePlaneNode;

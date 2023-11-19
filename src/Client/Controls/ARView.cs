@@ -5,12 +5,12 @@ using System.Collections.ObjectModel;
 public class ArView : View, IArView
 {
 	public static readonly BindableProperty ImagesProperty = BindableProperty.Create(
-		nameof(Images), typeof(ObservableCollection<byte[]>), typeof(ArView),
-		defaultValueCreator: _ => new ObservableCollection<byte[]>(), defaultBindingMode: BindingMode.TwoWay);
+		nameof(Images), typeof(ObservableCollection<string>), typeof(ArView),
+		defaultValueCreator: _ => new ObservableCollection<string>(), defaultBindingMode: BindingMode.TwoWay);
 
-	public ObservableCollection<byte[]> Images
+	public ObservableCollection<string> Images
 	{
-		get => (ObservableCollection<byte[]>)GetValue(ImagesProperty);
+		get => (ObservableCollection<string>)GetValue(ImagesProperty);
 		set => SetValue(ImagesProperty, value);
 	}
 }

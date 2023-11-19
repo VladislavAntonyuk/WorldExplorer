@@ -1,4 +1,4 @@
-namespace Client.ViewModels;
+﻿namespace Client.ViewModels;
 
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -83,7 +83,7 @@ public sealed partial class PlaceDetailsViewModel : BaseViewModel, IQueryAttribu
 		await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object?>
 		{
 			{
-				"images", PlaceImages.ToArray()
+				"images", Place.Images
 			}
 		});
 	}

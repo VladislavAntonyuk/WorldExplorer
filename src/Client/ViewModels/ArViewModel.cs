@@ -8,11 +8,11 @@ using Services.Navigation;
 public partial class ArViewModel
 	(INavigationService navigationService, IDeviceDisplay deviceDisplay) : BaseViewModel, IQueryAttributable
 {
-	public ObservableCollection<byte[]> Images { get; } = [];
+	public ObservableCollection<string> Images { get; } = [];
 
 	public void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
-		if (query.TryGetValue("images", out var imagesObject) && imagesObject is byte[][] images)
+		if (query.TryGetValue("images", out var imagesObject) && imagesObject is List<string> images)
 		{
 			Images.Clear();
 			foreach (var image in images)

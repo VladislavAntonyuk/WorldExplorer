@@ -73,7 +73,7 @@
 
 			<CollectionView
 				IsVisible="{OnPlatform Default=true, iOS=false}"
-				ItemsSource="{Binding PlaceImages}"
+				ItemsSource="{Binding Place.Images}"
 				HeightRequest="300">
 
 				<CollectionView.ItemsLayout>
@@ -87,7 +87,7 @@
 						<VerticalStackLayout>
 							<Image
 								 Background="{DynamicResource Gray500}"
-								 Source="{Binding ., Converter={StaticResource ByteArrayToImageSourceConverter}}"
+								 Source="{Binding .}"
 								 WidthRequest="300"
 								 HeightRequest="300"
 								 Aspect="AspectFit" />
