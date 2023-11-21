@@ -3,8 +3,12 @@ name: Build and deploy client
 on:
     push:
         branches: [ main ]
+        paths:
+          - 'src/Client/**'
     pull_request:
         branches: [ main ]
+        paths:
+          - 'src/Client/**'
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -51,6 +55,8 @@ jobs:
             -   name: Prepare build
                 run: |
                     (Get-Content src\Client\Platforms\Windows\Package.appxmanifest).Replace('1.0.0.0', '${{ env.VERSION }}') | Set-Content src\Client\Platforms\Windows\Package.appxmanifest
+                    (Get-Content src\Client\Client.csproj).Replace('<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>${{ env.VERSION }}</ApplicationDisplayVersion>') | Set-Content src\Client\Client.csproj
+                    (Get-Content src\Client\Client.csproj).Replace('<ApplicationVersion>1</ApplicationVersion>', '<ApplicationVersion>${{github.run_number}}</ApplicationVersion>') | Set-Content src\Client\Client.csproj
 
             -   name: Build Client
                 run: |
