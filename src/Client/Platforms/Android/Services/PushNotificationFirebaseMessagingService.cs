@@ -12,9 +12,9 @@ using Constants = Shared.Constants;
 public class PushNotificationFirebaseMessagingService : FirebaseMessagingService
 {
 	int messageId;
-	public override void OnMessageReceived(RemoteMessage p0)
+	public override void OnMessageReceived(RemoteMessage message)
 	{
-		base.OnMessageReceived(p0);
+		base.OnMessageReceived(message);
 
 		MainThread.InvokeOnMainThreadAsync(() =>
 		{
@@ -23,7 +23,7 @@ public class PushNotificationFirebaseMessagingService : FirebaseMessagingService
 				return;
 			}
 
-			var pushNotification = p0.GetNotification();
+			var pushNotification = message.GetNotification();
 
 			var manager = (NotificationManager?)Application.Context.GetSystemService(NotificationService);
 			if (OperatingSystem.IsAndroidVersionAtLeast(26))

@@ -82,7 +82,7 @@
 		<GoogleServicesJson Include="Platforms\Android\google-services.json" />
 		<PackageReference Include="JavaGl.Obj" Version="0.4.0.1" />
 		<PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
-		<PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0" />
+		<PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
 		<PackageReference Include="Xamarin.Google.Dagger" Version="2.39.1" />
 	</ItemGroup>
 
