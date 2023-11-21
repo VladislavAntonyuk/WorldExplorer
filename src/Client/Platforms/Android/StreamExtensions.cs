@@ -16,7 +16,7 @@ public static class StreamExtensions
 				return;
 			}
 
-			var path = Path.Combine(storagePath.ToString(), Path.GetRandomFileName());
+			var path = Path.Combine(storagePath.ToString(), $"{DateTime.Now}.jpg");
 			await File.WriteAllBytesAsync(path, memoryStream.ToArray());
 		}
 		catch (Exception ex)

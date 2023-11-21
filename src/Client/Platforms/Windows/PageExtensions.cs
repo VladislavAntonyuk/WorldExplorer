@@ -10,11 +10,11 @@ public static class PageExtensions
 		{
 			ContentTemplate = new DataTemplate(() => bottomSheetContent),
 			StaysOpen = !dimDismiss,
-			ShowCloseButton = false,
+			ShowCloseButton = true,
 			Parent = page,
 			AnimationMode = PopupAnimationMode.Fade,
 			AutoSizeMode = PopupAutoSizeMode.Both,
-			ShowHeader = false
+			HeaderTitle = string.Empty
 		};
 		popup.Show();
 		return popup;

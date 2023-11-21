@@ -1,5 +1,6 @@
 ﻿namespace Client;
 
+using _Microsoft.Android.Resource.Designer;
 using Google.Android.Material.BottomSheet;
 using Microsoft.Maui.Platform;
 
@@ -9,7 +10,7 @@ public static class PageExtensions
 	{
 		var bottomSheetDialog = new BottomSheetDialog(
 			Platform.CurrentActivity?.Window?.DecorView.FindViewById(Android.Resource.Id.Content)?.Context ??
-			throw new InvalidOperationException("Context is null"), Resource.Style.AppBottomSheetDialogTheme);
+			throw new InvalidOperationException("Context is null"), ResourceConstant.Style.AppBottomSheetDialogTheme);
 		ArgumentNullException.ThrowIfNull(page.Handler?.MauiContext);
 		bottomSheetDialog.SetContentView(bottomSheetContent.ToPlatform(page.Handler.MauiContext));
 		bottomSheetDialog.Behavior.Hideable = dimDismiss;

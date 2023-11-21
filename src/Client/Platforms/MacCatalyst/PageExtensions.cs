@@ -13,6 +13,7 @@ public static class PageExtensions
 			ShowCloseButton = true,
 			Parent = page,
 			AutoSizeMode = PopupAutoSizeMode.Both,
+			AnimationMode = PopupAnimationMode.Fade,
 			HeaderTitle = string.Empty
 		};
 		popup.Show();
