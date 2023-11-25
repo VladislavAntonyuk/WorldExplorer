@@ -80,7 +80,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	[RelayCommand(AllowConcurrentExecutions = false)]
 	private async Task StartTracking()
 	{
-		var permission = await Permissions.RequestAsync<Permissions.LocationAlways>();
+		var permission = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
 		if (permission != PermissionStatus.Granted)
 		{
 			await dialogService.ToastAsync("No permission");

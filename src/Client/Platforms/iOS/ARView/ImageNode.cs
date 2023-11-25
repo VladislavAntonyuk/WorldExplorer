@@ -26,11 +26,11 @@ public sealed class ImageNode : SCNNode
 		return geometry;
 	}
 
-	internal void UpdateImage(NSData uIImage)
+	internal void UpdateImage(NSData content)
 	{
 		if (Geometry?.FirstMaterial is not null)
 		{
-			Geometry.FirstMaterial.Diffuse.Contents = uIImage;
+			Geometry.FirstMaterial.Diffuse.Contents = content;
 		}
 	}
 

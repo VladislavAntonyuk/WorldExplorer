@@ -2,11 +2,13 @@ namespace Client;
 
 using ARKit;
 using Controls;
+using Extensions;
 using Foundation;
 using Microsoft.Maui.Handlers;
 using SceneKit;
 
-public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, ARSCNView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
+public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, ARSCNView>(
+	mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
 {
 	private const float ImageHeight = 0.2f;
 	private const float ImageWidth = 0.3f;
@@ -41,28 +43,30 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 			node.RemoveFromParentNode();
 		});
 		BuildImagePlaceholders(handler.PlatformView.Scene.RootNode, handler.imagePlaneNodes);
-		Task.Run(() =>
+		int i = 0;
+		foreach (var imageUrl in view.Images)
 		{
-			var imageNumber = 0;
-			foreach (var imageUrl in view.Images)
-			{
-				if (imageNumber >= handler.imagePlaneNodes.Count - 1)
-				{
-					break;
-				}
+			Task.Run(() =>
+			    {
+				    int currentIndex = Interlocked.Increment(ref i) - 1;
+				    if (currentIndex < handler.imagePlaneNodes.Count)
+				    {
+					    var data = NSData.FromUrl(new NSUrl(imageUrl));
+					    if (data.Length == 0)
+					    {
+						    Interlocked.Decrement(ref i);
+						    return;
+					    }
 
-				try
-				{
-					var data = NSData.FromUrl(new NSUrl(imageUrl));
-					handler.imagePlaneNodes[imageNumber].UpdateImage(data);
-					imageNumber++;
-				}
-				catch
-				{
-					// ignore invalid image
-				}
-			}
-		});
+					    handler.imagePlaneNodes[currentIndex].UpdateImage(data);
+				    }
+			    })
+			    .AndForget(false, _ =>
+			    {
+				    Interlocked.Decrement(ref i);
+				    return Task.CompletedTask;
+			    });
+		}
 	}
 
 	protected override ARSCNView CreatePlatformView()
@@ -98,12 +102,6 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 	protected override void DisconnectHandler(ARSCNView platformView)
 	{
 		isReady = false;
-		foreach (var imagePlaneNode in imagePlaneNodes)
-		{
-			imagePlaneNode.Dispose();
-		}
-
-		imagePlaneNodes.Clear();
 		platformView.Dispose();
 		base.DisconnectHandler(platformView);
 	}
@@ -125,10 +123,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, 0 - (ImageHeight * 3) - (VerticalMargin * 3), radius - 0.15f));
 	}
 
-	private static IEnumerable<ImageNode> AddBlankRow(SCNNode rootNode,
-		SCNNode centerNode,
-		float y,
-		double radius)
+	private static IEnumerable<ImageNode> AddBlankRow(SCNNode rootNode, SCNNode centerNode, float y, double radius)
 	{
 		const int imagesPerRow = 10;
 		for (var i = 0; i < imagesPerRow; i++)
