@@ -1,6 +1,5 @@
-﻿namespace Client.Services;
+﻿namespace Client.Services.API;
 
-using API;
 using Refit;
 using Shared.Models;
 
@@ -23,18 +22,14 @@ public interface IPlacesApi
 		}
 	}
 
-	[Get("/details")]
-	internal Task<ApiResponse<Place>> GetDetailsInternal([Query] string name,
-		[Query] Location location,
-		CancellationToken cancellationToken);
+	[Get("/{id}")]
+	internal Task<ApiResponse<Place>> GetDetailsInternal(Guid id, CancellationToken cancellationToken);
 
-	async Task<ApiResponse<Place>> GetDetails([Query] string name,
-		[Query] Location location,
-		CancellationToken cancellationToken)
+	async Task<ApiResponse<Place>> GetDetails(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{
-			return await GetDetailsInternal(name, location, cancellationToken);
+			return await GetDetailsInternal(id, cancellationToken);
 		}
 		catch (Exception e)
 		{

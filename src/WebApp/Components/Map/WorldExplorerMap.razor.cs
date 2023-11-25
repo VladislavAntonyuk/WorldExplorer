@@ -6,7 +6,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using Services.Place;
 using Shared.Models;
-using WebApp.Components;
+using Components;
 
 public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
 {
@@ -53,7 +53,7 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 
 		foreach (var place in places)
 		{
-			await CreateMarker(place.Location, place.Name, place.MainImage);
+			await CreateMarker(place.Id, place.Location, place.Name, place.MainImage);
 		}
 	}
 
@@ -77,9 +77,9 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 	}
 
 	[JSInvokable]
-	public async Task OpenDetails(string title, Location location)
+	public async Task OpenDetails(Guid id, string title)
 	{
-		var placeDetails = await PlacesService.GetPlaceDetails(title, location, CancellationToken.None);
+		var placeDetails = await PlacesService.GetPlaceDetails(id, CancellationToken.None);
 		if (placeDetails is null)
 		{
 			Snackbar.Add($"{title} not found", Severity.Error);
@@ -95,12 +95,12 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 		}
 	}
 
-	private async Task<Marker> CreateMarker(Location location, string label, string? icon)
+	private async Task<Marker> CreateMarker(Guid id, Location location, string label, string? icon)
 	{
 		const string defaultIcon = "/assets/default-location-pin.png";
 		var markerOptions = new MarkerOptions(location, label, icon ?? defaultIcon);
 		var marker = new Marker(markerOptions);
-		await JsRuntime.InvokeVoidAsync("leafletInterop.addMarker", mapRef, marker);
+		await JsRuntime.InvokeVoidAsync("leafletInterop.addMarker", mapRef, id, marker);
 		return marker;
 	}
 }

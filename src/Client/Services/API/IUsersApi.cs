@@ -1,6 +1,5 @@
-﻿namespace Client.Services;
+﻿namespace Client.Services.API;
 
-using API;
 using Refit;
 using Shared.Models;
 

@@ -1,6 +1,5 @@
 ﻿namespace WebApp.Apis.V1.Controllers;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Place;
 using Shared.Models;
@@ -15,13 +14,11 @@ public class PlacesController(IPlacesService placesService) : ApiAuthControllerB
 		return placesService.GetNearByPlaces(location, cancellationToken);
 	}
 
-	[HttpGet("details")]
+	[HttpGet("{id:guid}")]
 	[ProducesResponseType<Place>(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public Task<Place?> GetDetails([FromQuery] string name,
-		[FromQuery] Location location,
-		CancellationToken cancellationToken)
+	public Task<Place?> GetDetails(Guid id, CancellationToken cancellationToken)
 	{
-		return placesService.GetPlaceDetails(name, location, cancellationToken);
+		return placesService.GetPlaceDetails(id, cancellationToken);
 	}
 }

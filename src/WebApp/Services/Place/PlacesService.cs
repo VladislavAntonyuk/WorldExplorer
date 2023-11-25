@@ -46,10 +46,10 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		return nearestPlaces.Select(ToPlace).ToList();
 	}
 
-	public async Task<Place?> GetPlaceDetails(string name, Location location, CancellationToken cancellationToken)
+	public async Task<Place?> GetPlaceDetails(Guid id, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-		var savedPlace = await dbContext.Places.FirstOrDefaultAsync(place => place.Name == name && place.Location.IsWithinDistance(new Point(location.Longitude, location.Latitude), DistanceConstants.NearbyDistance), cancellationToken);
+		var savedPlace = await dbContext.Places.FirstOrDefaultAsync(place => place.Id == id, cancellationToken);
 		return savedPlace is null ? null : ToPlace(savedPlace);
 	}
 
@@ -99,6 +99,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 	{
 		return new Infrastructure.Entities.Place
 		{
+			Id = place.Id,
 			Name = place.Name,
 			Description = place.Description,
 			Images = place.Images.Select(x => new Image

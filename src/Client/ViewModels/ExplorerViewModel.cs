@@ -3,44 +3,27 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Controls;
 using Framework;
 using Microsoft.Maui.Controls.Maps;
 using Models;
 using Resources.Localization;
 using Services;
+using Services.API;
 using Views;
 
-public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
+public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
+	ILauncher launcher,
+	IGeolocator geoLocator,
+	IDialogService dialogService,
+	IDispatcher dispatcher,
+	IDeviceDisplay deviceDisplay) : BaseViewModel, IDisposable
 {
-	private readonly IDeviceDisplay deviceDisplay;
-	private readonly IDialogService dialogService;
-	private readonly IDispatcher dispatcher;
-	private readonly IGeolocator geoLocator;
-
-	private readonly IPlacesApi placesApi;
-	private readonly ILauncher launcher;
-
 	[ObservableProperty]
 	private bool isShowingUser = true;
 
 	[ObservableProperty]
 	private GeolocatorData? currentGeolocatorData;
-
-	public ExplorerViewModel(IPlacesApi placesApi,
-		ILauncher launcher,
-		IGeolocator geoLocator,
-		IDialogService dialogService,
-		IDispatcher dispatcher,
-		IDeviceDisplay deviceDisplay)
-	{
-		this.placesApi = placesApi;
-		this.launcher = launcher;
-		this.geoLocator = geoLocator;
-		geoLocator.PositionChanged += GeoLocator_PositionChanged;
-		this.dialogService = dialogService;
-		this.dispatcher = dispatcher;
-		this.deviceDisplay = deviceDisplay;
-	}
 
 	private void GeoLocator_PositionChanged(object? sender, GeolocatorData e)
 	{
@@ -51,7 +34,7 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 		}, nameof(LocationChanged));
 	}
 
-	public ObservableCollection<Pin> Pins { get; } = new();
+	public ObservableCollection<WorldExplorerPin> Pins { get; } = new();
 
 	private readonly WeakEventManager weakEventManager = new();
 	public event EventHandler<LocationChangedEventArgs> LocationChanged
@@ -62,6 +45,7 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 
 	public override async Task InitializeAsync()
 	{
+		geoLocator.PositionChanged += GeoLocator_PositionChanged;
 		deviceDisplay.KeepScreenOn = true;
 		await base.InitializeAsync();
 		await StartTracking();
@@ -69,6 +53,7 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 
 	public override Task UnInitializeAsync()
 	{
+		geoLocator.PositionChanged -= GeoLocator_PositionChanged;
 		geoLocator.StopListening();
 		deviceDisplay.KeepScreenOn = false;
 		return base.UnInitializeAsync();
@@ -132,8 +117,9 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 		{
 			foreach (var place in placesResponse.Content.Where(x => Pins.All(pin => pin.Label != x.Name)))
 			{
-				Pins.Add(new Pin
+				Pins.Add(new WorldExplorerPin()
 				{
+					PlaceId = place.Id,
 					Location = new Location(place.Location.Latitude, place.Location.Longitude),
 					Label = place.Name,
 					Type = PinType.Place,
@@ -169,5 +155,6 @@ public sealed partial class ExplorerViewModel : BaseViewModel, IDisposable
 	public void Dispose()
 	{
 		geoLocator.PositionChanged -= GeoLocator_PositionChanged;
+		geoLocator.StopListening();
 	}
 }

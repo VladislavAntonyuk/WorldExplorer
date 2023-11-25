@@ -43,13 +43,11 @@ window.leafletInterop = {
 				dotnetRef.invokeMethodAsync("UpdatePositionError", e.message);
 			});
 	},
-	addMarker: function (dotnetRef, options) {
+	addMarker: function (dotnetRef, id, options) {
 		const marker = createMarker(options);
 		marker.on("click",
 			(e) => {
-				dotnetRef.invokeMethodAsync("OpenDetails",
-					options.title,
-					{latitude: e.latlng.lat, longitude: e.latlng.lng});
+				dotnetRef.invokeMethodAsync("OpenDetails", id,	options.title);
 			});
 	},
 	destroyMap: function () {

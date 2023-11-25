@@ -1,5 +1,6 @@
 ﻿namespace Client.Views;
 
+using Controls;
 using Framework;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
@@ -29,7 +30,7 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 
 	private async void Pin_OnMarkerClicked(object? sender, PinClickedEventArgs e)
 	{
-		if (sender is not Pin pin)
+		if (sender is not WorldExplorerPin pin)
 		{
 			return;
 		}
@@ -38,11 +39,7 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 		placeDetailsViewModel.ApplyQueryAttributes(new Dictionary<string, object>
 		{
 			{
-				"place", new Place
-				{
-					Name = pin.Label,
-					Location = new Location(pin.Location.Latitude, pin.Location.Longitude)
-				}
+				"place", pin.PlaceId
 			}
 		});
 

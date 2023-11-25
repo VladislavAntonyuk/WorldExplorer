@@ -1,11 +1,10 @@
-﻿namespace Client;
+namespace Client;
 
 using ARKit;
 using Controls;
 using Foundation;
 using Microsoft.Maui.Handlers;
 using SceneKit;
-using UIKit;
 
 public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, ARSCNView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
 {
@@ -20,7 +19,9 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		};
 
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
+
 	private bool isReady;
+	private readonly List<ImageNode> imagePlaneNodes = new();
 
 	public ArViewHandler() : this(ArViewMapper, ArViewCommandMapper)
 	{
@@ -33,46 +34,44 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 			return;
 		}
 
-		var imagePlaneNodes = new List<ImagePlaneNode>();
-		BuildImagePlaceholders(handler.PlatformView.Scene.RootNode, imagePlaneNodes);
-
-		int imageNumber = 0;
-		foreach (var imageUrl in view.Images)
+		handler.imagePlaneNodes.Clear();
+		handler.PlatformView.Scene.RootNode.EnumerateChildNodes((SCNNode node, out bool stop) =>
 		{
-			if (imageNumber >= imagePlaneNodes.Count - 1)
+			stop = false;
+			node.RemoveFromParentNode();
+		});
+		BuildImagePlaceholders(handler.PlatformView.Scene.RootNode, handler.imagePlaneNodes);
+		Task.Run(() =>
+		{
+			var imageNumber = 0;
+			foreach (var imageUrl in view.Images)
 			{
-				break;
-			}
-
-			try
-			{
-				var url = NSUrl.FromString(imageUrl);
-				if (url is null)
+				if (imageNumber >= handler.imagePlaneNodes.Count - 1)
 				{
-					continue;
+					break;
 				}
 
-				var uiImage = UIImage.LoadFromData(NSData.FromUrl(url));
-				if (uiImage is null)
+				try
 				{
-					continue;
+					var data = NSData.FromUrl(new NSUrl(imageUrl));
+					handler.imagePlaneNodes[imageNumber].UpdateImage(data);
+					imageNumber++;
 				}
-
-				imagePlaneNodes[imageNumber].UpdateImage(uiImage);
-				imageNumber++;
+				catch
+				{
+					// ignore invalid image
+				}
 			}
-			catch
-			{
-				// ignore invalid image
-			}
-		}
+		});
 	}
 
 	protected override ARSCNView CreatePlatformView()
 	{
 		return new ARSCNView
 		{
-			AutoenablesDefaultLighting = true
+			AutoenablesDefaultLighting = true,
+			Session = new ARSession(),
+			Scene = new SCNScene()
 		};
 	}
 
@@ -85,8 +84,6 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 			return;
 		}
 
-		platformView.Session = new ARSession();
-		platformView.Scene = new SCNScene();
 		platformView.Session.Run(new ARWorldTrackingConfiguration
 		{
 			AutoFocusEnabled = true,
@@ -100,13 +97,18 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 
 	protected override void DisconnectHandler(ARSCNView platformView)
 	{
-		platformView.Session.Pause();
-		platformView.Scene.Dispose();
-		platformView.Session.Dispose();
+		isReady = false;
+		foreach (var imagePlaneNode in imagePlaneNodes)
+		{
+			imagePlaneNode.Dispose();
+		}
+
+		imagePlaneNodes.Clear();
+		platformView.Dispose();
 		base.DisconnectHandler(platformView);
 	}
 
-	private static void BuildImagePlaceholders(SCNNode rootNode, List<ImagePlaneNode> imagePlaneNodes)
+	private static void BuildImagePlaceholders(SCNNode rootNode, List<ImageNode> imagePlaneNodes)
 	{
 		var centerNode = new SCNNode
 		{
@@ -123,7 +125,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		imagePlaneNodes.AddRange(AddBlankRow(rootNode, centerNode, 0 - (ImageHeight * 3) - (VerticalMargin * 3), radius - 0.15f));
 	}
 
-	private static IEnumerable<ImagePlaneNode> AddBlankRow(SCNNode rootNode,
+	private static IEnumerable<ImageNode> AddBlankRow(SCNNode rootNode,
 		SCNNode centerNode,
 		float y,
 		double radius)
@@ -131,7 +133,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		const int imagesPerRow = 10;
 		for (var i = 0; i < imagesPerRow; i++)
 		{
-			var imagePlaneNode = new ImagePlaneNode(ImageWidth, ImageHeight);
+			var imagePlaneNode = new ImageNode(ImageWidth, ImageHeight);
 
 			var x = (float)(radius * Math.Cos(2 * Math.PI * i / imagesPerRow));
 			var z = (float)(radius * Math.Sin(2 * Math.PI * i / imagesPerRow));

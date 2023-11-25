@@ -1,17 +1,17 @@
 ﻿namespace Client;
 
+using Foundation;
 using SceneKit;
 using UIKit;
 
-public sealed class ImagePlaneNode : SCNNode
+public sealed class ImageNode : SCNNode
 {
-	public ImagePlaneNode(float width, float height)
+	public ImageNode(float width, float height)
 	{
 		Geometry = CreateGeometry(width, height);
-		Opacity = 0.2f;
 	}
 
-	private static SCNGeometry CreateGeometry(float width, float height)
+	private static SCNPlane CreateGeometry(float width, float height)
 	{
 		var material = new SCNMaterial();
 		material.Diffuse.Contents = UIColor.White;
@@ -26,12 +26,18 @@ public sealed class ImagePlaneNode : SCNNode
 		return geometry;
 	}
 
-	internal void UpdateImage(UIImage uIImage)
+	internal void UpdateImage(NSData uIImage)
 	{
 		if (Geometry?.FirstMaterial is not null)
 		{
 			Geometry.FirstMaterial.Diffuse.Contents = uIImage;
-			RunAction(SCNAction.FadeIn(1));
 		}
+	}
+
+	protected override void Dispose(bool disposing)
+	{
+		Geometry?.FirstMaterial?.Diffuse.Contents?.Dispose();
+		Geometry?.Dispose();
+		base.Dispose(disposing);
 	}
 }
