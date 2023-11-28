@@ -16,7 +16,6 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		await dbContext.Places.ExecuteDeleteAsync(cancellationToken);
-		await dbContext.LocationInfoRequests.ExecuteDeleteAsync(cancellationToken);
 	}
 
 	public async Task<List<Place>> GetPlaces(CancellationToken cancellationToken)
@@ -41,23 +40,16 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 			};
 		}
 
-		var nearestPlacesNearby = await dbContext.Places
-												 .Where(x => x.Location.IsWithinDistance(userLocation, DistanceConstants.NearbyDistance))
-												 .OrderBy(c => c.Location.Distance(userLocation))
-												 .ToListAsync(cancellationToken);
-		if (nearestPlacesNearby.Count > 0)
+		var hasCompletedRequests = locationInfoRequests.Count > 0;
+		if (hasCompletedRequests)
 		{
+			var nearestPlacesNearby = await dbContext.Places
+													.Where(x => x.Location.IsWithinDistance(userLocation, DistanceConstants.NearbyDistance))
+													.OrderBy(c => c.Location.Distance(userLocation))
+													.ToListAsync(cancellationToken);
 			return new OperationResult<List<Place>>()
 			{
 				Result = nearestPlacesNearby.Select(ToPlace).ToList()
-			};
-		}
-
-		if (locationInfoRequests.Count > 0)
-		{
-			return new OperationResult<List<Place>>()
-			{
-				Result = []
 			};
 		}
 

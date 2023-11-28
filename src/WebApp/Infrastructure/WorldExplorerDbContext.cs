@@ -18,8 +18,8 @@ public class WorldExplorerDbContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.Entity<LocationInfoRequest>()
-		            .Property(e => e.Location)
-		            .HasSrid(DistanceConstants.SRID)
+					.Property(e => e.Location)
+					.HasSrid(DistanceConstants.SRID)
 					.HasColumnType("POINT");
 
 		modelBuilder.Entity<Place>()

@@ -19,10 +19,13 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 	{
 		var generalPrompt = $$"""
 		                      You are a tour guide with a great knowledge of history. Tell me about 5 places near the following location: Latitude: {{location.Latitude}},Longitude: {{location.Longitude}}.
-		                      Places must be located within {{DistanceConstants.NearbyDistance}} meters from the location.
-		                      Format the output in json format with the next properties: name, description, location (longitude, latitude).
-		                      As they are famous places you must know there coordinates. Provide as most detailed information in description as possible. Description must contain a lot of text (at least 500 words).
-		                      The output must contain only json, because I will parse it later. Do not include any information or formatting except valid json.
+		                      As they are famous places you must know their coordinates. Provide location as accurately as possible.
+		                      Places must be located within {{DistanceConstants.NearbyDistance}} meters from the location. 
+		                      If there are no places in the area, increase the distance but not more than {{DistanceConstants.NearbyDistance * 10}} meters. 
+		                      If there are still no places, return an empty list. Location is more important than number of places, so it's better to return fewer places than inaccurate locations.
+		                      Format the output in JSON format with the next properties: name, description, location (longitude, latitude).
+		                      Provide as detailed information in the description as possible. The description must contain a lot of text (at least 1000 words).
+		                      The output must contain only JSON because I will parse it later. Do not include any information or formatting except valid JSON.
 		                      Example:
 		                      [
 		                          {

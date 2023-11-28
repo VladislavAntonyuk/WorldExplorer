@@ -36,7 +36,7 @@ public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> d
 				try
 				{
 					await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
-					               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Pending), stoppingToken);
+								   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Pending), stoppingToken);
 
 					var tasks = chunk.Select(x => aiService.GetNearByPlaces(new Location(x.Location.Y, x.Location.X)));
 					var placeTasks = await Task.WhenAll(tasks);
@@ -44,17 +44,17 @@ public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> d
 
 					var newPlaceNames = places.Select(x => x.Name);
 					var existingPlaceNames = await dbContext.Places.Where(x => newPlaceNames.Contains(x.Name))
-					                                        .Select(x => x.Name)
-					                                        .ToListAsync(stoppingToken);
+															.Select(x => x.Name)
+															.ToListAsync(stoppingToken);
 
 					var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name).ToList();
 
 					var getImagesTasks = newPlaces.Select(async x =>
-					                              {
-						                              var images = await imageSearchService.GetPlaceImages(x.Name, stoppingToken);
-						                              x.Images.AddRange(images);
-					                              })
-					                              .ToList();
+												  {
+													  var images = await imageSearchService.GetPlaceImages(x.Name, stoppingToken);
+													  x.Images.AddRange(images);
+												  })
+												  .ToList();
 
 					await Task.WhenAll(getImagesTasks);
 
@@ -62,13 +62,13 @@ public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> d
 					await dbContext.SaveChangesAsync(stoppingToken);
 
 					await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
-					               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Completed), stoppingToken);
+								   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Completed), stoppingToken);
 				}
 				catch (Exception ex)
 				{
 					logger.LogError(ex, "Failed requesting places {Requests}", string.Join(',', locationInfoRequests));
 					await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
-					               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.New), stoppingToken);
+								   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.New), stoppingToken);
 
 				}
 			}

@@ -12,12 +12,12 @@ using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using Policies;
 using Services.AI;
+using Services.Image;
 using Services.Place;
 using Services.User;
 using Shared.Enums;
 using Shared.Extensions;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
-using Services.Image;
 
 public static class Constants
 {

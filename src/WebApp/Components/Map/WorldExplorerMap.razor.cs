@@ -1,13 +1,13 @@
 ﻿namespace WebApp.Components.Map;
 
+using Components;
 using Dialogs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using Services.Place;
-using Shared.Models;
-using Components;
 using Shared.Enums;
+using Shared.Models;
 
 public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
 {
@@ -52,7 +52,7 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 			case StatusCode.Success:
 				if (placesResult.Result.Count == 0)
 				{
-					Snackbar.Add("No places found nearby");
+					Snackbar.Add(Translation.NoPlacesFoundNearby, Severity.Info);
 					break;
 				}
 
@@ -63,7 +63,7 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 
 				break;
 			case StatusCode.LocationInfoRequestPending:
-				Snackbar.Add("Loading places...");
+				Snackbar.Add(Translation.LoadingPlaces, Severity.Info, options => options.ShowCloseIcon = false);
 				break;
 		}
 
@@ -100,7 +100,7 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 		var placeDetails = await PlacesService.GetPlaceDetails(id, CancellationToken.None);
 		if (placeDetails is null)
 		{
-			Snackbar.Add($"{title} not found", Severity.Error);
+			Snackbar.Add($"{title} {Translation.NotFound}", Severity.Error);
 		}
 		else
 		{

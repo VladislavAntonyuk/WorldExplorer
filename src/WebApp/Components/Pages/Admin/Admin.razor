@@ -6,6 +6,8 @@
 @attribute [Authorize(Policy = "IsAdministrator")]
 @attribute [StreamRendering]
 
+<PageTitle>@Constants.ProductName</PageTitle>
+
 <AuthorizeView Policy="IsAdministrator">
 	<Authorized>
 		<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">

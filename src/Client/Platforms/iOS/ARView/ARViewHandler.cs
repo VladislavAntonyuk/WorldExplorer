@@ -1,4 +1,4 @@
-namespace Client;
+﻿namespace Client;
 
 using ARKit;
 using Controls;
@@ -47,25 +47,25 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		foreach (var imageUrl in view.Images)
 		{
 			Task.Run(() =>
-			    {
-				    int currentIndex = Interlocked.Increment(ref i) - 1;
-				    if (currentIndex < handler.imagePlaneNodes.Count)
-				    {
-					    var data = NSData.FromUrl(new NSUrl(imageUrl));
-					    if (data.Length == 0)
-					    {
-						    Interlocked.Decrement(ref i);
-						    return;
-					    }
+				{
+					int currentIndex = Interlocked.Increment(ref i) - 1;
+					if (currentIndex < handler.imagePlaneNodes.Count)
+					{
+						var data = NSData.FromUrl(new NSUrl(imageUrl));
+						if (data.Length == 0)
+						{
+							Interlocked.Decrement(ref i);
+							return;
+						}
 
-					    handler.imagePlaneNodes[currentIndex].UpdateImage(data);
-				    }
-			    })
-			    .AndForget(false, _ =>
-			    {
-				    Interlocked.Decrement(ref i);
-				    return Task.CompletedTask;
-			    });
+						handler.imagePlaneNodes[currentIndex].UpdateImage(data);
+					}
+				})
+				.AndForget(false, _ =>
+				{
+					Interlocked.Decrement(ref i);
+					return Task.CompletedTask;
+				});
 		}
 	}
 
