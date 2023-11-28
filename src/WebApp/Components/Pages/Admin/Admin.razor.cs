@@ -65,7 +65,7 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 	private async Task DeleteRequest(int requestId)
 	{
 		await LocationInfoRequestsService.Delete(requestId, CancellationToken.None);
-		await GetPlaces();
+		await GetRequests();
 	}
 
 	protected override async Task OnInitializedAsync()
