@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
+using Place;
+using Shared;
 using Shared.Models;
 
 public class AiService : IAiService
@@ -29,6 +31,7 @@ public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> log
 	{
 		var generalPrompt = $$"""
 		                      You are a tour guide with a great knowledge of history. Tell me about 5 places near the following location: Latitude: {{location.Latitude}},Longitude: {{location.Longitude}}.
+		                      Places must be located within {{DistanceConstants.NearbyDistance}} meters from the location.
 		                      Format the output in json format with the next properties: name, description, location (longitude, latitude).
 		                      As they are famous places you must know there coordinates. Provide as most detailed information in description as possible. Description must contain a lot of text (at least 500 words).
 		                      The output must contain only json, because I will parse it later. Do not include any information or formatting except valid json.
@@ -51,7 +54,7 @@ public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> log
 			return [];
 		}
 
-		logger.LogInformation("Received a response from AI: {Response}", result.Choices[0].Message.Content);
+		logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Choices[0].Message.Content, result.ProcessingTime);
 		return JsonSerializer.Deserialize<List<Place>>(result.Choices[0].Message.Content, serializerOptions) ?? [];
 	}
 }

@@ -51,8 +51,7 @@ public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> d
 
 					var getImagesTasks = newPlaces.Select(async x =>
 					                              {
-						                              var images =
-							                              await imageSearchService.GetPlaceImages(x.Name, stoppingToken);
+						                              var images = await imageSearchService.GetPlaceImages(x.Name, stoppingToken);
 						                              x.Images.AddRange(images);
 					                              })
 					                              .ToList();
@@ -86,9 +85,8 @@ public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> d
 			Images = place.Images.Select(x => new Image
 			{
 				Source = x
-			})
-						  .ToList(),
-			Location = new Point(place.Location.Longitude, place.Location.Latitude)
+			}).ToList(),
+			Location = place.Location.ToPoint()
 		};
 	}
 }

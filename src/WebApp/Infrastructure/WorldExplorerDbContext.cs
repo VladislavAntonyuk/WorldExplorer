@@ -2,6 +2,7 @@
 
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Services.Place;
 
 public class WorldExplorerDbContext : DbContext
 {
@@ -18,10 +19,12 @@ public class WorldExplorerDbContext : DbContext
 	{
 		modelBuilder.Entity<LocationInfoRequest>()
 		            .Property(e => e.Location)
-		            .HasColumnType("POINT");
+		            .HasSrid(DistanceConstants.SRID)
+					.HasColumnType("POINT");
 
 		modelBuilder.Entity<Place>()
 					.Property(e => e.Location)
+					.HasSrid(DistanceConstants.SRID)
 					.HasColumnType("POINT");
 		modelBuilder.Entity<Place>()
 					.OwnsMany(post => post.Images, builder => { builder.ToJson(); });
@@ -47,7 +50,7 @@ public class WorldExplorerDbContext : DbContext
 			entity.HasOne<Place>()
 				  .WithMany()
 				  .HasForeignKey(d => d.PlaceId)
-				  .OnDelete(DeleteBehavior.Cascade); // prevent cascade delete
+				  .OnDelete(DeleteBehavior.Cascade);
 		});
 
 		modelBuilder.Entity<Review>(entity =>
@@ -57,7 +60,7 @@ public class WorldExplorerDbContext : DbContext
 			entity.HasOne<User>()
 				  .WithMany()
 				  .HasForeignKey(d => d.UserId)
-				  .OnDelete(DeleteBehavior.Cascade); // On user deletion, associated reviews will be deleted
+				  .OnDelete(DeleteBehavior.Cascade);
 		});
 
 		modelBuilder.Entity<User>()

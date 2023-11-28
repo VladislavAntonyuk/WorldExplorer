@@ -34,10 +34,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 	public async Task<OperationResult<List<Place>>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-		var userLocation = new Point(location.Longitude, location.Latitude)
-		{
-			SRID = 4326
-		};
+		var userLocation = location.ToPoint();
 
 		var locationInfoRequests = await dbContext.LocationInfoRequests.Where(x => x.Location.IsWithinDistance(userLocation, DistanceConstants.NearbyDistance)).ToListAsync(cancellationToken);
 
@@ -72,7 +69,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		var locationInfoRequest = new LocationInfoRequest()
 		{
 			Status = LocationInfoRequestStatus.New,
-			Location = new Point(location.Longitude, location.Latitude),
+			Location = userLocation,
 			CreationDate = DateTime.UtcNow
 		};
 		await dbContext.LocationInfoRequests.AddAsync(locationInfoRequest, cancellationToken);
