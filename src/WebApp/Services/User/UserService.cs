@@ -15,8 +15,13 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 		foreach (var user in dbUsers.Select(ToModel))
 		{
 			var profile = await graphClient.GetUser(user.Id, cancellationToken);
+			if (profile is null)
+			{
+				continue;
+			}
+
 			user.Name = profile.DisplayName ?? string.Empty;
-			user.Email = profile.OtherMails.FirstOrDefault() ?? string.Empty;
+			user.Email = profile.OtherMails.FirstOrDefault(string.Empty);
 			users.Add(user);
 		}
 
@@ -40,13 +45,17 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 		}
 
 		var profile = await graphClient.GetUser(providerId, cancellationToken);
+		if (profile is null)
+		{
+			return null;
+		}
 
 		return new User
 		{
 			Id = dbUser.Id,
 			Visits = dbUser.Visits.Select(ToDto).ToList(),
 			Name = profile.DisplayName ?? string.Empty,
-			Email = profile.OtherMails?.FirstOrDefault() ?? string.Empty,
+			Email = profile.OtherMails.FirstOrDefault(string.Empty),
 			Activities = new List<UserActivity>
 			{
 				new()

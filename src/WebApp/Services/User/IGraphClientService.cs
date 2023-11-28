@@ -8,7 +8,7 @@ using Shared.Extensions;
 
 public interface IGraphClientService
 {
-	Task<AzureUser> GetUser(string providerId, CancellationToken cancellationToken);
+	Task<AzureUser?> GetUser(string providerId, CancellationToken cancellationToken);
 	Task DeleteAsync(string providerId, CancellationToken cancellationToken);
 }
 public class AzureUser
@@ -41,10 +41,22 @@ public class GraphClientService : IGraphClientService
 		defaultCultureInfo = new CultureInfo("en-US");
 	}
 
-	public async Task<AzureUser> GetUser(string providerId, CancellationToken cancellationToken)
+	public async Task<AzureUser?> GetUser(string providerId, CancellationToken cancellationToken)
 	{
-		var user = await graphClient.Users[providerId].GetAsync(cancellationToken: cancellationToken);
-		ArgumentException.ThrowIfNullOrEmpty(user?.Id);
+		User? user;
+		try
+		{
+			user = await graphClient.Users[providerId].GetAsync(cancellationToken: cancellationToken);
+		}
+		catch
+		{
+			return null;
+		}
+
+		if (string.IsNullOrEmpty(user?.Id))
+		{
+			return null;
+		}
 
 		var culture = GetCulture(user.Country);
 		return new AzureUser

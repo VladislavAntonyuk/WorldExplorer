@@ -42,6 +42,13 @@ public class ClaimsController(IGraphClientService graphClientService,
 			return BadRequest(new ResponseContent("ShowBlockPage", "ObjectId is mandatory."));
 		}
 
+		var user = await graphClientService.GetUser(requestConnector.ObjectId, cancellationToken);
+		if (user is null)
+		{
+			logger.LogWarning("User {UserId} not found.", requestConnector.ObjectId);
+			return BadRequest(new ResponseContent("ShowBlockPage", "User not found."));
+		}
+
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
 		var existedUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == requestConnector.ObjectId,
@@ -52,7 +59,6 @@ public class ClaimsController(IGraphClientService graphClientService,
 			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 
-		var user = await graphClientService.GetUser(requestConnector.ObjectId, cancellationToken);
 		var result = new ResponseContent
 		{
 			Groups = string.Join(',', user.Groups.Select(x => x.DisplayName)),
