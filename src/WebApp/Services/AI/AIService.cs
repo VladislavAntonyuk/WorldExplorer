@@ -13,7 +13,12 @@ public class AiService : IAiService
 	private readonly ILogger<AiService> logger;
 	private readonly OpenAiSettings openAiSettings;
 
-	public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> logger)
+	private readonly JsonSerializerOptions serializerOptions = new()
+	{
+		PropertyNameCaseInsensitive = true
+	};
+
+public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> logger)
 	{
 		this.openAiSettings = openAiSettings.Value;
 		api = new OpenAIAPI(this.openAiSettings.ApiKey);
@@ -43,14 +48,10 @@ public class AiService : IAiService
 		}, new Model(openAiSettings.Model));
 		if (result.Choices.Count == 0)
 		{
-			return new List<Place>();
+			return [];
 		}
 
 		logger.LogInformation("Received a response from AI: {Response}", result.Choices[0].Message.Content);
-		return JsonSerializer.Deserialize<List<Place>>(result.Choices[0].Message.Content, new JsonSerializerOptions
-		{
-			PropertyNameCaseInsensitive = true
-		}) ??
-			   new List<Place>();
+		return JsonSerializer.Deserialize<List<Place>>(result.Choices[0].Message.Content, serializerOptions) ?? [];
 	}
 }

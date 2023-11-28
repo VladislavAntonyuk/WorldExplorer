@@ -10,7 +10,9 @@ using Models;
 using Resources.Localization;
 using Services;
 using Services.API;
+using Shared.Enums;
 using Views;
+using Location = Microsoft.Maui.Devices.Sensors.Location;
 
 public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	ILauncher launcher,
@@ -34,7 +36,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		}, nameof(LocationChanged));
 	}
 
-	public ObservableCollection<WorldExplorerPin> Pins { get; } = new();
+	public ObservableCollection<WorldExplorerPin> Pins { get; } = [];
 
 	private readonly WeakEventManager weakEventManager = new();
 	public event EventHandler<LocationChangedEventArgs> LocationChanged
@@ -98,37 +100,56 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 			return;
 		}
 
-		var placesResponse = await placesApi.GetRecommendations(
-			new Shared.Models.Location(value.Location.Latitude, value.Location.Longitude), CancellationToken.None);
+		StatusCode statusCode;
+		do
+		{
+			statusCode = await GetRecommendations(value);
+			await Task.Delay(TimeSpan.FromSeconds(10));
+		} while (statusCode == StatusCode.LocationInfoRequestPending);
+	}
+
+	private async Task<StatusCode> GetRecommendations(GeolocatorData value)
+	{
+		var placesResponse = await placesApi.GetRecommendations(new Shared.Models.Location(value.Location.Latitude, value.Location.Longitude), CancellationToken.None);
 
 		if (!placesResponse.IsSuccessStatusCode)
 		{
 			await dialogService.ToastAsync(placesResponse.Error.Message);
-			return;
+			return StatusCode.FailedResponse;
 		}
 
-		if (placesResponse.Content.Count == 0)
+		switch (placesResponse.Content.StatusCode)
 		{
-			await dialogService.ToastAsync(Localization.NoPlacesFound);
-			return;
-		}
-
-		dispatcher.Dispatch((() =>
-		{
-			foreach (var place in placesResponse.Content.Where(x => Pins.All(pin => pin.Label != x.Name)))
-			{
-				Pins.Add(new WorldExplorerPin()
+			case StatusCode.Success:
+				if (placesResponse.Content.Result.Count == 0)
 				{
-					PlaceId = place.Id,
-					Location = new Location(place.Location.Latitude, place.Location.Longitude),
-					Label = place.Name,
-					Type = PinType.Place,
-					Address = place.Description ?? string.Empty
-				});
-			}
-		}));
+					await dialogService.ToastAsync(Localization.NoPlacesFound);
+					break;
+				}
 
-		await CheckLocation(value.Location);
+				dispatcher.Dispatch((() =>
+				{
+					foreach (var place in placesResponse.Content.Result.Where(x => Pins.All(pin => pin.Label != x.Name)))
+					{
+						Pins.Add(new WorldExplorerPin()
+						{
+							PlaceId = place.Id,
+							Location = new Location(place.Location.Latitude, place.Location.Longitude),
+							Label = place.Name,
+							Type = PinType.Place,
+							Address = place.Description ?? string.Empty
+						});
+					}
+				}));
+
+				await CheckLocation(value.Location);
+				break;
+			case StatusCode.LocationInfoRequestPending:
+				await dialogService.ToastAsync(Localization.NoPlacesFound);
+				break;
+		}
+
+		return placesResponse.Content.StatusCode;
 	}
 
 	private async Task CheckLocation(Location location)

@@ -6,10 +6,10 @@ using Shared.Models;
 public interface IPlacesApi
 {
 	[Get("/recommendations")]
-	internal Task<ApiResponse<List<Place>>> GetRecommendationsInternal([Query] Location location,
+	internal Task<ApiResponse<OperationResult<List<Place>>>> GetRecommendationsInternal([Query] Location location,
 		CancellationToken cancellationToken);
 
-	async Task<ApiResponse<List<Place>>> GetRecommendations([Query] Location location,
+	async Task<ApiResponse<OperationResult<List<Place>>>> GetRecommendations([Query] Location location,
 		CancellationToken cancellationToken)
 	{
 		try
@@ -18,7 +18,7 @@ public interface IPlacesApi
 		}
 		catch (Exception e)
 		{
-			return await e.GetErrorResponse<List<Place>>(HttpMethod.Get);
+			return await e.GetErrorResponse<OperationResult<List<Place>>>(HttpMethod.Get);
 		}
 	}
 

@@ -17,11 +17,11 @@ public class ImageSearchService
 				$"search.json?engine=google_images&q={HttpUtility.UrlEncode(placeName)}&api_key={apiKey}",
 				cancellationToken);
 			return response?.ImagesResults.Select(x => x.Url).Where(x => x.StartsWith("https://")).ToList() ??
-				   new List<string>();
+				   [];
 		}
 		catch (Exception)
 		{
-			return new List<string>();
+			return [];
 		}
 	}
 }
@@ -29,7 +29,7 @@ public class ImageSearchService
 public class GoogleImagesResponse
 {
 	[JsonPropertyName("images_results")]
-	public List<GoogleImagesResult> ImagesResults { get; set; } = new();
+	public List<GoogleImagesResult> ImagesResults { get; set; } = [];
 }
 
 public class GoogleImagesResult

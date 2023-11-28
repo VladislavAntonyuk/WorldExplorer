@@ -7,6 +7,7 @@ using MudBlazor;
 using Services.Place;
 using Shared.Models;
 using Components;
+using Shared.Enums;
 
 public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
 {
@@ -43,18 +44,30 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 		}
 	}
 
-	private async Task AddNearbyPlaces(Location location)
+	private async Task<StatusCode> AddNearbyPlaces(Location location)
 	{
-		var places = await PlacesService.GetNearByPlaces(location, CancellationToken.None);
-		if (places.Count == 0)
+		var placesResult = await PlacesService.GetNearByPlaces(location, CancellationToken.None);
+		switch (placesResult.StatusCode)
 		{
-			Snackbar.Add("No places found nearby");
+			case StatusCode.Success:
+				if (placesResult.Result.Count == 0)
+				{
+					Snackbar.Add("No places found nearby");
+					break;
+				}
+
+				foreach (var place in placesResult.Result)
+				{
+					await CreateMarker(place.Id, place.Location, place.Name, place.MainImage);
+				}
+
+				break;
+			case StatusCode.LocationInfoRequestPending:
+				Snackbar.Add("Loading places...");
+				break;
 		}
 
-		foreach (var place in places)
-		{
-			await CreateMarker(place.Id, place.Location, place.Name, place.MainImage);
-		}
+		return placesResult.StatusCode;
 	}
 
 	[JSInvokable]
@@ -66,7 +79,12 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 			currentLocation = location;
 			isLoading = false;
 			StateHasChanged();
-			await AddNearbyPlaces(currentLocation);
+			StatusCode statusCode;
+			do
+			{
+				statusCode = await AddNearbyPlaces(currentLocation);
+				await Task.Delay(TimeSpan.FromSeconds(10));
+			} while (statusCode == StatusCode.LocationInfoRequestPending);
 		}
 	}
 

@@ -9,6 +9,7 @@
 		<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
             <MudTabPanel Text="Places">
                 <MudButton Color="Color.Error" OnClick="ClearPlaces">Clear places</MudButton>
+                <MudButton Color="Color.Error" OnClick="ClearRequests">Clear requests</MudButton>
 
                 <MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="Place">
                 	<HeaderContent>

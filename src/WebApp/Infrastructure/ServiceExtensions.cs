@@ -45,7 +45,7 @@ public static class ServiceExtensions
 		services.AddSingleton<IGraphClientService>(_ =>
 		{
 			var config = configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
-			                    .Get<AzureAdB2CGraphClientConfiguration>();
+								.Get<AzureAdB2CGraphClientConfiguration>();
 			ArgumentNullException.ThrowIfNull(config);
 			var clientSecretCredential = new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret);
 			return new GraphClientService(new GraphServiceClient(clientSecretCredential), config.DefaultApplicationId);
@@ -60,18 +60,19 @@ public static class ServiceExtensions
 			   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
 		});
 	}
-	
+
 	public static void AddWorldExplorerServices(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddScoped<IPlacesService, PlacesService>();
+		services.AddHostedService<PlacesBackgroundService>();
+		services.AddSingleton<IPlacesService, PlacesService>();
 		services.Configure<OpenAiSettings>(configuration.GetRequiredSection("OpenAI"));
 		services.AddSingleton<IAiService, AiService>();
 
 		services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
-		services.AddScoped<IImageSearchService, ImageSearchService>();
+		services.AddSingleton<IImageSearchService, ImageSearchService>();
 	}
 
-	public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
+	private static void AddAuth(this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
 		services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
@@ -99,7 +100,7 @@ public static class ServiceExtensions
 		});
 	}
 
-	public static void AddTranslations(this IServiceCollection services)
+	private static void AddTranslations(this IServiceCollection services)
 	{
 		services.AddI18nText();
 		services.Configure<RequestLocalizationOptions>(options =>

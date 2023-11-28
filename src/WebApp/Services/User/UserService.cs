@@ -56,8 +56,8 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 			Visits = dbUser.Visits.Select(ToDto).ToList(),
 			Name = profile.DisplayName ?? string.Empty,
 			Email = profile.OtherMails.FirstOrDefault(string.Empty),
-			Activities = new List<UserActivity>
-			{
+			Activities =
+			[
 				new()
 				{
 					Date = DateTime.Today,
@@ -68,7 +68,7 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 					Date = DateTime.Today.AddDays(-1),
 					Steps = 150
 				}
-			}
+			]
 		};
 	}
 

@@ -23,7 +23,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
 
 	private bool isReady;
-	private readonly List<ImageNode> imagePlaneNodes = new();
+	private readonly List<ImageNode> imagePlaneNodes = [];
 
 	public ArViewHandler() : this(ArViewMapper, ArViewCommandMapper)
 	{
@@ -75,7 +75,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		{
 			AutoenablesDefaultLighting = true,
 			Session = new ARSession(),
-			Scene = new SCNScene()
+			Scene = []
 		};
 	}
 

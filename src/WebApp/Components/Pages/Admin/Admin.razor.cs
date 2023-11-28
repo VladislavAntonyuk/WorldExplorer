@@ -8,8 +8,8 @@ using WebApp.Components;
 
 public partial class Admin : WorldExplorerAuthBaseComponent
 {
-	private List<Place> places = new();
-	private List<User> users = new();
+	private List<Place> places = [];
+	private List<User> users = [];
 
 	[Inject]
 	public required IPlacesService PlacesService { get; set; }
@@ -20,6 +20,11 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 	private Task ClearPlaces()
 	{
 		return PlacesService.ClearPlaces(CancellationToken.None);
+	}
+
+	private Task ClearRequests()
+	{
+		return PlacesService.ClearRequests(CancellationToken.None);
 	}
 
 	private async Task GetUsers()

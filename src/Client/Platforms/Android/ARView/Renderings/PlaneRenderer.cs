@@ -77,7 +77,7 @@ public class PlaneRenderer
 	private readonly float[] mPlaneAngleUvMatrix = new float[4]; // 2x2 rotation matrix applied to uv coords.
 	private readonly float[] mPlaneColor = new float[4];
 
-	private readonly Dictionary<Plane, int> mPlaneIndexMap = new();
+	private readonly Dictionary<Plane, int> mPlaneIndexMap = [];
 	private readonly int[] mTextures = new int[1];
 
 	private int mDotColorUniform;

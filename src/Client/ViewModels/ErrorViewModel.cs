@@ -7,7 +7,7 @@ using Resources.Localization;
 
 public partial class ErrorViewModel : BaseViewModel, IQueryAttributable
 {
-	private readonly Dictionary<ErrorCode, string> errors = new();
+	private readonly Dictionary<ErrorCode, string> errors = [];
 
 	[ObservableProperty]
 	private ErrorCode? code;

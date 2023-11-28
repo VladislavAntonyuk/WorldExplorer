@@ -100,7 +100,7 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 	private static readonly float[] MAnchorMatrix = new float[16];
 	private readonly Context context;
 
-	private readonly List<Anchor> mAnchors = new();
+	private readonly List<Anchor> mAnchors = [];
 
 	private readonly BackgroundRenderer mBackgroundRenderer = new();
 	private readonly PlaneRenderer mPlaneRenderer = new();

@@ -9,7 +9,7 @@ public class PlacesController(IPlacesService placesService) : ApiAuthControllerB
 	[HttpGet("recommendations")]
 	[ProducesResponseType<List<Place>>(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public Task<List<Place>> GetRecommendations([FromQuery] Location location, CancellationToken cancellationToken)
+	public Task<OperationResult<List<Place>>> GetRecommendations([FromQuery] Location location, CancellationToken cancellationToken)
 	{
 		return placesService.GetNearByPlaces(location, cancellationToken);
 	}

@@ -19,14 +19,14 @@ public partial class LoginViewModel(INavigationService navigation,
 
 	private Timer? timer;
 
-	public ObservableCollection<CarouselModel> Items { get; } = new()
-	{
+	public ObservableCollection<CarouselModel> Items { get; } =
+	[
 		new(Localization.PromoTitle1, Localization.PromoText1),
 		new(Localization.PromoTitle2, Localization.PromoText2),
 		new(Localization.PromoTitle3, Localization.PromoText3),
 		new(Localization.PromoTitle4, Localization.PromoText4),
 		new(Localization.PromoTitle5, Localization.PromoText5)
-	};
+	];
 
 	public override Task InitializeAsync()
 	{
