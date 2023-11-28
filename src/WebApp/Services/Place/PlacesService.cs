@@ -18,11 +18,6 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		await dbContext.Places.ExecuteDeleteAsync(cancellationToken);
 		await dbContext.LocationInfoRequests.ExecuteDeleteAsync(cancellationToken);
 	}
-	public async Task ClearRequests(CancellationToken cancellationToken)
-	{
-		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-		await dbContext.LocationInfoRequests.ExecuteDeleteAsync(cancellationToken);
-	}
 
 	public async Task<List<Place>> GetPlaces(CancellationToken cancellationToken)
 	{

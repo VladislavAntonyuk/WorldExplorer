@@ -65,7 +65,8 @@ public static class ServiceExtensions
 	{
 		services.AddHostedService<PlacesBackgroundService>();
 		services.AddSingleton<IPlacesService, PlacesService>();
-		services.Configure<OpenAiSettings>(configuration.GetRequiredSection("OpenAI"));
+		services.AddSingleton<ILocationInfoRequestsService, LocationInfoRequestsService>();
+		services.Configure<AiSettings>(configuration.GetRequiredSection("AI"));
 		services.AddSingleton<IAiService, AiService>();
 
 		services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));

@@ -15,5 +15,5 @@ public abstract class BaseContentView<T> : ContentView where T : BaseViewModel
 		};
 	}
 
-	public T ViewModel { get; }
+	protected T ViewModel { get; }
 }

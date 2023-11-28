@@ -104,7 +104,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		do
 		{
 			statusCode = await GetRecommendations(value);
-			await Task.Delay(TimeSpan.FromSeconds(10));
 		} while (statusCode == StatusCode.LocationInfoRequestPending);
 	}
 
@@ -127,9 +126,9 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 					break;
 				}
 
-				dispatcher.Dispatch((() =>
+				await dispatcher.DispatchAsync(async () =>
 				{
-					foreach (var place in placesResponse.Content.Result.Where(x => Pins.All(pin => pin.Label != x.Name)))
+					foreach (var place in placesResponse.Content.Result.Where(x => Pins.All(pin => pin.PlaceId != x.Id)))
 					{
 						Pins.Add(new WorldExplorerPin()
 						{
@@ -140,12 +139,14 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 							Address = place.Description ?? string.Empty
 						});
 					}
-				}));
 
-				await CheckLocation(value.Location);
+					await CheckLocation(value.Location);
+				});
+
 				break;
 			case StatusCode.LocationInfoRequestPending:
-				await dialogService.ToastAsync(Localization.NoPlacesFound);
+				await dialogService.ToastAsync(Localization.LookingForPlaces);
+				await Task.Delay(TimeSpan.FromSeconds(10));
 				break;
 		}
 

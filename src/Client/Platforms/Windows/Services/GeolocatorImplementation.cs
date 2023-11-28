@@ -11,7 +11,6 @@ public partial class GeolocatorImplementation
 	{
 		locator.PositionChanged += OnPositionChanged;
 
-
 		locator.MovementThreshold = 100;
 		locator.DesiredAccuracyInMeters = 100;
 	}

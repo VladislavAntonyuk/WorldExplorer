@@ -1,30 +1,38 @@
 ﻿namespace WebApp.Components.Pages.Admin;
 
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Components;
 using Services.Place;
 using Services.User;
-using Shared.Models;
 using WebApp.Components;
+using Place = Shared.Models.Place;
+using User = Shared.Models.User;
 
 public partial class Admin : WorldExplorerAuthBaseComponent
 {
 	private List<Place> places = [];
 	private List<User> users = [];
+	private List<LocationInfoRequest> requests = [];
 
 	[Inject]
 	public required IPlacesService PlacesService { get; set; }
 
 	[Inject]
+	public required ILocationInfoRequestsService LocationInfoRequestsService { get; set; }
+
+	[Inject]
 	public required IUserService UsersService { get; set; }
 
-	private Task ClearPlaces()
+	private async Task ClearPlaces()
 	{
-		return PlacesService.ClearPlaces(CancellationToken.None);
+		await PlacesService.ClearPlaces(CancellationToken.None);
+		await GetPlaces();
 	}
 
-	private Task ClearRequests()
+	private async Task ClearRequests()
 	{
-		return PlacesService.ClearRequests(CancellationToken.None);
+		await LocationInfoRequestsService.Clear(CancellationToken.None);
+		await GetRequests();
 	}
 
 	private async Task GetUsers()
@@ -35,6 +43,11 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 	private async Task GetPlaces()
 	{
 		places = await PlacesService.GetPlaces(CancellationToken.None);
+	}
+
+	private async Task GetRequests()
+	{
+		requests = await LocationInfoRequestsService.GetRequests(CancellationToken.None);
 	}
 
 	private async Task DeleteUser(string userId)
@@ -49,10 +62,17 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 		await GetPlaces();
 	}
 
+	private async Task DeleteRequest(int requestId)
+	{
+		await LocationInfoRequestsService.Delete(requestId, CancellationToken.None);
+		await GetPlaces();
+	}
+
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
 		await GetPlaces();
 		await GetUsers();
+		await GetRequests();
 	}
 }

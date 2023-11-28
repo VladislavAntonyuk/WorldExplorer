@@ -6,26 +6,14 @@ using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
 using Place;
-using Shared;
 using Shared.Models;
 
-public class AiService : IAiService
+public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logger) : IAiService
 {
-	private readonly OpenAIAPI api;
-	private readonly ILogger<AiService> logger;
-	private readonly OpenAiSettings openAiSettings;
-
 	private readonly JsonSerializerOptions serializerOptions = new()
 	{
 		PropertyNameCaseInsensitive = true
 	};
-
-public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> logger)
-	{
-		this.openAiSettings = openAiSettings.Value;
-		api = new OpenAIAPI(this.openAiSettings.ApiKey);
-		this.logger = logger;
-	}
 
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
@@ -45,10 +33,13 @@ public AiService(IOptions<OpenAiSettings> openAiSettings, ILogger<AiService> log
 		                      ]
 		                      """;
 		// https://platform.openai.com/docs/models/model-endpoint-compatibility
+		var api = aiSettings.Value.Provider == "Azure"
+			? OpenAIAPI.ForAzure("", "", new APIAuthentication(aiSettings.Value.ApiKey))
+			: new OpenAIAPI(aiSettings.Value.ApiKey);
 		var result = await api.Chat.CreateChatCompletionAsync(new[]
 		{
 			new ChatMessage(ChatMessageRole.Assistant, generalPrompt)
-		}, new Model(openAiSettings.Model));
+		}, new Model(aiSettings.Value.Model));
 		if (result.Choices.Count == 0)
 		{
 			return [];

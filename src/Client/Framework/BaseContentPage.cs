@@ -18,7 +18,7 @@ public abstract class BaseContentPage<T> : ContentPage where T : BaseViewModel
 #endif
 	}
 
-	public T ViewModel { get; }
+	protected T ViewModel { get; }
 
 	protected override void OnAppearing()
 	{

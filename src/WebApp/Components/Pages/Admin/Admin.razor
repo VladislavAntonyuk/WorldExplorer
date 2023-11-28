@@ -1,4 +1,6 @@
-﻿@using Shared.Models
+﻿@using WebApp.Infrastructure.Entities
+@using Place = Shared.Models.Place
+@using User = Shared.Models.User
 @inherits WorldExplorerAuthBaseComponent
 @page "/admin"
 @attribute [Authorize(Policy = "IsAdministrator")]
@@ -7,27 +9,46 @@
 <AuthorizeView Policy="IsAdministrator">
 	<Authorized>
 		<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-            <MudTabPanel Text="Places">
-                <MudButton Color="Color.Error" OnClick="ClearPlaces">Clear places</MudButton>
-                <MudButton Color="Color.Error" OnClick="ClearRequests">Clear requests</MudButton>
+			<MudTabPanel Text="Places">
+				<MudButton Color="Color.Error" OnClick="ClearPlaces">Clear places</MudButton>
 
-                <MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="Place">
-                	<HeaderContent>
-                		<MudTh>Name</MudTh>
-                		<MudTh>Location</MudTh>
-                		<MudTh>Rating</MudTh>
-                		<MudTh>Images count</MudTh>
-                		<MudTh></MudTh>
-                	</HeaderContent>
-                	<RowTemplate Context="place">
-                		<MudTd DataLabel="Name">@place.Name</MudTd>
-                		<MudTd DataLabel="Location">@place.Location</MudTd>
-                		<MudTd DataLabel="Rating">@place.Rating</MudTd>
-                		<MudTd DataLabel="Images count">@place.Images.Count</MudTd>
-		                <MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeletePlace(place.Id)">Delete</MudButton></MudTd>
-                	</RowTemplate>
-                </MudTable>
-            </MudTabPanel>
+				<MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="Place">
+					<HeaderContent>
+						<MudTh>Name</MudTh>
+						<MudTh>Location</MudTh>
+						<MudTh>Rating</MudTh>
+						<MudTh>Images count</MudTh>
+						<MudTh></MudTh>
+					</HeaderContent>
+					<RowTemplate Context="place">
+						<MudTd DataLabel="Name">@place.Name</MudTd>
+						<MudTd DataLabel="Location">@place.Location</MudTd>
+						<MudTd DataLabel="Rating">@place.Rating</MudTd>
+						<MudTd DataLabel="Images count">@place.Images.Count</MudTd>
+						<MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeletePlace(place.Id)">Delete</MudButton></MudTd>
+					</RowTemplate>
+				</MudTable>
+			</MudTabPanel>
+			<MudTabPanel Text="Requests">
+				<MudButton Color="Color.Error" OnClick="ClearRequests">Clear requests</MudButton>
+
+				<MudTable Items="@requests" Breakpoint="Breakpoint.Sm" T="LocationInfoRequest">
+					<HeaderContent>
+						<MudTh>Id</MudTh>
+						<MudTh>Status</MudTh>
+						<MudTh>Location</MudTh>
+						<MudTh>CreationDate</MudTh>
+						<MudTh></MudTh>
+					</HeaderContent>
+					<RowTemplate Context="request">
+						<MudTd DataLabel="Id">@request.Id</MudTd>
+						<MudTd DataLabel="Status">@request.Status</MudTd>
+						<MudTd DataLabel="Location">@request.Location</MudTd>
+						<MudTd DataLabel="CreationDate">@request.CreationDate</MudTd>
+						<MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeleteRequest(request.Id)">Delete</MudButton></MudTd>
+					</RowTemplate>
+				</MudTable>
+			</MudTabPanel>
             <MudTabPanel Text="Users">
                 <MudTable Items="@users" Breakpoint="Breakpoint.Sm" T="User">
                 	<HeaderContent>
