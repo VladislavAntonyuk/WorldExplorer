@@ -76,8 +76,8 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 
 	public bool IsNearby(Location location1, Location location2, double distance)
 	{
-		var point1 = new Point(location1.Longitude, location1.Latitude);
-		var point2 = new Point(location2.Longitude, location2.Latitude);
+		var point1 = location1.ToPoint();
+		var point2 = location2.ToPoint();
 		return point1.IsWithinDistance(point2, distance);
 	}
 

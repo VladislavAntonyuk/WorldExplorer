@@ -22,6 +22,11 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 
 	private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
 	{
+		if (!e.MoveToRegion)
+		{
+			return;
+		}
+
 		dispatcher.Dispatch(() =>
 		{
 			Map.MoveToRegion(MapSpan.FromCenterAndRadius(e.Location, Distance.FromKilometers(1)));

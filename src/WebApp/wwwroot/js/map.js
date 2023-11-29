@@ -26,6 +26,9 @@ window.leafletInterop = {
 
 					userMarker.removeFrom(map);
 				}
+				else {
+					map.setView(e.latlng, options.zoom);
+				}
 
 				userMarker = createMarker({
 					icon: "/assets/user-location-pin.png",
@@ -35,7 +38,6 @@ window.leafletInterop = {
 					},
 					title: "My location"
 				});
-				map.setView(e.latlng, options.zoom);
 				dotnetRef.invokeMethodAsync("UpdatePosition", {latitude: e.latlng.lat, longitude: e.latlng.lng});
 			});
 		map.on("locationerror",

@@ -79,6 +79,7 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 			currentLocation = location;
 			isLoading = false;
 			StateHasChanged();
+			Snackbar.Add(Translation.LoadingPlaces, Severity.Info);
 			StatusCode statusCode;
 			do
 			{

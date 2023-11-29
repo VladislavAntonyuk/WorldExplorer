@@ -29,10 +29,12 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	private void GeoLocator_PositionChanged(object? sender, GeolocatorData e)
 	{
+		var moveToRegion = CurrentGeolocatorData == null;
 		CurrentGeolocatorData = e;
 		weakEventManager.HandleEvent(this, new LocationChangedEventArgs
 		{
-			Location = e.Location
+			Location = e.Location,
+			MoveToRegion = moveToRegion
 		}, nameof(LocationChanged));
 	}
 
