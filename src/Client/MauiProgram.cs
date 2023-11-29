@@ -78,6 +78,7 @@ public static class MauiProgram
 		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
 		builder.Services.AddApi<IUsersApi>(apiSettings.Users);
 
+		builder.Services.AddSingleton<AboutPage, AboutViewModel>();
 		builder.Services.AddSingleton<ProfilePage, ProfileViewModel>();
 		builder.Services.AddSingleton<PlaceDetailsView, PlaceDetailsViewModel>();
 		builder.Services.AddSingleton<LoginPage, LoginViewModel>();

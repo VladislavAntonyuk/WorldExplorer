@@ -76,7 +76,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	[RelayCommand]
 	private void About()
 	{
-		Application.Current?.OpenWindow(new Window(new AboutPage()));
+		Application.Current?.OpenWindow(new Window(new AboutPage(new AboutViewModel())));
 	}
 
 	[RelayCommand(AllowConcurrentExecutions = false)]

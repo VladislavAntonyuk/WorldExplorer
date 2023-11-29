@@ -1,8 +1,11 @@
 ﻿namespace Client.Views;
 
-public partial class AboutPage : ContentPage
+using Framework;
+using ViewModels;
+
+public partial class AboutPage : BaseContentPage<AboutViewModel>
 {
-	public AboutPage()
+	public AboutPage(AboutViewModel viewModel) : base(viewModel)
 	{
 		InitializeComponent();
 	}
