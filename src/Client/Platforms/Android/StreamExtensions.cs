@@ -1,6 +1,7 @@
 ﻿namespace Client;
 
-using Android.OS;
+using Android.Content;
+using Android.Provider;
 
 public static class StreamExtensions
 {
@@ -8,16 +9,24 @@ public static class StreamExtensions
 	{
 		try
 		{
-			var memoryStream = new MemoryStream();
-			await stream.CopyToAsync(memoryStream);
-			var storagePath = Environment.GetExternalStoragePublicDirectory(Environment.DirectoryPictures);
-			if (storagePath is null)
+			var uri = MediaStore.Images.Media.ExternalContentUri;
+			if (uri is not null)
 			{
-				return;
+				var values = new ContentValues();
+				values.Put("_display_name", $"{DateTime.Now}.jpg");
+				var content = Android.App.Application.Context.ContentResolver;
+				using var url = content?.Insert(uri, values);
+				if (url is not null)
+				{
+					using var memoryStream = new MemoryStream();
+					await using var newStream = content?.OpenOutputStream(url);
+					await stream.CopyToAsync(memoryStream);
+					if (newStream is not null)
+					{
+						await newStream.WriteAsync(memoryStream.ToArray(), 0, (int)memoryStream.Length);
+					}
+				}
 			}
-
-			var path = Path.Combine(storagePath.ToString(), $"{DateTime.Now}.jpg");
-			await File.WriteAllBytesAsync(path, memoryStream.ToArray());
 		}
 		catch (Exception ex)
 		{
