@@ -93,6 +93,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 			isInitialized = false;
 		}
 
+		platformView.Dispose();
 		base.DisconnectHandler(platformView);
 }
 }

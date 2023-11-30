@@ -102,6 +102,8 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 	protected override void DisconnectHandler(ARSCNView platformView)
 	{
 		isReady = false;
+		platformView.Session.Pause();
+		platformView.Session.Dispose();
 		platformView.Dispose();
 		base.DisconnectHandler(platformView);
 	}
