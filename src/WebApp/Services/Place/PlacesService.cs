@@ -27,11 +27,11 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 
 	public async Task<OperationResult<List<Place>>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
 	{
-		var nearbyDistance = placesOptions.Value.NearbyDistance;
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		var locationRequestNearbyDistance = placesOptions.Value.LocationRequestNearbyDistance;
 		var userLocation = location.ToPoint();
 
-		var locationInfoRequests = await dbContext.LocationInfoRequests.Where(x => x.Location.IsWithinDistance(userLocation, nearbyDistance)).ToListAsync(cancellationToken);
+		var locationInfoRequests = await dbContext.LocationInfoRequests.Where(x => x.Location.IsWithinDistance(userLocation, locationRequestNearbyDistance)).ToListAsync(cancellationToken);
 
 		if (locationInfoRequests.Exists(x => x.Status != LocationInfoRequestStatus.Completed))
 		{
@@ -44,9 +44,9 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		var hasCompletedRequests = locationInfoRequests.Count > 0;
 		if (hasCompletedRequests)
 		{
+			var nearbyDistance = placesOptions.Value.NearbyDistance;
 			var nearestPlacesNearby = await dbContext.Places
 													.Where(x => x.Location.IsWithinDistance(userLocation, nearbyDistance))
-													.OrderBy(c => c.Location.Distance(userLocation))
 													.ToListAsync(cancellationToken);
 			return new OperationResult<List<Place>>()
 			{

@@ -26,6 +26,7 @@ public static class MauiProgram
 		var apiSettings = builder.Configuration.GetRequiredSection("API").Get<ApiSettings>();
 		ArgumentNullException.ThrowIfNull(apiSettings);
 		ArgumentNullException.ThrowIfNull(keysSettings);
+		builder.Services.AddSingleton(_ => keysSettings);
 
 		builder.UseMauiApp<App>()
 			   .UseMauiCommunityToolkitMaps(keysSettings.WindowsMaps)

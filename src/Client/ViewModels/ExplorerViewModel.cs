@@ -72,7 +72,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	[RelayCommand]
 	private Task Help()
 	{
-		return launcher.TryOpenAsync("https://world-explorer.azurewebsites.net");
+		return launcher.TryOpenAsync("https://world-explorer.azurewebsites.net/about");
 	}
 
 	[RelayCommand]

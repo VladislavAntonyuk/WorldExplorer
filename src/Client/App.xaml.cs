@@ -1,11 +1,15 @@
 ﻿namespace Client;
 
+using Shared;
 using ViewModels;
 
 public partial class App : Application
 {
-	public App(ShellViewModel viewModel)
+	private readonly KeysSettings keysSettings;
+
+	public App(ShellViewModel viewModel, KeysSettings keysSettings)
 	{
+		this.keysSettings = keysSettings;
 		InitializeComponent();
 
 		MainPage = new AppShell(viewModel);
@@ -14,6 +18,6 @@ public partial class App : Application
 	protected override async void OnStart()
 	{
 		base.OnStart();
-		await Services.DeviceInstallationService.RegisterDevice("drawgo", "p7fcbXEbiLKwdv7uX/XpFCRSmP5AEaxuBLmSOluzXhE=");
+		await Services.DeviceInstallationService.RegisterDevice("world-explorer", keysSettings.NotificationsHub);
 	}
 }

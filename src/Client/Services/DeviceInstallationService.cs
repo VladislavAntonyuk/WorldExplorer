@@ -29,7 +29,14 @@ public static partial class DeviceInstallationService
 														   CreateToken($"https://{notificationHub}.servicebus.windows.net",
 																	   "DefaultListenSharedAccessSignature",
 																	   key));
-		await httpClient.PutAsJsonAsync($"https://{notificationHub}.servicebus.windows.net/{notificationHub}/installations/{deviceInstallation.InstallationId}?api-version=2015-01", deviceInstallation);
+		try
+		{
+			await httpClient.PutAsJsonAsync($"https://{notificationHub}.servicebus.windows.net/{notificationHub}/installations/{deviceInstallation.InstallationId}?api-version=2015-01", deviceInstallation);
+		}
+		catch
+		{
+			// ignore
+		}
 	}
 
 
