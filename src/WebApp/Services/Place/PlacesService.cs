@@ -4,13 +4,13 @@ using System.Threading;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using NetTopologySuite.Geometries;
+using Microsoft.Extensions.Options;
 using Shared.Enums;
 using Shared.Models;
 using Location = Shared.Models.Location;
 using Place = Shared.Models.Place;
 
-public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFactory) : IPlacesService
+public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFactory, IOptions<PlacesSettings> placesOptions) : IPlacesService
 {
 	public async Task ClearPlaces(CancellationToken cancellationToken)
 	{
@@ -27,10 +27,11 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 
 	public async Task<OperationResult<List<Place>>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
 	{
+		var nearbyDistance = placesOptions.Value.NearbyDistance;
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		var userLocation = location.ToPoint();
 
-		var locationInfoRequests = await dbContext.LocationInfoRequests.Where(x => x.Location.IsWithinDistance(userLocation, DistanceConstants.NearbyDistance)).ToListAsync(cancellationToken);
+		var locationInfoRequests = await dbContext.LocationInfoRequests.Where(x => x.Location.IsWithinDistance(userLocation, nearbyDistance)).ToListAsync(cancellationToken);
 
 		if (locationInfoRequests.Exists(x => x.Status != LocationInfoRequestStatus.Completed))
 		{
@@ -44,7 +45,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		if (hasCompletedRequests)
 		{
 			var nearestPlacesNearby = await dbContext.Places
-													.Where(x => x.Location.IsWithinDistance(userLocation, DistanceConstants.NearbyDistance))
+													.Where(x => x.Location.IsWithinDistance(userLocation, nearbyDistance))
 													.OrderBy(c => c.Location.Distance(userLocation))
 													.ToListAsync(cancellationToken);
 			return new OperationResult<List<Place>>()
@@ -74,11 +75,11 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 		return savedPlace is null ? null : ToPlace(savedPlace);
 	}
 
-	public bool IsNearby(Location location1, Location location2, double distance)
+	public bool IsNearby(Location location1, Location location2)
 	{
 		var point1 = location1.ToPoint();
 		var point2 = location2.ToPoint();
-		return point1.IsWithinDistance(point2, distance);
+		return point1.IsWithinDistance(point2, placesOptions.Value.LocationDistance);
 	}
 
 	public async Task Delete(Guid placeId, CancellationToken cancellationToken)

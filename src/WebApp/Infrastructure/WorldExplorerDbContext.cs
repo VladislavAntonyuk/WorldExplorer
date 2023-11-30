@@ -5,12 +5,8 @@ using Configurations;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 
-public class WorldExplorerDbContext : DbContext
+public class WorldExplorerDbContext(DbContextOptions<WorldExplorerDbContext> options) : DbContext(options)
 {
-	public WorldExplorerDbContext(DbContextOptions<WorldExplorerDbContext> options) : base(options)
-	{
-	}
-
 	public DbSet<Place> Places => Set<Place>();
 	public DbSet<User> Users => Set<User>();
 	public DbSet<Visit> Visits => Set<Visit>();

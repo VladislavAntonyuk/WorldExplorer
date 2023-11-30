@@ -73,13 +73,11 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 	[JSInvokable]
 	public async Task UpdatePosition(Location location)
 	{
-		if (currentLocation is null ||
-			!PlacesService.IsNearby(currentLocation, location, DistanceConstants.LocationDistance))
+		if (currentLocation is null || !PlacesService.IsNearby(currentLocation, location))
 		{
 			currentLocation = location;
 			isLoading = false;
 			StateHasChanged();
-			Snackbar.Add(Translation.LoadingPlaces, Severity.Info);
 			StatusCode statusCode;
 			do
 			{

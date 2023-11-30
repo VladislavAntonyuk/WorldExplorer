@@ -65,6 +65,7 @@ public static class ServiceExtensions
 	{
 		services.AddHostedService<PlacesBackgroundService>();
 		services.AddSingleton<IPlacesService, PlacesService>();
+		services.Configure<PlacesSettings>(configuration.GetRequiredSection("Places"));
 		services.AddSingleton<ILocationInfoRequestsService, LocationInfoRequestsService>();
 		services.Configure<AiSettings>(configuration.GetRequiredSection("AI"));
 		services.AddSingleton<IAiService, AiService>();
