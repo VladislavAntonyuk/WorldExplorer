@@ -20,13 +20,13 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
+
 		var config = GetConfiguration();
 		builder.Configuration.AddConfiguration(config);
 		var keysSettings = builder.Configuration.GetRequiredSection("Keys").Get<KeysSettings>();
 		var apiSettings = builder.Configuration.GetRequiredSection("API").Get<ApiSettings>();
 		ArgumentNullException.ThrowIfNull(apiSettings);
 		ArgumentNullException.ThrowIfNull(keysSettings);
-		builder.Services.AddSingleton(_ => keysSettings);
 
 		builder.UseMauiApp<App>()
 			   .UseMauiCommunityToolkitMaps(keysSettings.WindowsMaps)

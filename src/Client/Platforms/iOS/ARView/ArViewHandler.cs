@@ -29,46 +29,6 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 	{
 	}
 
-	private static void MapImages(ArViewHandler handler, IArView view)
-	{
-		if (!handler.isReady)
-		{
-			return;
-		}
-
-		handler.imagePlaneNodes.Clear();
-		handler.PlatformView.Scene.RootNode.EnumerateChildNodes((SCNNode node, out bool stop) =>
-		{
-			stop = false;
-			node.RemoveFromParentNode();
-		});
-		BuildImagePlaceholders(handler.PlatformView.Scene.RootNode, handler.imagePlaneNodes);
-		int i = 0;
-		foreach (var imageUrl in view.Images)
-		{
-			Task.Run(() =>
-				{
-					int currentIndex = Interlocked.Increment(ref i) - 1;
-					if (currentIndex < handler.imagePlaneNodes.Count)
-					{
-						var data = NSData.FromUrl(new NSUrl(imageUrl));
-						if (data.Length == 0)
-						{
-							Interlocked.Decrement(ref i);
-							return;
-						}
-
-						handler.imagePlaneNodes[currentIndex].UpdateImage(data);
-					}
-				})
-				.AndForget(false, _ =>
-				{
-					Interlocked.Decrement(ref i);
-					return Task.CompletedTask;
-				});
-		}
-	}
-
 	protected override ARSCNView CreatePlatformView()
 	{
 		return new ARSCNView
@@ -107,6 +67,47 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		platformView.Dispose();
 		base.DisconnectHandler(platformView);
 	}
+
+	private static void MapImages(ArViewHandler handler, IArView view)
+	{
+		if (!handler.isReady)
+		{
+			return;
+		}
+
+		handler.imagePlaneNodes.Clear();
+		handler.PlatformView.Scene.RootNode.EnumerateChildNodes((SCNNode node, out bool stop) =>
+		{
+			stop = false;
+			node.RemoveFromParentNode();
+		});
+		BuildImagePlaceholders(handler.PlatformView.Scene.RootNode, handler.imagePlaneNodes);
+		int i = 0;
+		foreach (var imageUrl in view.Images)
+		{
+			Task.Run(() =>
+			    {
+				    int currentIndex = Interlocked.Increment(ref i) - 1;
+				    if (currentIndex < handler.imagePlaneNodes.Count)
+				    {
+					    var data = NSData.FromUrl(new NSUrl(imageUrl));
+					    if (data.Length == 0)
+					    {
+						    Interlocked.Decrement(ref i);
+						    return;
+					    }
+
+					    handler.imagePlaneNodes[currentIndex].UpdateImage(data);
+				    }
+			    })
+			    .AndForget(false, _ =>
+			    {
+				    Interlocked.Decrement(ref i);
+				    return Task.CompletedTask;
+			    });
+		}
+	}
+
 
 	private static void BuildImagePlaceholders(SCNNode rootNode, List<ImageNode> imagePlaneNodes)
 	{

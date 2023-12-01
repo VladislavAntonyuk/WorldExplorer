@@ -1,7 +1,6 @@
 ﻿namespace Client.ViewModels;
 
 using Framework;
-using Services;
 using Services.API;
 using Services.Navigation;
 
