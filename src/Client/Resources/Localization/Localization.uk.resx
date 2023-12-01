@@ -133,49 +133,49 @@
     <value>Видалити профіль</value>
   </data>
   <data name="PromoText1" xml:space="preserve">
-    <value>Unleash the power of AI to explore and learn about places worldwide. Be it an ancient site or a modern city, World Explorer brings it to your smartphone.</value>
+    <value>Використовуйте потужність штучного інтелекту для дослідження та навчання про місця по всьому світу. Будь то давній об'єкт чи сучасне місто, World Explorer приводить його до вашого смартфона.</value>
   </data>
   <data name="PromoText2" xml:space="preserve">
-    <value>Gets underlying information, history, culture, and interesting facts about any place before you even set foot there.</value>
+    <value>Отримуйте базову інформацію, історію, культуру та цікаві факти про будь-яке місце, перш ніж ви туди навіть ступите.</value>
   </data>
   <data name="PromoText3" xml:space="preserve">
-    <value>Discover local cuisine, attractions, and hidden gems around your current location or your planned destination, making the exploration more exciting and convenient.</value>
+    <value>Відкрийте для себе місцеву кухню, атракціони та приховані скарби навколо вашого місця розташування, роблячи дослідження більш захоплюючим та зручним.</value>
   </data>
   <data name="PromoText4" xml:space="preserve">
-    <value>Personalize your recommendations according to your interests, and get the best out of your travel experience with World Explorer.</value>
+    <value>Персоналізуйте свої рекомендації відповідно до ваших інтересів, і отримайте максимум від вашого подорожнього досвіду з World Explorer.</value>
   </data>
   <data name="PromoText5" xml:space="preserve">
-    <value>Be part of a global community of explorers who share insights and experiences, adding depth to your understanding of various places.</value>
+    <value>Станьте частиною глобальної спільноти дослідників, які діляться ідеями та досвідом, додаючи глибини вашому розумінню різних місць.</value>
   </data>
   <data name="PromoTitle1" xml:space="preserve">
-    <value>AI-Powered Exploration</value>
+    <value>Дослідження за допомогою штучного інтелекту</value>
   </data>
   <data name="PromoTitle2" xml:space="preserve">
-    <value>Comprehensive Place Descriptions</value>
+    <value>Повні описи місць</value>
   </data>
   <data name="PromoTitle3" xml:space="preserve">
-    <value>Nearby Recommendations</value>
+    <value>Рекомендації поблизу</value>
   </data>
   <data name="PromoTitle4" xml:space="preserve">
-    <value>Personalized Experience</value>
+    <value>Персоналізований досвід</value>
   </data>
   <data name="PromoTitle5" xml:space="preserve">
-    <value>Community Insights</value>
+    <value>Статистика спільноти</value>
   </data>
   <data name="DeleteProfileConfirmationText" xml:space="preserve">
-	  <value>Підтвердити?</value>
+    <value>Підтвердити?</value>
   </data>
   <data name="LookingForPlaces" xml:space="preserve">
-	  <value>Пошук місць поряд з вами. Це може зайняти певний час.</value>
+    <value>Пошук місць поряд з вами. Це може зайняти певний час.</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>Ні</value>
   </data>
   <data name="NoInternet" xml:space="preserve">
-	  <value>Немає інтернету</value>
+    <value>Немає інтернету</value>
   </data>
   <data name="NoPlacesFound" xml:space="preserve">
-	  <value>Місця не знайдені</value>
+    <value>Місця не знайдені</value>
   </data>
   <data name="Slogan" xml:space="preserve">
     <value>World Explorer: Exploring the world, one place at a time.</value>
@@ -184,57 +184,63 @@
     <value>Так</value>
   </data>
   <data name="YouAreNear" xml:space="preserve">
-	  <value>Ви знаходитесь біля {0}</value>
+    <value>Ви знаходитесь біля {0}</value>
   </data>
   <data name="LoadingPlaceDetails" xml:space="preserve">
-	  <value>Завантаження інформації...</value>
+    <value>Завантаження інформації...</value>
   </data>
   <data name="SharePlaceText" xml:space="preserve">
-    <value>I'd like to share this place with you</value>
+    <value>Я хочу поділитися цим місцем з вами</value>
   </data>
   <data name="UnableToGetPlaceDetails" xml:space="preserve">
-	  <value>Не можу отримати інформацю про місце</value>
+    <value>Не можу отримати інформацю про місце</value>
   </data>
   <data name="CancelLogin" xml:space="preserve">
-	  <value>Відмінити вхід</value>
+    <value>Відмінити вхід</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-	  <value>Дізнатися більше</value>
+    <value>Дізнатися більше</value>
   </data>
   <data name="LiveView" xml:space="preserve">
-	  <value>Віртуальний режим</value>
+    <value>Віртуальний режим</value>
   </data>
   <data name="Login" xml:space="preserve">
-	  <value>Логін</value>
+    <value>Логін</value>
   </data>
   <data name="Share" xml:space="preserve">
-	  <value>Поділитися</value>
+    <value>Поділитися</value>
   </data>
   <data name="DangerZone" xml:space="preserve">
-	  <value>Небезпечна зона</value>
+    <value>Небезпечна зона</value>
   </data>
   <data name="Date" xml:space="preserve">
-	  <value>Дата</value>
+    <value>Дата</value>
   </data>
   <data name="Speed" xml:space="preserve">
-	  <value>Швидкість: {0:N1} м/с</value>
+    <value>Швидкість: {0:N1} м/с</value>
   </data>
   <data name="Statistics" xml:space="preserve">
-	  <value>Статистика</value>
+    <value>Статистика</value>
   </data>
   <data name="Steps" xml:space="preserve">
-	  <value>Кроки</value>
+    <value>Кроки</value>
   </data>
   <data name="VisitedPlaces" xml:space="preserve">
-	  <value>Відвідані місця</value>
+    <value>Відвідані місця</value>
   </data>
   <data name="About" xml:space="preserve">
-	  <value>Про нас</value>
+    <value>Про нас</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-	  <value>Розробник Vladislav Antonyuk</value>
+    <value>Розробник Vladislav Antonyuk</value>
   </data>
   <data name="Help" xml:space="preserve">
-	  <value>Допомога</value>
+    <value>Допомога</value>
+  </data>
+  <data name="BuildRoute" xml:space="preserve">
+    <value>Прокласти маршрут</value>
+  </data>
+  <data name="CameraNotLoaded" xml:space="preserve">
+    <value>Камера не завантажилась</value>
   </data>
 </root>

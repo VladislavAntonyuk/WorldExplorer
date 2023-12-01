@@ -138,7 +138,8 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 							Location = new Location(place.Location.Latitude, place.Location.Longitude),
 							Label = place.Name,
 							Type = PinType.Place,
-							Address = place.Description ?? string.Empty
+							Image = place.MainImage,
+							Address = OperatingSystem.IsWindows() ? string.Empty : place.Description ?? string.Empty
 						});
 					}
 
@@ -149,6 +150,9 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 			case StatusCode.LocationInfoRequestPending:
 				await dialogService.ToastAsync(Localization.LookingForPlaces);
 				await Task.Delay(TimeSpan.FromSeconds(10));
+				break;
+			case StatusCode.FailedResponse:
+				await dialogService.ToastAsync(Localization.UnableToGetPlaceDetails);
 				break;
 		}
 

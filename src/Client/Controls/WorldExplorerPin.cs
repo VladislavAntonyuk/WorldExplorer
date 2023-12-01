@@ -11,4 +11,12 @@ public class WorldExplorerPin : Pin
 		get => (Guid)GetValue(PlaceIdProperty);
 		set => SetValue(PlaceIdProperty, value);
 	}
+
+	public static readonly BindableProperty ImageProperty = BindableProperty.Create(nameof(Image), typeof(string), typeof(WorldExplorerPin));
+
+	public string? Image
+	{
+		get => (string?)GetValue(ImageProperty);
+		set => SetValue(ImageProperty, value);
+	}
 }

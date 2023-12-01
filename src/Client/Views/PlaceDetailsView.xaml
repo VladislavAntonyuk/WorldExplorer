@@ -45,31 +45,39 @@
 
 			<Label Text="{Binding Place.Description}" />
 
-			<HorizontalStackLayout
-				HorizontalOptions="Center"
-				Spacing="10">
+			<ScrollView
+				Orientation="Horizontal">
 
-				<Button
-					Background="{StaticResource Primary}"
-					Text="{x:Static localization:Localization.LearnMore}"
-					TextColor="{StaticResource White}"
-					Command="{Binding OpenUrlCommand}"
-					CommandParameter="{Binding Place.Name}"/>
+				<HorizontalStackLayout
+					HorizontalOptions="Center"
+					Spacing="10">
 
-				<Button
-					Background="{StaticResource Primary}"
-					Text="{x:Static localization:Localization.Share}"
-					TextColor="{StaticResource White}"
-					Command="{Binding SharePlaceCommand}"
-					CommandParameter="{Binding Place.Name}"/>
+					<Button
+						Background="{StaticResource Primary}"
+						Text="{x:Static localization:Localization.LearnMore}"
+						TextColor="{StaticResource White}"
+						Command="{Binding OpenUrlCommand}"/>
 
-				<Button
-					Background="{StaticResource Primary}"
-					IsVisible="{Binding IsLiveViewEnabled}"
-					Text="{x:Static localization:Localization.LiveView}"
-					TextColor="{StaticResource White}"
-					Clicked="OpenArClicked"/>
-			</HorizontalStackLayout>
+					<Button
+						Background="{StaticResource Primary}"
+						Text="{x:Static localization:Localization.Share}"
+						TextColor="{StaticResource White}"
+						Command="{Binding SharePlaceCommand}"/>
+
+					<Button
+						Background="{StaticResource Primary}"
+						Text="{x:Static localization:Localization.BuildRoute}"
+						TextColor="{StaticResource White}"
+						Command="{Binding BuildRouteCommand}"/>
+
+					<Button
+						Background="{StaticResource Primary}"
+						IsVisible="{Binding IsLiveViewEnabled}"
+						Text="{x:Static localization:Localization.LiveView}"
+						TextColor="{StaticResource White}"
+						Clicked="OpenArClicked"/>
+				</HorizontalStackLayout>
+			</ScrollView>
 
 			<CollectionView
 				IsVisible="{OnPlatform Default=true, iOS=false}"

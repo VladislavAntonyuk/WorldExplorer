@@ -56,6 +56,7 @@
 			<DataTemplate x:DataType="{x:Type controls:WorldExplorerPin}">
 				<controls:WorldExplorerPin
 					PlaceId="{Binding PlaceId}"
+					Image="{Binding Image}"
 					Location="{Binding Location}"
 					Address="{Binding Address}"
 					Label="{Binding Label}"

@@ -68,18 +68,43 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 	}
 
 	[RelayCommand]
-	private Task<bool> OpenUrl(string placeName)
+	private Task<bool> OpenUrl()
 	{
-		return launcher.TryOpenAsync(new Uri($"https://google.com/search?q={placeName}"));
+		return launcher.TryOpenAsync(new Uri($"https://google.com/search?q={Place.Name}"));
 	}
 
 	[RelayCommand]
-	private Task SharePlace(string placeName)
+	private Task SharePlace()
 	{
-		return share.RequestAsync(new ShareTextRequest(Localization.SharePlaceText, placeName)
+		return share.RequestAsync(new ShareTextRequest(Localization.SharePlaceText, Place.Name)
 		{
-			Uri = $"https://google.com/search?q={placeName}",
-			Subject = placeName
+			Uri = $"https://google.com/search?q={Place.Name}",
+			Subject = Place.Name
 		});
+	}
+
+	[RelayCommand]
+	private async Task BuildRoute()
+	{
+		var myLocation = await Geolocation.GetLocationAsync();
+		if (myLocation is null)
+		{
+			return;
+		}
+
+		if (DeviceInfo.Current.Platform == DevicePlatform.iOS || DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+		{
+			// https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
+			await Launcher.OpenAsync($"http://maps.apple.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.Latitude},{Place.Location.Longitude}");
+		}
+		else if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+		{
+			// opens the 'task chooser' so the user can pick Maps, Chrome or other mapping app
+			await Launcher.OpenAsync($"http://maps.google.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.Latitude},{Place.Location.Longitude}");
+		}
+		else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+		{
+			await Launcher.OpenAsync($"bingmaps:?rtp=adr.{myLocation.Latitude},{myLocation.Longitude}~adr.{Place.Location.Latitude},{Place.Location.Longitude}");
+		}
 	}
 }

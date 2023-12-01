@@ -37,7 +37,8 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
-		var dbUser = await dbContext.Users.Include(user => user.Visits)
+		var dbUser = await dbContext.Users
+		                            .Include(user => user.Visits)
 									.FirstOrDefaultAsync(u => u.Id == providerId, cancellationToken);
 		if (dbUser is null)
 		{

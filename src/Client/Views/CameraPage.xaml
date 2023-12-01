@@ -8,6 +8,7 @@
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:maui="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
 	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
 	x:Class="Client.Views.CameraPage"
 	Shell.PresentationMode="ModalAnimated"
 	x:DataType="viewModels:CameraViewModel">
@@ -37,5 +38,11 @@
 		</ImageButton>
 
 		<maui:CameraView ZIndex="0" />
+		<Label
+			Text="{x:Static localization:Localization.CameraNotLoaded}"
+			IsVisible="{Binding IsCameraLoaded, Converter={StaticResource InvertedBoolConverter}}"
+			HorizontalOptions="Center"
+			VerticalOptions="Center"
+			ZIndex="2"/>
 	</Grid>
 </framework:BaseContentPage>

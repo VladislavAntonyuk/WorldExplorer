@@ -187,7 +187,7 @@
     <value>You are near {0}</value>
   </data>
   <data name="LoadingPlaceDetails" xml:space="preserve">
-	  <value>Loading place details...</value>
+    <value>Loading place details...</value>
   </data>
   <data name="SharePlaceText" xml:space="preserve">
     <value>I'd like to share this place with you</value>
@@ -235,6 +235,12 @@
     <value>Created by Vladislav Antonyuk</value>
   </data>
   <data name="Help" xml:space="preserve">
-	  <value>Help</value>
+    <value>Help</value>
+  </data>
+  <data name="BuildRoute" xml:space="preserve">
+    <value>Build route</value>
+  </data>
+  <data name="CameraNotLoaded" xml:space="preserve">
+    <value>Camera is not loaded</value>
   </data>
 </root>

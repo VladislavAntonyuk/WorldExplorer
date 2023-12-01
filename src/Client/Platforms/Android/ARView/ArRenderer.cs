@@ -11,6 +11,7 @@ using Java.IO;
 using Java.Lang;
 using Javax.Microedition.Khronos.Opengles;
 using Renderings;
+using Config = Google.AR.Core.Config;
 using EGLConfig = Javax.Microedition.Khronos.Egl.EGLConfig;
 using Exception = System.Exception;
 
@@ -30,10 +31,14 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 
 	private Snackbar? mLoadingMessageSnackbar;
 
-	public ArRenderer(Context context, Session session)
+	public ArRenderer(Context context)
 	{
 		this.context = context;
-		this.session = session;
+		session = new Session(context);
+		var config = new Config(session);
+		config.SetUpdateMode(Config.UpdateMode.LatestCameraImage);
+		session.Configure(config);
+
 		MainThread.BeginInvokeOnMainThread(() =>
 		{
 			ArgumentNullException.ThrowIfNull(Platform.CurrentActivity?.Window?.DecorView);
