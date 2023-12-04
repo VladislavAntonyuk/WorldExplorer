@@ -1,4 +1,4 @@
-﻿<framework:BaseContentPage
+<framework:BaseContentPage
 	x:TypeArguments="viewModels:ExplorerViewModel"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -9,13 +9,12 @@
 	xmlns:controls="clr-namespace:Client.Controls"
 	x:Class="Client.Views.ExplorerPage"
 	x:DataType="viewModels:ExplorerViewModel"
-	Shell.NavBarIsVisible="{OnPlatform Default=true, MacCatalyst=false}">
+	Shell.NavBarIsVisible="True">
 
 	<Shell.TitleView>
 		<Label
 			Text="{Binding Status}"
 			TextColor="{StaticResource White}"
-			IsVisible="{OnIdiom Phone=true, Default=false}"
 			HorizontalTextAlignment="Center"
 			VerticalOptions="Center"/>
 	</Shell.TitleView>
