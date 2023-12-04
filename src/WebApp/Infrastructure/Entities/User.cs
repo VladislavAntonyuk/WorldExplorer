@@ -1,7 +1,5 @@
 ﻿namespace WebApp.Infrastructure.Entities;
 
-using Shared.Models;
-
 public class User
 {
 	public required string Id { get; set; }

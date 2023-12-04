@@ -54,9 +54,10 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 		return new User
 		{
 			Id = dbUser.Id,
-			Visits = dbUser.Visits.Select(ToDto).ToList(),
+			Visits = dbUser.Visits.Select(ToModel).ToList(),
 			Name = profile.DisplayName ?? string.Empty,
 			Email = profile.OtherMails.FirstOrDefault(string.Empty),
+			Settings = ToModel(dbUser.Settings),
 			Activities =
 			[
 				new()
@@ -85,7 +86,7 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
 		await dbContext.Users
 		               .Where(x => x.Id == user.Id)
-		               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Settings, user.Settings), cancellationToken);
+		               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Settings, ToEntity(user.Settings)), cancellationToken);
 	}
 
 	private static User ToModel(Infrastructure.Entities.User user)
@@ -98,18 +99,34 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 		};
 	}
 
-	private static Visit ToDto(Infrastructure.Entities.Visit user)
+	private static Visit ToModel(Infrastructure.Entities.Visit visit)
 	{
 		return new Visit
 		{
-			Id = user.Id,
+			Id = visit.Id,
 			Place = new Place
 			{
-				Id = user.PlaceId,
+				Id = visit.PlaceId,
 				Name = string.Empty,
 				Location = new Location(0, 0)
 			},
-			VisitDate = user.VisitDate
+			VisitDate = visit.VisitDate
+		};
+	}
+
+	private static UserSettings ToModel(Infrastructure.Entities.UserSettings settings)
+	{
+		return new UserSettings()
+		{
+			TrackUserLocation = settings.TrackUserLocation
+		};
+	}
+
+	private static Infrastructure.Entities.UserSettings ToEntity(UserSettings settings)
+	{
+		return new Infrastructure.Entities.UserSettings()
+		{
+			TrackUserLocation = settings.TrackUserLocation
 		};
 	}
 }
