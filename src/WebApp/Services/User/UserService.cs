@@ -84,9 +84,12 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 	public async Task UpdateUser(User user, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
-		await dbContext.Users
-		               .Where(x => x.Id == user.Id)
-		               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Settings, ToEntity(user.Settings)), cancellationToken);
+		var dbUser = await dbContext.Users.AsTracking().FirstOrDefaultAsync(x => x.Id == user.Id, cancellationToken);
+		if (dbUser is not null)
+		{
+			dbUser.Settings = ToEntity(user.Settings);
+			await dbContext.SaveChangesAsync(cancellationToken);
+		}
 	}
 
 	private static User ToModel(Infrastructure.Entities.User user)

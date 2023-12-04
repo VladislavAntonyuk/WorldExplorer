@@ -15,6 +15,9 @@ public partial class Profile : WorldExplorerAuthBaseComponent
 	[Inject]
 	public required IUserService UserService { get; set; }
 
+	[Inject]
+	public required ISnackbar Snackbar { get; set; }
+
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
@@ -26,8 +29,12 @@ public partial class Profile : WorldExplorerAuthBaseComponent
 		return UserService.DeleteUser(CurrentUser.ProviderId, CancellationToken.None);
 	}
 
-	private Task SaveChanges()
+	private async Task SaveChanges()
 	{
-		return user is null ? Task.CompletedTask : UserService.UpdateUser(user, CancellationToken.None);
+		if (user is not null)
+		{
+			await UserService.UpdateUser(user, CancellationToken.None);
+			Snackbar.Add(Translation.SavedChanges, Severity.Success);
+		}
 	}
 }
