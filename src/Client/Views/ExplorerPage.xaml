@@ -13,10 +13,10 @@
 
 	<Shell.TitleView>
 		<Label
-			Text="{Binding CurrentGeolocatorData.Speed, StringFormat={x:Static localization:Localization.Speed}, FallbackValue=0}"
+			Text="{Binding Status}"
 			TextColor="{StaticResource White}"
 			IsVisible="{OnIdiom Phone=true, Default=false}"
-			HorizontalOptions="Center"
+			HorizontalTextAlignment="Center"
 			VerticalOptions="Center"/>
 	</Shell.TitleView>
 

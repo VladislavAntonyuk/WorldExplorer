@@ -58,6 +58,32 @@
 				Text="{x:Static localization:Localization.Logout}" />
 
 			<Label
+				Text="{x:Static localization:Localization.UserSettings}"
+				Style="{StaticResource TitleStyle}" />
+
+			<Grid
+				ColumnDefinitions="Auto, *">
+
+				<Label
+					Grid.Column="0"
+					Grid.Row="0"
+					Text="{x:Static localization:Localization.TrackUserLocation}" />
+
+				<CheckBox
+					Grid.Column="1"
+					Grid.Row="0"
+					HorizontalOptions="End"
+					IsChecked="{Binding User.Settings.TrackUserLocation}">
+					<CheckBox.Behaviors>
+						<toolkit:EventToCommandBehavior
+							Command="{Binding SaveChangesCommand}"
+							EventName="CheckedChanged"/>
+					</CheckBox.Behaviors>
+				</CheckBox>
+
+			</Grid>
+
+			<Label
 				Text="{x:Static localization:Localization.VisitedPlaces}"
 				Style="{StaticResource TitleStyle}"
 				IsVisible="{Binding User.Visits, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />

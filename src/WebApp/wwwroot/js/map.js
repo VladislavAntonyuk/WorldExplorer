@@ -12,7 +12,7 @@ window.leafletInterop = {
 			}).addTo(map);
 		map.locate({
 			watch: true,
-			setView: false,
+			setView: options.trackUserLocation,
 			enableHighAccuracy: true,
 			timeout: Infinity
 		});

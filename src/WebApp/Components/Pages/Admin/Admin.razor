@@ -16,6 +16,7 @@
 
 				<MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="Place">
 					<HeaderContent>
+						<MudTh>Id</MudTh>
 						<MudTh>Name</MudTh>
 						<MudTh>Location</MudTh>
 						<MudTh>Rating</MudTh>
@@ -23,6 +24,7 @@
 						<MudTh></MudTh>
 					</HeaderContent>
 					<RowTemplate Context="place">
+						<MudTd DataLabel="Id">@place.Id</MudTd>
 						<MudTd DataLabel="Name">@place.Name</MudTd>
 						<MudTd DataLabel="Location">@place.Location</MudTd>
 						<MudTd DataLabel="Rating">@place.Rating</MudTd>

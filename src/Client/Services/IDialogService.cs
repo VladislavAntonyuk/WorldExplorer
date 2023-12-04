@@ -15,4 +15,6 @@ public interface IDialogService
 	{
 		return ToastAsync(string.Join(Environment.NewLine, messages), cancellationToken);
 	}
+
+	Task AlertAsync(string title, string message, string cancel);
 }

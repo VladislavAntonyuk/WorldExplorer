@@ -18,6 +18,16 @@ internal class DialogService : IDialogService
 		return Toast.Make(message, ToastDuration.Long).Show(cancellationToken);
 	}
 
+	public Task AlertAsync(string title, string message, string cancel)
+	{
+		if (Application.Current?.MainPage is null)
+		{
+			return Task.CompletedTask;
+		}
+
+		return Application.Current.MainPage.DisplayAlert(title, message, cancel);
+	}
+
 	public async Task<bool> ConfirmAsync(string title, string message, string ok, string cancel)
 	{
 		if (Application.Current?.MainPage is null)

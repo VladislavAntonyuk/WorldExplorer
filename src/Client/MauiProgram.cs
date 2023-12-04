@@ -70,11 +70,12 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IDialogService, DialogService>();
 
 		builder.Services.AddSingleton(Connectivity.Current);
-		builder.Services.AddSingleton(_ => DeviceInfo.Current);
-		builder.Services.AddSingleton(_ => DeviceDisplay.Current);
-		builder.Services.AddSingleton(_ => Share.Default);
-		builder.Services.AddSingleton(_ => Launcher.Default);
-		builder.Services.AddSingleton<IGeolocator, GeolocatorImplementation>();
+		builder.Services.AddSingleton(DeviceInfo.Current);
+		builder.Services.AddSingleton(DeviceDisplay.Current);
+		builder.Services.AddSingleton(Share.Default);
+		builder.Services.AddSingleton(Launcher.Default);
+		builder.Services.AddSingleton(Geolocation.Default);
+		builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
 		builder.Services.AddTransient<AuthHeaderHandler>();
 		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
 		builder.Services.AddApi<IUsersApi>(apiSettings.Users);

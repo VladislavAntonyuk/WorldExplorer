@@ -13,6 +13,19 @@ public class UsersController(ICurrentUserService currentUserService, IUserServic
 		return userService.GetUser(currentUser.ProviderId, cancellationToken);
 	}
 
+	[HttpPut("self")]
+	public async Task<IActionResult> UpdateCurrentUser(User user, CancellationToken cancellationToken)
+	{
+		var currentUserId = currentUserService.GetCurrentUser().ProviderId;
+		if (currentUserId != user.Id)
+		{
+			return BadRequest();
+		}
+
+		await userService.UpdateUser(user, cancellationToken);
+		return Ok();
+	}
+
 	[HttpDelete("self")]
 	public async Task<IActionResult> DeleteCurrentUser(CancellationToken cancellationToken)
 	{

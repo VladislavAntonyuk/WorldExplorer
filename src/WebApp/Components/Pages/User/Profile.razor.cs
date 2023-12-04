@@ -8,10 +8,7 @@ using WebApp.Components;
 
 public partial class Profile : WorldExplorerAuthBaseComponent
 {
-	private User? currentUser;
-	[Inject]
-	public required NavigationManager NavigationManager { get; set; }
-
+	private User? user;
 	[Inject]
 	public required IDialogService DialogService { get; set; }
 
@@ -21,21 +18,16 @@ public partial class Profile : WorldExplorerAuthBaseComponent
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
-		currentUser = new User
-		{
-			Name = CurrentUser.Name,
-			Email = CurrentUser.Email,
-			Id = CurrentUser.ProviderId
-		};
-
-		if (currentUser.Email == string.Empty)
-		{
-			NavigationManager.NavigateTo("MicrosoftIdentity/Account/SignOut", true);
-		}
+		user = await UserService.GetUser(CurrentUser.ProviderId, CancellationToken.None);
 	}
 
 	private Task DeleteAccount()
 	{
 		return UserService.DeleteUser(CurrentUser.ProviderId, CancellationToken.None);
+	}
+
+	private Task SaveChanges()
+	{
+		return user is null ? Task.CompletedTask : UserService.UpdateUser(user, CancellationToken.None);
 	}
 }

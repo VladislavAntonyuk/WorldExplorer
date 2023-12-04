@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using Services.Place;
+using Services.User;
 using Shared.Enums;
 using Shared.Models;
 
@@ -28,6 +29,12 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 	[Inject]
 	public required ISnackbar Snackbar { get; set; }
 
+	[Inject]
+	public required ICurrentUserService CurrentUserService { get; set; }
+
+	[Inject]
+	public required IUserService UserService { get; set; }
+
 	public async ValueTask DisposeAsync()
 	{
 		await JsRuntime.InvokeVoidAsync("leafletInterop.destroyMap");
@@ -39,8 +46,13 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 		await base.OnAfterRenderAsync(firstRender);
 		if (firstRender)
 		{
+			var currentUser = CurrentUserService.GetCurrentUser();
+			var user = await UserService.GetUser(currentUser.ProviderId, CancellationToken.None);
 			mapRef = DotNetObjectReference.Create(this);
-			await JsRuntime.InvokeVoidAsync("leafletInterop.initMap", mapRef, new MapOptions(null, 15));
+			await JsRuntime.InvokeVoidAsync("leafletInterop.initMap", mapRef, new MapOptions(null, 15)
+			{
+				TrackUserLocation = user?.Settings.TrackUserLocation == true
+			});
 		}
 	}
 

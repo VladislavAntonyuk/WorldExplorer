@@ -3,15 +3,18 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Framework;
 using Models;
 using Resources.Localization;
 using Services;
+using Services.API;
 using Services.Auth;
 using Services.Navigation;
 
 public partial class LoginViewModel(INavigationService navigation,
 	IAuthService authService,
+	IUsersApi usersApi,
 	IDialogService dialogService) : BaseViewModel
 {
 	[ObservableProperty]
@@ -56,6 +59,12 @@ public partial class LoginViewModel(INavigationService navigation,
 		var token = await authService.SignInInteractively(cancellationToken);
 		if (token.IsSuccessful)
 		{
+			var getUserResponse = await usersApi.GetCurrentUser(cancellationToken);
+			if (getUserResponse.IsSuccessStatusCode)
+			{
+				WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(getUserResponse.Content));
+			}
+
 			await navigation.NavigateAsync<ExplorerViewModel, ErrorViewModel>();
 		}
 		else

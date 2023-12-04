@@ -2,4 +2,7 @@
 
 using Shared.Models;
 
-public record MapOptions(Location? Location, int Zoom);
+public record MapOptions(Location? Location, int Zoom)
+{
+	public bool TrackUserLocation { get; set; }
+}

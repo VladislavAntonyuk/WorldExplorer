@@ -10,6 +10,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 	{
 		builder.HasKey(e => e.Id);
 		builder.HasMany(x => x.Visits).WithOne().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+		builder.OwnsOne(post => post.Settings, x => { x.ToJson(); });
 
 		builder.HasData(new User
 		{

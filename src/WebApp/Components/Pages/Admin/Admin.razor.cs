@@ -2,6 +2,7 @@
 
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Services.Place;
 using Services.User;
 using WebApp.Components;
@@ -22,17 +23,29 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 
 	[Inject]
 	public required IUserService UsersService { get; set; }
+	[Inject]
+	public required IDialogService DialogService { get; set; }
 
 	private async Task ClearPlaces()
 	{
-		await PlacesService.ClearPlaces(CancellationToken.None);
-		await GetPlaces();
+		var isConfirmed = await DialogService.ShowMessageBox("Clear places",
+		                                                      "Are you sure you want to clear all places?");
+		if (isConfirmed == true)
+		{
+			await PlacesService.ClearPlaces(CancellationToken.None);
+			await GetPlaces();
+		}
 	}
 
 	private async Task ClearRequests()
 	{
-		await LocationInfoRequestsService.Clear(CancellationToken.None);
-		await GetRequests();
+		var isConfirmed = await DialogService.ShowMessageBox("Clear requests",
+		                                                     "Are you sure you want to clear all requests?");
+		if (isConfirmed == true)
+		{
+			await LocationInfoRequestsService.Clear(CancellationToken.None);
+			await GetRequests();
+		}
 	}
 
 	private async Task GetUsers()

@@ -34,4 +34,19 @@ public interface IUsersApi
 			return await e.GetErrorResponse<User>(HttpMethod.Get);
 		}
 	}
+
+	[Put("/self")]
+	internal Task<IApiResponse> UpdateCurrentUserInternal(User user, CancellationToken cancellationToken);
+
+	async Task<IApiResponse> UpdateCurrentUser(User user, CancellationToken cancellationToken)
+	{
+		try
+		{
+			return await UpdateCurrentUserInternal(user, cancellationToken);
+		}
+		catch (Exception e)
+		{
+			return await e.GetErrorResponse(HttpMethod.Put);
+		}
+	}
 }

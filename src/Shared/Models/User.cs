@@ -8,4 +8,5 @@ public class User
 	public List<UserActivity> Activities { get; set; } = [];
 	public required string Name { get; set; }
 	public required string Email { get; set; }
+	public UserSettings Settings { get; set; } = new();
 }

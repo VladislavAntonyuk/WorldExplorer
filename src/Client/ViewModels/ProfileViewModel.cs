@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Framework;
 using Resources.Localization;
 using Services;
@@ -73,5 +74,12 @@ public partial class ProfileViewModel : BaseViewModel
 		{
 			await dialogService.ToastAsync(getUserResult.Error.Message);
 		}
+	}
+
+	[RelayCommand]
+	private Task SaveChanges(CancellationToken cancellationToken)
+	{
+		WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(User));
+		return User is null ? Task.CompletedTask : usersApi.UpdateCurrentUser(User, cancellationToken);
 	}
 }

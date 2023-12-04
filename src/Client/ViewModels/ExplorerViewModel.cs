@@ -1,4 +1,4 @@
-﻿namespace Client.ViewModels;
+namespace Client.ViewModels;
 
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,34 +6,48 @@ using CommunityToolkit.Mvvm.Input;
 using Controls;
 using Framework;
 using Microsoft.Maui.Controls.Maps;
-using Models;
 using Resources.Localization;
 using Services;
 using Services.API;
+using Services.Auth;
 using Shared.Enums;
 using Views;
 using Location = Microsoft.Maui.Devices.Sensors.Location;
 
 public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	ILauncher launcher,
-	IGeolocator geoLocator,
+	IGeolocation geoLocation,
 	IDialogService dialogService,
 	IDispatcher dispatcher,
+	ICurrentUserService currentUserService,
 	IDeviceDisplay deviceDisplay) : BaseViewModel, IDisposable
 {
 	[ObservableProperty]
 	private bool isShowingUser = true;
 
 	[ObservableProperty]
-	private GeolocatorData? currentGeolocatorData;
+	private Location? currentLocation;
 
-	private void GeoLocator_PositionChanged(object? sender, GeolocatorData e)
+	[ObservableProperty]
+	private string? status;
+
+	private void GeoLocationOnLocationChanged(object? sender, GeolocationLocationChangedEventArgs e)
 	{
-		var moveToRegion = CurrentGeolocatorData == null;
-		CurrentGeolocatorData = e;
+		UpdateLocation(e.Location);
+	}
+
+	private void GeoLocationOnListeningFailed(object? sender, GeolocationListeningFailedEventArgs e)
+	{
+		Status = Localization.UnableToGetPlaceDetails;
+	}
+
+	private void UpdateLocation(Location location)
+	{
+		var moveToRegion = CurrentLocation is null || currentUserService.GetCurrentUser()?.Settings.TrackUserLocation == true;
+		CurrentLocation = location;
 		weakEventManager.HandleEvent(this, new LocationChangedEventArgs
 		{
-			Location = e.Location,
+			Location = location,
 			MoveToRegion = moveToRegion
 		}, nameof(LocationChanged));
 	}
@@ -49,7 +63,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	public override async Task InitializeAsync()
 	{
-		geoLocator.PositionChanged += GeoLocator_PositionChanged;
 		deviceDisplay.KeepScreenOn = true;
 		await base.InitializeAsync();
 		await StartTracking();
@@ -57,8 +70,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	public override Task UnInitializeAsync()
 	{
-		geoLocator.PositionChanged -= GeoLocator_PositionChanged;
-		geoLocator.StopListening();
+		StopTracking();
 		deviceDisplay.KeepScreenOn = false;
 		return base.UnInitializeAsync();
 	}
@@ -87,35 +99,53 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		var permission = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
 		if (permission != PermissionStatus.Granted)
 		{
-			await dialogService.ToastAsync("No permission");
+			await dialogService.AlertAsync("Error", "No permission", "OK");
 			return;
 		}
 
-		await dialogService.ToastAsync(Localization.LookingForPlaces);
-		geoLocator.StartListening();
+		var lastKnownLocation = await geoLocation.GetLastKnownLocationAsync();
+		if (lastKnownLocation is not null)
+		{
+			UpdateLocation(lastKnownLocation);
+		}
+
+		Status = Localization.LookingForPlaces;
+		geoLocation.LocationChanged += GeoLocationOnLocationChanged;
+		geoLocation.ListeningFailed += GeoLocationOnListeningFailed;
+		await geoLocation.StartListeningForegroundAsync(new GeolocationListeningRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(30)));
 	}
 
-	async partial void OnCurrentGeolocatorDataChanged(GeolocatorData? value)
+	async partial void OnCurrentLocationChanged(Location? value)
 	{
 		if (value is null)
 		{
 			return;
 		}
 
+		int attempts = 0;
 		StatusCode statusCode;
 		do
 		{
-			statusCode = await GetRecommendations(value);
+			statusCode = await dispatcher.DispatchAsync(() => GetRecommendations(value));
+			attempts++;
+#pragma warning disable S2583
+			if (attempts > 5)
+#pragma warning restore S2583
+			{
+				Status = Localization.UnableToGetPlaceDetails;
+				break;
+			}
 		} while (statusCode == StatusCode.LocationInfoRequestPending);
 	}
 
-	private async Task<StatusCode> GetRecommendations(GeolocatorData value)
+	private async Task<StatusCode> GetRecommendations(Location location)
 	{
-		var placesResponse = await placesApi.GetRecommendations(new Shared.Models.Location(value.Location.Latitude, value.Location.Longitude), CancellationToken.None);
+		var placesResponse = await placesApi.GetRecommendations(new Shared.Models.Location(location.Latitude, location.Longitude), CancellationToken.None);
 
 		if (!placesResponse.IsSuccessStatusCode)
 		{
 			await dialogService.ToastAsync(placesResponse.Error.Message);
+			Status = Localization.UnableToGetPlaceDetails;
 			return StatusCode.FailedResponse;
 		}
 
@@ -124,35 +154,33 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 			case StatusCode.Success:
 				if (placesResponse.Content.Result.Count == 0)
 				{
-					await dialogService.ToastAsync(Localization.NoPlacesFound);
+					Status = Localization.NoPlacesFound;
 					break;
 				}
 
-				await dispatcher.DispatchAsync(async () =>
+				Status = string.Format(Localization.FoundPlaces, placesResponse.Content.Result.Count);
+				foreach (var place in placesResponse.Content.Result.Where(x => Pins.All(pin => pin.PlaceId != x.Id)))
 				{
-					foreach (var place in placesResponse.Content.Result.Where(x => Pins.All(pin => pin.PlaceId != x.Id)))
+					Pins.Add(new WorldExplorerPin()
 					{
-						Pins.Add(new WorldExplorerPin()
-						{
-							PlaceId = place.Id,
-							Location = new Location(place.Location.Latitude, place.Location.Longitude),
-							Label = place.Name,
-							Type = PinType.Place,
-							Image = place.MainImage,
-							Address = OperatingSystem.IsWindows() ? string.Empty : place.Description ?? string.Empty
-						});
-					}
+						PlaceId = place.Id,
+						Location = new Location(place.Location.Latitude, place.Location.Longitude),
+						Label = place.Name,
+						Type = PinType.Place,
+						Image = place.MainImage,
+						Address = OperatingSystem.IsWindows() ? string.Empty : place.Description ?? string.Empty
+					});
+				}
 
-					await CheckLocation(value.Location);
-				});
+				await CheckLocation(location);
 
 				break;
 			case StatusCode.LocationInfoRequestPending:
-				await dialogService.ToastAsync(Localization.LookingForPlaces);
+				Status = Localization.LookingForPlaces;
 				await Task.Delay(TimeSpan.FromSeconds(10));
 				break;
 			case StatusCode.FailedResponse:
-				await dialogService.ToastAsync(Localization.UnableToGetPlaceDetails);
+				Status = Localization.UnableToGetPlaceDetails;
 				break;
 		}
 
@@ -182,7 +210,14 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	public void Dispose()
 	{
-		geoLocator.PositionChanged -= GeoLocator_PositionChanged;
-		geoLocator.StopListening();
+		StopTracking();
+	}
+
+	private void StopTracking()
+	{
+		CurrentLocation = null;
+		geoLocation.ListeningFailed -= GeoLocationOnListeningFailed;
+		geoLocation.LocationChanged -= GeoLocationOnLocationChanged;
+		geoLocation.StopListeningForeground();
 	}
 }

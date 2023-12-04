@@ -2,7 +2,7 @@
 @inherits WorldExplorerAuthBaseComponent
 @attribute [Authorize]
 
-@if (currentUser is null)
+@if (user is null)
 {
 	<LoadingControl/>
 }
@@ -10,7 +10,9 @@ else
 {
 	<MudExpansionPanels MultiExpansion="true">
 		<MudExpansionPanel Text="@Translation.Profile" IsInitiallyExpanded="true">
-			<MudText>@CurrentUser.Name</MudText>
+			<MudText>@user.Name</MudText>
+			<MudCheckBox T="bool" Checked="@user.Settings.TrackUserLocation" Label="@Translation.TrackUserLocation"/>
+			<MudButton OnClick="SaveChanges" Color="Color.Primary" ButtonType="ButtonType.Button">@Translation.SaveChanges</MudButton>
 		</MudExpansionPanel>
 		<MudExpansionPanel Text="@Translation.DangerZone" IsInitiallyExpanded="true" class="mt-1">
 			<MudButton OnClick="DeleteAccount" Color="Color.Error" ButtonType="ButtonType.Button">@Translation.DeleteAccount</MudButton>
