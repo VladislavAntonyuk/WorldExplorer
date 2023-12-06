@@ -4,6 +4,7 @@ using Controls;
 using Framework;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
+using Syncfusion.Maui.Popup;
 using ViewModels;
 
 public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
@@ -44,16 +45,25 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 			return;
 		}
 
+		var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
 		placeDetailsViewModel.ApplyQueryAttributes(new Dictionary<string, object>
 		{
 			{
 				"place", pin.PlaceId
 			}
 		});
-
-		var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
-		var bottomSheet = this.ShowBottomSheet(placeDetailsView, true);
-		placeDetailsView.BottomSheet = bottomSheet;
+		var popup = new SfPopup
+		{
+			ContentTemplate = new DataTemplate(() => placeDetailsView),
+			StaysOpen = true,
+			ShowCloseButton = true,
+			Parent = this,
+			AnimationMode = PopupAnimationMode.Fade,
+			AutoSizeMode = PopupAutoSizeMode.Both,
+			HeaderTitle = pin.Label
+		};
+		popup.Show();
+		placeDetailsView.Popup = popup;
 	}
 
 	private void HelpMenuItemClicked(object? sender, EventArgs e)

@@ -17,10 +17,10 @@
 		</OnPlatform>
 	</views:PlaceDetailsView.BackgroundColor>
 
-	<Grid>
+	<Grid
+		WidthRequest="{Binding Window.Width, Source={x:Reference PlaceDetails}}"
+		MinimumHeightRequest="500">
 		<VerticalStackLayout
-			WidthRequest="{Binding Window.Width, Source={x:Reference PlaceDetails}}"
-			MinimumHeightRequest="{OnPlatform WinUI=500, MacCatalyst=500, Default=0}"
 			IsVisible="{Binding IsPlacedLoaded, Converter={StaticResource InvertedBoolConverter}}">
 
 			<Label
@@ -35,11 +35,6 @@
 			IsVisible="{Binding IsPlacedLoaded}">
 			<VerticalStackLayout Spacing="10">
 
-				<Label
-					Text="{Binding Place.Name}"
-					HorizontalOptions="Center"
-					FontSize="Large" />
-
 				<rating:SfRating
 					Value="{Binding Place.Rating}"
 					ItemCount="5"
@@ -52,8 +47,6 @@
 							UnratedStroke="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
 						</rating:SfRating.RatingSettings>
 				</rating:SfRating>
-
-				<Label Text="{Binding Place.Description}" />
 
 				<ScrollView
 					Orientation="Horizontal">
@@ -88,6 +81,8 @@
 							Clicked="OpenArClicked"/>
 					</HorizontalStackLayout>
 				</ScrollView>
+
+				<Label Text="{Binding Place.Description}" />
 
 				<CollectionView
 					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
