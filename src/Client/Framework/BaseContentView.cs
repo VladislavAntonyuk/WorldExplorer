@@ -1,5 +1,7 @@
 ﻿namespace Client.Framework;
 
+using Extensions;
+
 public abstract class BaseContentView<T> : ContentView where T : BaseViewModel
 {
 	protected BaseContentView(T viewModel)
@@ -7,13 +9,25 @@ public abstract class BaseContentView<T> : ContentView where T : BaseViewModel
 		BindingContext = ViewModel = viewModel;
 		Loaded += delegate
 		{
-			ViewModel.InitializeAsync();
+			InitializeAsync().AndForget(true);
 		};
 		Unloaded += delegate
 		{
-			ViewModel.UnInitializeAsync();
+			UnInitializeAsync().AndForget(true);
 		};
 	}
 
 	protected T ViewModel { get; }
+
+	protected virtual Task InitializeAsync()
+	{
+		ViewModel.InitializeAsync();
+		return Task.CompletedTask;
+	}
+
+	protected virtual Task UnInitializeAsync()
+	{
+		ViewModel.UnInitializeAsync().AndForget();
+		return Task.CompletedTask;
+	}
 }

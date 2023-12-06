@@ -1,5 +1,6 @@
 ﻿namespace Client.ViewModels;
 
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
@@ -17,6 +18,9 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 	INavigationService navigationService) : BaseViewModel, IQueryAttributable
 {
 	private Guid? placeId;
+
+	[ObservableProperty]
+	private bool isPlacedLoaded;
 
 	[ObservableProperty]
 	private bool isLiveViewEnabled;
@@ -37,18 +41,31 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 			return;
 		}
 
-		IsLiveViewEnabled = false;
 		await dialogService.ToastAsync(Localization.LoadingPlaceDetails);
-		var getDetailsResult = await placesApi.GetDetails(placeId.Value, CancellationToken.None);
-		if (getDetailsResult.IsSuccessStatusCode)
+		do
 		{
-			Place = getDetailsResult.Content;
-			if (Place.Images.Count > 0 && arService.IsSupported())
+			var getDetailsResult = await placesApi.GetDetails(placeId.Value, CancellationToken.None);
+			if (getDetailsResult.IsSuccessStatusCode)
 			{
-				IsLiveViewEnabled = true;
+				Place = getDetailsResult.Content;
+				if (Place.Images.Count > 0 && arService.IsSupported())
+				{
+					IsLiveViewEnabled = true;
+				}
 			}
-		}
+			else
+			{
+				break;
+			}
 
+			if (string.IsNullOrWhiteSpace(Place.Description))
+			{
+				await Task.Delay(TimeSpan.FromSeconds(10));
+			}
+		} while (string.IsNullOrWhiteSpace(Place.Description));
+
+
+		IsPlacedLoaded = true;
 		if (Place == Place.Default)
 		{
 			await dialogService.ToastAsync(Localization.UnableToGetPlaceDetails);

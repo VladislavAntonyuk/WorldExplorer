@@ -8,7 +8,8 @@
 	xmlns:views="clr-namespace:Client.Views"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
 	x:DataType="viewModels:PlaceDetailsViewModel"
-	x:Class="Client.Views.PlaceDetailsView">
+	x:Class="Client.Views.PlaceDetailsView"
+	x:Name="PlaceDetails">
 
 	<views:PlaceDetailsView.BackgroundColor>
 		<OnPlatform x:TypeArguments="Color">
@@ -16,87 +17,103 @@
 		</OnPlatform>
 	</views:PlaceDetailsView.BackgroundColor>
 
-	<ScrollView Margin="10">
-		<VerticalStackLayout Spacing="10">
+	<Grid>
+		<VerticalStackLayout
+			WidthRequest="{Binding Window.Width, Source={x:Reference PlaceDetails}}"
+			MinimumHeightRequest="{OnPlatform WinUI=500, MacCatalyst=500, Default=0}"
+			IsVisible="{Binding IsPlacedLoaded, Converter={StaticResource InvertedBoolConverter}}">
 
 			<Label
-				Text="{Binding Place.Name}"
+				Text="{x:Static localization:Localization.LoadingPlaceDetails}"
 				HorizontalOptions="Center"
 				FontSize="Large" />
 
-			<rating:SfRating
-				Value="{Binding Place.Rating}"
-				ItemCount="5"
-				Precision="Exact"
-				ItemSize="20"
-				IsReadOnly="True"
-				BackgroundColor="Transparent">
-				<rating:SfRating.RatingSettings>
-					<rating:RatingSettings
-						UnratedStroke="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
-				</rating:SfRating.RatingSettings>
-			</rating:SfRating>
-
-			<Label Text="{Binding Place.Description}" />
-
-			<ScrollView
-				Orientation="Horizontal">
-
-				<HorizontalStackLayout
-					HorizontalOptions="Center"
-					Spacing="10">
-
-					<Button
-						Background="{StaticResource Primary}"
-						Text="{x:Static localization:Localization.LearnMore}"
-						TextColor="{StaticResource White}"
-						Command="{Binding OpenUrlCommand}"/>
-
-					<Button
-						Background="{StaticResource Primary}"
-						Text="{x:Static localization:Localization.Share}"
-						TextColor="{StaticResource White}"
-						Command="{Binding SharePlaceCommand}"/>
-
-					<Button
-						Background="{StaticResource Primary}"
-						Text="{x:Static localization:Localization.BuildRoute}"
-						TextColor="{StaticResource White}"
-						Command="{Binding BuildRouteCommand}"/>
-
-					<Button
-						Background="{StaticResource Primary}"
-						IsVisible="{Binding IsLiveViewEnabled}"
-						Text="{x:Static localization:Localization.LiveView}"
-						TextColor="{StaticResource White}"
-						Clicked="OpenArClicked"/>
-				</HorizontalStackLayout>
-			</ScrollView>
-
-			<CollectionView
-				IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
-				ItemsSource="{Binding Place.Images}"
-				HeightRequest="300">
-
-				<CollectionView.ItemsLayout>
-					<LinearItemsLayout
-						Orientation="Horizontal"
-						ItemSpacing="10" />
-				</CollectionView.ItemsLayout>
-
-				<CollectionView.ItemTemplate>
-					<DataTemplate>
-						<VerticalStackLayout>
-							<Image
-								 Background="{DynamicResource Gray500}"
-								 Source="{Binding .}"
-								 WidthRequest="300"
-								 HeightRequest="300"
-								 Aspect="AspectFit" />
-						</VerticalStackLayout>
-					</DataTemplate>
-				</CollectionView.ItemTemplate>
-			</CollectionView>
 		</VerticalStackLayout>
-	</ScrollView>
+
+		<ScrollView
+			Margin="10"
+			IsVisible="{Binding IsPlacedLoaded}">
+			<VerticalStackLayout Spacing="10">
+
+				<Label
+					Text="{Binding Place.Name}"
+					HorizontalOptions="Center"
+					FontSize="Large" />
+
+				<rating:SfRating
+					Value="{Binding Place.Rating}"
+					ItemCount="5"
+					Precision="Exact"
+					ItemSize="20"
+					IsReadOnly="True"
+					BackgroundColor="Transparent">
+						<rating:SfRating.RatingSettings>
+							<rating:RatingSettings
+							UnratedStroke="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
+						</rating:SfRating.RatingSettings>
+				</rating:SfRating>
+
+				<Label Text="{Binding Place.Description}" />
+
+				<ScrollView
+					Orientation="Horizontal">
+
+					<HorizontalStackLayout
+						HorizontalOptions="Center"
+						Spacing="10">
+
+						<Button
+							Background="{StaticResource Primary}"
+							Text="{x:Static localization:Localization.LearnMore}"
+							TextColor="{StaticResource White}"
+							Command="{Binding OpenUrlCommand}"/>
+
+						<Button
+							Background="{StaticResource Primary}"
+							Text="{x:Static localization:Localization.Share}"
+							TextColor="{StaticResource White}"
+							Command="{Binding SharePlaceCommand}"/>
+
+						<Button
+							Background="{StaticResource Primary}"
+							Text="{x:Static localization:Localization.BuildRoute}"
+							TextColor="{StaticResource White}"
+							Command="{Binding BuildRouteCommand}"/>
+
+						<Button
+							Background="{StaticResource Primary}"
+							IsVisible="{Binding IsLiveViewEnabled}"
+							Text="{x:Static localization:Localization.LiveView}"
+							TextColor="{StaticResource White}"
+							Clicked="OpenArClicked"/>
+					</HorizontalStackLayout>
+				</ScrollView>
+
+				<CollectionView
+					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
+					ItemsSource="{Binding Place.Images}"
+					HeightRequest="300">
+
+					<CollectionView.ItemsLayout>
+						<LinearItemsLayout
+							Orientation="Horizontal"
+							ItemSpacing="10" />
+					</CollectionView.ItemsLayout>
+
+					<CollectionView.ItemTemplate>
+						<DataTemplate>
+							<VerticalStackLayout>
+								<Image
+									 Background="{DynamicResource Gray500}"
+									 Source="{Binding .}"
+									 WidthRequest="300"
+									 HeightRequest="300"
+									 Aspect="AspectFit" />
+							</VerticalStackLayout>
+						</DataTemplate>
+					</CollectionView.ItemTemplate>
+				</CollectionView>
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
 </framework:BaseContentView>

@@ -4,17 +4,14 @@ using Controls;
 using Framework;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
-using Shared.Models;
 using ViewModels;
 
 public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 {
-	private readonly PlaceDetailsViewModel placeDetailsViewModel;
 	private readonly IDispatcher dispatcher;
 
-	public ExplorerPage(ExplorerViewModel viewModel, PlaceDetailsViewModel placeDetailsViewModel, IDispatcher dispatcher) : base(viewModel)
+	public ExplorerPage(ExplorerViewModel viewModel, IDispatcher dispatcher) : base(viewModel)
 	{
-		this.placeDetailsViewModel = placeDetailsViewModel;
 		this.dispatcher = dispatcher;
 		viewModel.LocationChanged += OnLocationChanged;
 		InitializeComponent();
@@ -33,7 +30,7 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 		});
 	}
 
-	private async void Pin_OnMarkerClicked(object? sender, PinClickedEventArgs e)
+	private void Pin_OnMarkerClicked(object? sender, PinClickedEventArgs e)
 	{
 		if (sender is not WorldExplorerPin pin)
 		{
@@ -41,6 +38,12 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 		}
 
 		e.HideInfoWindow = true;
+		var placeDetailsViewModel = IPlatformApplication.Current?.Services.GetRequiredService<PlaceDetailsViewModel>();
+		if (placeDetailsViewModel is null)
+		{
+			return;
+		}
+
 		placeDetailsViewModel.ApplyQueryAttributes(new Dictionary<string, object>
 		{
 			{
@@ -48,13 +51,9 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 			}
 		});
 
-		await placeDetailsViewModel.InitializeAsync();
-		if (placeDetailsViewModel.Place != Place.Default)
-		{
-			var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
-			var bottomSheet = this.ShowBottomSheet(placeDetailsView, true);
-			placeDetailsView.BottomSheet = bottomSheet;
-		}
+		var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
+		var bottomSheet = this.ShowBottomSheet(placeDetailsView, true);
+		placeDetailsView.BottomSheet = bottomSheet;
 	}
 
 	private void HelpMenuItemClicked(object? sender, EventArgs e)

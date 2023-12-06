@@ -82,7 +82,7 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<AboutPage, AboutViewModel>();
 		builder.Services.AddSingleton<ProfilePage, ProfileViewModel>();
-		builder.Services.AddSingleton<PlaceDetailsView, PlaceDetailsViewModel>();
+		builder.Services.AddTransient<PlaceDetailsView, PlaceDetailsViewModel>();
 		builder.Services.AddSingleton<LoginPage, LoginViewModel>();
 		builder.Services.AddSingleton<ExplorerPage, ExplorerViewModel>();
 		builder.Services.AddSingleton<LoadingPage, LoadingViewModel>();

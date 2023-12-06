@@ -23,7 +23,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	IDeviceDisplay deviceDisplay) : BaseViewModel, IDisposable
 {
 	[ObservableProperty]
-	private bool isShowingUser = true;
+	private bool isShowingUser = false;
 
 	[ObservableProperty]
 	private Location? currentLocation;
@@ -38,7 +38,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	private void GeoLocationOnListeningFailed(object? sender, GeolocationListeningFailedEventArgs e)
 	{
-		Status = Localization.UnableToGetPlaceDetails;
+		Status = $"{Localization.UnableToGetPlaceDetails}. {e.Error}";
 	}
 
 	private void UpdateLocation(Location location)
@@ -99,7 +99,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		var permission = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
 		if (permission != PermissionStatus.Granted)
 		{
-			await dialogService.AlertAsync("Error", "No permission", "OK");
+			await dialogService.AlertAsync("Error", "Geolocation permission denied", "OK");
 			return;
 		}
 
@@ -113,6 +113,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		geoLocation.LocationChanged += GeoLocationOnLocationChanged;
 		geoLocation.ListeningFailed += GeoLocationOnListeningFailed;
 		await geoLocation.StartListeningForegroundAsync(new GeolocationListeningRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(30)));
+		IsShowingUser = true;
 	}
 
 	async partial void OnCurrentLocationChanged(Location? value)
