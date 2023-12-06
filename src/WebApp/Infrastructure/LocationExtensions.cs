@@ -12,4 +12,9 @@ public static class LocationExtensions
 			SRID = DistanceConstants.SRID
 		};
 	}
+
+	public static Shared.Models.Location ToLocation(this Point point)
+	{
+		return new Shared.Models.Location(point.Y, point.X);
+	}
 }

@@ -1,18 +1,15 @@
 ﻿namespace WebApp.Services.Place;
 
 using AI;
-using Image;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using NetTopologySuite.Geometries;
 using Location = Shared.Models.Location;
 using Place = Infrastructure.Entities.Place;
 
-public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> dbContextFactory,
+public class PlacesLookupBackgroundService(IDbContextFactory<WorldExplorerDbContext> dbContextFactory,
 	IAiService aiService,
-	IImageSearchService imageSearchService,
-	ILogger<PlacesBackgroundService> logger) : BackgroundService
+	ILogger<PlacesLookupBackgroundService> logger) : BackgroundService
 {
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
@@ -38,28 +35,7 @@ public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> d
 					await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
 								   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Pending), stoppingToken);
 
-					var tasks = chunk.Select(x => aiService.GetNearByPlaces(new Location(x.Location.Y, x.Location.X)));
-					var placeTasks = await Task.WhenAll(tasks);
-					var places = placeTasks.SelectMany(x => x).ToList();
-
-					var newPlaceNames = places.Select(x => x.Name);
-					var existingPlaceNames = await dbContext.Places.Where(x => newPlaceNames.Contains(x.Name))
-															.Select(x => x.Name)
-															.ToListAsync(stoppingToken);
-
-					var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name).ToList();
-
-					var getImagesTasks = newPlaces.Select(async x =>
-												  {
-													  var images = await imageSearchService.GetPlaceImages(x.Name, stoppingToken);
-													  x.Images.AddRange(images);
-												  })
-												  .ToList();
-
-					await Task.WhenAll(getImagesTasks);
-
-					await dbContext.Places.AddRangeAsync(newPlaces.Select(ToPlace), stoppingToken);
-					await dbContext.SaveChangesAsync(stoppingToken);
+					await GeneratePlaces(dbContext, chunk, stoppingToken);
 
 					await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
 								   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Completed), stoppingToken);
@@ -75,17 +51,30 @@ public class PlacesBackgroundService(IDbContextFactory<WorldExplorerDbContext> d
 		}
 	}
 
+	private async Task GeneratePlaces(WorldExplorerDbContext dbContext,
+		LocationInfoRequest[] locationInfoRequests,
+		CancellationToken cancellationToken)
+	{
+		var tasks = locationInfoRequests.Select(x => aiService.GetNearByPlaces(new Location(x.Location.Y, x.Location.X)));
+		var placeTasks = await Task.WhenAll(tasks);
+		var places = placeTasks.SelectMany(x => x).ToList();
+
+		var newPlaceNames = places.Select(x => x.Name);
+		var existingPlaceNames = await dbContext.Places.Where(x => newPlaceNames.Contains(x.Name))
+												.Select(x => x.Name)
+												.ToListAsync(cancellationToken);
+
+		var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name).Select(ToPlace);
+
+		await dbContext.Places.AddRangeAsync(newPlaces, cancellationToken);
+		await dbContext.SaveChangesAsync(cancellationToken);
+	}
+
 	private static Place ToPlace(Shared.Models.Place place)
 	{
 		return new Place
 		{
-			Id = place.Id,
 			Name = place.Name,
-			Description = place.Description,
-			Images = place.Images.Select(x => new Image
-			{
-				Source = x
-			}).ToList(),
 			Location = place.Location.ToPoint()
 		};
 	}

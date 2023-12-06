@@ -143,7 +143,7 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 				foreach (var plane in planes)
 				{
 					if (plane.GetType() == Plane.Type.HorizontalUpwardFacing &&
-					    plane.TrackingState == TrackingState.Tracking)
+						plane.TrackingState == TrackingState.Tracking)
 					{
 						HideLoadingMessage();
 						break;

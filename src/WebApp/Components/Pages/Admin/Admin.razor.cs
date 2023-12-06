@@ -29,7 +29,7 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 	private async Task ClearPlaces()
 	{
 		var isConfirmed = await DialogService.ShowMessageBox("Clear places",
-		                                                      "Are you sure you want to clear all places?");
+															  "Are you sure you want to clear all places?");
 		if (isConfirmed == true)
 		{
 			await PlacesService.ClearPlaces(CancellationToken.None);
@@ -40,7 +40,7 @@ public partial class Admin : WorldExplorerAuthBaseComponent
 	private async Task ClearRequests()
 	{
 		var isConfirmed = await DialogService.ShowMessageBox("Clear requests",
-		                                                     "Are you sure you want to clear all requests?");
+															 "Are you sure you want to clear all requests?");
 		if (isConfirmed == true)
 		{
 			await LocationInfoRequestsService.Clear(CancellationToken.None);

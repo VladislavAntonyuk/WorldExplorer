@@ -47,19 +47,33 @@
         <MudDrawer @bind-Open="drawerOpen" Elevation="1" ClipMode="DrawerClipMode.Always">
             <NavMenu />
             <AuthorizeView>
-                <NotAuthorized>
-                    <LanguageControl />
-                </NotAuthorized>
-                <Authorized>
-                    <MudHidden Breakpoint="Breakpoint.MdAndUp">
-                        <SearchControl />
-                    </MudHidden>
-                </Authorized>
+	            <NotAuthorized>
+		            <LanguageControl />
+	            </NotAuthorized>
+	            <Authorized>
+		            <MudHidden Breakpoint="Breakpoint.MdAndUp">
+			            <SearchControl />
+		            </MudHidden>
+	            </Authorized>
             </AuthorizeView>
+            <MudLink Href="https://www.buymeacoffee.com/vlad.antonyuk" Target="_blank">
+	            <MudImage Src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
+	                      Alt="Buy Me A Coffee"
+	                      Fluid="true"
+	                      Class="side-image"/>
+            </MudLink>
         </MudDrawer>
 		<MudMainContent>
 			<MudContainer MaxWidth="MaxWidth.False">
-				@Body
+				<ErrorBoundary @ref="errorBoundary" MaximumErrorCount="5">
+					<ChildContent>
+						@Body
+					</ChildContent>
+					<ErrorContent>
+						<MudText Typo="Typo.h1">Error has occurred</MudText>
+						<MudButton OnClick="ResetError">Go To The Homepage</MudButton>
+					</ErrorContent>
+				</ErrorBoundary>
 			</MudContainer>
 			<MudScrollToTop Style="z-index: 1200">
 				<MudFab StartIcon="@Icons.Material.Filled.ArrowUpward" Color="Color.Primary"/>

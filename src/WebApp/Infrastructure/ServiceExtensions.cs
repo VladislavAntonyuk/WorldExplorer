@@ -63,7 +63,9 @@ public static class ServiceExtensions
 
 	public static void AddWorldExplorerServices(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddHostedService<PlacesBackgroundService>();
+		services.AddHostedService<PlacesLookupBackgroundService>();
+		services.AddHostedService<PlaceDetailsBackgroundService>();
+
 		services.AddSingleton<IPlacesService, PlacesService>();
 		services.Configure<PlacesSettings>(configuration.GetRequiredSection("Places"));
 		services.AddSingleton<ILocationInfoRequestsService, LocationInfoRequestsService>();

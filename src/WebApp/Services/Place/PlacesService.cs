@@ -22,7 +22,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		var dbPlaces = await dbContext.Places.ToListAsync(cancellationToken);
-		return dbPlaces.Select(ToPlace).OrderBy(x => x.Name).ToList();
+		return [.. dbPlaces.Select(ToPlace).OrderBy(x => x.Name)];
 	}
 
 	public async Task<OperationResult<List<Place>>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
@@ -96,7 +96,7 @@ public class PlacesService(IDbContextFactory<WorldExplorerDbContext> dbContextFa
 			Name = place.Name,
 			Description = place.Description,
 			Images = place.Images.Select(x => x.Source).ToList(),
-			Location = new Location(place.Location.Y, place.Location.X),
+			Location = place.Location.ToLocation(),
 			Reviews = place.Reviews.Select(x => new Shared.Models.Review
 			{
 				Id = x.Id,

@@ -1,4 +1,4 @@
-namespace Client.ViewModels;
+﻿namespace Client.ViewModels;
 
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;

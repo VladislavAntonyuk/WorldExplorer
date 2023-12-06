@@ -10,7 +10,7 @@ using Services.User;
 using Shared.Enums;
 using Shared.Models;
 
-public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
+public sealed partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDisposable
 {
 	private Location? currentLocation;
 	private string? errorMessage;
@@ -108,20 +108,12 @@ public partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyncDispos
 	[JSInvokable]
 	public async Task OpenDetails(Guid id, string title)
 	{
-		var placeDetails = await PlacesService.GetPlaceDetails(id, CancellationToken.None);
-		if (placeDetails is null)
+		await DialogService.ShowAsync<PlaceDetailsDialog>(title, new DialogParameters
 		{
-			Snackbar.Add($"{title} {Translation.NotFound}", Severity.Error);
-		}
-		else
-		{
-			await DialogService.ShowAsync<PlaceDetailsDialog>(placeDetails.Name, new DialogParameters
 			{
-				{
-					nameof(PlaceDetailsDialog.Place), placeDetails
-				}
-			});
-		}
+				nameof(PlaceDetailsDialog.PlaceId), id
+			}
+		});
 	}
 
 	private async Task<Marker> CreateMarker(Guid id, Location location, string label, string? icon)

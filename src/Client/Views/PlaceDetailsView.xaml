@@ -18,12 +18,6 @@
 
 	<ScrollView Margin="10">
 		<VerticalStackLayout Spacing="10">
-			<Image
-				IsVisible="{OnPlatform Default=false, iOS=true}"
-				Background="{DynamicResource Gray500}"
-				Source="{Binding Place.Images[0]}"
-				MaximumHeightRequest="300"
-				Aspect="AspectFit" />
 
 			<Label
 				Text="{Binding Place.Name}"
@@ -80,7 +74,7 @@
 			</ScrollView>
 
 			<CollectionView
-				IsVisible="{OnPlatform Default=true, iOS=false}"
+				IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
 				ItemsSource="{Binding Place.Images}"
 				HeightRequest="300">
 

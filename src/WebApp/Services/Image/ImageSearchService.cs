@@ -19,7 +19,7 @@ public class ImageSearchService
 			return response?.ImagesResults.Select(x => x.Url).Where(x => x.StartsWith("https://")).ToList() ??
 				   [];
 		}
-		catch (Exception)
+		catch
 		{
 			return [];
 		}

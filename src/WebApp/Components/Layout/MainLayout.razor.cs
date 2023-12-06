@@ -1,5 +1,7 @@
 ﻿namespace WebApp.Components.Layout;
 
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 public partial class MainLayout : WorldExplorerBaseLayout
@@ -8,6 +10,10 @@ public partial class MainLayout : WorldExplorerBaseLayout
 	private bool isDarkMode = true;
 	private MudThemeProvider? mudThemeProvider;
 	private bool rightToLeft;
+	private ErrorBoundary? errorBoundary;
+
+	[Inject]
+	public required NavigationManager NavigationManager { get; set; }
 
 	private void DrawerToggle()
 	{
@@ -34,5 +40,10 @@ public partial class MainLayout : WorldExplorerBaseLayout
 		}
 
 		return Task.CompletedTask;
+	}
+	private void ResetError()
+	{
+		errorBoundary?.Recover();
+		NavigationManager.NavigateTo("/");
 	}
 }

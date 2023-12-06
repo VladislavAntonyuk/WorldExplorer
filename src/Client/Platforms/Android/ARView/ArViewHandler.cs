@@ -73,5 +73,5 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 	{
 		platformView.Dispose();
 		base.DisconnectHandler(platformView);
-}
+	}
 }

@@ -8,6 +8,5 @@
 
 	<toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
 	<toolkit:IsListNotNullOrEmptyConverter x:Key="IsListNotNullOrEmptyConverter" />
-	<toolkit:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
 	<converters:ErrorCodeToImageSourceConverter x:Key="ErrorCodeToImagePathConverter" />
 </ResourceDictionary>
