@@ -5,17 +5,11 @@
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:rating="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
-	xmlns:views="clr-namespace:Client.Views"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView"
-	x:Name="PlaceDetails">
-
-	<views:PlaceDetailsView.BackgroundColor>
-		<OnPlatform x:TypeArguments="Color">
-			<On Platform="MacCatalyst, WinUI" Value="{StaticResource Gray300}" />
-		</OnPlatform>
-	</views:PlaceDetailsView.BackgroundColor>
+	x:Name="PlaceDetails"
+	BackgroundColor="{StaticResource Gray300}">
 
 	<Grid
 		WidthRequest="{Binding Window.Width, Source={x:Reference PlaceDetails}}"
