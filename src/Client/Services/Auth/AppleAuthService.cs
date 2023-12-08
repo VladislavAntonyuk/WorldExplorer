@@ -17,7 +17,7 @@ internal class AppleAuthService(IOptions<AzureB2CConfiguration> options) : IAuth
 				new Uri($"msal{options.Value.ClientId}://auth"));
 
 			currentUserToken = authResult.AccessToken;
-			return new OperationResult<string>()
+			return new OperationResult<string>
 			{
 				Value = authResult.AccessToken
 			};
@@ -46,7 +46,7 @@ internal class AppleAuthService(IOptions<AzureB2CConfiguration> options) : IAuth
             return operationResult;
 		}
 
-		return new OperationResult<string>()
+		return new OperationResult<string>
 		{
 			Value = currentUserToken
 		};

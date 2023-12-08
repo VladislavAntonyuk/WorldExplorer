@@ -1,6 +1,6 @@
-﻿@using WebApp.Infrastructure.Entities
-@using Place = Shared.Models.Place
+﻿@using Place = Shared.Models.Place
 @using User = Shared.Models.User
+@using WebApp.Infrastructure.Entities
 @inherits WorldExplorerAuthBaseComponent
 @page "/admin"
 @attribute [Authorize(Policy = "IsAdministrator")]
@@ -24,7 +24,10 @@
 						<MudTh></MudTh>
 					</HeaderContent>
 					<RowTemplate Context="place">
-						<MudTd DataLabel="Id">@place.Id</MudTd>
+						@{
+							var link = $"/admin/places/{place.Id}";
+						}
+						<MudTd DataLabel="Id"><MudLink Href="@link">@place.Id</MudLink></MudTd>
 						<MudTd DataLabel="Name">@place.Name</MudTd>
 						<MudTd DataLabel="Location">@place.Location</MudTd>
 						<MudTd DataLabel="Rating">@place.Rating</MudTd>

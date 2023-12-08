@@ -11,4 +11,5 @@ public interface IPlacesService
 	Task ClearPlaces(CancellationToken cancellationToken);
 	bool IsNearby(Location location1, Location location2);
 	Task Delete(Guid placeId, CancellationToken cancellationToken);
+	Task UpdatePlace(Place place, CancellationToken cancellationToken);
 }

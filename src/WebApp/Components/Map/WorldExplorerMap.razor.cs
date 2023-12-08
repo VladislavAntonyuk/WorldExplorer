@@ -1,6 +1,5 @@
 ﻿namespace WebApp.Components.Map;
 
-using Components;
 using Dialogs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;

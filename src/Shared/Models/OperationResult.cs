@@ -1,6 +1,6 @@
 ﻿namespace Shared.Models;
 
-using Shared.Enums;
+using Enums;
 
 public class OperationResult<T> where T : new()
 {

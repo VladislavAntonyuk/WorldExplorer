@@ -12,7 +12,7 @@ using Services.API;
 using Services.Auth;
 using Shared.Enums;
 using Views;
-using Location = Microsoft.Maui.Devices.Sensors.Location;
+using Location = Location;
 
 public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	ILauncher launcher,
@@ -23,7 +23,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	IDeviceDisplay deviceDisplay) : BaseViewModel, IDisposable
 {
 	[ObservableProperty]
-	private bool isShowingUser = false;
+	private bool isShowingUser;
 
 	[ObservableProperty]
 	private Location? currentLocation;
@@ -162,7 +162,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 				Status = string.Format(Localization.FoundPlaces, placesResponse.Content.Result.Count);
 				foreach (var place in placesResponse.Content.Result.Where(x => Pins.All(pin => pin.PlaceId != x.Id)))
 				{
-					Pins.Add(new WorldExplorerPin()
+					Pins.Add(new WorldExplorerPin
 					{
 						PlaceId = place.Id,
 						Location = new Location(place.Location.Latitude, place.Location.Longitude),

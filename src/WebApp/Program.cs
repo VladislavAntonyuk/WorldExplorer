@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OwaspHeaders.Core.Extensions;
 using WebApp.Components;
 using WebApp.Infrastructure;
 
@@ -17,6 +18,7 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
+app.UseSecureHeadersMiddleware();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();

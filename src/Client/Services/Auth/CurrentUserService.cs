@@ -1,6 +1,5 @@
 ﻿namespace Client.Services.Auth;
 
-using API;
 using CommunityToolkit.Mvvm.Messaging;
 using Shared.Models;
 

@@ -1,5 +1,6 @@
 ﻿namespace Client;
 
+using Android.App;
 using Android.Content;
 using Android.Provider;
 
@@ -14,7 +15,7 @@ public static class StreamExtensions
 			{
 				var values = new ContentValues();
 				values.Put("_display_name", $"{DateTime.Now}.jpg");
-				var content = Android.App.Application.Context.ContentResolver;
+				var content = Application.Context.ContentResolver;
 				using var url = content?.Insert(uri, values);
 				if (url is not null)
 				{

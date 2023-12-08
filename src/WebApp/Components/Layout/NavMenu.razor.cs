@@ -2,7 +2,6 @@
 
 using System.Reflection;
 using System.Runtime.Versioning;
-using WebApp.Components;
 
 public partial class NavMenu : WorldExplorerBaseComponent
 {

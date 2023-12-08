@@ -1,6 +1,5 @@
 ﻿namespace WebApp.Services.User;
 
-using System.Threading;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
@@ -119,7 +118,7 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 
 	private static UserSettings ToModel(Infrastructure.Entities.UserSettings settings)
 	{
-		return new UserSettings()
+		return new UserSettings
 		{
 			TrackUserLocation = settings.TrackUserLocation
 		};
@@ -127,7 +126,7 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<Worl
 
 	private static Infrastructure.Entities.UserSettings ToEntity(UserSettings settings)
 	{
-		return new Infrastructure.Entities.UserSettings()
+		return new Infrastructure.Entities.UserSettings
 		{
 			TrackUserLocation = settings.TrackUserLocation
 		};

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Services.User;
 using Shared.Models;
-using WebApp.Components;
 
 public partial class Profile : WorldExplorerAuthBaseComponent
 {

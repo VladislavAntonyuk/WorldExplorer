@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Services.Place;
 using Services.User;
-using WebApp.Components;
 using Place = Shared.Models.Place;
 using User = Shared.Models.User;
 

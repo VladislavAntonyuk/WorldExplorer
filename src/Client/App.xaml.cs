@@ -1,6 +1,5 @@
 ﻿namespace Client;
 
-using Shared;
 using ViewModels;
 
 public partial class App : Application

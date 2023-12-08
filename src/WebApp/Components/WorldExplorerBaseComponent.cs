@@ -2,13 +2,14 @@
 
 using I18nText;
 using Microsoft.AspNetCore.Components;
+using Toolbelt.Blazor.I18nText;
 
 public abstract class WorldExplorerBaseComponent : ComponentBase
 {
 	protected Translation Translation = new();
 
 	[Inject]
-	public required Toolbelt.Blazor.I18nText.I18nText I18NText { get; set; }
+	public required I18nText I18NText { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{

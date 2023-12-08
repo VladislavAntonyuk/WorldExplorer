@@ -2,10 +2,11 @@
 
 using NetTopologySuite.Geometries;
 using Services.Place;
+using Location = Shared.Models.Location;
 
 public static class LocationExtensions
 {
-	public static Point ToPoint(this Shared.Models.Location location)
+	public static Point ToPoint(this Location location)
 	{
 		return new Point(location.Longitude, location.Latitude)
 		{
@@ -13,8 +14,8 @@ public static class LocationExtensions
 		};
 	}
 
-	public static Shared.Models.Location ToLocation(this Point point)
+	public static Location ToLocation(this Point point)
 	{
-		return new Shared.Models.Location(point.Y, point.X);
+		return new Location(point.Y, point.X);
 	}
 }

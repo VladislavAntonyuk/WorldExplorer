@@ -65,7 +65,7 @@ public class PlaceDetailsBackgroundService(IDbContextFactory<WorldExplorerDbCont
 		images.AddRange(await imageSearchService.GetPlaceImages(place.Name, stoppingToken));
 		foreach (var image in images)
 		{
-			place.Images.Add(new Image()
+			place.Images.Add(new Image
 			{
 				Source = image
 			});

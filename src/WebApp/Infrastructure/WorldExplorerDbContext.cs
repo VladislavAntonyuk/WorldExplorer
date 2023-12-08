@@ -1,6 +1,5 @@
 ﻿namespace WebApp.Infrastructure;
 
-using System.Reflection.Emit;
 using Configurations;
 using Entities;
 using Microsoft.EntityFrameworkCore;

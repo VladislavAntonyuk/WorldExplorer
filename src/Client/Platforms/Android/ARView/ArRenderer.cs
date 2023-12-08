@@ -13,7 +13,7 @@ using Javax.Microedition.Khronos.Opengles;
 using Renderings;
 using Config = Google.AR.Core.Config;
 using EGLConfig = Javax.Microedition.Khronos.Egl.EGLConfig;
-using Exception = System.Exception;
+using Exception = Exception;
 
 public class ArRenderer : Object, GLSurfaceView.IRenderer
 {

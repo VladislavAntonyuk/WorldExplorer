@@ -2,8 +2,8 @@
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Services.Place;
 using Shared.Models;
-using WebApp.Services.Place;
 
 public partial class PlaceDetailsDialog : BaseDialog
 {
