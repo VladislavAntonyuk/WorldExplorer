@@ -79,7 +79,7 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		try
 		{
 			var prompt = $"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'";
-			var imageResult = await api.ImageGenerations.CreateImageAsync(new ImageGenerationRequest(prompt, 1, ImageSize._1024, null, ImageResponseFormat.Url));
+			var imageResult = await api.ImageGenerations.CreateImageAsync(new ImageGenerationRequest(prompt, Model.DALLE3, ImageSize._1024, "hd", null, ImageResponseFormat.Url));
 			return imageResult.Data.Select(x => x.Url).First();
 		}
 		catch (Exception e)
