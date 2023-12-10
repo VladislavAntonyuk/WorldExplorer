@@ -10,7 +10,7 @@ using Place = Infrastructure.Entities.Place;
 public class PlaceDetailsBackgroundService(IDbContextFactory<WorldExplorerDbContext> dbContextFactory,
 	IAiService aiService,
 	IImageSearchService imageSearchService,
-	ILogger<PlacesLookupBackgroundService> logger) : BackgroundService
+	ILogger<PlaceDetailsBackgroundService> logger) : BackgroundService
 {
 	private const int MinImagesCount = 70;
 
