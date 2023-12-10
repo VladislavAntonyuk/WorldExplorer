@@ -14,7 +14,7 @@ public static class StreamExtensions
 			if (uri is not null)
 			{
 				var values = new ContentValues();
-				values.Put("_display_name", $"{DateTime.Now}.jpg");
+				values.Put("_display_name", $"{DateTime.Now:u}.jpg");
 				var content = Application.Context.ContentResolver;
 				using var url = content?.Insert(uri, values);
 				if (url is not null)

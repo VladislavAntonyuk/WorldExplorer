@@ -44,9 +44,15 @@ public partial class CameraViewModel(INavigationService navigationService,
 			CameraView.Current.Camera = CameraView.Current.Cameras[0];
 			await dispatcher.DispatchAsync(async () =>
 			{
-				if (await CameraView.Current.StartCameraAsync() == CameraResult.Success)
+				var result = await CameraView.Current.StartCameraAsync();
+				if (result is CameraResult.Success)
 				{
 					IsCameraLoaded = true;
+				}
+				else
+				{
+					await dialogService.ToastAsync($"Camera error: {result.ToString()}");
+					await Close();
 				}
 			});
 		}
