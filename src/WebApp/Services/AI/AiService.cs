@@ -43,8 +43,8 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
 				new (ChatMessageRole.User, generalPrompt)
 			},
-			Model = new Model(aiSettings.Value.Model)
-		}).Safe(new ChatResult{Choices = []});
+			Model = new Model("gpt-3.5-turbo-1106")
+		}).Safe(new ChatResult{Choices = []}, (e) => logger.LogError(e, "Failed to get nearby places"));
 		if (result.Choices.Count == 0)
 		{
 			return [];
@@ -60,7 +60,7 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		var generalPrompt = $"""
 		                     Tell me about place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'.
 		                     This is a famous place, so you must know a lot about it.
-		                     Provide as detailed information as possible. The description for place must contain a lot of text (at least 1000 words).
+		                     Provide as detailed information as possible. The description for place must contain a lot of text.
 		                     The output must contain only the detailed information because I will parse it later. Do not include any information or formatting except description text.
 		                     Example:
 		                     Dmytro Yavornytsky National Historical Museum of Dnipro is a museum, established in Dnipro (Ukraine) in 1848 by Andriy Fabr, local governor. Its permanent collection consists of 283 thousand objects from ancient Paleolithic implements to display units of World War II. Among its notable objects are the Kurgan stelae, Kernosivsky idol and vast collection of cossack's antiquities.
@@ -75,8 +75,8 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
 				new (ChatMessageRole.User, generalPrompt)
 			},
-			Model = new Model(aiSettings.Value.Model)
-		}).Safe(new ChatResult{Choices = []});
+			Model = new Model("gpt-4-1106-preview")
+		}).Safe(new ChatResult{Choices = []}, (e) => logger.LogError(e, "Failed to get place description"));
 		if (result.Choices.Count == 0)
 		{
 			return null;
