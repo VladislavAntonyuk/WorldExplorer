@@ -6,6 +6,7 @@ using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Images;
 using OpenAI_API.Models;
+using Shared.Extensions;
 using Shared.Models;
 
 public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logger) : IAiService
@@ -22,37 +23,42 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
 		var generalPrompt = $$"""
-		                      You are a tour guide with a great knowledge of history. Tell me about 10 places near the following location: Latitude='{{location.Latitude}}', Longitude='{{location.Longitude}}'.
+		                      Tell me about 10 places near the following location: Latitude='{{location.Latitude}}', Longitude='{{location.Longitude}}'.
 		                      As they are famous places you must know their coordinates. Provide location as accurately as possible.
 		                      Format the output in JSON format with the next properties: name, location (longitude, latitude).
 		                      The output must contain only JSON because I will parse it later. Do not include any information or formatting except valid JSON.
-		                      Example:
-		                      [
+		                      Example JSON for one place:
 		                          {
 		                              "name": "Dmytro Yavornytsky National Historical Museum of Dnipro",
 		                              "location": { "latitude": 48.455833330000026, "longitude": 35.06388889000002 }
 		                          }
-		                      ]
 		                      """;
 
 		// https://platform.openai.com/docs/models/model-endpoint-compatibility
-		var result = await api.Chat.CreateChatCompletionAsync(new[]
+		var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
 		{
-			new ChatMessage(ChatMessageRole.Assistant, generalPrompt)
-		}, new Model(aiSettings.Value.Model));
+			ResponseFormat = ChatRequest.ResponseFormats.JsonObject,
+			Messages = new List<ChatMessage>()
+			{
+				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
+				new (ChatMessageRole.User, generalPrompt)
+			},
+			Model = new Model(aiSettings.Value.Model)
+		}).Safe(new ChatResult{Choices = []});
 		if (result.Choices.Count == 0)
 		{
 			return [];
 		}
 
-		logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Choices[0].Message.Content, result.ProcessingTime);
-		return JsonSerializer.Deserialize<List<Place>>(result.Choices[0].Message.Content, serializerOptions) ?? [];
+		logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Choices[0].Message.TextContent, result.ProcessingTime);
+		var response = JsonSerializer.Deserialize<PlacesAiResponse>(result.Choices[0].Message.TextContent, serializerOptions);
+		return response?.Places ?? [];
 	}
 
-	public async Task<string?> GetPlaceDetails(string placeName, Location location)
+	public async Task<string?> GetPlaceDescription(string placeName, Location location)
 	{
 		var generalPrompt = $"""
-		                     You are a tour guide with a great knowledge of history. Tell me about place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'.
+		                     Tell me about place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'.
 		                     This is a famous place, so you must know a lot about it.
 		                     Provide as detailed information as possible. The description for place must contain a lot of text (at least 1000 words).
 		                     The output must contain only the detailed information because I will parse it later. Do not include any information or formatting except description text.
@@ -61,17 +67,23 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		                     """;
 
 		// https://platform.openai.com/docs/models/model-endpoint-compatibility
-		var result = await api.Chat.CreateChatCompletionAsync(new[]
+		var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
 		{
-			new ChatMessage(ChatMessageRole.Assistant, generalPrompt)
-		}, new Model(aiSettings.Value.Model));
+			ResponseFormat = ChatRequest.ResponseFormats.Text,
+			Messages = new List<ChatMessage>()
+			{
+				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
+				new (ChatMessageRole.User, generalPrompt)
+			},
+			Model = new Model(aiSettings.Value.Model)
+		}).Safe(new ChatResult{Choices = []});
 		if (result.Choices.Count == 0)
 		{
 			return null;
 		}
 
-		logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Choices[0].Message.Content, result.ProcessingTime);
-		return result.Choices[0].Message.Content;
+		logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Choices[0].Message.TextContent, result.ProcessingTime);
+		return result.Choices[0].Message.TextContent;
 	}
 
 	public async Task<string?> GenerateImage(string placeName, Location location)
@@ -88,5 +100,10 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		}
 
 		return null;
+	}
+
+	private sealed class PlacesAiResponse
+	{
+		public List<Place> Places { get; set; } = [];
 	}
 }

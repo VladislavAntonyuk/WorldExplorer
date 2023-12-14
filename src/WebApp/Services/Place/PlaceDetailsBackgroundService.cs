@@ -76,7 +76,7 @@ public class PlaceDetailsBackgroundService(IDbContextFactory<WorldExplorerDbCont
 	{
 		if (string.IsNullOrWhiteSpace(place.Description))
 		{
-			place.Description = await aiService.GetPlaceDetails(place.Name, place.Location.ToLocation());
+			place.Description = await aiService.GetPlaceDescription(place.Name, place.Location.ToLocation());
 		}
 	}
 }

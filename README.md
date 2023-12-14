@@ -10,6 +10,14 @@ A journey is not just about reaching the destination; it's about the experiences
 
 ## Development
 
+### MacCatalyst
+
+Run on Device
+
+```bash
+dotnet build -t:Run -c Release -f net8.0-maccatalyst -r maccatalyst-arm64
+```
+
 ### iOS
 
 Run on Emulator iPhone 15 Pro Max

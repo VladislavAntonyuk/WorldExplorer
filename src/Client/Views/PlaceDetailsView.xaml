@@ -29,6 +29,13 @@
 			IsVisible="{Binding IsPlacedLoaded}">
 			<VerticalStackLayout Spacing="10">
 
+				<Image
+					Background="{DynamicResource Gray500}"
+					Source="{Binding Place.MainImage, FallbackValue='https://placehold.co/300?text=Loading...'}"
+					WidthRequest="300"
+					HeightRequest="300"
+					Aspect="AspectFit" />
+
 				<rating:SfRating
 					Value="{Binding Place.Rating}"
 					ItemCount="5"
