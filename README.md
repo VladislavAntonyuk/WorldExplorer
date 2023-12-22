@@ -2,6 +2,9 @@
 
 https://world-explorer.azurewebsites.net/
 
+## Conference
+[![YouTube Video Link](https://img.youtube.com/vi/sHVlg8Y6qlU/0.jpg)](https://www.youtube.com/watch?v=sHVlg8Y6qlU)
+
 ## Description
 
 Explore the globe like never before with World Explorer. Our AI-powered app gives you in-depth insights about any place worldwide, provides a comprehensive description, and recommends local attractions with your personalized travel guide.
