@@ -14,7 +14,7 @@
 		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="12.0.2" />
 		<PackageReference Include="Microsoft.Identity.Web.UI" Version="2.16.0" />
 		
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite" Version="8.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
 			<PrivateAssets>all</PrivateAssets>
