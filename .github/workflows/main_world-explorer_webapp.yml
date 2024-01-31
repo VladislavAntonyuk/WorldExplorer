@@ -5,10 +5,12 @@ on:
         branches: [ main ]
         paths:
           - 'src/WebApp/**'
+          - '.github/workflows/main_world-explorer_webapp.yml'
     pull_request:
         branches: [ main ]
         paths:
           - 'src/WebApp/**'
+          - '.github/workflows/main_world-explorer_webapp.yml'
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
