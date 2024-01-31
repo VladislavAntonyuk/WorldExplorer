@@ -24,10 +24,10 @@ jobs:
         runs-on: windows-latest
 
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Set up .NET
-                uses: actions/setup-dotnet@v3
+                uses: actions/setup-dotnet@v4
                 with:
                     dotnet-version: '8.x'
 
@@ -35,7 +35,7 @@ jobs:
                 run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp' /p:Version="${{ env.VERSION }}"
 
             -   name: Upload artifact for deployment job
-                uses: actions/upload-artifact@v3
+                uses: actions/upload-artifact@v4
                 with:
                     name: webapp
                     path: ${{env.DOTNET_ROOT}}/webapp
@@ -51,7 +51,7 @@ jobs:
 
         steps:
             -   name: Download artifact from build job
-                uses: actions/download-artifact@v3
+                uses: actions/download-artifact@v4
                 with:
                     name: webapp
 
@@ -70,7 +70,7 @@ jobs:
 
             -   name: Deploy to Azure Web App
                 id: deploy-to-webapp
-                uses: azure/webapps-deploy@v2
+                uses: azure/webapps-deploy@v3
                 with:
                     app-name: 'world-explorer'
                     slot-name: 'Production'
