@@ -77,6 +77,7 @@ jobs:
             -   name: Build Client (Windows)
                 run: |
                     dotnet publish src/Client/Client.csproj -f net8.0-windows10.0.19041.0 /p:Version="${{ env.VERSION }}"
+                    copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\f\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
                     copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
                     copy ".\src\Client\obj\Release\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\*.*" ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\"
                     &"${Env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\MakeAppx.exe" pack /v /h SHA256 /d "src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64" /p "output\windows\WorldExplorer.msix";

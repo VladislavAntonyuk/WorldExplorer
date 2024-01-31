@@ -19,3 +19,6 @@ updates:
     CommunityToolkit:
       patterns:
       - "CommunityToolkit*"
+    xUnit:
+      patterns:
+      - "xunit*"
