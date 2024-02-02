@@ -43,7 +43,7 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
 				new (ChatMessageRole.User, generalPrompt)
 			},
-			Model = new Model("gpt-3.5-turbo-1106")
+			Model = Model.ChatGPTTurbo
 		}).Safe(new ChatResult{Choices = []}, (e) => logger.LogError(e, "Failed to get nearby places"));
 		if (result.Choices.Count == 0)
 		{
@@ -75,7 +75,7 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
 				new (ChatMessageRole.User, generalPrompt)
 			},
-			Model = new Model("gpt-4-1106-preview")
+			Model = Model.GPT4_Turbo
 		}).Safe(new ChatResult{Choices = []}, (e) => logger.LogError(e, "Failed to get place description"));
 		if (result.Choices.Count == 0)
 		{
