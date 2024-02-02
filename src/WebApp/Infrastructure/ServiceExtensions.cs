@@ -54,9 +54,10 @@ public static class ServiceExtensions
 
 	public static void AddDatabase(this IServiceCollection services)
 	{
+		Directory.CreateDirectory("App_Data");
 		services.AddPooledDbContextFactory<WorldExplorerDbContext>(opt =>
 		{
-			opt.UseSqlite("Data Source=WorldExplorer.db", optionsBuilder => optionsBuilder.UseNetTopologySuite())
+			opt.UseSqlite("Data Source=App_Data/WorldExplorer.db", optionsBuilder => optionsBuilder.UseNetTopologySuite())
 			   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
 		});
 	}
