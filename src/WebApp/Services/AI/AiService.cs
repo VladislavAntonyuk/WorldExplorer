@@ -20,6 +20,8 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		? OpenAIAPI.ForAzure("", "", new APIAuthentication(aiSettings.Value.ApiKey))
 		: new OpenAIAPI(aiSettings.Value.ApiKey);
 
+
+	private const string GptModel = "gpt-3.5-turbo-1106";
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
 		var generalPrompt = $$"""
@@ -35,15 +37,15 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		                      """;
 
 		// https://platform.openai.com/docs/models/model-endpoint-compatibility
-		var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
+		var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest
 		{
 			ResponseFormat = ChatRequest.ResponseFormats.JsonObject,
-			Messages = new List<ChatMessage>()
+			Messages = new List<ChatMessage>
 			{
 				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
-				new (ChatMessageRole.User, generalPrompt)
+				new(ChatMessageRole.User, generalPrompt)
 			},
-			Model = Model.ChatGPTTurbo
+			Model = new Model(GptModel)
 		}).Safe(new ChatResult{Choices = []}, (e) => logger.LogError(e, "Failed to get nearby places"));
 		if (result.Choices.Count == 0)
 		{
