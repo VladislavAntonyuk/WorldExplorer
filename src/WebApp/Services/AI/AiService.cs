@@ -21,7 +21,8 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		: new OpenAIAPI(aiSettings.Value.ApiKey);
 
 
-	private const string GptModel = "gpt-3.5-turbo-1106";
+	private const string GptPlacesModel = "gpt-3.5-turbo";
+    private const string GptPlaceDescriptionModel = "gpt-3.5-turbo"; // use gpt-4-turbo-preview
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
 		var generalPrompt = $$"""
@@ -45,7 +46,7 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
 				new(ChatMessageRole.User, generalPrompt)
 			},
-			Model = new Model(GptModel)
+			Model = new Model(GptPlacesModel)
 		}).Safe(new ChatResult{Choices = []}, (e) => logger.LogError(e, "Failed to get nearby places"));
 		if (result.Choices.Count == 0)
 		{
@@ -77,7 +78,7 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
 				new (ChatMessageRole.User, generalPrompt)
 			},
-			Model = Model.GPT4_Turbo
+			Model = new Model(GptPlaceDescriptionModel)
 		}).Safe(new ChatResult{Choices = []}, (e) => logger.LogError(e, "Failed to get place description"));
 		if (result.Choices.Count == 0)
 		{
@@ -88,6 +89,9 @@ public class AiService(IOptions<AiSettings> aiSettings, ILogger<AiService> logge
 		return result.Choices[0].Message.TextContent;
 	}
 
+    /// <summary>
+	/// Only works with DALL-E-3 and higher (https://platform.openai.com/docs/models/)
+    /// </summary>
 	public async Task<string?> GenerateImage(string placeName, Location location)
 	{
 		try
