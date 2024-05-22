@@ -1,6 +1,6 @@
-﻿@using Place = Shared.Models.Place
+﻿@using WebApp.Infrastructure.Entities
+@using Place = Shared.Models.Place
 @using User = Shared.Models.User
-@using WebApp.Infrastructure.Entities
 @inherits WorldExplorerAuthBaseComponent
 @page "/admin"
 @attribute [Authorize(Policy = "IsAdministrator")]

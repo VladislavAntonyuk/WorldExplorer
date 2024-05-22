@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.Graph.Beta;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -72,6 +73,21 @@ public static class ServiceExtensions
 		services.AddSingleton<ILocationInfoRequestsService, LocationInfoRequestsService>();
 		services.Configure<AiSettings>(configuration.GetRequiredSection("AI"));
 		services.AddSingleton<IAiService, AiService>();
+		services.AddHttpClient<GeminiProvider>("Gemini", client =>
+		{
+			client.DefaultRequestHeaders.Add("x-goog-api-client", "genai-swift/0.4.8");
+			client.DefaultRequestHeaders.Add("User-Agent", "AIChat/1 CFNetwork/1410.1 Darwin/22.6.0");
+		});
+		services.AddSingleton<IAiProvider>(s =>
+		{
+			var aiSettings = s.GetRequiredService<IOptions<AiSettings>>().Value;
+			if (aiSettings.Provider == "OpenAI")
+			{
+				return new OpenAiProvider(s.GetRequiredService<IOptions<AiSettings>>(), s.GetRequiredService<ILogger<OpenAiProvider>>());
+			}
+
+			return s.GetRequiredService<GeminiProvider>();
+		});
 
 		services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
 		services.AddSingleton<IImageSearchService, ImageSearchService>();

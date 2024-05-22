@@ -28,7 +28,7 @@ app.MapControllers();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 var db = app.Services.GetRequiredService<IDbContextFactory<WorldExplorerDbContext>>();
-using var dbContext = db.CreateDbContext();
-dbContext.Database.Migrate();
+await using var dbContext = await db.CreateDbContextAsync();
+await dbContext.Database.MigrateAsync();
 
-app.Run();
+await app.RunAsync();

@@ -9,10 +9,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MudBlazor" Version="6.19.1" />
+		<PackageReference Include="MudBlazor" Version="7.0.0-preview.3" />
 		<PackageReference Include="OwaspHeaders.Core" Version="8.0.0" />
 		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="12.0.2" />
-		<PackageReference Include="Microsoft.Identity.Web.UI" Version="2.18.1" />
+		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.0-preview1" />
 		
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite" Version="8.0.5" />
@@ -21,9 +21,10 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 
+		<PackageReference Include="Google_GenerativeAI" Version="0.1.20" />
 		<PackageReference Include="OpenAI" Version="1.11.0" />
 
-		<PackageReference Include="Azure.Identity" Version="1.11.3" />
-		<PackageReference Include="Microsoft.Graph.Beta" Version="5.63.0-preview" />
+		<PackageReference Include="Azure.Identity" Version="1.12.0-beta.2" />
+		<PackageReference Include="Microsoft.Graph.Beta" Version="5.75.0-preview" />
 	</ItemGroup>
 </Project>

@@ -2,13 +2,11 @@ namespace WebAppTests;
 
 using System.Text.Json;
 using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Shared.Models;
 using WebApp.Services.AI;
 using Xunit.Abstractions;
 
-public class AiServiceTests(ITestOutputHelper testOutputHelper)
+public abstract class BaseAiProviderTests(ITestOutputHelper testOutputHelper)
 {
 	[Fact]
 	public async Task GetNearbyPlacesShouldReturnTenPlaces()
@@ -28,12 +26,5 @@ public class AiServiceTests(ITestOutputHelper testOutputHelper)
 		testOutputHelper.WriteLine(placeDescription);
 	}
 
-	private AiService GetAiService()
-	{
-		return new(Options.Create(new AiSettings
-		{
-			ApiKey = "API-key",
-			Provider = "OpenAI"
-		}), NullLogger<AiService>.Instance);
-	}
+	public abstract IAiService GetAiService();
 }

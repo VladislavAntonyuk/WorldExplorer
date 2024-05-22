@@ -2,9 +2,10 @@
 
 using I18nText;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Toolbelt.Blazor.I18nText;
 
-public abstract class WorldExplorerBaseComponent : ComponentBase
+public abstract class WorldExplorerBaseComponent : MudComponentBase
 {
 	protected Translation Translation = new();
 

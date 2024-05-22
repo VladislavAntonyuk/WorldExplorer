@@ -2,9 +2,10 @@
 
 <MudRTLProvider RightToLeft="@rightToLeft">
 	<MudThemeProvider @ref="@mudThemeProvider" @bind-IsDarkMode="@isDarkMode"/>
+	<MudPopoverProvider />
 	<MudDialogProvider CloseButton="true"
 	                   CloseOnEscapeKey="true"
-	                   DisableBackdropClick="true"
+	                   BackdropClick="false"
 	                   Position="DialogPosition.Center"/>
 	<MudSnackbarProvider/>
 
