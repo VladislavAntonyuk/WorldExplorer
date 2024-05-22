@@ -58,7 +58,8 @@ jobs:
             -   uses: cschleiden/replace-tokens@v1
                 env:
                     GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
-                    OPENAI_APIKEY: ${{ secrets.OPENAI_APIKEY }}
+                    AI_APIKEY: ${{ secrets.AI_APIKEY }}
+                    AI_PROVIDER: ${{ secrets.AI_PROVIDER }}
                     AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
                     AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
                     AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME }}
