@@ -12,11 +12,11 @@
 		<PackageReference Include="MudBlazor" Version="7.0.0-preview.3" />
 		<PackageReference Include="OwaspHeaders.Core" Version="8.0.0" />
 		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="12.0.2" />
-		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.0-preview1" />
+		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.0-preview3" />
 		
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite" Version="8.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite" Version="8.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
