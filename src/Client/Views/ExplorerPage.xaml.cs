@@ -65,19 +65,4 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 		popup.Show();
 		placeDetailsView.Popup = popup;
 	}
-
-	private void HelpMenuItemClicked(object? sender, EventArgs e)
-	{
-		ViewModel.HelpCommand.Execute(null);
-	}
-
-	private void AboutMenuItemClicked(object? sender, EventArgs e)
-	{
-		ViewModel.AboutCommand.Execute(null);
-	}
-
-	private void ToggleUserLocationClicked(object? sender, EventArgs e)
-	{
-		ViewModel.ToggleUserLocationCommand.Execute(null);
-	}
 }

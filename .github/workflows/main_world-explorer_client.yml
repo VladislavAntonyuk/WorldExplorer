@@ -34,7 +34,7 @@ jobs:
             -   name: Set up .NET
                 uses: actions/setup-dotnet@v4
                 with:
-                    dotnet-version: '8.x'
+                    dotnet-version: '9.x'
 
             -   name: Install workloads
                 run: dotnet workload install maui
@@ -62,28 +62,28 @@ jobs:
 
             -   name: Build Client (Android)
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-android /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net9.0-android /p:Version="${{ env.VERSION }}"
                     mkdir output\android
-                    copy ".\src\Client\bin\Release\net8.0-android\publish\com.vladislavantonyuk.worldexplorer.aab" "output\android"
+                    copy ".\src\Client\bin\Release\net9.0-android\publish\com.vladislavantonyuk.worldexplorer.aab" "output\android"
 
             -   name: Build Client (Tizen)
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-tizen /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net9.0-tizen /p:Version="${{ env.VERSION }}"
                     mkdir output\tizen
-                    copy ".\src\Client\bin\Release\net8.0-tizen\tizen-x86\*.tpk" "output\tizen"
+                    copy ".\src\Client\bin\Release\net9.0-tizen\tizen-x86\*.tpk" "output\tizen"
 
             -   name: Build Client (Apple)
                 run: |
-                    dotnet build src/Client/Client.csproj -f net8.0-ios /p:Version="${{ env.VERSION }}"
-                    dotnet publish src/Client/Client.csproj -f net8.0-maccatalyst /p:Version="${{ env.VERSION }}"
+                    dotnet build src/Client/Client.csproj -f net9.0-ios /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net9.0-maccatalyst /p:Version="${{ env.VERSION }}"
                     mkdir output\maccatalyst
-                    copy ".\src\Client\bin\Release\net8.0-maccatalyst\**\*.pkg" "output\maccatalyst"
+                    copy ".\src\Client\bin\Release\net9.0-maccatalyst\**\*.pkg" "output\maccatalyst"
 
             -   name: Build Client (Windows)
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net8.0-windows10.0.19041.0 /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client.csproj -f net9.0-windows10.0.19041.0 /p:Version="${{ env.VERSION }}"
                     mkdir output\windows
-                    copy ".\src\Client\bin\Release\net8.0-windows10.0.19041.0\win10-x64\AppPackages\**\*.msix" "output\windows"
+                    copy ".\src\Client\bin\Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\**\*.msix" "output\windows"
 
             -   name: Upload artifact for deployment job
                 uses: actions/upload-artifact@v4

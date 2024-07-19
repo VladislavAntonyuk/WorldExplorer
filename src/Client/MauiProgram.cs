@@ -29,8 +29,11 @@ public static class MauiProgram
 		ArgumentNullException.ThrowIfNull(keysSettings);
 
 		builder.UseMauiApp<App>()
-		       .UseMauiMaps()
+#if WINDOWS
 			   .UseMauiCommunityToolkitMaps(keysSettings.WindowsMaps)
+#else
+			   .UseMauiMaps()
+#endif
 			   .UseMauiCameraView()
 			   .UseSkiaSharp()
 			   .ConfigureFonts(fonts =>

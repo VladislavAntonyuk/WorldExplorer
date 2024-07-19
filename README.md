@@ -18,7 +18,7 @@ A journey is not just about reaching the destination; it's about the experiences
 Run on Device
 
 ```bash
-dotnet build -t:Run -c Release -f net8.0-maccatalyst -r maccatalyst-arm64
+dotnet build -t:Run -c Release -f net9.0-maccatalyst -r maccatalyst-arm64
 ```
 
 ### iOS
@@ -26,13 +26,13 @@ dotnet build -t:Run -c Release -f net8.0-maccatalyst -r maccatalyst-arm64
 Run on Emulator iPhone 15 Pro Max
 
 ```bash
-dotnet build -t:Run -c Release -f net8.0-ios -p:_DeviceName=:v2:udid=7D850AFF-242B-41BC-A9A7-A0818D4CEF30
+dotnet build -t:Run -c Release -f net9.0-ios -p:_DeviceName=:v2:udid=7D850AFF-242B-41BC-A9A7-A0818D4CEF30
 ```
 
 Run on Device
 
 ```bash
-dotnet build -t:Run -c Release -f net8.0-ios -r ios-arm64 -p:_DeviceName=IDENTIFIER
+dotnet build -t:Run -c Release -f net9.0-ios -r ios-arm64 -p:_DeviceName=IDENTIFIER
 ```
 
 ### Android

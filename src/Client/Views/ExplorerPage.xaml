@@ -23,7 +23,7 @@
 		<MenuBarItem Text="Preferences">
 			<MenuFlyoutItem
 				Text="Toggle My Location"
-				Clicked="ToggleUserLocationClicked">
+				Command="{Binding ToggleUserLocationCommand}">
 				<MenuFlyoutItem.KeyboardAccelerators>
 					<KeyboardAccelerator Modifiers="Ctrl" Key="u"></KeyboardAccelerator>
 				</MenuFlyoutItem.KeyboardAccelerators>
@@ -33,7 +33,7 @@
 		<MenuBarItem Text="{x:Static localization:Localization.About}">
 			<MenuFlyoutItem
 				Text="{x:Static localization:Localization.Help}"
-				Clicked="HelpMenuItemClicked">
+				Command="{Binding HelpCommand}">
 				<MenuFlyoutItem.KeyboardAccelerators>
 					<KeyboardAccelerator Modifiers="Ctrl" Key="h"></KeyboardAccelerator>
 				</MenuFlyoutItem.KeyboardAccelerators>
@@ -41,7 +41,7 @@
 
 			<MenuFlyoutItem
 				Text="{x:Static localization:Localization.About}"
-				Clicked="AboutMenuItemClicked"/>
+				Command="{Binding AboutCommand}"/>
 		</MenuBarItem>
 
 	</framework:BaseContentPage.MenuBarItems>
@@ -60,6 +60,7 @@
 					Address="{Binding Address}"
 					Label="{Binding Label}"
 					Type="Place"
+					MarkerId="{Binding MarkerId}"
 					MarkerClicked="Pin_OnMarkerClicked" />
 			</DataTemplate>
 		</maps:Map.ItemTemplate>

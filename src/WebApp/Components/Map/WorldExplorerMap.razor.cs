@@ -118,8 +118,7 @@ public sealed partial class WorldExplorerMap : WorldExplorerBaseComponent, IAsyn
 	private async Task<Marker> CreateMarker(Guid id, Location location, string label, string? icon)
 	{
 		const string defaultIcon = "/assets/default-location-pin.png";
-		var markerOptions = new MarkerOptions(location, label, icon ?? defaultIcon);
-		var marker = new Marker(markerOptions);
+		var marker = new Marker(location, label, icon ?? defaultIcon);
 		await JsRuntime.InvokeVoidAsync("leafletInterop.addMarker", mapRef, id, marker);
 		return marker;
 	}
