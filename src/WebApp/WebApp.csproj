@@ -22,7 +22,7 @@
 		</PackageReference>
 
 		<PackageReference Include="Google_GenerativeAI" Version="1.0.2" />
-		<PackageReference Include="OpenAI" Version="2.0.0-beta.7" />
+		<PackageReference Include="OpenAI" Version="2.0.0-beta.8" />
 
 		<PackageReference Include="Azure.Identity" Version="1.12.0" />
 		<PackageReference Include="Microsoft.Graph.Beta" Version="5.78.0-preview" />
