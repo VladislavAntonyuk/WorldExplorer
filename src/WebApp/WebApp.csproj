@@ -6,25 +6,38 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\Modules\Users\WorldExplorer.Modules.Users.Infrastructure\WorldExplorer.Modules.Users.Infrastructure.csproj" />
+		<ProjectReference Include="..\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MudBlazor" Version="7.3.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="9.0.0-preview.6.24327.4" />
+		<PackageReference Include="MudBlazor" Version="7.4.0" />
 		<PackageReference Include="OwaspHeaders.Core" Version="8.1.0" />
-		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="12.0.2" />
-		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.0" />
+		<!--<PackageReference Include="Toolbelt.Blazor.I18nText" Version="12.0.2" />-->
+		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.1" />
 		
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite" Version="8.0.7" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
+
+		<PackageReference Include="Google_GenerativeAI" Version="1.0.2" />
+		<PackageReference Include="OpenAI" Version="1.11.0" />
+
+		<PackageReference Include="Azure.Identity" Version="1.13.0-beta.1" />
+		<PackageReference Include="Microsoft.Graph.Beta" Version="5.78.0-preview" />
+
+
+
+
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
+
+
+
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-preview.6.24327.4">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-
-		<PackageReference Include="Google_GenerativeAI" Version="1.0.2" />
-		<PackageReference Include="OpenAI" Version="2.0.0-beta.7" />
-
-		<PackageReference Include="Azure.Identity" Version="1.12.0" />
-		<PackageReference Include="Microsoft.Graph.Beta" Version="5.78.0-preview" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+		<PackageReference Include="Scalar.AspNetCore" Version="1.1.2" />
 	</ItemGroup>
+
 </Project>
