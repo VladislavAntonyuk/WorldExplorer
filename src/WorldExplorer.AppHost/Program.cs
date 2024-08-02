@@ -1,14 +1,16 @@
 ﻿var builder = DistributedApplication.CreateBuilder(args);
 
 var redis = builder.AddRedis("redis")
-                   .WithImageTag("latest");
+				   .WithImageTag("latest");
 
-var database = builder.AddSqlServer("database")
-                      .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-                      .PublishAsAzureSqlDatabase();
+var sqlServer = builder.AddSqlServer("server")
+                       .WithImage("mssql/server", "2019-CU18-ubuntu-20.04")
+                       .WithImageRegistry("mcr.microsoft.com")
+                       .PublishAsAzureSqlDatabase()
+                       .AddDatabase("database", "worldexplorer");
 
 builder.AddProject<Projects.WebApp>("webapp")
-       .WithReference(redis)
-       .WithReference(database);
+	   .WithReference(redis)
+	   .WithReference(sqlServer);
 
 builder.Build().Run();

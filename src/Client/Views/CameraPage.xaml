@@ -6,9 +6,9 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
-	xmlns:maui="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
 	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
 	x:Class="Client.Views.CameraPage"
 	Shell.PresentationMode="ModalAnimated"
 	x:DataType="viewModels:CameraViewModel">
@@ -37,7 +37,11 @@
 			</ImageButton.Source>
 		</ImageButton>
 
-		<maui:CameraView ZIndex="0" />
+		<toolkit:CameraView
+			x:Name="CameraView"
+			CaptureImageCommand="{Binding PhotoCommand}"
+			ZIndex="0" />
+
 		<Label
 			Text="{x:Static localization:Localization.CameraNotLoaded}"
 			IsVisible="{Binding IsCameraLoaded, Converter={StaticResource InvertedBoolConverter}}"
