@@ -1,7 +1,6 @@
 ﻿namespace Client;
 
 using System.Reflection;
-using Camera.MAUI;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Maps;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +33,7 @@ public static class MauiProgram
 #else
 			   .UseMauiMaps()
 #endif
-			   .UseMauiCameraView()
+			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
 			   .ConfigureFonts(fonts =>
 			   {

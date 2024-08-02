@@ -51,9 +51,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Common.Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Common.Application", "src\Common\WorldExplorer.Common.Application\WorldExplorer.Common.Application.csproj", "{9E4D48BB-49D7-4B92-9658-25983579B82A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldExplorer.AppHost", "src\WorldExplorer.AppHost\WorldExplorer.AppHost.csproj", "{BAD3F261-FC8B-45E2-B090-69D8A239189D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.AppHost", "src\WorldExplorer.AppHost\WorldExplorer.AppHost.csproj", "{BAD3F261-FC8B-45E2-B090-69D8A239189D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.ServiceDefaults", "src\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj", "{B382B13C-D821-47AD-A038-A21C747DA14B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Places", "Places", "{C93AB8CE-6440-40A1-A25B-8861755DD3BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orders", "Orders", "{5A2E1B52-B2DC-4881-BD0E-E593203FAEAF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Traveller", "Traveller", "{8B2DBD7C-F469-4F07-9373-597D6D99235C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,6 +158,9 @@ Global
 		{5181424C-FF30-41EC-9FCF-B4F74FFEFD89} = {8E5CA99A-E111-44AC-9D5B-BD497919F6D2}
 		{60D1DAC3-D25A-4DEB-A8FA-F5F2002CDBF4} = {8E5CA99A-E111-44AC-9D5B-BD497919F6D2}
 		{9E4D48BB-49D7-4B92-9658-25983579B82A} = {8E5CA99A-E111-44AC-9D5B-BD497919F6D2}
+		{C93AB8CE-6440-40A1-A25B-8861755DD3BA} = {4105798F-4B5A-4F50-BEFB-7673B00CA698}
+		{5A2E1B52-B2DC-4881-BD0E-E593203FAEAF} = {4105798F-4B5A-4F50-BEFB-7673B00CA698}
+		{8B2DBD7C-F469-4F07-9373-597D6D99235C} = {4105798F-4B5A-4F50-BEFB-7673B00CA698}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {13BDE4A2-81B8-494D-B82D-60780D2AB107}

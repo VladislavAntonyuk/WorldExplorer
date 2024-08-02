@@ -1,6 +1,6 @@
 ﻿namespace Client.ViewModels;
 
-using Camera.MAUI;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
@@ -21,7 +21,7 @@ public partial class CameraViewModel(INavigationService navigationService,
 		var cameraPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
 		if (cameraPermissionStatus == PermissionStatus.Granted)
 		{
-			CameraView.Current.CamerasLoaded += CameraView_CamerasLoaded;
+			IsCameraLoaded = true;
 			await base.InitializeAsync();
 		}
 		else
@@ -33,35 +33,13 @@ public partial class CameraViewModel(INavigationService navigationService,
 	public override Task UnInitializeAsync()
 	{
 		deviceDisplay.KeepScreenOn = false;
-		CameraView.Current.CamerasLoaded -= CameraView_CamerasLoaded;
 		return base.UnInitializeAsync();
 	}
 
-	private async void CameraView_CamerasLoaded(object? sender, EventArgs e)
-	{
-		if (CameraView.Current.NumCamerasDetected > 0)
-		{
-			CameraView.Current.Camera = CameraView.Current.Cameras[0];
-			await dispatcher.DispatchAsync(async () =>
-			{
-				var result = await CameraView.Current.StartCameraAsync();
-				if (result is CameraResult.Success)
-				{
-					IsCameraLoaded = true;
-				}
-				else
-				{
-					await dialogService.ToastAsync($"Camera error: {result.ToString()}");
-					await Close();
-				}
-			});
-		}
-	}
 
 	[RelayCommand]
-	private async Task Photo()
+	private async Task Photo(Stream? stream)
 	{
-		var stream = await CameraView.Current.TakePhotoAsync();
 		if (stream != null)
 		{
 			await SaveImage(stream);

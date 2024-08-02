@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using WorldExplorer.Api.Extensions;
 using WorldExplorer.Api.Middleware;
-using WorldExplorer.Api.OpenTelemetry;
 using WorldExplorer.Common.Application;
 using WorldExplorer.Common.Infrastructure;
 using WorldExplorer.Common.Infrastructure.Configuration;
@@ -55,24 +54,18 @@ string redisConnectionString = builder.Configuration.GetConnectionStringOrThrow(
 
 builder.Services.AddInfrastructure(
 	builder.Configuration,
-	DiagnosticsConfig.ServiceName,
     [
         //EventsModule.ConfigureConsumers(redisConnectionString),
         //TicketingModule.ConfigureConsumers,
         //AttendanceModule.ConfigureConsumers
     ],
-    databaseConnectionString,
     redisConnectionString);
 
-//Uri keyCloakHealthUrl = builder.Configuration.GetKeyCloakHealthUrl();
-
 builder.Services.AddHealthChecks()
-    //.AddNpgSql(databaseConnectionString)
-    .AddRedis(redisConnectionString)
-    //.AddKeyCloak(keyCloakHealthUrl)
-    ;
+    .AddSqlServer(databaseConnectionString)
+    .AddRedis(redisConnectionString);
 
-builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance"]);
+builder.Configuration.AddModuleConfiguration(["users"]);
 
 builder.Services.AddUsersModule(builder.Configuration);
 
@@ -82,8 +75,6 @@ app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
-	//app.UseSwagger();
-	//app.UseSwaggerUI();
 	app.MapOpenApi();
 	app.MapScalarApiReference();
 
@@ -93,6 +84,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseSecureHeadersMiddleware();
 app.UseHttpsRedirection();
+
 app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -111,7 +103,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapEndpoints();
-app.MapControllers();
+
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.Run();
 
