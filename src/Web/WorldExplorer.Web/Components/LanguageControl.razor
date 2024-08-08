@@ -1,0 +1,13 @@
+﻿@using WorldExplorer.Modules.Users.Application.Abstractions.Identity
+@inherits WorldExplorerBaseComponent
+
+<div class="my-3 px-2">
+	<MudSelect T="Language"
+	           @bind-Value="@currentLang"
+	           Label="@Translation.Languages">
+		@foreach (var language in Enum.GetValues<Language>())
+		{
+			<MudSelectItem T="Language" Value="@language">@language</MudSelectItem>
+		}
+	</MudSelect>
+</div>

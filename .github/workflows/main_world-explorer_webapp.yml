@@ -4,12 +4,16 @@ on:
     push:
         branches: [ main ]
         paths:
-          - 'src/WebApp/**'
+          - 'src/Web/**'
+          - 'src/Common/**'
+          - 'src/Modules/**'
           - '.github/workflows/main_world-explorer_webapp.yml'
     pull_request:
         branches: [ main ]
         paths:
-          - 'src/WebApp/**'
+          - 'src/Web/**'
+          - 'src/Common/**'
+          - 'src/Modules/**'
           - '.github/workflows/main_world-explorer_webapp.yml'
 
 concurrency:
@@ -32,7 +36,7 @@ jobs:
                     dotnet-version: '9.x'
 
             -   name: Publish WebApp
-                run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp' /p:Version="${{ env.VERSION }}"
+                run: dotnet publish src/Web/WorldExplorer.Web/WorldExplorer.Web.csproj -o '${{env.DOTNET_ROOT}}/webapp' /p:Version="${{ env.VERSION }}"
 
             -   name: Upload artifact for deployment job
                 uses: actions/upload-artifact@v4
