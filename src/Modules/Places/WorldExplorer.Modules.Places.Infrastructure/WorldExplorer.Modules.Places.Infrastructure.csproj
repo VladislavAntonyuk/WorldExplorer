@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetVersion)</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj"/>
+		<ProjectReference Include="..\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj"/>
+		<ProjectReference Include="..\WorldExplorer.Modules.Places.Presentation\WorldExplorer.Modules.Places.Presentation.csproj"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="WorldExplorer.Modules.Places.IntegrationTests"/>
+		<InternalsVisibleTo Include="WorldExplorer.IntegrationTests"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Google_GenerativeAI" Version="1.0.2" />
+		<PackageReference Include="OpenAI" Version="1.11.0" />
+
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="9.0.0-preview.6.24327.4" />
+	</ItemGroup>
+
+</Project>

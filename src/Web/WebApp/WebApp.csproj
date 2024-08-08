@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>$(NetVersion)</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\Modules\Users\WorldExplorer.Modules.Users.Infrastructure\WorldExplorer.Modules.Users.Infrastructure.csproj" />
+		<ProjectReference Include="..\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+
+
+
+
+		<PackageReference Include="Azure.Identity" Version="1.13.0-beta.1" />
+		<PackageReference Include="Microsoft.Graph.Beta" Version="5.78.0-preview" />
+
+
+
+
+
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>$(NetVersion)</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Application\WorldExplorer.Common.Application.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Users.Domain\WorldExplorer.Modules.Users.Domain.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Users.IntegrationEvents\WorldExplorer.Modules.Users.IntegrationEvents.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Users\RegisterUser\**" />
+	  <Compile Remove="Users\UpdateUser\**" />
+	  <Compile Remove="Users\UserService.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="Users\RegisterUser\**" />
+	  <EmbeddedResource Remove="Users\UpdateUser\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Users\RegisterUser\**" />
+	  <None Remove="Users\UpdateUser\**" />
+	</ItemGroup>
+
+</Project>

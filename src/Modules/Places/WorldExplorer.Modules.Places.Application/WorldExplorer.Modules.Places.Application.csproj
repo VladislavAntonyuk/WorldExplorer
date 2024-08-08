@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>$(NetVersion)</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Application\WorldExplorer.Common.Application.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Places.Domain\WorldExplorer.Modules.Places.Domain.csproj" />
+		<!--<ProjectReference Include="..\WorldExplorer.Modules.Places.IntegrationEvents\WorldExplorer.Modules.Places.IntegrationEvents.csproj" />-->
+	</ItemGroup>
+</Project>

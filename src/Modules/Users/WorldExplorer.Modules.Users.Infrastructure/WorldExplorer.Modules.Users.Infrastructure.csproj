@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetVersion)</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Users.Application\WorldExplorer.Modules.Users.Application.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Users.Presentation\WorldExplorer.Modules.Users.Presentation.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="WorldExplorer.Modules.Users.IntegrationTests" />
+		<InternalsVisibleTo Include="WorldExplorer.IntegrationTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Graph.Beta" Version="5.78.0-preview" />
+	</ItemGroup>
+
+</Project>

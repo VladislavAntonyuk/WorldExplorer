@@ -20,8 +20,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\WebApp\WebApp.csproj" />
-    </ItemGroup>
-
 </Project>

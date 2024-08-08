@@ -8,3 +8,10 @@ public class OperationResult<T> where T : new()
 
 	public StatusCode StatusCode { get; init; }
 }
+
+public enum StatusCode
+{
+	Success,
+	LocationInfoRequestPending,
+	FailedResponse
+}
