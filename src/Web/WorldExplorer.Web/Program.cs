@@ -1,16 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
-using WebApp.Infrastructure;
-using WorldExplorer.Common.Infrastructure;
+﻿using WebApp.Infrastructure;
 using WorldExplorer.ServiceDefaults;
-using WorldExplorer.Web;
 using WorldExplorer.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
-JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-// Add service defaults & Aspire components.
 builder.AddServiceDefaults();
 builder.AddRedisOutputCache("cache");
 
@@ -18,8 +11,6 @@ builder.Services.AddBlazor();
 builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddUserServices(builder.Configuration);
 builder.Services.AddWorldExplorerServices(builder.Configuration);
-
-
 
 var app = builder.Build();
 
@@ -32,7 +23,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+app.MapStaticAssets();
 app.UseAntiforgery();
 
 app.UseOutputCache();
