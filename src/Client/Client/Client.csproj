@@ -63,14 +63,14 @@
 		<PackageReference Include="M.BindableProperty.Generator" Version="0.11.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0-preview.6.24327.7" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-preview.6.24327.7" />
-		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.62.0" />
+		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.63.0" />
 		<PackageReference Include="Refit.HttpClientFactory" Version="7.1.2" />
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="3.0.0-preview.7" />
 		<PackageReference Include="Syncfusion.Maui.Charts" Version="26.1.42" />
 		<PackageReference Include="Syncfusion.Maui.Inputs" Version="26.1.42" />
 		<PackageReference Include="Syncfusion.Maui.Popup" Version="26.1.42" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.70" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.70" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.80" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.80" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == '$(NetVersion)-android'">

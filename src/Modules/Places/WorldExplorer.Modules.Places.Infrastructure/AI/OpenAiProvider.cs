@@ -6,6 +6,7 @@ using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Images;
 using OpenAI_API.Models;
+using Shared.Extensions;
 
 public class OpenAiProvider(IOptions<AiSettings> aiSettings, ILogger<OpenAiProvider> logger) : IAiProvider
 {
@@ -25,7 +26,7 @@ public class OpenAiProvider(IOptions<AiSettings> aiSettings, ILogger<OpenAiProvi
 				new (ChatMessageRole.User, request)
 			},
 			Model = new Model(GptModel)
-		});//.Safe(new ChatResult { Choices = [] }, e => logger.LogError(e, "Failed to get response"));
+		}).Safe(new ChatResult { Choices = [] }, e => logger.LogError(e, "Failed to get response"));
 		if (result.Choices.Count == 0)
 		{
 			return null;

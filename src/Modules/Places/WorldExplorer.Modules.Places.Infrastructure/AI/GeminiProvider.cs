@@ -4,6 +4,7 @@ using GenerativeAI.Models;
 using GenerativeAI.Types;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Shared.Extensions;
 
 public class GeminiProvider(HttpClient httpClient, IOptions<AiSettings> aiOptions, ILogger<GeminiProvider> logger) : IAiProvider
 {
@@ -12,7 +13,7 @@ public class GeminiProvider(HttpClient httpClient, IOptions<AiSettings> aiOption
 		var result = await new GenerativeModel(aiOptions.Value.ApiKey, client: httpClient).GenerateContentAsync([
 			new Part {Text = "You are a tour guide with a great knowledge of history."},
 			new Part {Text = request},
-		]);//.Safe(new EnhancedGenerateContentResponse(), e => logger.LogError(e, "Failed to get response"));
+		]).Safe(new EnhancedGenerateContentResponse(), e => logger.LogError(e, "Failed to get response"));
 		var response = result.Text();
 		if (string.IsNullOrEmpty(response))
 		{

@@ -10,7 +10,7 @@
         <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
         <PackageReference Include="xunit" Version="2.9.0" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0-pre.20">
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0-pre.24">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
