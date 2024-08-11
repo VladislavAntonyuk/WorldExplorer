@@ -1,39 +1,41 @@
 ﻿namespace WebApp.Services.AI;
 
+using System.ClientModel;
+using System.ClientModel.Primitives;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using OpenAI_API;
-using OpenAI_API.Chat;
-using OpenAI_API.Images;
-using OpenAI_API.Models;
-using Shared.Extensions;
+using OpenAI;
+using OpenAI.Chat;
+using OpenAI.Images;
 
-public class OpenAiProvider(IOptions<AiSettings> aiSettings, ILogger<OpenAiProvider> logger) : IAiProvider
+public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : IAiProvider
 {
-	private readonly IOpenAIAPI api = new OpenAIAPI(aiSettings.Value.ApiKey);
-
-	// https://platform.openai.com/docs/models/model-endpoint-compatibility
-	private const string GptModel = "gpt-3.5-turbo";
-
 	public async Task<string?> GetResponse(string request)
 	{
-		var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest
+		var client = api.GetChatClient("gpt-35-turbo");
+
+		try
 		{
-			ResponseFormat = ChatRequest.ResponseFormats.Text,
-			Messages = new List<ChatMessage>
+			var result = await client.CompleteChatAsync(
+			[
+				new SystemChatMessage("You are a tour guide with a great knowledge of history."),
+				new UserChatMessage(request)
+			], new ChatCompletionOptions()
 			{
-				new (ChatMessageRole.System, "You are a tour guide with a great knowledge of history."),
-				new (ChatMessageRole.User, request)
-			},
-			Model = new Model(GptModel)
-		}).Safe(new ChatResult { Choices = [] }, e => logger.LogError(e, "Failed to get response"));
-		if (result.Choices.Count == 0)
+				ResponseFormat = ChatResponseFormat.Text
+			});
+			if (result.Value.Content.Count == 0)
+			{
+				return null;
+			}
+
+			logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Value.Content[0].Text, DateTime.UtcNow - result.Value.CreatedAt.UtcDateTime);
+			return result.Value.Content[0].Text;
+		}
+		catch (Exception e)
 		{
+			logger.LogError(e, "Failed generating response for {Request}", request);
 			return null;
 		}
-
-		logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Choices[0].Message.TextContent, result.ProcessingTime);
-		return result.Choices[0].Message.TextContent;
 	}
 
 	/// <summary>
@@ -43,12 +45,13 @@ public class OpenAiProvider(IOptions<AiSettings> aiSettings, ILogger<OpenAiProvi
 	{
 		try
 		{
-			var imageResult = await api.ImageGenerations.CreateImageAsync(new ImageGenerationRequest(request, Model.DALLE3, ImageSize._1024, "hd", null, ImageResponseFormat.Url));
-			return imageResult.Data.Select(x => x.Url).FirstOrDefault();
+			var client = api.GetImageClient("gpt-35-turbo");
+			var imageResult = await client.GenerateImageAsync(request, new ImageGenerationOptions(){Quality = GeneratedImageQuality.High, ResponseFormat = GeneratedImageFormat.Uri, Size = GeneratedImageSize.W1024xH1024, Style = GeneratedImageStyle.Natural});
+			return imageResult.Value.ImageUri.ToString();
 		}
 		catch (Exception e)
 		{
-			logger.LogError(e, "Failed generating images for {Request}", request);
+			logger.LogError(e, "Failed generating image for {Request}", request);
 		}
 
 		return null;

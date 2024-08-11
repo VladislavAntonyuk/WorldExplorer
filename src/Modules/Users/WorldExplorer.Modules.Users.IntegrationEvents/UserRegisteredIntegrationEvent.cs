@@ -9,21 +9,21 @@ public sealed class UserRegisteredIntegrationEvent : IntegrationEvent
         DateTime occurredOnUtc,
         Guid userId,
         string email,
-        string firstName,
-        string lastName)
+        string name,
+        string language)
         : base(id, occurredOnUtc)
     {
         UserId = userId;
         Email = email;
-        FirstName = firstName;
-        LastName = lastName;
+        Name = name;
+        Language = language;
     }
 
     public Guid UserId { get; init; }
 
     public string Email { get; init; }
 
-    public string FirstName { get; init; }
+    public string Name { get; init; }
 
-    public string LastName { get; init; }
+    public string Language { get; init; }
 }

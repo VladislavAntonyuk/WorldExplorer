@@ -8,6 +8,10 @@ namespace WorldExplorer.Modules.Users.Presentation.Users;
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Application.Users.RegisterUser;
+using Common.Presentation.Results;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 internal sealed class RegisterUser : IEndpoint
 {
@@ -29,78 +33,21 @@ internal sealed class RegisterUser : IEndpoint
 				  //  return Unauthorized();
 			   // }
 
-			   //if (string.IsNullOrWhiteSpace(requestConnector.ObjectId))
-			   //{
-			   //	return BadRequest(new ResponseContent("ShowBlockPage", "ObjectId is mandatory."));
-			   //}
-
-			   // var user = await graphClientService.GetUser(requestConnector.ObjectId, cancellationToken);
-			   // if (user is null)
-			   // {
-				  //  logger.LogWarning("User {UserId} not found.", requestConnector.ObjectId);
-				  //  return BadRequest(new ResponseContent("ShowBlockPage", "User not found."));
-			   // }
-			   //
-			   // await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
-
-			   //var existedUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == requestConnector.ObjectId,
-			   //															cancellationToken);
-			   //if (existedUser is null)
-			   //{
-			   //	await dbContext.Users.AddAsync(new User { Id = requestConnector.ObjectId }, cancellationToken);
-			   //	await dbContext.SaveChangesAsync(cancellationToken);
-			   //}
-
-			   var result = new ResponseContent
+			   var result = await sender.Send(new RegisterUserCommand(request.ObjectId));
+			   if (result.IsSuccess)
 			   {
-				  // Groups = string.Join(',', user.Groups.Select(x => x.DisplayName)),
-				 //  Language = user.Language.ToString()
-			   };
+				   return Results.Ok(new ResponseContent
+				   {
+					   Language = result.Value.Language.ToString(),
+					   Groups = result.Value.Groups
+				   });
+			   }
 
-			   return Results.Ok(result);
-
-
-
-
-			   // Result<Guid> result = await sender.Send(new RegisterUserCommand(
-				  //                                          request.Email, request.Password, request.FirstName,
-				  //                                          request.LastName));
-			   //
-			   // return result.Match(Results.Ok, ApiResults.Problem);
+			   return Results.BadRequest(new ResponseContent("ShowBlockPage", result.Error.Description));
 		   })
-		   // TODO Require Basic Auth
-		   .AllowAnonymous()
+		   .RequireAuthorization("BasicAuthenticationPolicy")
 		   .WithTags(Tags.Users);
 	}
-
-	// private bool IsAuthorized(HttpRequest req)
-	// {
-	// 	var username = configuration.GetValue<string>("AzureAdB2CClaimsBasicAuthUsername");
-	// 	var password = configuration.GetValue<string>("AzureAdB2CClaimsBasicAuthPassword");
-	//
-	// 	// Check if the HTTP Authorization header exist
-	// 	if (!req.Headers.ContainsKey("Authorization"))
-	// 	{
-	// 		logger.LogWarning("Missing HTTP basic authentication header.");
-	// 		return false;
-	// 	}
-	//
-	// 	// Read the authorization header
-	// 	var auth = req.Headers["Authorization"].ToString();
-	//
-	// 	// Ensure the type of the authorization header id `Basic`
-	// 	if (!auth.StartsWith("Basic "))
-	// 	{
-	// 		logger.LogWarning("HTTP basic authentication header must start with 'Basic '.");
-	// 		return false;
-	// 	}
-	//
-	// 	// Get the the HTTP basic authorization credentials
-	// 	var cred = Encoding.UTF8.GetString(Convert.FromBase64String(auth[6..])).Split(':');
-	//
-	// 	// Evaluate the credentials and return the result
-	// 	return cred[0] == username && cred[1] == password;
-	// }
 
 	internal sealed class Request
 	{

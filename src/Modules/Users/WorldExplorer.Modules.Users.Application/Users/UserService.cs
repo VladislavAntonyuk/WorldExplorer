@@ -8,27 +8,7 @@ using WorldExplorer.Modules.Users.Infrastructure.Database;
 
 public class UserService(IGraphClientService graphClient, IDbContextFactory<UsersDbContext> factory) : IUserService
 {
-	public async Task<List<UserResponse>> GetUsers(CancellationToken cancellationToken)
-	{
-		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
-		var dbUsers = await dbContext.Users.ToListAsync(cancellationToken);
-		var users = new List<UserResponse>();
-		foreach (var user in dbUsers)
-		{
-			var profile = await graphClient.GetUser(user.Id, cancellationToken);
-			if (profile is null)
-			{
-				continue;
-			}
-
-			//user.Name = profile.DisplayName ?? string.Empty;
-			//user.Email = profile.OtherMails.FirstOrDefault(string.Empty);
-			users.Add(new UserResponse(user.Id, user.Email, user.FirstName, user.LastName));
-		}
-
-		return users;
-	}
-
+	
 	public async Task<UserResponse?> GetUser(Guid providerId, CancellationToken cancellationToken)
 	{
 		//if (string.IsNullOrEmpty(providerId))
@@ -74,13 +54,6 @@ public class UserService(IGraphClientService graphClient, IDbContextFactory<User
 		//		}
 		//	]
 		//};
-	}
-
-	public async Task DeleteUser(Guid providerId, CancellationToken cancellationToken)
-	{
-		await using var dbContext = await factory.CreateDbContextAsync(cancellationToken);
-		await dbContext.Users.Where(x => x.Id == providerId).ExecuteDeleteAsync(cancellationToken);
-		await graphClient.DeleteAsync(providerId, cancellationToken);
 	}
 
 	public async Task UpdateUser(User user, CancellationToken cancellationToken)

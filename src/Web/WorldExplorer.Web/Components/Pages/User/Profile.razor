@@ -10,8 +10,8 @@ else
 {
 	<MudExpansionPanels MultiExpansion="true">
 		<MudExpansionPanel Text="@Translation.Profile" Expanded="true">
-		@* 	<MudText>@user.Name</MudText>
-			<MudCheckBox T="bool" @bind-Checked="@user.Settings.TrackUserLocation" Label="@Translation.TrackUserLocation"/> *@
+			<MudText>@user.Name</MudText>
+			<MudCheckBox T="bool" @bind-Value="@user.Settings.TrackUserLocation" Label="@Translation.TrackUserLocation"/>
 			<MudButton OnClick="SaveChanges" Color="Color.Primary" ButtonType="ButtonType.Button">@Translation.SaveChanges</MudButton>
 		</MudExpansionPanel>
 		<MudExpansionPanel Text="@Translation.DangerZone" Expanded="true" class="mt-1">

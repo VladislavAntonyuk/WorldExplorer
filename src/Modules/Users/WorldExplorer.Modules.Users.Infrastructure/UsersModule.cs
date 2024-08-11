@@ -17,24 +17,28 @@ namespace WorldExplorer.Modules.Users.Infrastructure;
 using Application.Abstractions.Identity;
 using Azure.Identity;
 using Common.Application.Abstractions.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Graph.Beta;
+using Presentation.Users;
 
 public static class UsersModule
 {
-    public static IServiceCollection AddUsersModule(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public static IHostApplicationBuilder AddUsersModule(
+        this IHostApplicationBuilder builder)
     {
-        services.AddDomainEventHandlers();
+        builder.Services.AddDomainEventHandlers();
+		
+        builder.Services.AddIntegrationEventHandlers();
+		
+        builder.Services.AddInfrastructure(builder.Configuration);
+		
+        builder.Services.AddEndpoints(Presentation.AssemblyReference.Assembly);
+		
+        builder.Services.AddAuth(builder.Configuration);
 
-        services.AddIntegrationEventHandlers();
-
-        services.AddInfrastructure(configuration);
-
-        services.AddEndpoints(Presentation.AssemblyReference.Assembly);
-
-        return services;
+        return builder;
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -52,9 +56,14 @@ public static class UsersModule
             options
                 .UseSqlServer(
                     configuration.GetConnectionString("Database"),
-                    npgsqlOptions => npgsqlOptions
-                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Users))
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+                    optionsBuilder => optionsBuilder
+                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Users)
+                        .UseAzureSqlDefaults())
+// todo remove
+				.EnableDetailedErrors()
+                .EnableSensitiveDataLogging()
+
+				.AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
 
         services.AddScoped<IUserRepository, UserRepository>();
 

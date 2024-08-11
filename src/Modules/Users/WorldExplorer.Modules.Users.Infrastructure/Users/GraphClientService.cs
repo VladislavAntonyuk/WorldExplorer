@@ -22,12 +22,12 @@ public class GraphClientService : IGraphClientService
 		defaultCultureInfo = new CultureInfo("en-US");
 	}
 
-	public async Task<AzureUser?> GetUser(string providerId, CancellationToken cancellationToken)
+	public async Task<AzureUser?> GetUser(Guid providerId, CancellationToken cancellationToken)
 	{
 		User? user;
 		try
 		{
-			user = await graphClient.Users[providerId].GetAsync(cancellationToken: cancellationToken);
+			user = await graphClient.Users[providerId.ToString()].GetAsync(cancellationToken: cancellationToken);
 		}
 		catch
 		{
@@ -56,9 +56,9 @@ public class GraphClientService : IGraphClientService
 		return user.AdditionalData.TryGetValue(key, out var value) ? value : null;
 	}
 
-	private async Task<IEnumerable<AzureGroup>> GetUserGroups(string? providerId, CancellationToken cancellationToken)
+	private async Task<IEnumerable<AzureGroup>> GetUserGroups(Guid? providerId, CancellationToken cancellationToken)
 	{
-		var membersOf = await graphClient.Users[providerId].MemberOf.GetAsync(cancellationToken: cancellationToken);
+		var membersOf = await graphClient.Users[providerId?.ToString()].MemberOf.GetAsync(cancellationToken: cancellationToken);
 		if (membersOf?.Value?.Count > 0)
 		{
 			var groups = membersOf.Value.Select(directoryObject => directoryObject as Group)
@@ -80,7 +80,7 @@ public class GraphClientService : IGraphClientService
 			});
 		}
 
-		return Enumerable.Empty<AzureGroup>();
+		return [];
 	}
 
 	private CultureInfo GetCulture(string? countryName)
@@ -94,8 +94,8 @@ public class GraphClientService : IGraphClientService
 		                  .LastOrDefault(x => x.EnglishName.Contains(countryName), defaultCultureInfo);
 	}
 
-	public Task DeleteAsync(string providerId, CancellationToken cancellationToken)
+	public Task DeleteAsync(Guid providerId, CancellationToken cancellationToken)
 	{
-		return graphClient.Users[providerId].DeleteAsync(cancellationToken: cancellationToken);
+		return graphClient.Users[providerId.ToString()].DeleteAsync(cancellationToken: cancellationToken);
 	}
 }

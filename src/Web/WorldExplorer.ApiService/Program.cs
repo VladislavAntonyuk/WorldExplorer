@@ -39,8 +39,8 @@ builder.Services.AddInfrastructure(
 
 builder.Configuration.AddModuleConfiguration(["users", "places", "traveller"]);
 
-builder.Services.AddUsersModule(builder.Configuration);
-builder.Services.AddPlacesModule(builder.Configuration);
+builder.AddUsersModule();
+builder.AddPlacesModule();
 
 var app = builder.Build();
 

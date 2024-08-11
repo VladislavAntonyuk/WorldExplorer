@@ -2,5 +2,11 @@
 
 namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
 
-public sealed record RegisterUserCommand(string Email, string Password, string FirstName, string LastName)
-    : ICommand<Guid>;
+using Domain.Users;
+using GetUser;
+using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
+
+public sealed record RegisterUserCommand(Guid ProviderId) : ICommand<UserResponse>;
+
+
+public sealed record UserResponse(Guid Id, string Name, string Email, Language Language, UserSettings Settings, string Groups);

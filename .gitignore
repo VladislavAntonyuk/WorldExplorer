@@ -405,4 +405,4 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
-appsettings.Development.json
+*.[Dd]evelopment.json

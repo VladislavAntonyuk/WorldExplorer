@@ -12,8 +12,4 @@
 	<InternalsVisibleTo Include="WorldExplorer.Modules.Users.IntegrationTests" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Users\UpdateUserProfile.cs" />
-  </ItemGroup>
-
 </Project>

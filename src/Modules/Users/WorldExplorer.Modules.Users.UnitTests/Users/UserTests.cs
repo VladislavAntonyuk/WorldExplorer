@@ -13,7 +13,7 @@ public class UserTests : BaseTest
     {
         // Act
         var user = User.Create(
-	        Guid.NewGuid().ToString(),
+	        Guid.NewGuid(),
 			Faker.Create<UserSettings>());
 
         // Assert
@@ -25,7 +25,7 @@ public class UserTests : BaseTest
     {
 		// Act
 		var user = User.Create(
-			Guid.NewGuid().ToString(),
+			Guid.NewGuid(),
 			Faker.Create<UserSettings>());
 
 		// Assert
@@ -40,7 +40,7 @@ public class UserTests : BaseTest
     {
 		// Arrange
 		var user = User.Create(
-			Guid.NewGuid().ToString(),
+			Guid.NewGuid(),
 			Faker.Create<UserSettings>());
 
 		// Act
@@ -59,7 +59,7 @@ public class UserTests : BaseTest
     {
 		// Arrange
 		var user = User.Create(
-			Guid.NewGuid().ToString(),
+			Guid.NewGuid(),
 			Faker.Create<UserSettings>());
 
 		user.ClearDomainEvents();

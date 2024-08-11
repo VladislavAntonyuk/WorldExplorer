@@ -1,5 +1,10 @@
 ﻿var builder = DistributedApplication.CreateBuilder(args);
 
+var openai = builder.AddConnectionString("openai");
+//var b = builder.AddAzureAppConfiguration("appconfiguration");
+
+//var reviewService = builder.AddFusionGateway<Projects.WorldExplorer_ApiService>("graphql");
+
 var cache = builder.AddRedis("cache")
                    .WithImageTag("latest");
 
@@ -11,7 +16,8 @@ var sqlServer = builder.AddSqlServer("server")
 
 var apiService = builder.AddProject<Projects.WorldExplorer_ApiService>("apiservice")
                         .WithReference(cache)
-                        .WithReference(sqlServer);
+                        .WithReference(sqlServer)
+                        .WithReference(openai);
 
 builder.AddProject<Projects.WorldExplorer_Web>("webfrontend")
 	.WithExternalHttpEndpoints()
