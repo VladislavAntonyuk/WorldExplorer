@@ -17,15 +17,15 @@ public partial class Profile(IDialogService dialogService, WorldExplorerApiClien
 
 	private Task DeleteAccount()
 	{
-		return apiClient.DeleteUser(CurrentUser.ProviderId, CancellationToken.None);
+		return apiClient.DeleteUser(CancellationToken.None);
 	}
 
 	private async Task SaveChanges()
 	{
 		if (user is not null)
 		{
-			await apiClient.UpdateUser(user, CancellationToken.None);
-			snackbar.Add("Translation.SavedChanges", Severity.Success);
+			await apiClient.UpdateUser(user.Settings.TrackUserLocation, CancellationToken.None);
+			snackbar.Add(Translation.SavedChanges, Severity.Success);
 		}
 	}
 }

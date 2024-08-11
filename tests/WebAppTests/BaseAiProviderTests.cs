@@ -1,9 +1,9 @@
-namespace WebAppTests;
+﻿namespace WebAppTests;
 
 using System.Text.Json;
 using FluentAssertions;
-using Shared.Models;
 using WebApp.Services.AI;
+using WorldExplorer.Modules.Places.Domain.Places;
 using Xunit.Abstractions;
 
 public abstract class BaseAiProviderTests(ITestOutputHelper testOutputHelper)

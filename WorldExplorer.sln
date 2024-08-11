@@ -73,11 +73,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Places", "Places", "{5A429B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Modules.Places.Domain", "src\Modules\Places\WorldExplorer.Modules.Places.Domain\WorldExplorer.Modules.Places.Domain.csproj", "{816CDD7E-6990-4423-B497-63D767CB7809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldExplorer.Modules.Places.Infrastructure", "src\Modules\Places\WorldExplorer.Modules.Places.Infrastructure\WorldExplorer.Modules.Places.Infrastructure.csproj", "{889555A0-E74D-40F4-9C7C-D605F089B9D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Modules.Places.Infrastructure", "src\Modules\Places\WorldExplorer.Modules.Places.Infrastructure\WorldExplorer.Modules.Places.Infrastructure.csproj", "{889555A0-E74D-40F4-9C7C-D605F089B9D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldExplorer.Modules.Places.Application", "src\Modules\Places\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj", "{4F45B79F-6020-4A75-A376-F6BE986E147F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Modules.Places.Application", "src\Modules\Places\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj", "{4F45B79F-6020-4A75-A376-F6BE986E147F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldExplorer.Modules.Places.Presentation", "src\Modules\Places\WorldExplorer.Modules.Places.Presentation\WorldExplorer.Modules.Places.Presentation.csproj", "{6CCD2AA2-C221-4155-8866-46D9464928CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Modules.Places.Presentation", "src\Modules\Places\WorldExplorer.Modules.Places.Presentation\WorldExplorer.Modules.Places.Presentation.csproj", "{6CCD2AA2-C221-4155-8866-46D9464928CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

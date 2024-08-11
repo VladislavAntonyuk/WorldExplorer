@@ -11,8 +11,18 @@ internal sealed class UserRepository(UsersDbContext context) : IUserRepository
         return await context.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
+    public async Task<List<User>> GetAsync(CancellationToken cancellationToken = default)
+    {
+	    return await context.Users.ToListAsync(cancellationToken);
+    }
+
     public void Insert(User user)
     {
         context.Users.Add(user);
     }
+
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+    {
+		await context.Users.Where(x => x.Id == id).ExecuteDeleteAsync(cancellationToken);
+	}
 }

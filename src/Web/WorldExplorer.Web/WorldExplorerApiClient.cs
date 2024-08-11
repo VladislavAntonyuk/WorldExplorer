@@ -20,7 +20,7 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 
 	public async Task<List<UserResponse>> GetUsers(CancellationToken none)
 	{
-		return [];
+		return await GetAsync<List<UserResponse>>("users", none) ?? [];
 	}
 
 	public async Task<List<PlaceResponse>> GetPlaces(CancellationToken none)
@@ -33,10 +33,10 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 		return [];
 	}
 
-	public async Task DeleteUser(string providerId, CancellationToken none)
+	public async Task DeleteUser(CancellationToken none)
 	{
 		//self delete
-
+		await DeleteAsync("users/profile", none);
 	}
 
 	public async Task DeleteUser(Guid userId, CancellationToken none)
@@ -46,10 +46,12 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 
 	public async Task DeletePlace(Guid placeId, CancellationToken none)
 	{
+		// admin delete
 	}
 
 	public async Task DeleteLocationInfoRequest(Guid requestId, CancellationToken none)
 	{
+		// admin delete
 	}
 
 	public async Task<PlaceResponse?> GetPlaceDetails(Guid placeId, CancellationToken none)
@@ -74,9 +76,13 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 		return GetAsync<UserResponse>("users/profile", none);
 	}
 
-	// toDo should be user request
-	public async Task UpdateUser(UserResponse user, CancellationToken none)
+	public Task UpdateUser(bool trackUserLocation, CancellationToken none)
 	{
+		var request = new
+		{
+			TrackUserLocation = trackUserLocation
+		};
+		return PutAsync("users/profile", request, none);
 	}
 
 	public async Task<OperationResult<List<PlaceResponse>>> GetNearByPlaces(Location location, CancellationToken none)
@@ -90,7 +96,23 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 
 	public bool IsNearby(Location currentLocation, Location location)
 	{
-		return true;
+		return false;
+	}
+
+	private async Task DeleteAsync(string url, CancellationToken cancellationToken)
+	{
+		try
+		{
+			await downstreamApi.CallApiForUserAsync("WorldExplorerApiClient", options =>
+			{
+				options.RelativePath = url;
+				options.HttpMethod = HttpMethod.Delete.Method;
+			}, cancellationToken: cancellationToken);
+		}
+		catch (Exception e)
+		{
+			handler.HandleException(e);
+		}
 	}
 
 	private async Task<T?> GetAsync<T>(string url, CancellationToken cancellationToken)
@@ -110,6 +132,41 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 		}
 
 		return default;
+	}
+
+	private async Task<TOutput?> PostAsync<TInput, TOutput>(string url, TInput content, CancellationToken cancellationToken)
+		where TInput : class
+		where TOutput : class
+	{
+		try
+		{
+			return await downstreamApi.PostForUserAsync<TInput, TOutput>("WorldExplorerApiClient", content, options =>
+			{
+				options.RelativePath = url;
+			}, cancellationToken: cancellationToken);
+		}
+		catch (Exception e)
+		{
+			handler.HandleException(e);
+		}
+
+		return default;
+	}
+
+	private async Task PutAsync<TInput>(string url, TInput content, CancellationToken cancellationToken)
+		where TInput : class
+	{
+		try
+		{
+			await downstreamApi.PutForUserAsync("WorldExplorerApiClient", content, options =>
+			{
+				options.RelativePath = url;
+			}, cancellationToken: cancellationToken);
+		}
+		catch (Exception e)
+		{
+			handler.HandleException(e);
+		}
 	}
 }
 

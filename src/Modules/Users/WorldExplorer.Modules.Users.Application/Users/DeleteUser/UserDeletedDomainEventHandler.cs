@@ -5,19 +5,18 @@ using WorldExplorer.Modules.Users.IntegrationEvents;
 
 namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
 
-internal sealed class UserProfileUpdatedDomainEventHandler(IEventBus eventBus)
-    : DomainEventHandler<UserProfileUpdatedDomainEvent>
+internal sealed class UserDeletedDomainEventHandler(IEventBus eventBus)
+    : DomainEventHandler<UserDeletedDomainEvent>
 {
     public override async Task Handle(
-        UserProfileUpdatedDomainEvent domainEvent,
+        UserDeletedDomainEvent domainEvent,
         CancellationToken cancellationToken = default)
     {
         await eventBus.PublishAsync(
-            new UserProfileUpdatedIntegrationEvent(
+            new UserDeletedIntegrationEvent(
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
-                domainEvent.UserId,
-                domainEvent.Settings.TrackUserLocation),
+                domainEvent.UserId),
             cancellationToken);
     }
 }

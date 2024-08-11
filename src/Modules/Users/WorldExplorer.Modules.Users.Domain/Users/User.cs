@@ -10,16 +10,13 @@ public sealed class User : Entity
 
 	public Guid Id { get; private set; }
 
-	public string IdentityId { get; private set; }
-
 	public UserSettings Settings { get; private set; } = new();
 
-    public static User Create(string identityId, UserSettings userSettings)
+    public static User Create(Guid id, UserSettings userSettings)
     {
         var user = new User
         {
-            Id = Guid.NewGuid(),
-            IdentityId = identityId,
+            Id = id,
             Settings = userSettings
         };
 

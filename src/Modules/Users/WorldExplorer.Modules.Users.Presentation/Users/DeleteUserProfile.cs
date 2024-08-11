@@ -18,9 +18,7 @@ internal sealed class DeleteUserProfile : IEndpoint
 	{
 		app.MapDelete("users/profile", async (ClaimsPrincipal claims, ISender sender) =>
 		   {
-			   var currentUserId = claims.GetUserId();
-			   // var result = await userService.DeleteUser(currentUserId);
-			   Result<UserResponse> result = await sender.Send(new GetUserQuery(claims.GetUserId()));
+			   Result result = await sender.Send(new DeleteUserCommand(claims.GetUserId()));
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })

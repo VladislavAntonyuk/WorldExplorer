@@ -11,19 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Users\RegisterUser\**" />
-	  <Compile Remove="Users\UpdateUser\**" />
 	  <Compile Remove="Users\UserService.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Remove="Users\RegisterUser\**" />
-	  <EmbeddedResource Remove="Users\UpdateUser\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Users\RegisterUser\**" />
-	  <None Remove="Users\UpdateUser\**" />
 	</ItemGroup>
 
 </Project>

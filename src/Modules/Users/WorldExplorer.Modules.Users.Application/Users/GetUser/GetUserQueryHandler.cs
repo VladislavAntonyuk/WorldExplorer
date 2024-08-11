@@ -19,10 +19,10 @@ internal sealed class GetUserQueryHandler(IUserRepository userRepository, IGraph
             return Result.Failure<UserResponse>(UserErrors.NotFound(request.UserId));
         }
 
-        var profile = await graphClientService.GetUser(user.IdentityId, cancellationToken);
+        var profile = await graphClientService.GetUser(user.Id, cancellationToken);
         if (profile is null)
         {
-	        return Result.Failure<UserResponse>(UserErrors.NotFound(user.IdentityId));
+	        return Result.Failure<UserResponse>(UserErrors.NotFound(user.Id));
         }
 
         return new UserResponse(

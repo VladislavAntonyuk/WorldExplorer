@@ -29,8 +29,7 @@ public sealed partial class WorldExplorerMap(IJSRuntime jsRuntime,
 		await base.OnAfterRenderAsync(firstRender);
 		if (firstRender)
 		{
-			var currentUser = currentUserService.GetCurrentUser();
-			var user = await apiClient.GetUser(currentUser.ProviderId, CancellationToken.None);
+			var user = await apiClient.GetCurrentUser(CancellationToken.None);
 			mapRef = DotNetObjectReference.Create(this);
 			await jsRuntime.InvokeVoidAsync("leafletInterop.initMap", mapRef, new MapOptions(null, 15)
 			{
@@ -47,7 +46,7 @@ public sealed partial class WorldExplorerMap(IJSRuntime jsRuntime,
 			case StatusCode.Success:
 				if (placesResult.Result.Count == 0)
 				{
-					snackbar.Add("Translation.NoPlacesFoundNearby", Severity.Info);
+					snackbar.Add(Translation.NoPlacesFoundNearby, Severity.Info);
 					break;
 				}
 
@@ -58,7 +57,7 @@ public sealed partial class WorldExplorerMap(IJSRuntime jsRuntime,
 
 				break;
 			case StatusCode.LocationInfoRequestPending:
-				snackbar.Add("Translation.LoadingPlaces", Severity.Info, options => options.ShowCloseIcon = false);
+				snackbar.Add(Translation.LoadingPlaces, Severity.Info, options => options.ShowCloseIcon = false);
 				break;
 		}
 

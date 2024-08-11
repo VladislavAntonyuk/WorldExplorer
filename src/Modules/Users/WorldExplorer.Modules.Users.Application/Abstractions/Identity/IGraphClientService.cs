@@ -2,6 +2,6 @@
 
 public interface IGraphClientService
 {
-	Task<AzureUser?> GetUser(string providerId, CancellationToken cancellationToken);
-	Task DeleteAsync(string providerId, CancellationToken cancellationToken);
+	Task<AzureUser?> GetUser(Guid providerId, CancellationToken cancellationToken);
+	Task DeleteAsync(Guid providerId, CancellationToken cancellationToken);
 }

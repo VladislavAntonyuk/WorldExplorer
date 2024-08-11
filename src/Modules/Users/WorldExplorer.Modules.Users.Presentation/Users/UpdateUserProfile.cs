@@ -11,38 +11,26 @@ using Microsoft.AspNetCore.Routing;
 
 namespace WorldExplorer.Modules.Users.Presentation.Users;
 
+using Domain.Users;
+
 internal sealed class UpdateUserProfile : IEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
-    {
-        app.MapPut("users/profile", async (Request request,  ClaimsPrincipal claims, ISender sender) =>
-        {
+	public void MapEndpoint(IEndpointRouteBuilder app)
+	{
+		app.MapPut("users/profile", async (ClaimsPrincipal claims, Request settings, ISender sender) =>
+		   {
+			   var result = await sender.Send(new UpdateUserCommand(
+				                                  claims.GetUserId(),
+				                                  settings.TrackUserLocation));
 
-	        //var currentUserId = currentUserService.GetCurrentUser().ProviderId;
-	        //if (currentUserId != user.Id)
-	        //{
-		       // return BadRequest();
-	        //}
+			   return result.Match(Results.NoContent, ApiResults.Problem);
+		   })
+		   .RequireAuthorization()
+		   .WithTags(Tags.Users);
+	}
 
-	        //await userService.UpdateUser(user, cancellationToken);
-	        //return Ok();
-
-
-			Result result = await sender.Send(new UpdateUserCommand(
-                claims.GetUserId(),
-                request.FirstName,
-                request.LastName));
-
-            return result.Match(Results.NoContent, ApiResults.Problem);
-        })
-        .RequireAuthorization(Permissions.ModifyUser)
-        .WithTags(Tags.Users);
-    }
-
-    internal sealed class Request
-    {
-        public string FirstName { get; init; }
-
-        public string LastName { get; init; }
-    }
+	internal sealed class Request
+	{
+		public bool TrackUserLocation { get; set; }
+	}
 }
