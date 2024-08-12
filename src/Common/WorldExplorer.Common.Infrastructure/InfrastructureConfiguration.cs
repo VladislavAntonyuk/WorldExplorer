@@ -113,6 +113,7 @@ public static class InfrastructureConfiguration
 					                                                      optionsBuilder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schema)
 						                                                      .UseAzureSqlDefaults();
 					                                                      configure?.Invoke(optionsBuilder);
+					                                                      optionsBuilder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), [0]);
 				                                                      })
 			                                                      // todo remove
 			                                                      .EnableDetailedErrors()
