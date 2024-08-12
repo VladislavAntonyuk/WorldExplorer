@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Modules\Travellers\WorldExplorer.Modules.Travellers\WorldExplorer.Modules.Travellers.csproj" />
 		<ProjectReference Include="..\WorldExplorer.ApiService\WorldExplorer.ApiService.csproj" />
 		<ProjectReference Include="..\WorldExplorer.Web\WorldExplorer.Web.csproj" />
 	</ItemGroup>
@@ -18,7 +19,7 @@
 		<PackageReference Include="Aspire.Hosting.Azure.CognitiveServices" Version="8.1.0" />
 		<PackageReference Include="Aspire.Hosting.Azure.Sql" Version="8.1.0" />
 		<PackageReference Include="Aspire.Hosting.Redis" Version="8.1.0" />
-		<PackageReference Include="HotChocolate.Fusion.Aspire" Version="14.0.0-p.140" />
+		<PackageReference Include="HotChocolate.Fusion.Aspire" Version="14.0.0-p.141" />
 	</ItemGroup>
 
 </Project>

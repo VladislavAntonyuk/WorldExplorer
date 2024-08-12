@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Places\WorldExplorer.Modules.Places.Infrastructure\WorldExplorer.Modules.Places.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Travellers\WorldExplorer.Modules.Travellers\WorldExplorer.Modules.Travellers.csproj" />
     <ProjectReference Include="..\..\Modules\Users\WorldExplorer.Modules.Users.Infrastructure\WorldExplorer.Modules.Users.Infrastructure.csproj" />
     <ProjectReference Include="..\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj" />
   </ItemGroup>

@@ -3,12 +3,23 @@
 		<TargetFramework>$(NetVersion)</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
-		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Presentation\WorldExplorer.Common.Presentation.csproj" />
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj"/>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Presentation\WorldExplorer.Common.Presentation.csproj"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="WorldExplorer.Modules.Travellers.IntegrationTests" />
+		<PackageReference Include="HotChocolate.AspNetCore" Version="14.0.0-p.141" />
+		<PackageReference Include="HotChocolate.Data" Version="14.0.0-p.141" />
+		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="14.0.0-p.141" />
+		<PackageReference Include="HotChocolate.Data.EntityFramework.Helpers" Version="14.0.0-p.100"/>
+		<PackageReference Include="HotChocolate.Types.Analyzers" Version="14.0.0-p.141">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="WorldExplorer.Modules.Travellers.IntegrationTests"/>
 	</ItemGroup>
 
 </Project>
