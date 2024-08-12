@@ -9,13 +9,10 @@
 			"BatchSize": 20
 		}
 	},
-	"AI": {
-		"ApiKey": "123",
-		"Provider": "OpenAI"
-	},
 	"GoogleSearch": {
 		"ApiKey": "321"
 	},
+	"AIProvider": "OpenAI",
 	"LocationRequestNearbyDistance": "0.02",
 	"NearbyDistance": "0.1",
 	"LocationDistance": "0.001"

@@ -1,13 +1,11 @@
 ﻿using WorldExplorer.Common.Application.EventBus;
 using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Infrastructure.Outbox;
 using WorldExplorer.Common.Presentation.Endpoints;
 using WorldExplorer.Modules.Users.Domain.Users;
 using WorldExplorer.Modules.Users.Infrastructure.Database;
 using WorldExplorer.Modules.Users.Infrastructure.Inbox;
 using WorldExplorer.Modules.Users.Infrastructure.Outbox;
 using WorldExplorer.Modules.Users.Infrastructure.Users;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -17,11 +15,9 @@ namespace WorldExplorer.Modules.Users.Infrastructure;
 using Application.Abstractions.Identity;
 using Azure.Identity;
 using Common.Application.Abstractions.Data;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
+using Common.Infrastructure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Graph.Beta;
-using Presentation.Users;
 
 public static class UsersModule
 {
@@ -29,51 +25,40 @@ public static class UsersModule
         this IHostApplicationBuilder builder)
     {
         builder.Services.AddDomainEventHandlers();
-		
+
         builder.Services.AddIntegrationEventHandlers();
-		
-        builder.Services.AddInfrastructure(builder.Configuration);
-		
+
+        builder.AddInfrastructure();
+
         builder.Services.AddEndpoints(Presentation.AssemblyReference.Assembly);
-		
+
         builder.Services.AddAuth(builder.Configuration);
 
         return builder;
     }
 
-    private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    private static void AddInfrastructure(this IHostApplicationBuilder builder)
     {
-	    services.AddSingleton<IGraphClientService>(_ =>
+	    builder.Services.AddSingleton<IGraphClientService>(_ =>
 	    {
-		    var config = configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
+		    var config = builder.Configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
 		                              .Get<AzureAdB2CGraphClientConfiguration>();
 		    ArgumentNullException.ThrowIfNull(config);
 		    var clientSecretCredential = new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret);
 		    return new GraphClientService(new GraphServiceClient(clientSecretCredential), config.DefaultApplicationId);
 	    });
 
-        services.AddDbContext<UsersDbContext>((sp, options) =>
-            options
-                .UseSqlServer(
-                    configuration.GetConnectionString("Database"),
-                    optionsBuilder => optionsBuilder
-                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Users)
-                        .UseAzureSqlDefaults())
-// todo remove
-				.EnableDetailedErrors()
-                .EnableSensitiveDataLogging()
+        builder.AddDatabase<UsersDbContext>(Schemas.Users);
 
-				.AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<UsersDbContext>());
 
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<UsersDbContext>());
-
-        services.Configure<OutboxOptions>(configuration.GetSection("Users:Outbox"));
+        builder.Services.Configure<OutboxOptions>(builder.Configuration.GetSection("Users:Outbox"));
 
         //services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
-        services.Configure<InboxOptions>(configuration.GetSection("Users:Inbox"));
+        builder.Services.Configure<InboxOptions>(builder.Configuration.GetSection("Users:Inbox"));
 
         //services.ConfigureOptions<ConfigureProcessInboxJob>();
     }

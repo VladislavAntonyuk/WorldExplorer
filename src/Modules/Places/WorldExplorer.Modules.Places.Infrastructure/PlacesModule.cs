@@ -8,6 +8,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure;
 
 using System.Configuration;
 using Common.Application.Abstractions.Data;
+using Common.Infrastructure;
 using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -37,19 +38,14 @@ public static class PlacesModule
 
     private static void AddInfrastructure(this IHostApplicationBuilder builder)
     {
-	    builder.Services.AddDbContext<PlacesDbContext>((sp, options) =>
-            options
-                .UseSqlServer(
-                    builder.Configuration.GetConnectionString("Database"),
-                    npgsqlOptions => npgsqlOptions
-                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Places)
-                        .UseNetTopologySuite())
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+	    builder.AddDatabase<PlacesDbContext>(Schemas.Places, options => options.UseNetTopologySuite());
+
+		builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
+
+		builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<PlacesDbContext>());
 
         builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 
-        builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<PlacesDbContext>());
-		builder.AddAzureOpenAIClient("openai");
 
 
 
@@ -59,23 +55,22 @@ public static class PlacesModule
 		//services.AddSingleton<IPlacesService, PlacesService>();
 		//services.Configure<PlacesSettings>(configuration.GetRequiredSection("Places"));
 		//services.AddSingleton<ILocationInfoRequestsService, LocationInfoRequestsService>();
-		builder.Services.Configure<AiSettings>(builder.Configuration.GetRequiredSection("AI"));
-		builder.Services.AddSingleton<IAiService, AiService>();
-		builder.Services.AddHttpClient<GeminiProvider>("Gemini", client =>
+		if (builder.Configuration.GetValue<string>("AIProvider") == "OpenAI")
 		{
-			client.DefaultRequestHeaders.Add("x-goog-api-client", "genai-swift/0.4.8");
-			client.DefaultRequestHeaders.Add("User-Agent", "AIChat/1 CFNetwork/1410.1 Darwin/22.6.0");
-		});
-		builder.Services.AddSingleton<IAiProvider>(s =>
+			builder.AddAzureOpenAIClient("openai");
+			builder.Services.AddSingleton<IAiProvider, OpenAiProvider>();
+		}
+		else
 		{
-			var aiSettings = s.GetRequiredService<IOptions<AiSettings>>().Value;
-			if (aiSettings.Provider == "OpenAI")
+			builder.Services.Configure<GeminiAiSettings>(builder.Configuration.GetRequiredSection("GeminiAISettings"));
+			builder.Services.AddHttpClient<IAiProvider, GeminiProvider>("Gemini", client =>
 			{
-				return new OpenAiProvider(s.GetRequiredService<OpenAIClient>(), s.GetRequiredService<ILogger<OpenAiProvider>>());
-			}
+				client.DefaultRequestHeaders.Add("x-goog-api-client", "genai-swift/0.4.8");
+				client.DefaultRequestHeaders.Add("User-Agent", "AIChat/1 CFNetwork/1410.1 Darwin/22.6.0");
+			});
+		}
 
-			return s.GetRequiredService<GeminiProvider>();
-		});
+		builder.Services.AddSingleton<IAiService, AiService>();
 
 		builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
 		builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();

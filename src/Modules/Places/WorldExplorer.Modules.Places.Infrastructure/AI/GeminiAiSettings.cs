@@ -1,8 +1,6 @@
 ﻿namespace WebApp.Services.AI;
 
-public class AiSettings
+public class GeminiAiSettings
 {
 	public required string ApiKey { get; set; }
-
-	public required string Provider { get; set; }
 }

@@ -10,7 +10,11 @@ using StackExchange.Redis;
 
 namespace WorldExplorer.Common.Infrastructure;
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 public static class InfrastructureConfiguration
 {
@@ -29,7 +33,7 @@ public static class InfrastructureConfiguration
         services.AddAuthenticationInternal(configuration);
 
         services.AddAuthorizationInternal();
-		
+
         services.TryAddSingleton<IEventBus, EventBus.EventBus>();
 
         services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
@@ -38,7 +42,7 @@ public static class InfrastructureConfiguration
         //services.TryAddSingleton(npgsqlDataSource);
 
         //services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
-		
+
         services.AddQuartz(configurator =>
         {
             var scheduler = Guid.NewGuid();
@@ -93,5 +97,29 @@ public static class InfrastructureConfiguration
         //    });
 
         return services;
+    }
+
+    public static IHostApplicationBuilder AddDatabase<T>(this IHostApplicationBuilder builder,
+	    string schema,
+	    Action<SqlServerDbContextOptionsBuilder>? configure = null)
+		where T:DbContext
+    {
+	    builder.Services.AddDbContextPool<T>((sp, options) =>
+		                                                      options
+			                                                      .UseSqlServer(
+				                                                      builder.Configuration.GetConnectionString("Database"),
+				                                                      optionsBuilder =>
+				                                                      {
+					                                                      optionsBuilder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schema)
+						                                                      .UseAzureSqlDefaults();
+					                                                      configure?.Invoke(optionsBuilder);
+				                                                      })
+			                                                      // todo remove
+			                                                      .EnableDetailedErrors()
+			                                                      .EnableSensitiveDataLogging()
+
+			                                                      .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+	    builder.EnrichSqlServerDbContext<T>();
+	    return builder;
     }
 }
