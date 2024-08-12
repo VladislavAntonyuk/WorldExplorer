@@ -9,9 +9,9 @@
 			"BatchSize": 50
 		}
 	},
-	"AI": {
-		"ApiKey": "#{AI_APIKEY}#",
-		"Provider": "#{AI_PROVIDER}#"
+	"AIProvider": "#{AI_PROVIDER}#",
+	"GeminiAISettings": {
+		"ApiKey": "#{GEMINI_KEY}#"
 	},
 	"GoogleSearch": {
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"

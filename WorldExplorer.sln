@@ -79,6 +79,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Modules.Place
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Modules.Places.Presentation", "src\Modules\Places\WorldExplorer.Modules.Places.Presentation\WorldExplorer.Modules.Places.Presentation.csproj", "{6CCD2AA2-C221-4155-8866-46D9464928CE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Travellers", "Travellers", "{CF20E7CE-7302-4B42-9001-AEE2D9C7E7DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldExplorer.Modules.Travellers", "src\Modules\Travellers\WorldExplorer.Modules.Travellers\WorldExplorer.Modules.Travellers.csproj", "{943C5366-E11A-4651-9643-1DD8BB0E9EDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +191,10 @@ Global
 		{6CCD2AA2-C221-4155-8866-46D9464928CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CCD2AA2-C221-4155-8866-46D9464928CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CCD2AA2-C221-4155-8866-46D9464928CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{943C5366-E11A-4651-9643-1DD8BB0E9EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{943C5366-E11A-4651-9643-1DD8BB0E9EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{943C5366-E11A-4651-9643-1DD8BB0E9EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{943C5366-E11A-4651-9643-1DD8BB0E9EDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -223,6 +231,8 @@ Global
 		{889555A0-E74D-40F4-9C7C-D605F089B9D0} = {5A429B42-8528-4F34-BD51-7FD2E6779C29}
 		{4F45B79F-6020-4A75-A376-F6BE986E147F} = {5A429B42-8528-4F34-BD51-7FD2E6779C29}
 		{6CCD2AA2-C221-4155-8866-46D9464928CE} = {5A429B42-8528-4F34-BD51-7FD2E6779C29}
+		{CF20E7CE-7302-4B42-9001-AEE2D9C7E7DD} = {EB5EDB93-E22B-49BD-8014-7531587B29E2}
+		{943C5366-E11A-4651-9643-1DD8BB0E9EDA} = {CF20E7CE-7302-4B42-9001-AEE2D9C7E7DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {13BDE4A2-81B8-494D-B82D-60780D2AB107}

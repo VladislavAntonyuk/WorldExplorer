@@ -9,8 +9,8 @@ var cache = builder.AddRedis("cache")
                    .WithImageTag("latest");
 
 var sqlServer = builder.AddSqlServer("server")
-                       .WithImage("mssql/server", "2019-CU18-ubuntu-20.04")
-                       .WithImageRegistry("mcr.microsoft.com")
+                        .WithImage("azure-sql-edge")
+                        .WithImageRegistry("mcr.microsoft.com")
                        .PublishAsAzureSqlDatabase()
                        .AddDatabase("database", "worldexplorer");
 

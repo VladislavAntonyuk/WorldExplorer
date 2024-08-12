@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services.AI;
+namespace WebApp.Services.AI;
 
 using System.ClientModel;
 using System.ClientModel.Primitives;
@@ -11,7 +11,7 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 {
 	public async Task<string?> GetResponse(string request)
 	{
-		var client = api.GetChatClient("gpt-35-turbo");
+		var client = api.GetChatClient("gpt-4o-mini");
 
 		try
 		{
@@ -45,7 +45,7 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 	{
 		try
 		{
-			var client = api.GetImageClient("gpt-35-turbo");
+			var client = api.GetImageClient("gpt-4");
 			var imageResult = await client.GenerateImageAsync(request, new ImageGenerationOptions(){Quality = GeneratedImageQuality.High, ResponseFormat = GeneratedImageFormat.Uri, Size = GeneratedImageSize.W1024xH1024, Style = GeneratedImageStyle.Natural});
 			return imageResult.Value.ImageUri.ToString();
 		}

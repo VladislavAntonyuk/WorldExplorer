@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Extensions;
 
-public class GeminiProvider(HttpClient httpClient, IOptions<AiSettings> aiOptions, ILogger<GeminiProvider> logger) : IAiProvider
+public class GeminiProvider(HttpClient httpClient, IOptions<GeminiAiSettings> aiOptions, ILogger<GeminiProvider> logger) : IAiProvider
 {
 	public async Task<string?> GetResponse(string request)
 	{
