@@ -6,6 +6,7 @@ using WorldExplorer.Common.Application;
 using WorldExplorer.Common.Infrastructure;
 using WorldExplorer.Common.Presentation.Endpoints;
 using WorldExplorer.Modules.Places.Infrastructure;
+using WorldExplorer.Modules.Travellers;
 using WorldExplorer.Modules.Users.Infrastructure;
 using WorldExplorer.ServiceDefaults;
 
@@ -40,6 +41,7 @@ builder.Services.AddInfrastructure(
 builder.Configuration.AddModuleConfiguration(["users", "places", "traveller"]);
 
 builder.AddUsersModule();
+builder.AddTravellersModule();
 builder.AddPlacesModule();
 
 var app = builder.Build();
@@ -59,6 +61,7 @@ app.UseAuthorization();
 
 app.MapEndpoints();
 app.MapDefaultEndpoints();
+app.MapTravellersEndpoint();
 
 app.Run();
 
