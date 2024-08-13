@@ -44,10 +44,10 @@ public class UserTests : BaseTest
 			Faker.Create<UserSettings>());
 
 		// Act
-		user.Update(user.Settings);
+		user.Update(new UserSettings(){ TrackUserLocation = true });
 
-        // Assert
-        UserProfileUpdatedDomainEvent domainEvent =
+		// Assert
+		UserProfileUpdatedDomainEvent domainEvent =
             AssertDomainEventWasPublished<UserProfileUpdatedDomainEvent>(user);
 
         domainEvent.UserId.Should().Be(user.Id);

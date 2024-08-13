@@ -1,4 +1,4 @@
-namespace WebApp.Services.AI;
+﻿namespace WebApp.Services.AI;
 
 using System.ClientModel;
 using System.ClientModel.Primitives;
@@ -11,7 +11,7 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 {
 	public async Task<string?> GetResponse(string request)
 	{
-		var client = api.GetChatClient("gpt-4o-mini");
+		var client = api.GetChatClient("gpt-3.5-turbo");
 
 		try
 		{
