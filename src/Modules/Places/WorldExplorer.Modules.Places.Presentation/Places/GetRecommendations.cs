@@ -17,7 +17,7 @@ internal sealed class GetRecommendations : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
 	{
-        app.MapGet("places/recommendations", async (ClaimsPrincipal claims, [AsParameters] Request location, ISender sender) =>
+        app.MapGet("places/recommendations", async ([AsParameters] Request location, ISender sender) =>
         {
 			Result<List<PlaceResponse>> result = await sender.Send(new GetNearByPlacesQuery(location.Longitude, location.Latitude));
 
