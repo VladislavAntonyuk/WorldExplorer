@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace WorldExplorer.Modules.Users.Infrastructure.Database;
 
 using Common.Application.Abstractions.Data;
+using Microsoft.EntityFrameworkCore.Design;
 using User = Domain.Users.User;
 
 public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options), IUnitOfWork
@@ -23,3 +24,16 @@ public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : D
         modelBuilder.ApplyConfiguration(new UserConfiguration());
     }
 }
+
+#if DEBUG
+// dotnet ef migrations add "Users" -o "Database\Migrations"
+public class UsersDbContextFactory : IDesignTimeDbContextFactory<UsersDbContext>
+{
+	public UsersDbContext CreateDbContext(string[] args)
+	{
+		return new UsersDbContext(new DbContextOptionsBuilder<UsersDbContext>()
+			.UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password")
+			.Options);
+	}
+}
+#endif

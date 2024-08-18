@@ -20,7 +20,7 @@ public static class TravellersModule
 
         builder.AddInfrastructure();
 
-        builder.Services.AddEndpoints(AssemblyReference.Assembly);
+        //builder.Services.AddEndpoints(AssemblyReference.Assembly);
 
         return builder;
     }
@@ -35,10 +35,17 @@ public static class TravellersModule
 
         builder.Services.AddScoped<TravellersService>();
 
-        builder.Services
-               .AddGraphQLServer();
-              // .AddCatalogTypes()
-              // .AddGraphQLConventions();
+        builder.Services.AddGraphQLServer()
+               .RegisterDbContextFactory<TravellersDbContext>()
+               .AddQueryType<TravellersService>()
+               .AddQueryConventions()
+               //.AddPagingArguments()
+               .AddFiltering()
+               //.AddProjections()
+               .AddSorting()
+               ;
+        // .AddCatalogTypes()
+        // .AddGraphQLConventions();
     }
 
     public static IEndpointRouteBuilder MapTravellersEndpoint(this IEndpointRouteBuilder builder)
