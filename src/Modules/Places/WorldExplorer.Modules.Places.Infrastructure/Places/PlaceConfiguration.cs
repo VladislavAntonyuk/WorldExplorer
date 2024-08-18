@@ -17,8 +17,8 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
 		builder.Property(x => x.Location)
 			   .HasConversion(l =>
 								  Geometry.DefaultFactory.CreatePoint(new Coordinate(l.Longitude, l.Latitude)),
-			                  p => new Location(p.X, p.Y))
-			   .HasColumnType(Geometry.TypeNamePoint);
+			                  p => new Location(p.X, p.Y));
+			  // .HasColumnType(Geometry.TypeNamePoint);
 		//builder.HasMany(x => x.Reviews)
 		//	   .WithOne().HasForeignKey(d => d.PlaceId)
 		//	   .OnDelete(DeleteBehavior.Cascade);
