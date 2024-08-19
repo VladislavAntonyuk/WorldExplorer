@@ -21,17 +21,17 @@ public static class ServiceExtensions
 		services.AddTranslations();
 		services.AddLogging();
 		services.AddRazorComponents()
-		        .AddInteractiveServerComponents()
-		        .AddMicrosoftIdentityConsentHandler();
+				.AddInteractiveServerComponents()
+				.AddMicrosoftIdentityConsentHandler();
 	}
 
 	public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
 	{
 		var scopes = configuration.GetSection("WorldExplorerApiClient:Scopes").Get<string[]>();
 		services.AddMicrosoftIdentityWebAppAuthentication(configuration, Microsoft.Identity.Web.Constants.AzureAdB2C)
-		       .EnableTokenAcquisitionToCallDownstreamApi(scopes)
-		       .AddDownstreamApi("WorldExplorerApiClient", configuration.GetSection("WorldExplorerApiClient"))
-		       .AddInMemoryTokenCaches();
+			   .EnableTokenAcquisitionToCallDownstreamApi(scopes)
+			   .AddDownstreamApi("WorldExplorerApiClient", configuration.GetSection("WorldExplorerApiClient"))
+			   .AddInMemoryTokenCaches();
 
 		services.AddCascadingAuthenticationState();
 		services.AddAuthZ(configuration);
@@ -46,6 +46,13 @@ public static class ServiceExtensions
 	public static void AddWorldExplorerServices(this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddTransient<WorldExplorerApiClient>();
+
+		var baseUrl = configuration.GetSection("WorldExplorerApiClient:BaseUrl").Get<string>();
+		services.AddWorldExplorerTravellersClient()
+			   .ConfigureHttpClient(client => client.BaseAddress = new Uri($"{baseUrl}/graphql"));
+
+
+
 		//services.AddHostedService<PlacesLookupBackgroundService>();
 		//services.AddHostedService<PlaceDetailsBackgroundService>();
 

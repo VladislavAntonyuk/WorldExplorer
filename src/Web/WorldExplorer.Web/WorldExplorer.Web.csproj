@@ -23,6 +23,7 @@
     <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="8.1.0" />
     <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="3.0.1" />
     <PackageReference Include="MudBlazor" Version="7.6.0" />
+    <PackageReference Include="StrawberryShake.Blazor" Version="14.0.0-p.142" />
     <PackageReference Include="Toolbelt.Blazor.I18nText" Version="13.0.0" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.1" />
 
