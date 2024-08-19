@@ -6,4 +6,5 @@ public class Visit
 	public required Guid TravellerId { get; set; }
 	public required Guid PlaceId { get; set; }
 	public DateTime VisitDate { get; set; }
+	public Review? Review { get; set; }
 }

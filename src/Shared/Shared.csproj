@@ -3,8 +3,4 @@
 	<PropertyGroup>
 		<TargetFramework>$(NetVersion)</TargetFramework>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Folder Include="Extensions\" />
-	</ItemGroup>
 </Project>
