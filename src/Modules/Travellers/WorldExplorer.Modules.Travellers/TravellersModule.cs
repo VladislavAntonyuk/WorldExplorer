@@ -12,39 +12,40 @@ using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
 public static class TravellersModule
 {
-    public static IHostApplicationBuilder AddTravellersModule(
-        this IHostApplicationBuilder builder)
-    {
-        //builder.Services.AddDomainEventHandlers();
+	public static IHostApplicationBuilder AddTravellersModule(
+		this IHostApplicationBuilder builder)
+	{
+		//builder.Services.AddDomainEventHandlers();
 
-       // builder.Services.AddIntegrationEventHandlers();
+		// builder.Services.AddIntegrationEventHandlers();
 
-        builder.AddInfrastructure();
+		builder.AddInfrastructure();
 
-        return builder;
-    }
+		return builder;
+	}
 
-    private static void AddInfrastructure(this IHostApplicationBuilder builder)
-    {
-        builder.AddDatabase<TravellersDbContext>(Schemas.Travellers);
+	private static void AddInfrastructure(this IHostApplicationBuilder builder)
+	{
+		builder.AddDatabase<TravellersDbContext>(Schemas.Travellers);
 
-        builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<TravellersDbContext>());
+		builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<TravellersDbContext>());
 
-        builder.Services.AddScoped<GetTravellersHandler>();
-        builder.Services.AddScoped<GetTravellerByIdHandler>();
+		builder.Services.AddScoped<GetTravellersHandler>();
+		builder.Services.AddScoped<GetTravellerByIdHandler>();
 
-        builder.Services.AddGraphQLServer()
-               .RegisterDbContextFactory<TravellersDbContext>()
-               .AddQueryType<GetTravellersHandler>()
-               .AddQueryType<GetTravellerByIdHandler>()
-               .AddQueryConventions()
-               .AddFiltering()
-               .AddSorting();
-    }
+		builder.Services.AddGraphQLServer()
+		       .RegisterDbContextFactory<TravellersDbContext>()
+		       .AddQueryType(d => d.Name("Travellers"))
+		       .AddType<GetTravellersHandler>()
+		       .AddType<GetTravellerByIdHandler>()
+		       .AddQueryConventions()
+		       .AddFiltering()
+		       .AddSorting();
+	}
 
-    public static IEndpointRouteBuilder MapTravellersEndpoint(this IEndpointRouteBuilder builder)
-    {
-	    builder.MapGraphQL();
-	    return builder;
-    }
+	public static IEndpointRouteBuilder MapTravellersEndpoint(this IEndpointRouteBuilder builder)
+	{
+		builder.MapGraphQL();
+		return builder;
+	}
 }

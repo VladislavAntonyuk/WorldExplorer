@@ -19,7 +19,7 @@ internal sealed class GetRecommendations : IEndpoint
 	{
         app.MapGet("places/recommendations", async ([AsParameters] Request location, ISender sender) =>
         {
-			Result<List<PlaceResponse>> result = await sender.Send(new GetNearByPlacesQuery(location.Longitude, location.Latitude));
+			var result = await sender.Send(new GetNearByPlacesQuery(location.Longitude, location.Latitude));
 
 			return result.Match(Results.Ok, ApiResults.Problem);
         })

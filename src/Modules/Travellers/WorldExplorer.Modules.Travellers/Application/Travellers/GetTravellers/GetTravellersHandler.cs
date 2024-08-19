@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Travellers;
 using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
+[ExtendObjectType("Travellers")]
 public sealed class GetTravellersHandler(TravellersDbContext context)
 {
 	[UseOffsetPaging]

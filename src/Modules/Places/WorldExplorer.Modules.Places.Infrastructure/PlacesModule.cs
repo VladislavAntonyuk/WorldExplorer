@@ -10,6 +10,7 @@ using System.Configuration;
 using Common.Application.Abstractions.Data;
 using Common.Infrastructure;
 using Database;
+using Domain.LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -40,11 +41,10 @@ public static class PlacesModule
     {
 	    builder.AddDatabase<PlacesDbContext>(Schemas.Places, options => options.UseNetTopologySuite());
 
-		builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
-
 		builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<PlacesDbContext>());
 
         builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
+        builder.Services.AddScoped<ILocationInfoRepository, LocationInfoRepository>();
 
 
 
@@ -54,7 +54,7 @@ public static class PlacesModule
 
 		//services.AddSingleton<IPlacesService, PlacesService>();
 		//services.Configure<PlacesSettings>(configuration.GetRequiredSection("Places"));
-		//services.AddSingleton<ILocationInfoRequestsService, LocationInfoRequestsService>();
+		//services.AddSingleton<ILocationInfoRequestsService, LocationInfoRepository>();
 		if (builder.Configuration.GetValue<string>("AIProvider") == "OpenAI")
 		{
 			builder.AddAzureOpenAIClient("openai");

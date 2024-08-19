@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlace;
 
+using Domain.LocationInfo;
 using Domain.Places;
 using Shared.Enums;
 
@@ -20,11 +21,4 @@ public sealed record LocationInfoRequestResponse
 	public required Location Location { get; set; }
 	public LocationInfoRequestStatus Status { get; set; }
 	public DateTime CreationDate { get; set; }
-}
-
-public enum LocationInfoRequestStatus
-{
-	New,
-	Pending,
-	Completed
 }

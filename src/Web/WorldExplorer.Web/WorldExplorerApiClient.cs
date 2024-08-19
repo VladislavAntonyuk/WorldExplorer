@@ -87,12 +87,8 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 
 	public async Task<OperationResult<List<PlaceResponse>>> GetNearByPlaces(Location location, CancellationToken none)
 	{
-		var r = await GetAsync<List<PlaceResponse>>($"places/recommendations?Latitude={location.Latitude}&Longitude={location.Longitude}", none);
-		return new OperationResult<List<PlaceResponse>>()
-		{
-			Result = r,
-			StatusCode = StatusCode.Success
-		};
+		var r = await GetAsync<OperationResult<List<PlaceResponse>>>($"places/recommendations?Latitude={location.Latitude}&Longitude={location.Longitude}", none);
+		return r;
 	}
 
 	public bool IsNearby(Location currentLocation, Location location)

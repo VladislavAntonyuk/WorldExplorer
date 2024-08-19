@@ -20,8 +20,8 @@ public sealed partial class WorldExplorerMap(IJSRuntime jsRuntime,
 
 	public async ValueTask DisposeAsync()
 	{
-		await jsRuntime.InvokeVoidAsync("leafletInterop.destroyMap");
-		mapRef?.Dispose();
+		//await jsRuntime.InvokeVoidAsync("leafletInterop.destroyMap");
+		//mapRef?.Dispose();
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
