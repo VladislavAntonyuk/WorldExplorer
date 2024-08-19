@@ -4,7 +4,6 @@ using Database;
 using Domain.Places;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using Location = Domain.Places.Location;
 
 internal sealed class PlaceRepository(PlacesDbContext context) : IPlaceRepository
 {
@@ -18,10 +17,10 @@ internal sealed class PlaceRepository(PlacesDbContext context) : IPlaceRepositor
 		context.Places.Add(place);
 	}
 
-	public async Task<List<Place>> GetNearestPlacesAsync(Location userLocation, CancellationToken cancellationToken)
+	public async Task<List<Place>> GetNearestPlacesAsync(Point userLocation, CancellationToken cancellationToken)
 	{
 		return await context.Places
-		             .Where(x => new Point(x.Location.Longitude, x.Location.Latitude).IsWithinDistance(new Point(userLocation.Longitude, userLocation.Latitude), 1000))
+		             .Where(x => x.Location.IsWithinDistance(userLocation, 1000))
 		             .ToListAsync(cancellationToken);
 	}
 }

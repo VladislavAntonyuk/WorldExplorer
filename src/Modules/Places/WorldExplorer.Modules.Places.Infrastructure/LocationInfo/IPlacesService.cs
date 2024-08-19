@@ -1,5 +1,6 @@
 ﻿namespace WebApp.Services.Place;
 
+using WorldExplorer.Modules.Places.Application.Abstractions;
 using WorldExplorer.Modules.Places.Domain.Places;
 
 public interface IPlacesService

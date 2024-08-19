@@ -8,7 +8,6 @@ using Modules.Travellers.Application.Travellers;
 using Modules.Users.Domain.Users;
 using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 using WorldExplorer.Modules.Users.Infrastructure.Database;
-using Location = Modules.Places.Domain.Places.Location;
 
 public static class MigrationExtensions
 {
@@ -33,13 +32,13 @@ public static class MigrationExtensions
 		}
 		if (context is PlacesDbContext placesDbContext)
 		{
-			placesDbContext.Add(WorldExplorer.Modules.Places.Domain.Places.Place.Create("Place1", new(49.419500, 26.995900), "Description1"));
-			placesDbContext.Add(WorldExplorer.Modules.Places.Domain.Places.Place.Create("Dnipro", new(48.482, 34.998), "Description2"));
+			placesDbContext.Add(WorldExplorer.Modules.Places.Domain.Places.Place.Create("Place1", new(49.419500, 26.995900){SRID = 4326}, "Description1"));
+			placesDbContext.Add(WorldExplorer.Modules.Places.Domain.Places.Place.Create("Dnipro", new(48.482, 34.998){SRID = 4326}, "Description2"));
 
 
 			placesDbContext.Add(new LocationInfoRequest()
 			{
-				Location = new(48.482, 34.998),
+				Location = new(49.419500, 26.995900) {SRID = 4326},
 				Status = LocationInfoRequestStatus.Completed,
 				CreationDate = DateTime.Today
 			});

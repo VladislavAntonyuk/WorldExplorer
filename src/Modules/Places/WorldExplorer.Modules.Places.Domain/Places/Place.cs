@@ -17,7 +17,7 @@ public class Place : Entity
 
 	public ICollection<Image> Images { get; private set; } = new List<Image>();
 
-	public static Place Create(string name, Location location, string? description)
+	public static Place Create(string name, Point location, string? description)
 	{
 		var place = new Place
 		{
@@ -32,7 +32,7 @@ public class Place : Entity
 		return place;
 	}
 
-	public void Update(string name, Location location, string? description)
+	public void Update(string name, Point location, string? description)
 	{
 		if (Name == name && Location == location && Description == description)
 		{
