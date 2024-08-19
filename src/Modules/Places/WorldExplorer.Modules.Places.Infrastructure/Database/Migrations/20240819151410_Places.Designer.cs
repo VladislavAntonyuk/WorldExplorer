@@ -13,8 +13,8 @@ using WorldExplorer.Modules.Places.Infrastructure.Database;
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PlacesDbContext))]
-    [Migration("20240819143055_LocationInfo")]
-    partial class LocationInfo
+    [Migration("20240819151410_Places")]
+    partial class Places
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

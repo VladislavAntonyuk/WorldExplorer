@@ -1,6 +1,7 @@
 ﻿namespace WebApp.Services.AI;
 
 using System.Text.Json;
+using WorldExplorer.Modules.Places.Application.Abstractions;
 using WorldExplorer.Modules.Places.Domain.Places;
 
 public class AiService(IAiProvider aiProvider) : IAiService

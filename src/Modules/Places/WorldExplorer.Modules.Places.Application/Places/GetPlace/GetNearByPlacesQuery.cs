@@ -7,13 +7,4 @@ using Places.Application.Places.GetPlace;
 using Places.Domain.Places;
 using Shared.Models;
 
-public sealed record GetNearByPlacesQuery(double Longitude, double Latitude) : IQuery<OperationResult<List<PlaceResponse>>>
-{
-	public Point ToPoint()
-	{
-		return new Point(Latitude, Longitude)
-		{
-			SRID = 4326
-		};
-	}
-}
+public sealed record GetPlaceDetailsQuery(Guid PlaceId) : IQuery<PlaceResponse>;

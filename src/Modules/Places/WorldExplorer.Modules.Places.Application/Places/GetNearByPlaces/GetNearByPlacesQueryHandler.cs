@@ -6,6 +6,7 @@ namespace WorldExplorer.Modules.Users.Application.Users.GetUser;
 
 using Common.Application.Abstractions.Data;
 using Microsoft.Extensions.Logging;
+using Places.Application.Abstractions;
 using Places.Application.Places.GetPlace;
 using Places.Domain.LocationInfo;
 using Places.Domain.Places;
@@ -60,8 +61,8 @@ internal sealed class GetNearByPlacesQueryHandler(ILocationInfoRepository locati
 		return new PlaceResponse(place.Id,
 		                         place.Name,
 		                         place.Description,
-		                         place.Location,
-		                         0,
+		                         new Location(place.Location.X, place.Location.Y),
+		                         1,
 		                         place.Images.Select(x => x.Source).ToList());
 	}
 }

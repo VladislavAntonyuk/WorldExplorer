@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlace;
 
+using Abstractions;
 using Domain.LocationInfo;
 using Domain.Places;
 using Shared.Enums;

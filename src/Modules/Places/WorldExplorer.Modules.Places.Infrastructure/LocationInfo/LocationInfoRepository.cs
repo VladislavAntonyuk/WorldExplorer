@@ -3,9 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using WorldExplorer.Modules.Places.Domain.LocationInfo;
-using WorldExplorer.Modules.Places.Domain.Places;
 using WorldExplorer.Modules.Places.Infrastructure.Database;
-using Location = WorldExplorer.Modules.Places.Domain.Places.Location;
 
 public class LocationInfoRepository(PlacesDbContext placesDbContext) : ILocationInfoRepository
 {
@@ -30,15 +28,15 @@ public class LocationInfoRepository(PlacesDbContext placesDbContext) : ILocation
 		throw new NotImplementedException();
 	}
 
-	public void Insert(LocationInfoRequest locationInfo)
+	public void Insert(LocationInfoRequest locationInfoRequest)
 	{
-		throw new NotImplementedException();
+		placesDbContext.LocationInfoRequests.Add(locationInfoRequest);
 	}
 
-	public Task<List<LocationInfoRequest>> IsNearby(Location userLocation)
+	public async Task<List<LocationInfoRequest>> IsNearby(Point userLocation)
 	{
-		return placesDbContext.LocationInfoRequests
-			.Where(x => new Point(x.Location.Longitude, x.Location.Latitude).IsWithinDistance(new Point(userLocation.Longitude, userLocation.Latitude), 100))
+		return await placesDbContext.LocationInfoRequests
+			.Where(x => x.Location.IsWithinDistance(userLocation, 100))
 			.ToListAsync();
 	}
 }

@@ -41,10 +41,10 @@
 //		return point1.IsWithinDistance(point2, placesOptions.Value.LocationDistance);
 //	}
 
-//	public async Task Delete(Guid placeId, CancellationToken cancellationToken)
+//	public async Task Delete(Guid PlaceId, CancellationToken cancellationToken)
 //	{
 //		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-//		await dbContext.Places.Where(x => x.Id == placeId).ExecuteDeleteAsync(cancellationToken);
+//		await dbContext.Places.Where(x => x.Id == PlaceId).ExecuteDeleteAsync(cancellationToken);
 //	}
 
 //	public async Task UpdatePlace(Place place, CancellationToken cancellationToken)
