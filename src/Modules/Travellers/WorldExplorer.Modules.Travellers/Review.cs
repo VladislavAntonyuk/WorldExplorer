@@ -1,4 +1,4 @@
-﻿namespace Shared.Models;
+﻿namespace WorldExplorer.Modules.Travellers;
 
 public class Review
 {

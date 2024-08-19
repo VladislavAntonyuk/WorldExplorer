@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Travellers.Database;
+﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
 using Abstractions.Data;
 using Microsoft.EntityFrameworkCore;
@@ -6,24 +6,27 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WorldExplorer.Common.Infrastructure.Inbox;
 using WorldExplorer.Common.Infrastructure.Outbox;
+using WorldExplorer.Modules.Travellers;
+using WorldExplorer.Modules.Travellers.Application.Travellers;
 
 public sealed class TravellersDbContext(DbContextOptions<TravellersDbContext> options) : DbContext(options), IUnitOfWork
 {
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.HasDefaultSchema(Schemas.Travellers);
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.HasDefaultSchema(Schemas.Travellers);
 
 		modelBuilder.ApplyConfiguration(new TravellerConfiguration());
 		modelBuilder.ApplyConfiguration(new TravellerRouteConfiguration());
-		modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
-    }
 
-    internal DbSet<Traveller> Travellers { get; set; }
-    //internal DbSet<Visit> Visits { get; set; }
-    //internal DbSet<Place> Places { get; set; }
+		modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
+		modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
+		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
+		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+	}
+
+	internal DbSet<Traveller> Travellers { get; set; }
+	internal DbSet<Visit> Visits { get; set; }
+	internal DbSet<Place> Places { get; set; }
 }
 
 
@@ -34,8 +37,8 @@ public class TravellersDbContextFactory : IDesignTimeDbContextFactory<Travellers
 	public TravellersDbContext CreateDbContext(string[] args)
 	{
 		return new TravellersDbContext(new DbContextOptionsBuilder<TravellersDbContext>()
-		                               .UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password")
-		                               .Options);
+									   .UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password")
+									   .Options);
 	}
 }
 #endif
@@ -47,6 +50,20 @@ public class TravellerConfiguration : IEntityTypeConfiguration<Traveller>
 		builder.HasKey(e => e.Id);
 
 		builder.HasMany(x => x.Routes).WithOne();
+
+		//builder.HasMany(x => x.Reviews)
+		//	   .WithOne().HasForeignKey(d => d.PlaceId)
+		//	   .OnDelete(DeleteBehavior.Cascade);
+	}
+}
+
+public class PlacesConfiguration : IEntityTypeConfiguration<Place>
+{
+	public void Configure(EntityTypeBuilder<Place> builder)
+	{
+		builder.HasKey(e => e.Id);
+
+		builder.HasMany(x => x.Visits).WithOne();
 
 		//builder.HasMany(x => x.Reviews)
 		//	   .WithOne().HasForeignKey(d => d.PlaceId)

@@ -15,7 +15,7 @@ public class Place : Entity
 	{
 		var place = new Place
 		{
-			Id = Guid.NewGuid(),
+			Id = Guid.CreateVersion7(),
 			Name = name,
 			Location = location,
 			Description = description

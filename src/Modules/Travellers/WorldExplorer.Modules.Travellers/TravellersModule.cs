@@ -1,13 +1,14 @@
 ﻿namespace WorldExplorer.Modules.Travellers;
 
 using Abstractions.Data;
-using Database;
+using Application.Travellers.GetById;
+using Application.Travellers.GetTravellers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WorldExplorer.Common.Infrastructure;
-using WorldExplorer.Common.Presentation.Endpoints;
+using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
 public static class TravellersModule
 {
@@ -20,8 +21,6 @@ public static class TravellersModule
 
         builder.AddInfrastructure();
 
-        //builder.Services.AddEndpoints(AssemblyReference.Assembly);
-
         return builder;
     }
 
@@ -29,23 +28,18 @@ public static class TravellersModule
     {
         builder.AddDatabase<TravellersDbContext>(Schemas.Travellers);
 
-        //builder.Services.AddScoped<IUserRepository, UserRepository>();
-
         builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<TravellersDbContext>());
 
-        builder.Services.AddScoped<TravellersService>();
+        builder.Services.AddScoped<GetTravellersHandler>();
+        builder.Services.AddScoped<GetTravellerByIdHandler>();
 
         builder.Services.AddGraphQLServer()
                .RegisterDbContextFactory<TravellersDbContext>()
-               .AddQueryType<TravellersService>()
+               .AddQueryType<GetTravellersHandler>()
+               .AddQueryType<GetTravellerByIdHandler>()
                .AddQueryConventions()
-               //.AddPagingArguments()
                .AddFiltering()
-               //.AddProjections()
-               .AddSorting()
-               ;
-        // .AddCatalogTypes()
-        // .AddGraphQLConventions();
+               .AddSorting();
     }
 
     public static IEndpointRouteBuilder MapTravellersEndpoint(this IEndpointRouteBuilder builder)
