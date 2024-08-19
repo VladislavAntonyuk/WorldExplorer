@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using WorldExplorer.Modules.Places.Infrastructure.Database;
@@ -12,9 +13,11 @@ using WorldExplorer.Modules.Places.Infrastructure.Database;
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PlacesDbContext))]
-    partial class PlacesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240819130145_Places")]
+    partial class Places
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,29 +111,6 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     b.HasKey("OutboxMessageId", "Name");
 
                     b.ToTable("outbox_message_consumers", "places");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.LocationInfo.LocationInfoRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Point>("Location")
-                        .IsRequired()
-                        .HasColumnType("geography");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LocationInfoRequests", "places");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>

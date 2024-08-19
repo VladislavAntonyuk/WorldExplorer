@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
+using Domain.LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetTopologySuite.Geometries;
@@ -14,11 +15,26 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
 
 		builder.OwnsMany(post => post.Images, x => { x.ToJson(); });
 
+			   //.HasColumnType(Geometry.TypeNamePoint);
+		//builder.HasMany(x => x.Reviews)
+		//	   .WithOne().HasForeignKey(d => d.PlaceId)
+		//	   .OnDelete(DeleteBehavior.Cascade);
+	}
+}
+public class LocationInfoRequestConfiguration : IEntityTypeConfiguration<LocationInfoRequest>
+{
+	public void Configure(EntityTypeBuilder<LocationInfoRequest> builder)
+	{
+		builder.HasKey(e => e.Id);
+
 		builder.Property(x => x.Location)
 			   .HasConversion(l =>
-								  Geometry.DefaultFactory.CreatePoint(new Coordinate(l.Longitude, l.Latitude)),
-			                  p => new Location(p.X, p.Y));
-			  // .HasColumnType(Geometry.TypeNamePoint);
+								  new Point(l.Longitude, l.Latitude)
+								  {
+									  SRID = 4326
+								  },
+							  p => new Location(p.X, p.Y));
+			   //.HasColumnType(Geometry.TypeNamePoint);
 		//builder.HasMany(x => x.Reviews)
 		//	   .WithOne().HasForeignKey(d => d.PlaceId)
 		//	   .OnDelete(DeleteBehavior.Cascade);

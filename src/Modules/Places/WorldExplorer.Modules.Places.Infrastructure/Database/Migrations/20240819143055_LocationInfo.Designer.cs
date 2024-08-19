@@ -13,8 +13,8 @@ using WorldExplorer.Modules.Places.Infrastructure.Database;
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PlacesDbContext))]
-    [Migration("20240818142602_Places")]
-    partial class Places
+    [Migration("20240819143055_LocationInfo")]
+    partial class LocationInfo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,29 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     b.HasKey("OutboxMessageId", "Name");
 
                     b.ToTable("outbox_message_consumers", "places");
+                });
+
+            modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.LocationInfo.LocationInfoRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Point>("Location")
+                        .IsRequired()
+                        .HasColumnType("geography");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LocationInfoRequests", "places");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>

@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Database;
 
 using Common.Application.Abstractions.Data;
+using Domain.LocationInfo;
 using Domain.Places;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -10,7 +11,8 @@ using WorldExplorer.Common.Infrastructure.Outbox;
 
 public sealed class PlacesDbContext(DbContextOptions<PlacesDbContext> options) : DbContext(options), IUnitOfWork
 {
-    internal DbSet<Place> Places { get; set; }
+	internal DbSet<Place> Places => Set<Place>();
+    internal DbSet<LocationInfoRequest> LocationInfoRequests => Set<LocationInfoRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,6 +23,7 @@ public sealed class PlacesDbContext(DbContextOptions<PlacesDbContext> options) :
         modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new PlaceConfiguration());
+        modelBuilder.ApplyConfiguration(new LocationInfoRequestConfiguration());
     }
 }
 
