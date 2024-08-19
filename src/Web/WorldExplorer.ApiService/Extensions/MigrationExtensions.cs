@@ -3,6 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Modules.Places.Infrastructure.Database;
 using Modules.Travellers;
+using Modules.Travellers.Application.Travellers;
 using Modules.Travellers.Database;
 using Modules.Users.Domain.Users;
 using WorldExplorer.Modules.Travellers.Infrastructure.Database;

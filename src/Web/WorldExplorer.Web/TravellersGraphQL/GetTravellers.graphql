@@ -1,0 +1,7 @@
+query GetTravellers {
+  travellers(take: 10) {
+    items {
+      id
+    }
+  }
+}

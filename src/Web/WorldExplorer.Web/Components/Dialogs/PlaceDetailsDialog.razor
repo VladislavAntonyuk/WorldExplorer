@@ -45,6 +45,14 @@
 					@place.Description
 				</MudText>
 			</MudContainer>
+
+			<MudList T="string">
+				@foreach (var review in reviews)
+				{
+					<MudListItem Text="@review.Id.ToString()" SecondaryText="@review.Id.ToString()" />
+					<MudDivider/>
+				}
+			</MudList>
 		}
 	</DialogContent>
 </MudDialog>
