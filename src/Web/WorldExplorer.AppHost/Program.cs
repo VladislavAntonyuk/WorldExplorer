@@ -5,22 +5,24 @@ var openai = builder.AddConnectionString("openai");
 
 
 var cache = builder.AddRedis("cache")
-                   .WithImageTag("latest");
+				   .WithImageTag("latest")
+				   .WithDataVolume("world-explorer-cache");
 
 var sqlServer = builder.AddSqlServer("server")
-                         //.WithImage("azure-sql-edge")
-                         //.WithImageRegistry("mcr.microsoft.com")
-                         .WithImageTag("2019-CU18-ubuntu-20.04")
-                       .PublishAsAzureSqlDatabase()
-                       .AddDatabase("database", "worldexplorer");
+						 //.WithImage("azure-sql-edge")
+						 //.WithImageRegistry("mcr.microsoft.com")
+						 .WithImageTag("2019-CU18-ubuntu-20.04")
+						 .WithDataVolume("world-explorer-database")
+						 .PublishAsAzureSqlDatabase()
+						 .AddDatabase("database", "worldexplorer");
 
 // var travellerService = builder.AddFusionGateway<Projects.WorldExplorer_Modules_Travellers>("graphql")
 //                            .WithReference(sqlServer);
 
 var apiService = builder.AddProject<Projects.WorldExplorer_ApiService>("apiservice")
-                        .WithReference(cache)
-                        .WithReference(sqlServer)
-                        .WithReference(openai);
+						.WithReference(cache)
+						.WithReference(sqlServer)
+						.WithReference(openai);
 
 builder.AddProject<Projects.WorldExplorer_Web>("webfrontend")
 	.WithExternalHttpEndpoints()

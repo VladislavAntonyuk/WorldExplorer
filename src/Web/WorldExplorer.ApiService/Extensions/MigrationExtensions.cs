@@ -28,7 +28,7 @@ public static class MigrationExtensions
 		if (context is UsersDbContext usersDbContext)
 		{
 			usersDbContext.Add(User.Create(Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6"), new()));
-			usersDbContext.SaveChanges();
+		//	usersDbContext.SaveChanges();
 		}
 		if (context is PlacesDbContext placesDbContext)
 		{
@@ -43,12 +43,12 @@ public static class MigrationExtensions
 				CreationDate = DateTime.Today
 			});
 
-			placesDbContext.SaveChanges();
+		//	placesDbContext.SaveChanges();
 		}
 		if (context is TravellersDbContext travellersDbContext)
 		{
 			travellersDbContext.Add(new Traveller() { Id = Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6") });
-			travellersDbContext.SaveChanges();
+		//	travellersDbContext.SaveChanges();
 		}
 	}
 }

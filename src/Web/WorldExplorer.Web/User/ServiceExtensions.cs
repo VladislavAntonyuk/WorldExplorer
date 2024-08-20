@@ -31,7 +31,7 @@ public static class ServiceExtensions
 		services.AddMicrosoftIdentityWebAppAuthentication(configuration, Microsoft.Identity.Web.Constants.AzureAdB2C)
 			   .EnableTokenAcquisitionToCallDownstreamApi(scopes)
 			   .AddDownstreamApi("WorldExplorerApiClient", configuration.GetSection("WorldExplorerApiClient"))
-			   .AddInMemoryTokenCaches();
+			   .AddDistributedTokenCaches();
 
 		services.AddCascadingAuthenticationState();
 		services.AddAuthZ(configuration);
