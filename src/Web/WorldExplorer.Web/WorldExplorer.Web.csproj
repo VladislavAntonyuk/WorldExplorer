@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.1.0" />
     <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="8.1.0" />
     <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="3.0.1" />
     <PackageReference Include="MudBlazor" Version="7.6.0" />

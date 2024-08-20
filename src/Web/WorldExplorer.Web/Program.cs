@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 builder.AddRedisOutputCache("cache");
+builder.AddRedisDistributedCache("cache");
 
 builder.Services.AddBlazor();
 builder.Services.AddAuth(builder.Configuration);
