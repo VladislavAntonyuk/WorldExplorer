@@ -11,6 +11,6 @@ public sealed class OutboxMessageConfiguration : IEntityTypeConfiguration<Outbox
 
         builder.HasKey(o => o.Id);
 
-        builder.Property(o => o.Content).HasMaxLength(2000);//.HasColumnType("jsonb");
+        builder.Property(o => o.Content);//.HasColumnType("jsonb");
     }
 }
