@@ -1,6 +1,4 @@
-﻿using System.Data;
-using System.Data.Common;
-using WorldExplorer.Common.Application.EventBus;
+﻿using WorldExplorer.Common.Application.EventBus;
 using WorldExplorer.Common.Infrastructure.Inbox;
 using WorldExplorer.Common.Infrastructure.Serialization;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,16 +20,15 @@ internal sealed class ProcessInboxJob(
     IOptions<InboxOptions> inboxOptions,
     ILogger<ProcessInboxJob> logger) : IJob
 {
-    private const string ModuleName = "Attendance";
+    private const string ModuleName = "Users";
 
     public async Task Execute(IJobExecutionContext context)
     {
         logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
 
-        await using DbConnection connection = dbConnectionFactory.Database.GetDbConnection();
-        await using DbTransaction transaction = await connection.BeginTransactionAsync();
+        IReadOnlyList<InboxMessageResponse> inboxMessages = await GetInboxMessagesAsync();
+        await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
-        IReadOnlyList<InboxMessageResponse> inboxMessages = await GetInboxMessagesAsync(connection, transaction);
 
         foreach (InboxMessageResponse inboxMessage in inboxMessages)
         {
@@ -66,7 +63,7 @@ internal sealed class ProcessInboxJob(
                 exception = caughtException;
             }
 
-            await UpdateInboxMessageAsync(connection, transaction, inboxMessage, exception);
+            await UpdateInboxMessageAsync(inboxMessage, exception);
         }
 
         await transaction.CommitAsync();
@@ -74,20 +71,17 @@ internal sealed class ProcessInboxJob(
         logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
     }
 
-    private async Task<IReadOnlyList<InboxMessageResponse>> GetInboxMessagesAsync(
-        IDbConnection connection,
-        IDbTransaction transaction)
+    private async Task<IReadOnlyList<InboxMessageResponse>> GetInboxMessagesAsync()
     {
         string sql =
             $"""
-             SELECT
+             SELECT TOP {inboxOptions.Value.BatchSize}
                 id AS {nameof(InboxMessageResponse.Id)},
                 content AS {nameof(InboxMessageResponse.Content)}
-             FROM users.inbox_messages
-             WHERE processed_on_utc IS NULL
-             ORDER BY occurred_on_utc
-             LIMIT {inboxOptions.Value.BatchSize}
-             FOR UPDATE
+             FROM users.inbox_messages WITH (UPDLOCK, ROWLOCK)
+             WHERE ProcessedOnUtc IS NULL
+             ORDER BY OccurredOnUtc;
+             
              """;
 		
         IEnumerable<InboxMessageResponse> inboxMessages = await dbConnectionFactory.Database.SqlQueryRaw<InboxMessageResponse>(
@@ -97,21 +91,16 @@ internal sealed class ProcessInboxJob(
     }
 
     private async Task UpdateInboxMessageAsync(
-        IDbConnection connection,
-        IDbTransaction transaction,
         InboxMessageResponse inboxMessage,
         Exception? exception)
     {
-        string sql =
-            $"""
-            UPDATE users.inbox_messages
-            SET processed_on_utc = {timeProvider.GetUtcNow()},
-                error = {exception}
-            WHERE id = {inboxMessage.Id}
-            """;
-
-        await dbConnectionFactory.Database.ExecuteSqlRawAsync(
-            sql);
+        await dbConnectionFactory.Database.ExecuteSqlAsync(
+	        $"""
+	         UPDATE users.inbox_messages
+	         SET ProcessedOnUtc = {timeProvider.GetUtcNow()},
+	             error = {exception}
+	         WHERE id = {inboxMessage.Id}
+	         """);
     }
 
     internal sealed record InboxMessageResponse(Guid Id, string Content);

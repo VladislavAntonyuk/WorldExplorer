@@ -35,7 +35,7 @@ builder.Services.AddApplication(moduleApplicationAssemblies);
 builder.AddInfrastructure(
 	[
 		//EventsModule.ConfigureConsumers(redisConnectionString),
-		//TicketingModule.ConfigureConsumers,
+		TravellersModule.ConfigureConsumers,
 		//AttendanceModule.ConfigureConsumers
 	],
 	"redisConnectionString");

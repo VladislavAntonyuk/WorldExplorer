@@ -1,19 +1,12 @@
 ﻿{
   "Users": {
     "Outbox": {
-      "IntervalInSeconds": 5,
+      "IntervalInSeconds": 50,
       "BatchSize": 20
     },
     "Inbox": {
-      "IntervalInSeconds": 5,
+      "IntervalInSeconds": 50,
       "BatchSize": 20
-    },
-    "KeyCloak": {
-      "AdminUrl": "http://WorldExplorer.identity:8080/admin/realms/WorldExplorer/",
-      "TokenUrl": "http://WorldExplorer.identity:8080/realms/WorldExplorer/protocol/openid-connect/token",
-      "ConfidentialClientId": "WorldExplorer-confidential-client",
-      "ConfidentialClientSecret": "PzotcrvZRF9BHCKcUxdKfHWlIPECG49k",
-      "PublicClientId": "WorldExplorer-public-client"
     }
   }
 }
