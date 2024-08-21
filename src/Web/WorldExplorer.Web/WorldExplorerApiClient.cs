@@ -11,12 +11,12 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 {
 	public async Task ClearPlaces(CancellationToken none)
 	{
-
+		await DeleteAsync("places", none);
 	}
 
 	public async Task ClearLocationInfoRequests(CancellationToken none)
 	{
-
+		await DeleteAsync("locationInfoRequests", none);
 	}
 
 	public async Task<List<UserResponse>> GetUsers(CancellationToken none)
@@ -26,12 +26,12 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 
 	public async Task<List<PlaceResponse>> GetPlaces(CancellationToken none)
 	{
-		return [];
+		return await GetAsync<List<PlaceResponse>>("places", none) ?? [];
 	}
 
 	public async Task<List<LocationInfoRequestResponse>> GetLocationInfoRequests(CancellationToken none)
 	{
-		return [];
+		return await GetAsync<List<LocationInfoRequestResponse>>("locationInfoRequests", none) ?? [];
 	}
 
 	public async Task DeleteUser(CancellationToken none)
@@ -43,16 +43,19 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 	public async Task DeleteUser(Guid userId, CancellationToken none)
 	{
 		// admin delete
+		await DeleteAsync($"users/{userId}", none);
 	}
 
 	public async Task DeletePlace(Guid placeId, CancellationToken none)
 	{
 		// admin delete
+		await DeleteAsync($"places/{placeId}", none);
 	}
 
 	public async Task DeleteLocationInfoRequest(Guid requestId, CancellationToken none)
 	{
 		// admin delete
+		await DeleteAsync($"locationInfoRequestsw/{requestId}", none);
 	}
 
 	public async Task<PlaceResponse?> GetPlaceDetails(Guid placeId, CancellationToken none)

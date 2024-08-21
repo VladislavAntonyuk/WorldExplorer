@@ -12,12 +12,9 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 	private List<UserResponse> users = [];
 	private List<LocationInfoRequestResponse> requests = [];
 
-	[Inject]
-	public required IDialogService DialogService { get; set; }
-
 	private async Task ClearPlaces()
 	{
-		var isConfirmed = await DialogService.ShowMessageBox("Clear places",
+		var isConfirmed = await dialogService.ShowMessageBox("Clear places",
 															  "Are you sure you want to clear all places?");
 		if (isConfirmed == true)
 		{
@@ -28,7 +25,7 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 
 	private async Task ClearRequests()
 	{
-		var isConfirmed = await DialogService.ShowMessageBox("Clear requests",
+		var isConfirmed = await dialogService.ShowMessageBox("Clear requests",
 															 "Are you sure you want to clear all requests?");
 		if (isConfirmed == true)
 		{

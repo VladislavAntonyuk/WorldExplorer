@@ -24,57 +24,57 @@ public static class InfrastructureConfiguration
 		return services;
 	}
 
-    public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
-		IConfiguration configuration,
+    public static IHostApplicationBuilder AddInfrastructure(
+        this IHostApplicationBuilder builder,
         Action<IRegistrationConfigurator>[] moduleConfigureConsumers,
         string redisConnectionString)
     {
-        services.AddAuthenticationInternal(configuration);
+        builder.Services.AddAuthenticationInternal(builder.Configuration);
 
-        services.AddAuthorizationInternal();
+        builder.Services.AddAuthorizationInternal();
 
-        services.TryAddSingleton<IEventBus, EventBus.EventBus>();
+        builder.Services.TryAddSingleton<IEventBus, EventBus.EventBus>();
 
-        services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
+        builder.Services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
 
         //NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
         //services.TryAddSingleton(npgsqlDataSource);
 
         //services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
 
-        services.AddQuartz(configurator =>
+        builder.Services.AddQuartz(configurator =>
         {
             var scheduler = Guid.NewGuid();
             configurator.SchedulerId = $"default-id-{scheduler}";
             configurator.SchedulerName = $"default-name-{scheduler}";
         });
 
-        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+        builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-	    services.AddHybridCache();
+	    builder.Services.AddHybridCache();
         try
         {
             IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
-            services.AddSingleton(connectionMultiplexer);
-            services.AddStackExchangeRedisCache(options =>
+            builder.Services.AddSingleton(connectionMultiplexer);
+            builder.Services.AddStackExchangeRedisCache(options =>
                 options.ConnectionMultiplexerFactory = () => Task.FromResult(connectionMultiplexer));
         }
         catch
         {
-            services.AddDistributedMemoryCache();
+            builder.Services.AddDistributedMemoryCache();
         }
 
-        services.AddMassTransit(configure =>
+		builder.AddRabbitMQClient("servicebus");
+        builder.Services.AddMassTransit(configure =>
         {
-            foreach (Action<IRegistrationConfigurator> configureConsumers in moduleConfigureConsumers)
+			foreach (Action<IRegistrationConfigurator> configureConsumers in moduleConfigureConsumers)
             {
                 configureConsumers(configure);
             }
 
             configure.SetKebabCaseEndpointNameFormatter();
 
-            configure.UsingInMemory((context, cfg) =>
+            configure.UsingRabbitMq((context, cfg) =>
             {
                 cfg.ConfigureEndpoints(context);
             });
@@ -96,7 +96,7 @@ public static class InfrastructureConfiguration
         //        tracing.AddOtlpExporter();
         //    });
 
-        return services;
+        return builder;
     }
 
     public static IHostApplicationBuilder AddDatabase<T>(this IHostApplicationBuilder builder,
