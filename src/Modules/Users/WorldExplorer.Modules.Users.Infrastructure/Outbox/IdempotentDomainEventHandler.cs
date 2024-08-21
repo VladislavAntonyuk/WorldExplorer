@@ -16,47 +16,34 @@ internal sealed class IdempotentDomainEventHandler<TDomainEvent>(
 {
     public override async Task Handle(TDomainEvent domainEvent, CancellationToken cancellationToken = default)
     {
-        await using DbConnection connection = dbConnectionFactory.Database.GetDbConnection();
-
         var outboxMessageConsumer = new OutboxMessageConsumer(domainEvent.Id, decorated.GetType().Name);
 
-        if (await OutboxConsumerExistsAsync(connection, outboxMessageConsumer))
+        if (await OutboxConsumerExistsAsync(outboxMessageConsumer))
         {
             return;
         }
 
         await decorated.Handle(domainEvent, cancellationToken);
 
-        await InsertOutboxConsumerAsync(connection, outboxMessageConsumer);
+        await InsertOutboxConsumerAsync(outboxMessageConsumer);
     }
 
     private async Task<bool> OutboxConsumerExistsAsync(
-        DbConnection dbConnection,
         OutboxMessageConsumer outboxMessageConsumer)
     {
-        string sql = 
-            $"""
-            SELECT EXISTS(
-                SELECT 1
-                FROM users.outbox_message_consumers
-                WHERE outbox_message_id = {outboxMessageConsumer.OutboxMessageId} AND
-                      name = {outboxMessageConsumer.Name}
-            )
-            """;
-
-        return await dbConnectionFactory.Database.SqlQueryRaw<int>(sql, outboxMessageConsumer).AnyAsync();
+        return await dbConnectionFactory.Database.SqlQuery<int>($"""
+                                                                     SELECT 1
+                                                                     FROM users.outbox_message_consumers
+                                                                     WHERE OutboxMessageId = "{outboxMessageConsumer.OutboxMessageId}" AND
+                                                                           Name = "{outboxMessageConsumer.Name}"
+                                                                 """).AnyAsync();
     }
 
-    private async Task InsertOutboxConsumerAsync(
-        DbConnection dbConnection,
-        OutboxMessageConsumer outboxMessageConsumer)
+    private async Task InsertOutboxConsumerAsync(OutboxMessageConsumer outboxMessageConsumer)
     {
-        const string sql =
-            """
-            INSERT INTO users.outbox_message_consumers(outbox_message_id, name)
-            VALUES (@OutboxMessageId, @Name)
-            """;
-
-        await dbConnectionFactory.Database.ExecuteSqlRawAsync(sql, outboxMessageConsumer);
+        await dbConnectionFactory.Database.ExecuteSqlAsync($"""
+                                                              INSERT INTO users.outbox_message_consumers(OutboxMessageId, Name)
+                                                              VALUES ({outboxMessageConsumer.OutboxMessageId}, {outboxMessageConsumer.Name})
+                                                              """);
     }
 }

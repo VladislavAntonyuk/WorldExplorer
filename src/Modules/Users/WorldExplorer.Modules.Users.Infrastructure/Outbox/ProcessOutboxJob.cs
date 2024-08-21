@@ -111,12 +111,12 @@ internal sealed class ProcessOutboxJob(
 		OutboxMessageResponse outboxMessage,
 		Exception? exception)
 	{
-		await dbConnectionFactory.Database.ExecuteSqlRawAsync(
+		await dbConnectionFactory.Database.ExecuteSqlAsync(
 			$"""
 			 UPDATE users.outbox_messages
-			 SET ProcessedOnUtc = {dateTimeProvider.GetUtcNow()}
-			     error = {exception}
-			 WHERE id = {outboxMessage.Id}
+			 SET ProcessedOnUtc = "{dateTimeProvider.GetUtcNow()}",
+			     Error = "{exception?.ToString()}"
+			 WHERE Id = "{outboxMessage.Id}"
 			 """);
 	}
 
