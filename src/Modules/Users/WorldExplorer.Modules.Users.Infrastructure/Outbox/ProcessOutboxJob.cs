@@ -13,107 +13,112 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
 
 using System.Text.Json;
 using Database;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessOutboxJob(
-    UsersDbContext dbConnectionFactory,
-    IServiceScopeFactory serviceScopeFactory,
-    TimeProvider dateTimeProvider,
-    IOptions<OutboxOptions> outboxOptions,
-    ILogger<ProcessOutboxJob> logger) : IJob
+	UsersDbContext dbConnectionFactory,
+	IServiceScopeFactory serviceScopeFactory,
+	TimeProvider dateTimeProvider,
+	IOptions<OutboxOptions> outboxOptions,
+	ILogger<ProcessOutboxJob> logger) : IJob
 {
-    private const string ModuleName = "Users";
+	private const string ModuleName = "Users";
 
-    public async Task Execute(IJobExecutionContext context)
-    {
-        logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
+	public async Task Execute(IJobExecutionContext context)
+	{
+		logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
 
-        await using DbConnection connection = dbConnectionFactory.Database.GetDbConnection();
-        await using DbTransaction transaction = await connection.BeginTransactionAsync();
+		IReadOnlyList<OutboxMessageResponse> outboxMessages = await GetOutboxMessagesAsync();
+		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
-        IReadOnlyList<OutboxMessageResponse> outboxMessages = await GetOutboxMessagesAsync(connection, transaction);
 
-        foreach (OutboxMessageResponse outboxMessage in outboxMessages)
-        {
-            Exception? exception = null;
+		foreach (OutboxMessageResponse outboxMessage in outboxMessages)
+		{
+			Exception? exception = null;
 
-            try
-            {
-                IDomainEvent domainEvent = JsonSerializer.Deserialize<IDomainEvent>(
-                    outboxMessage.Content,
-                    SerializerSettings.Instance)!;
+			try
+			{
+				var t = typeof(UserProfileUpdatedDomainEvent).Assembly.GetType(outboxMessage.Type);
+				IDomainEvent domainEvent = (IDomainEvent)JsonSerializer.Deserialize(
+					outboxMessage.Content,
+					t,
+					SerializerSettings.Instance)!;
 
-                using IServiceScope scope = serviceScopeFactory.CreateScope();
+				using IServiceScope scope = serviceScopeFactory.CreateScope();
 
-                IEnumerable<IDomainEventHandler> handlers = DomainEventHandlersFactory.GetHandlers(
-                    domainEvent.GetType(),
-                    scope.ServiceProvider,
-                    Application.AssemblyReference.Assembly);
+				IEnumerable<IDomainEventHandler> handlers = DomainEventHandlersFactory.GetHandlers(
+					domainEvent.GetType(),
+					scope.ServiceProvider,
+					Application.AssemblyReference.Assembly);
 
-                foreach (IDomainEventHandler domainEventHandler in handlers)
-                {
-                    await domainEventHandler.Handle(domainEvent, context.CancellationToken);
-                }
-            }
-            catch (Exception caughtException)
-            {
-                logger.LogError(
-                    caughtException,
-                    "{Module} - Exception while processing outbox message {MessageId}",
-                    ModuleName,
-                    outboxMessage.Id);
+				foreach (IDomainEventHandler domainEventHandler in handlers)
+				{
+					await domainEventHandler.Handle(domainEvent, context.CancellationToken);
+				}
+			}
+			catch (Exception caughtException)
+			{
+				logger.LogError(
+					caughtException,
+					"{Module} - Exception while processing outbox message {MessageId}",
+					ModuleName,
+					outboxMessage.Id);
 
-                exception = caughtException;
-            }
+				exception = caughtException;
+			}
 
-            await UpdateOutboxMessageAsync(connection, transaction, outboxMessage, exception);
-        }
+			await UpdateOutboxMessageAsync(outboxMessage, exception);
+		}
 
-        await transaction.CommitAsync();
+		await transaction.CommitAsync();
 
-        logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
-    }
+		logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
+	}
 
-    private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync(
-        IDbConnection connection,
-        IDbTransaction transaction)
-    {
-        string sql =
-            $"""
-             SELECT
+	private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync()
+	{
+		//string sql =
+		//    $"""
+		//     SELECT TOP {outboxOptions.Value.BatchSize}
+		//        id AS {nameof(OutboxMessageResponse.Id)},
+		//        content AS {nameof(OutboxMessageResponse.Content)}
+		//     FROM users.outbox_messages WITH (UPDLOCK, ROWLOCK)
+		//     WHERE ProcessedOnUtc IS NULL
+		//     ORDER BY OccurredOnUtc;
+
+		//     """;
+
+		string sql =
+			$"""
+             SELECT TOP {outboxOptions.Value.BatchSize}
                 id AS {nameof(OutboxMessageResponse.Id)},
+                type AS {nameof(OutboxMessageResponse.Type)},
                 content AS {nameof(OutboxMessageResponse.Content)}
              FROM users.outbox_messages
-             WHERE processed_on_utc IS NULL
-             ORDER BY occurred_on_utc
-             LIMIT {outboxOptions.Value.BatchSize}
-             FOR UPDATE
+             WHERE ProcessedOnUtc IS NULL
+             ORDER BY OccurredOnUtc
              """;
 
-        IEnumerable<OutboxMessageResponse> outboxMessages = await dbConnectionFactory.Database.SqlQueryRaw<OutboxMessageResponse>(
-	        sql).ToListAsync();
+		IEnumerable<OutboxMessageResponse> outboxMessages = await dbConnectionFactory.Database.SqlQueryRaw<OutboxMessageResponse>(
+			sql).ToListAsync();
 
-        return outboxMessages.ToList();
-    }
+		return outboxMessages.ToList();
+	}
 
-    private async Task UpdateOutboxMessageAsync(
-        IDbConnection connection,
-        IDbTransaction transaction,
-        OutboxMessageResponse outboxMessage,
-        Exception? exception)
-    {
-	    string sql =
-		    $"""
-		     UPDATE users.outbox_messages
-		     SET processed_on_utc = {dateTimeProvider.GetUtcNow()},
-		         error = {exception}
-		     WHERE id = {outboxMessage.Id}
-		     """;
+	private async Task UpdateOutboxMessageAsync(
+		OutboxMessageResponse outboxMessage,
+		Exception? exception)
+	{
+		await dbConnectionFactory.Database.ExecuteSqlRawAsync(
+			$"""
+			 UPDATE users.outbox_messages
+			 SET ProcessedOnUtc = {dateTimeProvider.GetUtcNow()}
+			     error = {exception}
+			 WHERE id = {outboxMessage.Id}
+			 """);
+	}
 
-	    await dbConnectionFactory.Database.ExecuteSqlRawAsync(
-		    sql);
-    }
-
-    internal sealed record OutboxMessageResponse(Guid Id, string Content);
+	internal sealed record OutboxMessageResponse(Guid Id, string Content, string Type);
 }

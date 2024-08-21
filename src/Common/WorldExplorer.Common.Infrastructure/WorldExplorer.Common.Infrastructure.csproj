@@ -12,6 +12,8 @@
     <PackageReference Include="MassTransit" Version="8.2.4" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4" />
 
+    <PackageReference Include="Scrutor" Version="4.2.2" />
+
 
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-preview.6.24327.4">

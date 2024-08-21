@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 namespace WorldExplorer.Common.Infrastructure.Outbox;
 
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 {
@@ -39,8 +40,8 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
             .Select(domainEvent => new OutboxMessage
             {
                 Id = domainEvent.Id,
-                Type = domainEvent.GetType().Name,
-                Content = JsonSerializer.Serialize(domainEvent, SerializerSettings.Instance),
+                Type = domainEvent.GetType().FullName,
+                Content = JsonSerializer.Serialize(domainEvent, JsonTypeInfo.CreateJsonTypeInfo(domainEvent.GetType(), SerializerSettings.Instance)),
                 OccurredOnUtc = domainEvent.OccurredOnUtc
             })
             .ToList();

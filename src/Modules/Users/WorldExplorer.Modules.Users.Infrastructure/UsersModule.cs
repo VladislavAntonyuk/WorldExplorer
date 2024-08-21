@@ -56,11 +56,11 @@ public static class UsersModule
 
         builder.Services.Configure<OutboxOptions>(builder.Configuration.GetSection("Users:Outbox"));
 
-        //services.ConfigureOptions<ConfigureProcessOutboxJob>();
+        builder.Services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
         builder.Services.Configure<InboxOptions>(builder.Configuration.GetSection("Users:Inbox"));
 
-        //services.ConfigureOptions<ConfigureProcessInboxJob>();
+        builder.Services.ConfigureOptions<ConfigureProcessInboxJob>();
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)
@@ -82,7 +82,7 @@ public static class UsersModule
 
             Type closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
 
-            //services.Decorate(domainEventHandler, closedIdempotentHandler);
+            services.Decorate(domainEventHandler, closedIdempotentHandler);
         }
     }
 
@@ -103,10 +103,9 @@ public static class UsersModule
                 .GetGenericArguments()
                 .Single();
 
-            Type closedIdempotentHandler =
-                typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
+            Type closedIdempotentHandler = typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
 
-            //services.Decorate(integrationEventHandler, closedIdempotentHandler);
+            services.Decorate(integrationEventHandler, closedIdempotentHandler);
         }
     }
 }
