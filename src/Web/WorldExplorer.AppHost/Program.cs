@@ -3,6 +3,9 @@
 var openai = builder.AddConnectionString("openai");
 //var b = builder.AddAzureAppConfiguration("appconfiguration");
 
+var serviceBus = builder.AddRabbitMQ("servicebus")
+                        .WithImageTag("3.13")
+                        .WithDataVolume("world-explorer-servicebus");
 
 var cache = builder.AddRedis("cache")
 				   .WithImageTag("latest")
@@ -22,6 +25,7 @@ var sqlServer = builder.AddSqlServer("server")
 var apiService = builder.AddProject<Projects.WorldExplorer_ApiService>("apiservice")
 						.WithReference(cache)
 						.WithReference(sqlServer)
+						.WithReference(serviceBus)
 						.WithReference(openai);
 
 builder.AddProject<Projects.WorldExplorer_Web>("webfrontend")

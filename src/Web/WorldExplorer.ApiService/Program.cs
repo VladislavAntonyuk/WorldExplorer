@@ -32,8 +32,7 @@ Assembly[] moduleApplicationAssemblies = [
 
 builder.Services.AddApplication(moduleApplicationAssemblies);
 
-builder.Services.AddInfrastructure(
-	builder.Configuration,
+builder.AddInfrastructure(
 	[
 		//EventsModule.ConfigureConsumers(redisConnectionString),
 		//TicketingModule.ConfigureConsumers,

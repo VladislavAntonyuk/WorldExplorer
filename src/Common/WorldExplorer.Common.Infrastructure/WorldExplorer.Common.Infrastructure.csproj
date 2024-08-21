@@ -6,10 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="8.1.0" />
+    <PackageReference Include="Aspire.RabbitMQ.Client" Version="8.1.0" />
     <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.1.0" />
 
     <PackageReference Include="MassTransit" Version="8.2.4" />
-    <PackageReference Include="MassTransit.Redis" Version="8.2.4" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4" />
 
 
 
