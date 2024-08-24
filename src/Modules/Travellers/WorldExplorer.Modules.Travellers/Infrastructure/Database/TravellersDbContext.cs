@@ -1,12 +1,11 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
 using Abstractions.Data;
+using Application.Travellers;
+using Common.Infrastructure.Inbox;
+using Common.Infrastructure.Outbox;
 using Configurations;
 using Microsoft.EntityFrameworkCore;
-using WorldExplorer.Common.Infrastructure.Inbox;
-using WorldExplorer.Common.Infrastructure.Outbox;
-using WorldExplorer.Modules.Travellers;
-using WorldExplorer.Modules.Travellers.Application.Travellers;
 
 public sealed class TravellersDbContext(DbContextOptions<TravellersDbContext> options) : DbContext(options), IUnitOfWork
 {

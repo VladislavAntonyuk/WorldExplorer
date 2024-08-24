@@ -37,8 +37,7 @@ builder.AddInfrastructure(
 		//EventsModule.ConfigureConsumers(redisConnectionString),
 		TravellersModule.ConfigureConsumers,
 		//AttendanceModule.ConfigureConsumers
-	],
-	"redisConnectionString");
+	]);
 
 builder.Configuration.AddModuleConfiguration(["users", "places", "traveller"]);
 
@@ -63,8 +62,7 @@ app.UseAuthorization();
 
 app.MapEndpoints();
 app.MapDefaultEndpoints();
-app.MapTravellersEndpoint();
-//app.MapGraphQL();
+app.MapGraphQL();
 
 app.Run();
 

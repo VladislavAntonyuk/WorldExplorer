@@ -13,7 +13,7 @@ using WorldExplorer.Modules.Places.Infrastructure.Database;
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PlacesDbContext))]
-    [Migration("20240819151410_Places")]
+    [Migration("20240824142352_Places")]
     partial class Places
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("places")
-                .HasAnnotation("ProductVersion", "9.0.0-preview.6.24327.4")
+                .HasAnnotation("ProductVersion", "9.0.0-preview.7.24405.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -78,8 +78,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Error")
                         .HasColumnType("nvarchar(max)");
@@ -134,6 +133,15 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LocationInfoRequests", "places");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreationDate = new DateTime(2024, 8, 24, 0, 0, 0, 0, DateTimeKind.Local),
+                            Location = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (49.4195 26.9959)"),
+                            Status = 2
+                        });
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>
@@ -156,6 +164,22 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Places", "places");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("019184c5-a895-7179-b6b6-f9ff5ba19d53"),
+                            Description = "Description1",
+                            Location = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (49.4195 26.9959)"),
+                            Name = "Place1"
+                        },
+                        new
+                        {
+                            Id = new Guid("019184c5-a899-7d2e-a94d-3eed0925c523"),
+                            Description = "Description2",
+                            Location = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (48.482 34.998)"),
+                            Name = "Dnipro"
+                        });
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>

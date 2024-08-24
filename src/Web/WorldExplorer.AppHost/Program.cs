@@ -1,15 +1,8 @@
-﻿var builder = DistributedApplication.CreateBuilder(args);
+﻿using Microsoft.Extensions.Hosting;
+
+var builder = DistributedApplication.CreateBuilder(args);
 
 var openai = builder.AddConnectionString("openai");
-//var b = builder.AddAzureAppConfiguration("appconfiguration");
-
-var serviceBus = builder.AddRabbitMQ("servicebus")
-                        .WithImageTag("3.13")
-                        .WithDataVolume("world-explorer-servicebus");
-
-var cache = builder.AddRedis("cache")
-				   .WithImageTag("latest")
-				   .WithDataVolume("world-explorer-cache");
 
 var sqlServer = builder.AddSqlServer("server")
 						 //.WithImage("azure-sql-edge")
@@ -23,14 +16,27 @@ var sqlServer = builder.AddSqlServer("server")
 //                            .WithReference(sqlServer);
 
 var apiService = builder.AddProject<Projects.WorldExplorer_ApiService>("apiservice")
-						.WithReference(cache)
 						.WithReference(sqlServer)
-						.WithReference(serviceBus)
 						.WithReference(openai);
 
-builder.AddProject<Projects.WorldExplorer_Web>("webfrontend")
-	.WithExternalHttpEndpoints()
-	.WithReference(cache)
-	.WithReference(apiService);
+var frontend = builder.AddProject<Projects.WorldExplorer_Web>("webfrontend")
+	   .WithExternalHttpEndpoints()
+	   .WithReference(apiService);
+
+if (!builder.Environment.IsDevelopment())
+{
+	var serviceBus = builder.AddRabbitMQ("servicebus")
+							.WithImageTag("3.13")
+							.WithDataVolume("world-explorer-servicebus");
+
+	var cache = builder.AddRedis("cache")
+					   .WithImageTag("latest")
+					   .WithDataVolume("world-explorer-cache");
+
+	apiService.WithReference(serviceBus)
+			  .WithReference(cache);
+
+	frontend.WithReference(cache);
+}
 
 builder.Build().Run();

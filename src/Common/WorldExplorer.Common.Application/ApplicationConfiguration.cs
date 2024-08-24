@@ -1,9 +1,9 @@
-﻿using System.Reflection;
-using WorldExplorer.Common.Application.Behaviors;
+﻿namespace WorldExplorer.Common.Application;
+
+using System.Reflection;
+using Behaviors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace WorldExplorer.Common.Application;
 
 public static class ApplicationConfiguration
 {

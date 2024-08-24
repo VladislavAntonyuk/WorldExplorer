@@ -4,6 +4,8 @@ using NetTopologySuite.Geometries;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
@@ -81,7 +83,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OccurredOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProcessedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Error = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -105,6 +107,22 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Places", x => x.Id);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "places",
+                table: "LocationInfoRequests",
+                columns: new[] { "Id", "CreationDate", "Location", "Status" },
+                values: new object[] { 1, new DateTime(2024, 8, 24, 0, 0, 0, 0, DateTimeKind.Local), (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (49.4195 26.9959)"), 2 });
+
+            migrationBuilder.InsertData(
+                schema: "places",
+                table: "Places",
+                columns: new[] { "Id", "Description", "Location", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("019184c5-a895-7179-b6b6-f9ff5ba19d53"), "Description1", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (49.4195 26.9959)"), "Place1" },
+                    { new Guid("019184c5-a899-7d2e-a94d-3eed0925c523"), "Description2", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (48.482 34.998)"), "Dnipro" }
                 });
         }
 

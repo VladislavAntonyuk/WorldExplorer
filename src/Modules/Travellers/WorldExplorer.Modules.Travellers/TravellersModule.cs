@@ -3,12 +3,15 @@
 using Abstractions.Data;
 using Application.Travellers.GetById;
 using Application.Travellers.GetTravellers;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Users.IntegrationEvents;
 using WorldExplorer.Common.Infrastructure;
 using WorldExplorer.Modules.Travellers.Infrastructure.Database;
+using WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
 public static class TravellersModule
 {
@@ -22,6 +25,11 @@ public static class TravellersModule
 		builder.AddInfrastructure();
 
 		return builder;
+	}
+
+	public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+	{
+		registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
 	}
 
 	private static void AddInfrastructure(this IHostApplicationBuilder builder)
@@ -41,11 +49,5 @@ public static class TravellersModule
 		       .AddQueryConventions()
 		       .AddFiltering()
 		       .AddSorting();
-	}
-
-	public static IEndpointRouteBuilder MapTravellersEndpoint(this IEndpointRouteBuilder builder)
-	{
-		builder.MapGraphQL();
-		return builder;
 	}
 }

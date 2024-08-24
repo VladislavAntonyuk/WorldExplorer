@@ -1,8 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers.GetById;
 
+using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
-using Travellers;
-using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
 [ExtendObjectType("Travellers")]
 public sealed class GetTravellerByIdHandler(TravellersDbContext context)

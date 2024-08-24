@@ -1,13 +1,13 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Database;
 
 using Common.Application.Abstractions.Data;
+using Common.Infrastructure.Inbox;
+using Common.Infrastructure.Outbox;
 using Domain.LocationInfo;
 using Domain.Places;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Places;
-using WorldExplorer.Common.Infrastructure.Inbox;
-using WorldExplorer.Common.Infrastructure.Outbox;
 
 public sealed class PlacesDbContext(DbContextOptions<PlacesDbContext> options) : DbContext(options), IUnitOfWork
 {

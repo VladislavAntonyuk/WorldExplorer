@@ -1,8 +1,8 @@
-﻿using WorldExplorer.Common.Application.Exceptions;
+﻿namespace WorldExplorer.Common.Application.Behaviors;
+
+using Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
-
-namespace WorldExplorer.Common.Application.Behaviors;
 
 internal sealed class ExceptionHandlingPipelineBehavior<TRequest, TResponse>(
     ILogger<ExceptionHandlingPipelineBehavior<TRequest, TResponse>> logger)

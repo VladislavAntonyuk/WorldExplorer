@@ -29,7 +29,7 @@ public static class DomainEventHandlersFactory
         foreach (Type domainEventHandlerType in domainEventHandlerTypes)
         {
             object domainEventHandler = serviceProvider.GetRequiredService(domainEventHandlerType);
-
+            
             handlers.Add((domainEventHandler as IDomainEventHandler)!);
         }
 

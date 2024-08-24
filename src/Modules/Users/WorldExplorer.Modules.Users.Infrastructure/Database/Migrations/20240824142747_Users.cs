@@ -64,7 +64,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OccurredOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProcessedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Error = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -86,6 +86,12 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.InsertData(
+                schema: "users",
+                table: "Users",
+                column: "Id",
+                value: new Guid("19d3b2c7-8714-4851-ac73-95aeecfba3a6"));
         }
 
         /// <inheritdoc />
