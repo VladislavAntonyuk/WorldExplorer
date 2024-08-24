@@ -1,6 +1,6 @@
-﻿using System.Reflection;
+﻿namespace WorldExplorer.Modules.Places.Application;
 
-namespace WorldExplorer.Modules.Places.Application;
+using System.Reflection;
 
 public static class AssemblyReference
 {

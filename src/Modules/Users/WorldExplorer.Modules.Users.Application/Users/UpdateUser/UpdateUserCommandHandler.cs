@@ -1,11 +1,9 @@
-﻿using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Users.Domain.Users;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
-
-using Abstractions.Identity;
-using Common.Application.Abstractions.Data;
+using Abstractions.Data;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.Users;
 
 internal sealed class UpdateUserCommandHandler(IUserRepository userRepository,  IUnitOfWork unitOfWork)
 	: ICommandHandler<UpdateUserCommand>
@@ -19,7 +17,8 @@ internal sealed class UpdateUserCommandHandler(IUserRepository userRepository,  
 			return Result.Failure(UserErrors.NotFound(request.UserId));
 		}
 
-		user.Update(new UserSettings() { TrackUserLocation = request.TrackUserLocation });
+		user.Update(new UserSettings
+			            { TrackUserLocation = request.TrackUserLocation });
 		await unitOfWork.SaveChangesAsync(cancellationToken);
 
 		return Result.Success();

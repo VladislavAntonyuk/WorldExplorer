@@ -1,9 +1,9 @@
-﻿using WorldExplorer.Common.Application.EventBus;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.DeleteUser;
+
+using WorldExplorer.Common.Application.EventBus;
 using WorldExplorer.Common.Application.Messaging;
 using WorldExplorer.Modules.Users.Domain.Users;
 using WorldExplorer.Modules.Users.IntegrationEvents;
-
-namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
 
 internal sealed class UserDeletedDomainEventHandler(IEventBus eventBus)
     : DomainEventHandler<UserDeletedDomainEvent>

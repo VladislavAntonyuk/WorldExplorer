@@ -1,7 +1,7 @@
-﻿namespace WebApp.Services.Place;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
 
-using WorldExplorer.Modules.Places.Application.Abstractions;
-using WorldExplorer.Modules.Places.Domain.Places;
+using Application.Abstractions;
+using Domain.Places;
 
 public interface IPlacesService
 {

@@ -1,23 +1,23 @@
-﻿using WorldExplorer.Common.Application.EventBus;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Presentation.Endpoints;
-using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.Infrastructure.Database;
-using WorldExplorer.Modules.Users.Infrastructure.Inbox;
-using WorldExplorer.Modules.Users.Infrastructure.Outbox;
-using WorldExplorer.Modules.Users.Infrastructure.Users;
+﻿namespace WorldExplorer.Modules.Users.Infrastructure;
+
+using Application.Abstractions.Data;
+using Application.Abstractions.Identity;
+using Azure.Identity;
+using Common.Application.EventBus;
+using Common.Application.Messaging;
+using Common.Infrastructure;
+using Common.Presentation.Endpoints;
+using Database;
+using Domain.Users;
+using Inbox;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
-namespace WorldExplorer.Modules.Users.Infrastructure;
-
-using Application.Abstractions.Identity;
-using Azure.Identity;
-using Common.Application.Abstractions.Data;
-using Common.Infrastructure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Graph.Beta;
+using Outbox;
+using Presentation;
+using Users;
 
 public static class UsersModule
 {
@@ -30,7 +30,7 @@ public static class UsersModule
 
         builder.AddInfrastructure();
 
-        builder.Services.AddEndpoints(Presentation.AssemblyReference.Assembly);
+        builder.Services.AddEndpoints(AssemblyReference.Assembly);
 
         builder.Services.AddAuth(builder.Configuration);
 
@@ -66,9 +66,9 @@ public static class UsersModule
     private static void AddDomainEventHandlers(this IServiceCollection services)
     {
         Type[] domainEventHandlers = Application.AssemblyReference.Assembly
-            .GetTypes()
-            .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
-            .ToArray();
+                                                .GetTypes()
+                                                .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
+                                                .ToArray();
 
         foreach (Type domainEventHandler in domainEventHandlers)
         {
@@ -88,10 +88,10 @@ public static class UsersModule
 
     private static void AddIntegrationEventHandlers(this IServiceCollection services)
     {
-        Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
-            .GetTypes()
-            .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
-            .ToArray();
+        Type[] integrationEventHandlers = AssemblyReference.Assembly
+                                                           .GetTypes()
+                                                           .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
+                                                           .ToArray();
 
         foreach (Type integrationEventHandler in integrationEventHandlers)
         {

@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
-using NetArchTest.Rules;
+﻿namespace WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
 
-namespace WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
+using FluentAssertions;
+using NetArchTest.Rules;
 
 internal static class TestResultExtensions
 {

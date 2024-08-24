@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
+using FluentValidation;
 
 internal sealed class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {

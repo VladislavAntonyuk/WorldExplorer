@@ -10,10 +10,5 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 	{
 		builder.HasKey(u => u.Id);
 		builder.OwnsOne(u => u.Settings, x => { x.ToJson(); });
-
-		builder.HasData(new
-		{
-			Id = Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6"),
-		});
 	}
 }

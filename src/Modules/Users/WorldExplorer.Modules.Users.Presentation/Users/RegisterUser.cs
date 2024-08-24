@@ -1,17 +1,13 @@
-﻿using WorldExplorer.Common.Presentation.Endpoints;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-
-namespace WorldExplorer.Modules.Users.Presentation.Users;
+﻿namespace WorldExplorer.Modules.Users.Presentation.Users;
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Application.Users.RegisterUser;
-using Common.Presentation.Results;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using Common.Presentation.Endpoints;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 
 internal sealed class RegisterUser : IEndpoint
 {

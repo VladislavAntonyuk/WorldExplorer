@@ -1,11 +1,10 @@
-﻿using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Users.Domain.Users;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
-
+using Abstractions.Data;
 using Abstractions.Identity;
-using Common.Application.Abstractions.Data;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.Users;
 
 internal sealed class RegisterUserCommandHandler(
 	IUserRepository userRepository,
@@ -33,7 +32,8 @@ internal sealed class RegisterUserCommandHandler(
 		var user = await userRepository.GetAsync(request.ProviderId, cancellationToken);
 		if (user is null)
 		{
-			user = User.Create(request.ProviderId, new UserSettings() { TrackUserLocation = false });
+			user = User.Create(request.ProviderId, new UserSettings
+				                   { TrackUserLocation = false });
 			userRepository.Insert(user);
 
 			await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services.AI;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.AI;
 
 public class GeminiAiSettings
 {

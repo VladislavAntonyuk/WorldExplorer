@@ -1,10 +1,8 @@
-﻿using WorldExplorer.Common.Application.Messaging;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
-
+using Abstractions.Identity;
+using Common.Application.Messaging;
 using Domain.Users;
-using GetUser;
-using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
 
 public sealed record RegisterUserCommand(Guid ProviderId) : ICommand<UserResponse>;
 

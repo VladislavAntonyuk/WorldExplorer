@@ -1,7 +1,7 @@
-﻿using WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
-using NetArchTest.Rules;
+﻿namespace WorldExplorer.Modules.Users.ArchitectureTests.Layers;
 
-namespace WorldExplorer.Modules.Users.ArchitectureTests.Layers;
+using Abstractions;
+using NetArchTest.Rules;
 
 public class LayerTests : BaseTest
 {

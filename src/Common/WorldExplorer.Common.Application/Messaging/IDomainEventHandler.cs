@@ -1,6 +1,6 @@
-﻿using WorldExplorer.Common.Domain;
+﻿namespace WorldExplorer.Common.Application.Messaging;
 
-namespace WorldExplorer.Common.Application.Messaging;
+using Domain;
 
 public interface IDomainEventHandler<in TDomainEvent> : IDomainEventHandler
     where TDomainEvent : IDomainEvent

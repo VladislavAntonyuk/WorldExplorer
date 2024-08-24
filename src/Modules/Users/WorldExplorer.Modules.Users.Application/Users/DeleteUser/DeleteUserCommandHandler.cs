@@ -1,10 +1,9 @@
-﻿using WorldExplorer.Common.Application.Messaging;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.DeleteUser;
+
+using WorldExplorer.Common.Application.Messaging;
 using WorldExplorer.Common.Domain;
+using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
 using WorldExplorer.Modules.Users.Domain.Users;
-
-namespace WorldExplorer.Modules.Users.Application.Users.GetUser;
-
-using Abstractions.Identity;
 
 internal sealed class DeleteUserCommandHandler(IUserRepository userRepository, IGraphClientService graphClientService)
     : ICommandHandler<DeleteUserCommand>

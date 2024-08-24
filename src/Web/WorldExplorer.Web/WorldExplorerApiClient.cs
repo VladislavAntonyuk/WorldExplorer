@@ -1,11 +1,10 @@
 ﻿namespace WorldExplorer.Web;
 
 using Microsoft.Identity.Abstractions;
-using Modules.Places.Application.Places.GetPlace;
-using Modules.Places.Domain.Places;
-using Modules.Users.Application.Users.GetUser;
 using Microsoft.Identity.Web;
 using Modules.Places.Application.Abstractions;
+using Modules.Places.Application.Places.GetPlace;
+using Modules.Users.Application.Users.GetUser;
 
 public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdentityConsentAndConditionalAccessHandler handler)
 {
@@ -92,7 +91,7 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 	public async Task<OperationResult<List<PlaceResponse>>> GetNearByPlaces(Location location, CancellationToken none)
 	{
 		var r = await GetAsync<OperationResult<List<PlaceResponse>>>($"places/recommendations?Latitude={location.Latitude}&Longitude={location.Longitude}", none);
-		return r ?? new OperationResult<List<PlaceResponse>>()
+		return r ?? new OperationResult<List<PlaceResponse>>
 		{
 			StatusCode = StatusCode.LocationInfoRequestPending
 		};

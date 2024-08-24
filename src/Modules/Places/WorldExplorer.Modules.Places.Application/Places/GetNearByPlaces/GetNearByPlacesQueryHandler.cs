@@ -1,19 +1,12 @@
-﻿using System.Data.Common;
+﻿namespace WorldExplorer.Modules.Places.Application.Places.GetNearByPlaces;
+
+using Abstractions;
+using Abstractions.Data;
+using Domain.LocationInfo;
+using Domain.Places;
+using GetPlace;
 using WorldExplorer.Common.Application.Messaging;
 using WorldExplorer.Common.Domain;
-
-namespace WorldExplorer.Modules.Users.Application.Users.GetUser;
-
-using Common.Application.Abstractions.Data;
-using Microsoft.Extensions.Logging;
-using Places.Application.Abstractions;
-using Places.Application.Places.GetPlace;
-using Places.Domain.LocationInfo;
-using Places.Domain.Places;
-using Places.Infrastructure.Places;
-using Shared.Enums;
-using Shared.Models;
-using WebApp.Services.AI;
 
 internal sealed class GetNearByPlacesQueryHandler(ILocationInfoRepository locationInfoRepository, IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
 	: IQueryHandler<GetNearByPlacesQuery, OperationResult<List<PlaceResponse>>>

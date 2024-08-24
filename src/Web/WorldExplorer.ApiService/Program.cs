@@ -9,6 +9,7 @@ using WorldExplorer.Modules.Places.Infrastructure;
 using WorldExplorer.Modules.Travellers;
 using WorldExplorer.Modules.Users.Infrastructure;
 using WorldExplorer.ServiceDefaults;
+using AssemblyReference = WorldExplorer.Modules.Users.Application.AssemblyReference;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,11 +22,11 @@ builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
-	options.UseTransformer<BearerSecuritySchemeTransformer>();
+	options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
 Assembly[] moduleApplicationAssemblies = [
-	WorldExplorer.Modules.Users.Application.AssemblyReference.Assembly,
+	AssemblyReference.Assembly,
 	WorldExplorer.Modules.Places.Application.AssemblyReference.Assembly,
 	//WorldExplorer.Modules.Travellers.AssemblyReference.Assembly,
 ];

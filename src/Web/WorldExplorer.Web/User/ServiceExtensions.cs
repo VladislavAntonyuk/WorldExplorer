@@ -1,15 +1,15 @@
-﻿namespace WebApp.Infrastructure;
+﻿namespace WorldExplorer.Web.User;
 
+using Common.Infrastructure;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Toolbelt.Blazor.I18nText;
-using WorldExplorer.Common.Infrastructure;
 using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
-using WorldExplorer.Modules.Users.Infrastructure.User;
 using WorldExplorer.Web;
+using Constants = Microsoft.Identity.Web.Constants;
 
 public static class ServiceExtensions
 {
@@ -28,13 +28,13 @@ public static class ServiceExtensions
 	public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
 	{
 		var scopes = configuration.GetSection("WorldExplorerApiClient:Scopes").Get<string[]>();
-		services.AddMicrosoftIdentityWebAppAuthentication(configuration, Microsoft.Identity.Web.Constants.AzureAdB2C)
+		services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
 			   .EnableTokenAcquisitionToCallDownstreamApi(scopes)
 			   .AddDownstreamApi("WorldExplorerApiClient", configuration.GetSection("WorldExplorerApiClient"))
 			   .AddDistributedTokenCaches();
 
 		services.AddCascadingAuthenticationState();
-		services.AddAuthZ(configuration);
+		services.AddAuthZ();
 	}
 
 	public static void AddUserServices(this IServiceCollection services, IConfiguration configuration)

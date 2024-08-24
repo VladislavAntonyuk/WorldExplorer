@@ -1,15 +1,12 @@
 ﻿namespace WorldExplorer.Modules.Places.Presentation.Places;
 
-using System.Security.Claims;
-using Common.Domain;
-using Common.Infrastructure.Authentication;
+using Application.Places.GetPlace;
+using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Users.Application.Users.GetUser;
-using WorldExplorer.Common.Presentation.Endpoints;
 
 internal sealed class GetPlaceDetails : IEndpoint
 {

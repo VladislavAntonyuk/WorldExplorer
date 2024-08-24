@@ -1,8 +1,8 @@
-﻿using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.Infrastructure.Database;
-using Microsoft.EntityFrameworkCore;
+﻿namespace WorldExplorer.Modules.Users.Infrastructure.Users;
 
-namespace WorldExplorer.Modules.Users.Infrastructure.Users;
+using Database;
+using Domain.Users;
+using Microsoft.EntityFrameworkCore;
 
 internal sealed class UserRepository(UsersDbContext context) : IUserRepository
 {

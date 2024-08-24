@@ -1,7 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Places.Domain.Places;
 
+using Common.Domain;
 using NetTopologySuite.Geometries;
-using WorldExplorer.Common.Domain;
 
 public class Place : Entity
 {

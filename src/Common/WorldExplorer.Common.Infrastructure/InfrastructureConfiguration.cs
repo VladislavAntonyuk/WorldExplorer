@@ -1,23 +1,22 @@
-﻿using WorldExplorer.Common.Application.EventBus;
-using WorldExplorer.Common.Infrastructure.Authentication;
-using WorldExplorer.Common.Infrastructure.Authorization;
-using WorldExplorer.Common.Infrastructure.Outbox;
+﻿namespace WorldExplorer.Common.Infrastructure;
+
+using Application.EventBus;
+using Authentication;
+using Authorization;
 using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Quartz;
-
-namespace WorldExplorer.Common.Infrastructure;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Outbox;
+using Quartz;
 
 public static class InfrastructureConfiguration
 {
-	public static IServiceCollection AddAuthZ(this IServiceCollection services, IConfiguration configuration)
+	public static IServiceCollection AddAuthZ(this IServiceCollection services)
 	{
 		services.AddAuthorizationInternal();
 		return services;

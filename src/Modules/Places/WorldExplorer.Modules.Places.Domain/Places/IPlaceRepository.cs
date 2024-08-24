@@ -1,6 +1,5 @@
-﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
+﻿namespace WorldExplorer.Modules.Places.Domain.Places;
 
-using Domain.Places;
 using NetTopologySuite.Geometries;
 
 public interface IPlaceRepository

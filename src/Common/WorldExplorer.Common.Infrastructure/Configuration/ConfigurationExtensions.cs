@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿namespace WorldExplorer.Common.Infrastructure.Configuration;
 
-namespace WorldExplorer.Common.Infrastructure.Configuration;
+using Microsoft.Extensions.Configuration;
 
 public static class ConfigurationExtensions
 {

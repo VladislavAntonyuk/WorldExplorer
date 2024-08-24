@@ -86,12 +86,6 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
-
-            migrationBuilder.InsertData(
-                schema: "users",
-                table: "Users",
-                column: "Id",
-                value: new Guid("19d3b2c7-8714-4851-ac73-95aeecfba3a6"));
         }
 
         /// <inheritdoc />

@@ -1,11 +1,9 @@
-﻿using System.Data.Common;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Users.Domain.Users;
-
-namespace WorldExplorer.Modules.Users.Application.Users.GetUser;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.GetUser;
 
 using Abstractions.Identity;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.Users;
 
 internal sealed class GetUserQueryHandler(IUserRepository userRepository, IGraphClientService graphClientService)
     : IQueryHandler<GetUserQuery, UserResponse>

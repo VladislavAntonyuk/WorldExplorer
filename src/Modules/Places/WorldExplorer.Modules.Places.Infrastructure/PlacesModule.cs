@@ -1,25 +1,21 @@
-﻿using WorldExplorer.Common.Infrastructure.Outbox;
-using WorldExplorer.Common.Presentation.Endpoints;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure;
 
-namespace WorldExplorer.Modules.Places.Infrastructure;
-
-using System.Configuration;
-using Common.Application.Abstractions.Data;
+using AI;
+using Application.Abstractions;
+using Application.Abstractions.Data;
 using Common.Infrastructure;
+using Common.Presentation.Endpoints;
 using Database;
 using Domain.LocationInfo;
+using Domain.Places;
+using Image;
+using LocationInfo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using OpenAI;
 using Places;
-using WebApp.Services.AI;
-using WebApp.Services.Image;
-using WebApp.Services.Place;
+using Presentation;
 
 public static class PlacesModule
 {
@@ -32,7 +28,7 @@ public static class PlacesModule
 
         builder.AddInfrastructure();
 
-        builder.Services.AddEndpoints(Presentation.AssemblyReference.Assembly);
+        builder.Services.AddEndpoints(AssemblyReference.Assembly);
 
         return builder;
     }

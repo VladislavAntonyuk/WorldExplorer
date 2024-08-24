@@ -1,7 +1,7 @@
-﻿using WorldExplorer.Common.Domain;
-using MediatR;
+﻿namespace WorldExplorer.Common.Application.Messaging;
 
-namespace WorldExplorer.Common.Application.Messaging;
+using Domain;
+using MediatR;
 
 public interface ICommand : IRequest<Result>, IBaseCommand;
 

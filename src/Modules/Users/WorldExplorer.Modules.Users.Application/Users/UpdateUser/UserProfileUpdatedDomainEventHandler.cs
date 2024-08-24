@@ -1,9 +1,9 @@
-﻿using WorldExplorer.Common.Application.EventBus;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.IntegrationEvents;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
+using Common.Application.EventBus;
+using Common.Application.Messaging;
+using Domain.Users;
+using IntegrationEvents;
 
 internal sealed class UserProfileUpdatedDomainEventHandler(IEventBus eventBus)
     : DomainEventHandler<UserProfileUpdatedDomainEvent>

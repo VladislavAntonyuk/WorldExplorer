@@ -1,4 +1,4 @@
-﻿namespace Shared.Enums;
+﻿namespace WorldExplorer.Modules.Places.Domain.LocationInfo;
 
 public enum StatusCode
 {

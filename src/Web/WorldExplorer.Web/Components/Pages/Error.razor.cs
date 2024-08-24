@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Microsoft.AspNetCore.Components;
-using WorldExplorer.Web.Components;
 
 public partial class Error : WorldExplorerBaseComponent
 {

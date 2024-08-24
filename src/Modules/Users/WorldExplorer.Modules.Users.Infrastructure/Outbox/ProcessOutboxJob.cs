@@ -1,20 +1,18 @@
-﻿using System.Data;
-using System.Data.Common;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Common.Infrastructure.Outbox;
-using WorldExplorer.Common.Infrastructure.Serialization;
+﻿namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
+
+using System.Text.Json;
+using Application;
+using Common.Application.Messaging;
+using Common.Domain;
+using Common.Infrastructure.Outbox;
+using Common.Infrastructure.Serialization;
+using Database;
+using Domain.Users;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz;
-
-namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
-
-using System.Text.Json;
-using Database;
-using Domain.Users;
-using Microsoft.EntityFrameworkCore;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessOutboxJob(
@@ -51,7 +49,7 @@ internal sealed class ProcessOutboxJob(
 				IEnumerable<IDomainEventHandler> handlers = DomainEventHandlersFactory.GetHandlers(
 					domainEvent.GetType(),
 					scope.ServiceProvider,
-					Application.AssemblyReference.Assembly);
+					AssemblyReference.Assembly);
 
 				foreach (IDomainEventHandler domainEventHandler in handlers)
 				{

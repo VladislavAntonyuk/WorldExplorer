@@ -1,7 +1,6 @@
-﻿namespace WebApp.Services.AI;
+﻿namespace WorldExplorer.Modules.Places.Application.Abstractions;
 
-using WorldExplorer.Modules.Places.Application.Abstractions;
-using WorldExplorer.Modules.Places.Domain.Places;
+using Domain.Places;
 
 public interface IAiService
 {

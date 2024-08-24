@@ -1,29 +1,20 @@
-﻿using WorldExplorer.Common.Application.EventBus;
+﻿namespace WorldExplorer.Modules.Users.IntegrationEvents;
 
-namespace WorldExplorer.Modules.Users.IntegrationEvents;
+using Common.Application.EventBus;
 
-public sealed class UserRegisteredIntegrationEvent : IntegrationEvent
+public sealed class UserRegisteredIntegrationEvent(
+	Guid id,
+	DateTime occurredOnUtc,
+	Guid userId,
+	string email,
+	string name,
+	string language) : IntegrationEvent(id, occurredOnUtc)
 {
-    public UserRegisteredIntegrationEvent(
-        Guid id,
-        DateTime occurredOnUtc,
-        Guid userId,
-        string email,
-        string name,
-        string language)
-        : base(id, occurredOnUtc)
-    {
-        UserId = userId;
-        Email = email;
-        Name = name;
-        Language = language;
-    }
+	public Guid UserId { get; init; } = userId;
 
-    public Guid UserId { get; init; }
+    public string Email { get; init; } = email;
 
-    public string Email { get; init; }
+    public string Name { get; init; } = name;
 
-    public string Name { get; init; }
-
-    public string Language { get; init; }
+    public string Language { get; init; } = language;
 }

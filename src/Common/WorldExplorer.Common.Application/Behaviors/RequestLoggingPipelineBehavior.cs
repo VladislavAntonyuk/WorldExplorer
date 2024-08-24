@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using WorldExplorer.Common.Domain;
+﻿namespace WorldExplorer.Common.Application.Behaviors;
+
+using System.Diagnostics;
+using Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
-
-namespace WorldExplorer.Common.Application.Behaviors;
 
 internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>(
     ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> logger)
@@ -22,7 +22,7 @@ internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>(
         Activity.Current?.SetTag("request.module", moduleName);
         Activity.Current?.SetTag("request.name", requestName);
 
-        using (logger.BeginScope("Module {0}", moduleName))
+        using (logger.BeginScope("Module {ModuleName}", moduleName))
         {
             logger.LogInformation("Processing request {RequestName}", requestName);
 
@@ -34,7 +34,7 @@ internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>(
             }
             else
             {
-                using (logger.BeginScope("Error {0}", result.Error))
+                using (logger.BeginScope("Error {Error}", result.Error))
                 {
                     logger.LogError("Completed request {RequestName} with error", requestName);
                 }

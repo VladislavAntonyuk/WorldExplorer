@@ -1,12 +1,11 @@
-﻿using WorldExplorer.Common.Domain;
-using WorldExplorer.Common.Infrastructure.Serialization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-
-namespace WorldExplorer.Common.Infrastructure.Outbox;
+﻿namespace WorldExplorer.Common.Infrastructure.Outbox;
 
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+using Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Serialization;
 
 public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 {

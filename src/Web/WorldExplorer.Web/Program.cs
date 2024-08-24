@@ -1,6 +1,6 @@
-﻿using WebApp.Infrastructure;
-using WorldExplorer.ServiceDefaults;
+﻿using WorldExplorer.ServiceDefaults;
 using WorldExplorer.Web.Components;
+using WorldExplorer.Web.User;
 
 var builder = WebApplication.CreateBuilder(args);
 

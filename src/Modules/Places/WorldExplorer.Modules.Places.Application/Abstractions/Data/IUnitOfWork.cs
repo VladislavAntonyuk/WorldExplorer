@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Common.Application.Abstractions.Data;
+﻿namespace WorldExplorer.Modules.Places.Application.Abstractions.Data;
 
 public interface IUnitOfWork
 {

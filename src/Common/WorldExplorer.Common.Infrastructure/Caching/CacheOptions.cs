@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿namespace WorldExplorer.Common.Infrastructure.Caching;
 
-namespace WorldExplorer.Common.Infrastructure.Caching;
+using Microsoft.Extensions.Caching.Distributed;
 
 public static class CacheOptions
 {

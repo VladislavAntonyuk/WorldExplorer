@@ -1,10 +1,10 @@
-﻿using System.Reflection;
+﻿namespace WorldExplorer.Common.Presentation.Endpoints;
+
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
-namespace WorldExplorer.Common.Presentation.Endpoints;
 
 public static class EndpointExtensions
 {

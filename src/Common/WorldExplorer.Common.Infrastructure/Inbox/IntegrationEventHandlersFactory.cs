@@ -1,9 +1,9 @@
-﻿using System.Collections.Concurrent;
-using System.Reflection;
-using WorldExplorer.Common.Application.EventBus;
-using Microsoft.Extensions.DependencyInjection;
+﻿namespace WorldExplorer.Common.Infrastructure.Inbox;
 
-namespace WorldExplorer.Common.Infrastructure.Inbox;
+using System.Collections.Concurrent;
+using System.Reflection;
+using Application.EventBus;
+using Microsoft.Extensions.DependencyInjection;
 
 public static class IntegrationEventHandlersFactory
 {

@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services.Image;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.Image;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;

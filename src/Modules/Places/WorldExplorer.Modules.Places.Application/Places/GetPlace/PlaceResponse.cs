@@ -2,8 +2,6 @@
 
 using Abstractions;
 using Domain.LocationInfo;
-using Domain.Places;
-using Shared.Enums;
 
 public sealed record PlaceResponse(
 	Guid Id,

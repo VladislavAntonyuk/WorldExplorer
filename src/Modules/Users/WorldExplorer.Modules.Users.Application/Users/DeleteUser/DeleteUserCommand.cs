@@ -1,5 +1,5 @@
-﻿using WorldExplorer.Common.Application.Messaging;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.DeleteUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.GetUser;
+using WorldExplorer.Common.Application.Messaging;
 
 public sealed record DeleteUserCommand(Guid UserId) : ICommand;

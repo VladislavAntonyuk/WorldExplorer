@@ -1,8 +1,7 @@
-﻿using System.Security.Claims;
-using WorldExplorer.Common.Application.Exceptions;
+﻿namespace WorldExplorer.Common.Infrastructure.Authentication;
 
-namespace WorldExplorer.Common.Infrastructure.Authentication;
-
+using System.Security.Claims;
+using Application.Exceptions;
 using Microsoft.Identity.Web;
 
 public static class ClaimsPrincipalExtensions
