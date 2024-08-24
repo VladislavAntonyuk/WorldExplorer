@@ -11,10 +11,10 @@ public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 {
 	public override IAiService GetAiService()
 	{
-		return new AiService(
-			new OpenAiProvider(new OpenAIClient(new ApiKeyCredential("API-Key"), new OpenAIClientOptions
-			{
-				 Endpoint = new Uri("https://openai.com")
-			}), NullLogger<OpenAiProvider>.Instance));
+		return new AiService(new OpenAiProvider(new OpenAIClient(new ApiKeyCredential("API-Key"),
+		                                                         new OpenAIClientOptions
+		                                                         {
+			                                                         Endpoint = new Uri("https://openai.com")
+		                                                         }), NullLogger<OpenAiProvider>.Instance));
 	}
 }

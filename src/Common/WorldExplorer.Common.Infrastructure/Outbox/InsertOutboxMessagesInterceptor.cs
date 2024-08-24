@@ -9,42 +9,42 @@ using Serialization;
 
 public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 {
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
-        DbContextEventData eventData,
-        InterceptionResult<int> result,
-        CancellationToken cancellationToken = default)
-    {
-        if (eventData.Context is not null)
-        {
-            InsertOutboxMessages(eventData.Context);
-        }
+	public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
+		InterceptionResult<int> result,
+		CancellationToken cancellationToken = default)
+	{
+		if (eventData.Context is not null)
+		{
+			InsertOutboxMessages(eventData.Context);
+		}
 
-        return base.SavingChangesAsync(eventData, result, cancellationToken);
-    }
+		return base.SavingChangesAsync(eventData, result, cancellationToken);
+	}
 
-    private static void InsertOutboxMessages(DbContext context)
-    {
-        var outboxMessages = context
-            .ChangeTracker
-            .Entries<Entity>()
-            .Select(entry => entry.Entity)
-            .SelectMany(entity =>
-            {
-                IReadOnlyCollection<IDomainEvent> domainEvents = entity.DomainEvents;
+	private static void InsertOutboxMessages(DbContext context)
+	{
+		var outboxMessages = context.ChangeTracker.Entries<Entity>()
+		                            .Select(entry => entry.Entity)
+		                            .SelectMany(entity =>
+		                            {
+			                            var domainEvents = entity.DomainEvents;
 
-                entity.ClearDomainEvents();
+			                            entity.ClearDomainEvents();
 
-                return domainEvents;
-            })
-            .Select(domainEvent => new OutboxMessage
-            {
-                Id = domainEvent.Id,
-                Type = domainEvent.GetType().FullName,
-                Content = JsonSerializer.Serialize(domainEvent, JsonTypeInfo.CreateJsonTypeInfo(domainEvent.GetType(), SerializerSettings.Instance)),
-                OccurredOnUtc = domainEvent.OccurredOnUtc
-            })
-            .ToList();
+			                            return domainEvents;
+		                            })
+		                            .Select(domainEvent => new OutboxMessage
+		                            {
+			                            Id = domainEvent.Id,
+			                            Type = domainEvent.GetType().FullName,
+			                            Content = JsonSerializer.Serialize(domainEvent,
+			                                                               JsonTypeInfo.CreateJsonTypeInfo(
+				                                                               domainEvent.GetType(),
+				                                                               SerializerSettings.Instance)),
+			                            OccurredOnUtc = domainEvent.OccurredOnUtc
+		                            })
+		                            .ToList();
 
-        context.Set<OutboxMessage>().AddRange(outboxMessages);
-    }
+		context.Set<OutboxMessage>().AddRange(outboxMessages);
+	}
 }

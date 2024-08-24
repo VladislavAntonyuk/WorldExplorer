@@ -3,7 +3,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Presentation.Users;
 
 internal static class AuthenticationExtensions
 {
@@ -12,9 +11,7 @@ internal static class AuthenticationExtensions
 
 	public static IServiceCollection AddAuth(this IServiceCollection builder, IConfiguration configuration)
 	{
-		builder
-			.AddAuthN()
-			.AddAuthZ();
+		builder.AddAuthN().AddAuthZ();
 
 		return builder;
 	}
@@ -22,7 +19,7 @@ internal static class AuthenticationExtensions
 	private static IServiceCollection AddAuthN(this IServiceCollection builder)
 	{
 		builder.AddAuthentication()
-			   .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(BasicAuthenticationName, null);
+		       .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(BasicAuthenticationName, null);
 
 		return builder;
 	}
@@ -31,7 +28,10 @@ internal static class AuthenticationExtensions
 	{
 		builder.AddAuthorization(options =>
 		{
-			options.AddPolicy(BasicAuthenticationPolicyName, policyBuilder => policyBuilder.AddAuthenticationSchemes(BasicAuthenticationName).RequireAuthenticatedUser().Build());
+			options.AddPolicy(BasicAuthenticationPolicyName,
+			                  policyBuilder => policyBuilder.AddAuthenticationSchemes(BasicAuthenticationName)
+			                                                .RequireAuthenticatedUser()
+			                                                .Build());
 		});
 
 		return builder;

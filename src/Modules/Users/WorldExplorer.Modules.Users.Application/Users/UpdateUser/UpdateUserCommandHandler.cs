@@ -5,12 +5,12 @@ using Common.Application.Messaging;
 using Common.Domain;
 using Domain.Users;
 
-internal sealed class UpdateUserCommandHandler(IUserRepository userRepository,  IUnitOfWork unitOfWork)
+internal sealed class UpdateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
 	: ICommandHandler<UpdateUserCommand>
 {
 	public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
 	{
-		User? user = await userRepository.GetAsync(request.UserId, cancellationToken);
+		var user = await userRepository.GetAsync(request.UserId, cancellationToken);
 
 		if (user is null)
 		{
@@ -18,7 +18,9 @@ internal sealed class UpdateUserCommandHandler(IUserRepository userRepository,  
 		}
 
 		user.Update(new UserSettings
-			            { TrackUserLocation = request.TrackUserLocation });
+		{
+			TrackUserLocation = request.TrackUserLocation
+		});
 		await unitOfWork.SaveChangesAsync(cancellationToken);
 
 		return Result.Success();

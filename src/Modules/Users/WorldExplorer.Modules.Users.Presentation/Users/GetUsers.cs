@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Users.Presentation.Users;
 
-using Application.Users.GetUser;
 using Application.Users.GetUsers;
 using Common.Infrastructure.Authorization;
 using Common.Presentation.Endpoints;

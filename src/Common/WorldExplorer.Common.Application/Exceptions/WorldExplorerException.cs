@@ -9,5 +9,5 @@ public sealed class WorldExplorerException(
 {
 	public string RequestName { get; } = requestName;
 
-    public Error? Error { get; } = error;
+	public Error? Error { get; } = error;
 }

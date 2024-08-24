@@ -7,12 +7,11 @@ public class Place : Entity
 {
 	private Place()
 	{
-		
 	}
 
 	public Guid Id { get; private set; }
 	public string Name { get; private set; }
-	public Point Location { get;private set; }
+	public Point Location { get; private set; }
 	public string? Description { get; private set; }
 
 	public ICollection<Image> Images { get; private set; } = new List<Image>();

@@ -3,7 +3,6 @@
 using FluentAssertions;
 using OpenAI_API;
 using OpenAI_API.Chat;
-using OpenAI_API.Models;
 using Xunit;
 using Xunit.Abstractions;
 

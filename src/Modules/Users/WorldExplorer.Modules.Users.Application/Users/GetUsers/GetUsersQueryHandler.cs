@@ -1,17 +1,17 @@
 ﻿namespace WorldExplorer.Modules.Users.Application.Users.GetUsers;
 
+using Abstractions.Identity;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.Users;
 using GetUser;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
-using WorldExplorer.Modules.Users.Domain.Users;
 
 internal sealed class GetUsersQueryHandler(IUserRepository userRepository, IGraphClientService graphClientService)
-    : IQueryHandler<GetUsersQuery, List<UserResponse>>
+	: IQueryHandler<GetUsersQuery, List<UserResponse>>
 {
-    public async Task<Result<List<UserResponse>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
-    {
-        var dbUsers = await userRepository.GetAsync(cancellationToken);
+	public async Task<Result<List<UserResponse>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+	{
+		var dbUsers = await userRepository.GetAsync(cancellationToken);
 
 		var users = new List<UserResponse>();
 		foreach (var user in dbUsers)
@@ -22,10 +22,8 @@ internal sealed class GetUsersQueryHandler(IUserRepository userRepository, IGrap
 				continue;
 			}
 
-			users.Add(new UserResponse(user.Id,
-			                           profile.DisplayName ?? string.Empty,
-			                           profile.OtherMails.FirstOrDefault(string.Empty),
-			                           profile.Language,
+			users.Add(new UserResponse(user.Id, profile.DisplayName ?? string.Empty,
+			                           profile.OtherMails.FirstOrDefault(string.Empty), profile.Language,
 			                           user.Settings));
 		}
 

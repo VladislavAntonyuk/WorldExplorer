@@ -4,6 +4,8 @@ using Common.Domain;
 
 public static class PlaceErrors
 {
-	public static Error NotFound(Guid placeId) =>
-		Error.NotFound("Places.NotFound", $"The place with the identifier {placeId} not found");
+	public static Error NotFound(Guid placeId)
+	{
+		return Error.NotFound("Places.NotFound", $"The place with the identifier {placeId} not found");
+	}
 }

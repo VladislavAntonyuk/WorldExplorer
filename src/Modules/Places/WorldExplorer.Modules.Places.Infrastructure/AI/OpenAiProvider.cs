@@ -26,7 +26,8 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 				return null;
 			}
 
-			logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}", result.Value.Content[0].Text, DateTime.UtcNow - result.Value.CreatedAt.UtcDateTime);
+			logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}",
+			                      result.Value.Content[0].Text, DateTime.UtcNow - result.Value.CreatedAt.UtcDateTime);
 			return result.Value.Content[0].Text;
 		}
 		catch (Exception e)
@@ -37,22 +38,20 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 	}
 
 	/// <summary>
-	/// Only works with DALL-E-3 and higher (https://platform.openai.com/docs/models/)
+	///     Only works with DALL-E-3 and higher (https://platform.openai.com/docs/models/)
 	/// </summary>
 	public async Task<string?> GetImageResponse(string request)
 	{
 		try
 		{
 			var client = api.GetImageClient("gpt-4");
-			var imageResult = await client.GenerateImageAsync(
-				request,
-				new ImageGenerationOptions
-				{
-					Quality = GeneratedImageQuality.High,
-					ResponseFormat = GeneratedImageFormat.Uri,
-					Size = GeneratedImageSize.W1024xH1024,
-					Style = GeneratedImageStyle.Natural
-				});
+			var imageResult = await client.GenerateImageAsync(request, new ImageGenerationOptions
+			{
+				Quality = GeneratedImageQuality.High,
+				ResponseFormat = GeneratedImageFormat.Uri,
+				Size = GeneratedImageSize.W1024xH1024,
+				Style = GeneratedImageStyle.Natural
+			});
 			return imageResult.Value.ImageUri.ToString();
 		}
 		catch (Exception e)

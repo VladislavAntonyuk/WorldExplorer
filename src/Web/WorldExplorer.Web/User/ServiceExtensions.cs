@@ -4,11 +4,10 @@ using Common.Infrastructure;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Modules.Users.Application.Abstractions.Identity;
 using MudBlazor.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Toolbelt.Blazor.I18nText;
-using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
-using WorldExplorer.Web;
 using Constants = Microsoft.Identity.Web.Constants;
 
 public static class ServiceExtensions
@@ -20,18 +19,16 @@ public static class ServiceExtensions
 		services.AddMudServices();
 		services.AddTranslations();
 		services.AddLogging();
-		services.AddRazorComponents()
-				.AddInteractiveServerComponents()
-				.AddMicrosoftIdentityConsentHandler();
+		services.AddRazorComponents().AddInteractiveServerComponents().AddMicrosoftIdentityConsentHandler();
 	}
 
 	public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
 	{
 		var scopes = configuration.GetSection("WorldExplorerApiClient:Scopes").Get<string[]>();
 		services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
-			   .EnableTokenAcquisitionToCallDownstreamApi(scopes)
-			   .AddDownstreamApi("WorldExplorerApiClient", configuration.GetSection("WorldExplorerApiClient"))
-			   .AddDistributedTokenCaches();
+		        .EnableTokenAcquisitionToCallDownstreamApi(scopes)
+		        .AddDownstreamApi("WorldExplorerApiClient", configuration.GetSection("WorldExplorerApiClient"))
+		        .AddDistributedTokenCaches();
 
 		services.AddCascadingAuthenticationState();
 		services.AddAuthZ();
@@ -49,8 +46,7 @@ public static class ServiceExtensions
 
 		var baseUrl = configuration.GetSection("WorldExplorerApiClient:BaseUrl").Get<string>();
 		services.AddWorldExplorerTravellersClient()
-			   .ConfigureHttpClient(client => client.BaseAddress = new Uri($"{baseUrl}/graphql"));
-
+		        .ConfigureHttpClient(client => client.BaseAddress = new Uri($"{baseUrl}/graphql"));
 
 
 		//services.AddHostedService<PlacesLookupBackgroundService>();

@@ -10,16 +10,16 @@ using Microsoft.AspNetCore.Routing;
 
 internal sealed class GetRecommendations : IEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+	public void MapEndpoint(IEndpointRouteBuilder app)
 	{
-        app.MapGet("places/recommendations", async ([AsParameters] Request location, ISender sender) =>
-        {
-			var result = await sender.Send(new GetNearByPlacesQuery(location.Longitude, location.Latitude));
+		app.MapGet("places/recommendations", async ([AsParameters] Request location, ISender sender) =>
+		   {
+			   var result = await sender.Send(new GetNearByPlacesQuery(location.Longitude, location.Latitude));
 
-			return result.Match(Results.Ok, ApiResults.Problem);
-        })
-        .RequireAuthorization()
-        .WithTags(Tags.Places);
+			   return result.Match(Results.Ok, ApiResults.Problem);
+		   })
+		   .RequireAuthorization()
+		   .WithTags(Tags.Places);
 	}
 
 	public record Request

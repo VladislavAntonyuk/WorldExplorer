@@ -18,15 +18,16 @@ internal sealed class RegisterUser : IEndpoint
 			   // If input data is null, show block page
 			   if (request is null)
 			   {
-				   return Results.BadRequest(new ResponseContent("ShowBlockPage", "There was a problem with your request."));
+				   return Results.BadRequest(
+					   new ResponseContent("ShowBlockPage", "There was a problem with your request."));
 			   }
 
 			   // TODO Require Auth
 			   // var clientIds = configuration.GetRequiredSection("ClientIds").Get<string[]>();
 			   // if (clientIds is null || !clientIds.Contains(requestConnector.ClientId))
 			   // {
-				  //  logger.LogWarning("HTTP clientId is not authorized.");
-				  //  return Unauthorized();
+			   //  logger.LogWarning("HTTP clientId is not authorized.");
+			   //  return Unauthorized();
 			   // }
 
 			   var result = await sender.Send(new RegisterUserCommand(request.ObjectId));

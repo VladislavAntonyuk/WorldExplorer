@@ -2,7 +2,7 @@
 
 internal sealed class InboxOptions
 {
-    public int IntervalInSeconds { get; init; }
+	public int IntervalInSeconds { get; init; }
 
-    public int BatchSize { get; init; }
+	public int BatchSize { get; init; }
 }

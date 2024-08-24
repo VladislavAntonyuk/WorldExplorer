@@ -6,12 +6,12 @@ using Microsoft.Identity.Web;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static Guid GetUserId(this ClaimsPrincipal? principal)
-    {
-        string? userId = principal?.GetObjectId();
+	public static Guid GetUserId(this ClaimsPrincipal? principal)
+	{
+		var userId = principal?.GetObjectId();
 
-        return Guid.TryParse(userId, out Guid parsedUserId) ?
-            parsedUserId :
-            throw new WorldExplorerException("User identifier is unavailable");
-    }
+		return Guid.TryParse(userId, out var parsedUserId)
+			? parsedUserId
+			: throw new WorldExplorerException("User identifier is unavailable");
+	}
 }

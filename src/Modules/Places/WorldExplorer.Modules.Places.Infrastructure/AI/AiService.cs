@@ -51,7 +51,8 @@ public class AiService(IAiProvider aiProvider) : IAiService
 
 	public Task<string?> GenerateImage(string placeName, Location location)
 	{
-		var prompt = $"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'";
+		var prompt =
+			$"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'";
 		return aiProvider.GetImageResponse(prompt);
 	}
 }

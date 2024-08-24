@@ -1,6 +1,6 @@
 ﻿namespace WorldExplorer.Web.User;
 
-using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
+using Modules.Users.Application.Abstractions.Identity;
 
 public class UserInfo
 {

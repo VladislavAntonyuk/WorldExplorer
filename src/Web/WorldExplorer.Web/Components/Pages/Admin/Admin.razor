@@ -26,12 +26,16 @@
 						@{
 							var link = $"/admin/places/{place.Id}";
 						}
-						<MudTd DataLabel="Id"><MudLink Href="@link">@place.Id</MudLink></MudTd>
+						<MudTd DataLabel="Id">
+							<MudLink Href="@link">@place.Id</MudLink>
+						</MudTd>
 						<MudTd DataLabel="Name">@place.Name</MudTd>
 						<MudTd DataLabel="Location">@place.Location</MudTd>
 						<MudTd DataLabel="Rating">@place.Rating</MudTd>
 						<MudTd DataLabel="Images count">@place.Images.Count</MudTd>
-						<MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeletePlace(place.Id)">Delete</MudButton></MudTd>
+						<MudTd DataLabel="">
+							<MudButton Color="Color.Error" OnClick="() => DeletePlace(place.Id)">Delete</MudButton>
+						</MudTd>
 					</RowTemplate>
 				</MudTable>
 			</MudTabPanel>
@@ -51,26 +55,30 @@
 						<MudTd DataLabel="Status">@request.Status</MudTd>
 						<MudTd DataLabel="Location">@request.Location</MudTd>
 						<MudTd DataLabel="CreationDate">@request.CreationDate</MudTd>
-						<MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeleteRequest(request.Id)">Delete</MudButton></MudTd>
+						<MudTd DataLabel="">
+							<MudButton Color="Color.Error" OnClick="() => DeleteRequest(request.Id)">Delete</MudButton>
+						</MudTd>
 					</RowTemplate>
 				</MudTable>
 			</MudTabPanel>
-            <MudTabPanel Text="Users">
-                <MudTable Items="@users" Breakpoint="Breakpoint.Sm" T="UserResponse">
-                	<HeaderContent>
-                		<MudTh>Id</MudTh>
-                		<MudTh>Name</MudTh>
-                		<MudTh>Email</MudTh>
-                		<MudTh></MudTh>
-                	</HeaderContent>
-                	<RowTemplate Context="user">
-                		<MudTd DataLabel="Id">@user.Id</MudTd>
-                		<MudTd DataLabel="Name">@user.Name</MudTd>
-		                <MudTd DataLabel="Email">@user.Email</MudTd>
-		                <MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="() => DeleteUser(user.Id)">Delete</MudButton></MudTd>
-                	</RowTemplate>
-                </MudTable>
-            </MudTabPanel>
-        </MudTabs>
+			<MudTabPanel Text="Users">
+				<MudTable Items="@users" Breakpoint="Breakpoint.Sm" T="UserResponse">
+					<HeaderContent>
+						<MudTh>Id</MudTh>
+						<MudTh>Name</MudTh>
+						<MudTh>Email</MudTh>
+						<MudTh></MudTh>
+					</HeaderContent>
+					<RowTemplate Context="user">
+						<MudTd DataLabel="Id">@user.Id</MudTd>
+						<MudTd DataLabel="Name">@user.Name</MudTd>
+						<MudTd DataLabel="Email">@user.Email</MudTd>
+						<MudTd DataLabel="">
+							<MudButton Color="Color.Error" OnClick="() => DeleteUser(user.Id)">Delete</MudButton>
+						</MudTd>
+					</RowTemplate>
+				</MudTable>
+			</MudTabPanel>
+		</MudTabs>
 	</Authorized>
 </AuthorizeView>

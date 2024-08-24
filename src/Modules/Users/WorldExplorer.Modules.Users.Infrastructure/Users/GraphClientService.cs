@@ -51,6 +51,11 @@ public class GraphClientService : IGraphClientService
 		};
 	}
 
+	public Task DeleteAsync(Guid providerId, CancellationToken cancellationToken)
+	{
+		return graphClient.Users[providerId.ToString()].DeleteAsync(cancellationToken: cancellationToken);
+	}
+
 	private static object? GetAdditionalData(User user, string key)
 	{
 		return user.AdditionalData.TryGetValue(key, out var value) ? value : null;
@@ -58,7 +63,8 @@ public class GraphClientService : IGraphClientService
 
 	private async Task<IEnumerable<AzureGroup>> GetUserGroups(Guid? providerId, CancellationToken cancellationToken)
 	{
-		var membersOf = await graphClient.Users[providerId?.ToString()].MemberOf.GetAsync(cancellationToken: cancellationToken);
+		var membersOf = await graphClient.Users[providerId?.ToString()]
+		                                 .MemberOf.GetAsync(cancellationToken: cancellationToken);
 		if (membersOf?.Value?.Count > 0)
 		{
 			var groups = membersOf.Value.Select(directoryObject => directoryObject as Group)
@@ -92,10 +98,5 @@ public class GraphClientService : IGraphClientService
 
 		return CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures)
 		                  .LastOrDefault(x => x.EnglishName.Contains(countryName), defaultCultureInfo);
-	}
-
-	public Task DeleteAsync(Guid providerId, CancellationToken cancellationToken)
-	{
-		return graphClient.Users[providerId.ToString()].DeleteAsync(cancellationToken: cancellationToken);
 	}
 }

@@ -16,11 +16,10 @@ public class UnitTest1(ITestOutputHelper testOutputHelper)
 	[InlineData("https://api.chatanywhere.tech/v1", "API_KEY2", "gpt-4o-mini")]
 	public async Task Test(string url, string key, string model)
 	{
-		var client = new OpenAIClient(new ApiKeyCredential(key),
-		                              new OpenAIClientOptions
-		                              {
-										  Endpoint = new Uri(url)
-									  });
+		var client = new OpenAIClient(new ApiKeyCredential(key), new OpenAIClientOptions
+		{
+			Endpoint = new Uri(url)
+		});
 		var chatClient = client.GetChatClient(model);
 		var result = await chatClient.CompleteChatAsync(new UserChatMessage("hello"));
 		var content = result.Value.Content[0].ToString();

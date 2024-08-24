@@ -4,7 +4,7 @@ using Common.Domain;
 
 public sealed class UserProfileUpdatedDomainEvent(Guid userId, UserSettings settings) : DomainEvent
 {
-    public Guid UserId { get; init; } = userId;
+	public Guid UserId { get; init; } = userId;
 
-    public UserSettings Settings { get; init; } = settings;
+	public UserSettings Settings { get; init; } = settings;
 }

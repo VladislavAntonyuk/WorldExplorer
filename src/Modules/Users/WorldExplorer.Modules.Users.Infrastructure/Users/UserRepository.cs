@@ -6,23 +6,23 @@ using Microsoft.EntityFrameworkCore;
 
 internal sealed class UserRepository(UsersDbContext context) : IUserRepository
 {
-    public async Task<User?> GetAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await context.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
-    }
+	public async Task<User?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+	{
+		return await context.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+	}
 
-    public async Task<List<User>> GetAsync(CancellationToken cancellationToken = default)
-    {
-	    return await context.Users.ToListAsync(cancellationToken);
-    }
+	public async Task<List<User>> GetAsync(CancellationToken cancellationToken = default)
+	{
+		return await context.Users.ToListAsync(cancellationToken);
+	}
 
-    public void Insert(User user)
-    {
-        context.Users.Add(user);
-    }
+	public void Insert(User user)
+	{
+		context.Users.Add(user);
+	}
 
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
-    {
+	public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+	{
 		await context.Users.Where(x => x.Id == id).ExecuteDeleteAsync(cancellationToken);
 	}
 }

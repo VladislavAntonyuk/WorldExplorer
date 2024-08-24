@@ -1,9 +1,9 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
 
+using Database;
 using Domain.LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using WorldExplorer.Modules.Places.Infrastructure.Database;
 
 public class LocationInfoRepository(PlacesDbContext placesDbContext) : ILocationInfoRepository
 {
@@ -35,8 +35,7 @@ public class LocationInfoRepository(PlacesDbContext placesDbContext) : ILocation
 
 	public async Task<List<LocationInfoRequest>> IsNearby(Point userLocation)
 	{
-		return await placesDbContext.LocationInfoRequests
-			.Where(x => x.Location.IsWithinDistance(userLocation, 100))
-			.ToListAsync();
+		return await placesDbContext.LocationInfoRequests.Where(x => x.Location.IsWithinDistance(userLocation, 100))
+		                            .ToListAsync();
 	}
 }

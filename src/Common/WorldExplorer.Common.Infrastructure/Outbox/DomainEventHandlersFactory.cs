@@ -7,32 +7,30 @@ using Microsoft.Extensions.DependencyInjection;
 
 public static class DomainEventHandlersFactory
 {
-    private static readonly ConcurrentDictionary<string, Type[]> HandlersDictionary = new();
+	private static readonly ConcurrentDictionary<string, Type[]> HandlersDictionary = new();
 
-    public static IEnumerable<IDomainEventHandler> GetHandlers(
-        Type type,
-        IServiceProvider serviceProvider,
-        Assembly assembly)
-    {
-        Type[] domainEventHandlerTypes = HandlersDictionary.GetOrAdd(
-            $"{assembly.GetName().Name}{type.Name}",
-            _ =>
-            {
-                Type[] domainEventHandlerTypes = assembly.GetTypes()
-                    .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler<>).MakeGenericType(type)))
-                    .ToArray();
+	public static IEnumerable<IDomainEventHandler> GetHandlers(Type type,
+		IServiceProvider serviceProvider,
+		Assembly assembly)
+	{
+		var domainEventHandlerTypes = HandlersDictionary.GetOrAdd($"{assembly.GetName().Name}{type.Name}", _ =>
+		{
+			var domainEventHandlerTypes = assembly.GetTypes()
+			                                      .Where(t => t.IsAssignableTo(
+				                                             typeof(IDomainEventHandler<>).MakeGenericType(type)))
+			                                      .ToArray();
 
-                return domainEventHandlerTypes;
-            });
+			return domainEventHandlerTypes;
+		});
 
-        List<IDomainEventHandler> handlers = [];
-        foreach (Type domainEventHandlerType in domainEventHandlerTypes)
-        {
-            object domainEventHandler = serviceProvider.GetRequiredService(domainEventHandlerType);
-            
-            handlers.Add((domainEventHandler as IDomainEventHandler)!);
-        }
+		List<IDomainEventHandler> handlers = [];
+		foreach (var domainEventHandlerType in domainEventHandlerTypes)
+		{
+			var domainEventHandler = serviceProvider.GetRequiredService(domainEventHandlerType);
 
-        return handlers;
-    }
+			handlers.Add((domainEventHandler as IDomainEventHandler)!);
+		}
+
+		return handlers;
+	}
 }

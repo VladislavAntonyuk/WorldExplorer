@@ -4,8 +4,8 @@ using FluentValidation;
 
 internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {
-    public RegisterUserCommandValidator()
-    {
-        RuleFor(c => c.ProviderId).NotEmpty();
-    }
+	public RegisterUserCommandValidator()
+	{
+		RuleFor(c => c.ProviderId).NotEmpty();
+	}
 }

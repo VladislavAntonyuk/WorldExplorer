@@ -14,94 +14,84 @@ using Quartz;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessInboxJob(
-    UsersDbContext dbConnectionFactory,
-    IServiceScopeFactory serviceScopeFactory,
+	UsersDbContext dbConnectionFactory,
+	IServiceScopeFactory serviceScopeFactory,
 	TimeProvider timeProvider,
-    IOptions<InboxOptions> inboxOptions,
-    ILogger<ProcessInboxJob> logger) : IJob
+	IOptions<InboxOptions> inboxOptions,
+	ILogger<ProcessInboxJob> logger) : IJob
 {
-    private const string ModuleName = "Users";
+	private const string ModuleName = "Users";
 
-    public async Task Execute(IJobExecutionContext context)
-    {
-        logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
+	public async Task Execute(IJobExecutionContext context)
+	{
+		logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
 
-        IReadOnlyList<InboxMessageResponse> inboxMessages = await GetInboxMessagesAsync();
-        await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
+		var inboxMessages = await GetInboxMessagesAsync();
+		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
 
-        foreach (InboxMessageResponse inboxMessage in inboxMessages)
-        {
-            Exception? exception = null;
+		foreach (var inboxMessage in inboxMessages)
+		{
+			Exception? exception = null;
 
-            try
-            {
-                IIntegrationEvent integrationEvent = JsonSerializer.Deserialize<IIntegrationEvent>(
-                    inboxMessage.Content,
-                    SerializerSettings.Instance)!;
+			try
+			{
+				var integrationEvent = JsonSerializer.Deserialize<IIntegrationEvent>(
+					inboxMessage.Content, SerializerSettings.Instance)!;
 
-                using IServiceScope scope = serviceScopeFactory.CreateScope();
+				using var scope = serviceScopeFactory.CreateScope();
 
-                IEnumerable<IIntegrationEventHandler> handlers = IntegrationEventHandlersFactory.GetHandlers(
-                    integrationEvent.GetType(),
-                    scope.ServiceProvider,
-                    AssemblyReference.Assembly);
+				var handlers = IntegrationEventHandlersFactory.GetHandlers(
+					integrationEvent.GetType(), scope.ServiceProvider, AssemblyReference.Assembly);
 
-                foreach (IIntegrationEventHandler integrationEventHandler in handlers)
-                {
-                    await integrationEventHandler.Handle(integrationEvent, context.CancellationToken);
-                }
-            }
-            catch (Exception caughtException)
-            {
-                logger.LogError(
-                    caughtException,
-                    "{Module} - Exception while processing inbox message {MessageId}",
-                    ModuleName,
-                    inboxMessage.Id);
+				foreach (var integrationEventHandler in handlers)
+				{
+					await integrationEventHandler.Handle(integrationEvent, context.CancellationToken);
+				}
+			}
+			catch (Exception caughtException)
+			{
+				logger.LogError(caughtException, "{Module} - Exception while processing inbox message {MessageId}",
+				                ModuleName, inboxMessage.Id);
 
-                exception = caughtException;
-            }
+				exception = caughtException;
+			}
 
-            await UpdateInboxMessageAsync(inboxMessage, exception);
-        }
+			await UpdateInboxMessageAsync(inboxMessage, exception);
+		}
 
-        await transaction.CommitAsync();
+		await transaction.CommitAsync();
 
-        logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
-    }
+		logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
+	}
 
-    private async Task<IReadOnlyList<InboxMessageResponse>> GetInboxMessagesAsync()
-    {
-        string sql =
-            $"""
-             SELECT TOP {inboxOptions.Value.BatchSize}
-                id AS {nameof(InboxMessageResponse.Id)},
-                content AS {nameof(InboxMessageResponse.Content)}
-             FROM users.inbox_messages WITH (UPDLOCK, ROWLOCK)
-             WHERE ProcessedOnUtc IS NULL
-             ORDER BY OccurredOnUtc;
-             
-             """;
-		
-        IEnumerable<InboxMessageResponse> inboxMessages = await dbConnectionFactory.Database.SqlQueryRaw<InboxMessageResponse>(
-            sql).ToListAsync();
+	private async Task<IReadOnlyList<InboxMessageResponse>> GetInboxMessagesAsync()
+	{
+		var sql = $"""
+		           SELECT TOP {inboxOptions.Value.BatchSize}
+		              id AS {nameof(InboxMessageResponse.Id)},
+		              content AS {nameof(InboxMessageResponse.Content)}
+		           FROM users.inbox_messages WITH (UPDLOCK, ROWLOCK)
+		           WHERE ProcessedOnUtc IS NULL
+		           ORDER BY OccurredOnUtc;
 
-        return inboxMessages.ToList();
-    }
+		           """;
 
-    private async Task UpdateInboxMessageAsync(
-        InboxMessageResponse inboxMessage,
-        Exception? exception)
-    {
-        await dbConnectionFactory.Database.ExecuteSqlAsync(
-	        $"""
-	         UPDATE users.inbox_messages
-	         SET ProcessedOnUtc = {timeProvider.GetUtcNow()},
-	             error = {exception}
-	         WHERE id = {inboxMessage.Id}
-	         """);
-    }
+		IEnumerable<InboxMessageResponse> inboxMessages =
+			await dbConnectionFactory.Database.SqlQueryRaw<InboxMessageResponse>(sql).ToListAsync();
 
-    internal sealed record InboxMessageResponse(Guid Id, string Content);
+		return inboxMessages.ToList();
+	}
+
+	private async Task UpdateInboxMessageAsync(InboxMessageResponse inboxMessage, Exception? exception)
+	{
+		await dbConnectionFactory.Database.ExecuteSqlAsync($"""
+		                                                    UPDATE users.inbox_messages
+		                                                    SET ProcessedOnUtc = {timeProvider.GetUtcNow()},
+		                                                        error = {exception}
+		                                                    WHERE id = {inboxMessage.Id}
+		                                                    """);
+	}
+
+	internal sealed record InboxMessageResponse(Guid Id, string Content);
 }

@@ -4,5 +4,5 @@ using Microsoft.AspNetCore.Routing;
 
 public interface IEndpoint
 {
-    void MapEndpoint(IEndpointRouteBuilder app);
+	void MapEndpoint(IEndpointRouteBuilder app);
 }

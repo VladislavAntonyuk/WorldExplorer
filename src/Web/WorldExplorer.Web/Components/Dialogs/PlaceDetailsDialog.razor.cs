@@ -5,7 +5,10 @@ using Modules.Places.Application.Places.GetPlace;
 using MudBlazor;
 using StrawberryShake;
 
-public partial class PlaceDetailsDialog(WorldExplorerApiClient apiClient, IWorldExplorerTravellersClient travellersClient, ISnackbar snackbar) : BaseDialog
+public partial class PlaceDetailsDialog(
+	WorldExplorerApiClient apiClient,
+	IWorldExplorerTravellersClient travellersClient,
+	ISnackbar snackbar) : BaseDialog
 {
 	private PlaceResponse? place;
 	private IReadOnlyCollection<ReviewResponse> reviews = [];
@@ -35,13 +38,13 @@ public partial class PlaceDetailsDialog(WorldExplorerApiClient apiClient, IWorld
 				var reviewResponse = await travellersClient.GetTravellers.ExecuteAsync();
 				if (reviewResponse.IsSuccessResult())
 				{
-					reviews = reviewResponse.Data?.Travellers?.Items?
-						.Select(x => new ReviewResponse
-							        { Id = x.Id })
-						.ToList() ?? [];
+					reviews = reviewResponse.Data?.Travellers?.Items?.Select(x => new ReviewResponse
+					                        {
+						                        Id = x.Id
+					                        })
+					                        .ToList() ?? [];
 				}
 			}
-
 		} while (string.IsNullOrWhiteSpace(place?.Description));
 	}
 }

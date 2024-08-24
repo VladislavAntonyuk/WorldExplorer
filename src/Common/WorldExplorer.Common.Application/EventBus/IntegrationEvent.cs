@@ -4,5 +4,5 @@ public abstract class IntegrationEvent(Guid id, DateTime occurredOnUtc) : IInteg
 {
 	public Guid Id { get; init; } = id;
 
-    public DateTime OccurredOnUtc { get; init; } = occurredOnUtc;
+	public DateTime OccurredOnUtc { get; init; } = occurredOnUtc;
 }

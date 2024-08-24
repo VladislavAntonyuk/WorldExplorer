@@ -2,7 +2,6 @@
 
 using System.Security.Claims;
 using Application.Users.GetUser;
-using Common.Domain;
 using Common.Infrastructure.Authentication;
 using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
@@ -13,15 +12,15 @@ using Microsoft.AspNetCore.Routing;
 
 internal sealed class GetUserProfile : IEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
-    {
-        app.MapGet("users/profile", async (ClaimsPrincipal claims, ISender sender) =>
-        {
-            Result<UserResponse> result = await sender.Send(new GetUserQuery(claims.GetUserId()));
+	public void MapEndpoint(IEndpointRouteBuilder app)
+	{
+		app.MapGet("users/profile", async (ClaimsPrincipal claims, ISender sender) =>
+		   {
+			   var result = await sender.Send(new GetUserQuery(claims.GetUserId()));
 
-            return result.Match(Results.Ok, ApiResults.Problem);
-        })
-        .RequireAuthorization()
-        .WithTags(Tags.Users);
+			   return result.Match(Results.Ok, ApiResults.Problem);
+		   })
+		   .RequireAuthorization()
+		   .WithTags(Tags.Users);
 	}
 }

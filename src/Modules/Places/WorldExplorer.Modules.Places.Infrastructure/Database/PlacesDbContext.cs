@@ -12,19 +12,19 @@ using Places;
 public sealed class PlacesDbContext(DbContextOptions<PlacesDbContext> options) : DbContext(options), IUnitOfWork
 {
 	internal DbSet<Place> Places => Set<Place>();
-    internal DbSet<LocationInfoRequest> LocationInfoRequests => Set<LocationInfoRequest>();
+	internal DbSet<LocationInfoRequest> LocationInfoRequests => Set<LocationInfoRequest>();
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.HasDefaultSchema(Schemas.Places);
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.HasDefaultSchema(Schemas.Places);
 
-        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
-        modelBuilder.ApplyConfiguration(new PlaceConfiguration());
-        modelBuilder.ApplyConfiguration(new LocationInfoRequestConfiguration());
-    }
+		modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
+		modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
+		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
+		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+		modelBuilder.ApplyConfiguration(new PlaceConfiguration());
+		modelBuilder.ApplyConfiguration(new LocationInfoRequestConfiguration());
+	}
 }
 
 
@@ -35,7 +35,8 @@ public class PlacesDbContextFactory : IDesignTimeDbContextFactory<PlacesDbContex
 	public PlacesDbContext CreateDbContext(string[] args)
 	{
 		return new PlacesDbContext(new DbContextOptionsBuilder<PlacesDbContext>()
-		                           .UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password", builder => builder.UseNetTopologySuite())
+		                           .UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password",
+		                                         builder => builder.UseNetTopologySuite())
 		                           .Options);
 	}
 }

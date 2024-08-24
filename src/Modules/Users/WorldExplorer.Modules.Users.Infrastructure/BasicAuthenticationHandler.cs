@@ -13,8 +13,7 @@ public class BasicAuthenticationHandler(
 	IOptionsMonitor<AuthenticationSchemeOptions> options,
 	ILoggerFactory logger,
 	UrlEncoder encoder,
-	IConfiguration configuration)
-	: AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
+	IConfiguration configuration) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
 	protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 	{
@@ -26,12 +25,18 @@ public class BasicAuthenticationHandler(
 			var token = authorizationHeader["Basic ".Length..].Trim();
 			var credentialsAsEncodedString = Encoding.UTF8.GetString(Convert.FromBase64String(token));
 			var receivedCredentials = credentialsAsEncodedString.Split(':', 2);
-			if (receivedCredentials.Length == 2 && receivedCredentials[0] == userName && receivedCredentials[1] == password)
+			if (receivedCredentials.Length == 2 &&
+			    receivedCredentials[0] == userName &&
+			    receivedCredentials[1] == password)
 			{
-				var claims = new[] { new Claim("username", receivedCredentials[0]) };
+				var claims = new[]
+				{
+					new Claim("username", receivedCredentials[0])
+				};
 				var identity = new ClaimsIdentity(claims, "Basic");
 				var claimsPrincipal = new ClaimsPrincipal(identity);
-				return await Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, Scheme.Name)));
+				return await Task.FromResult(
+					AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, Scheme.Name)));
 			}
 
 			Logger.LogInformation("{Username} failed to log in", receivedCredentials[0]);

@@ -5,8 +5,8 @@ using System.Text.Json.Serialization;
 using System.Web;
 using Microsoft.Extensions.Configuration;
 
-public class ImageSearchService
-	(IHttpClientFactory httpClientFactory, IConfiguration configuration) : IImageSearchService
+public class ImageSearchService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+	: IImageSearchService
 {
 	private readonly string? apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey");
 
@@ -18,8 +18,7 @@ public class ImageSearchService
 			var response = await httpClient.GetFromJsonAsync<GoogleImagesResponse>(
 				$"search.json?engine=google_images&q={HttpUtility.UrlEncode(placeName)}&api_key={apiKey}",
 				cancellationToken);
-			return response?.ImagesResults.Select(x => x.Url).Where(x => x.StartsWith("https://")).ToList() ??
-				   [];
+			return response?.ImagesResults.Select(x => x.Url).Where(x => x.StartsWith("https://")).ToList() ?? [];
 		}
 		catch
 		{

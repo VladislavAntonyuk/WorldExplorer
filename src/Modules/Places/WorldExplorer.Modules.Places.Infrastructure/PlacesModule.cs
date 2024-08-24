@@ -19,30 +19,27 @@ using Presentation;
 
 public static class PlacesModule
 {
-    public static IHostApplicationBuilder AddPlacesModule(
-        this IHostApplicationBuilder builder)
-    {
-        builder.Services.AddDomainEventHandlers();
+	public static IHostApplicationBuilder AddPlacesModule(this IHostApplicationBuilder builder)
+	{
+		builder.Services.AddDomainEventHandlers();
 
-        builder.Services.AddIntegrationEventHandlers();
+		builder.Services.AddIntegrationEventHandlers();
 
-        builder.AddInfrastructure();
+		builder.AddInfrastructure();
 
-        builder.Services.AddEndpoints(AssemblyReference.Assembly);
+		builder.Services.AddEndpoints(AssemblyReference.Assembly);
 
-        return builder;
-    }
+		return builder;
+	}
 
-    private static void AddInfrastructure(this IHostApplicationBuilder builder)
-    {
-	    builder.AddDatabase<PlacesDbContext>(Schemas.Places, options => options.UseNetTopologySuite());
+	private static void AddInfrastructure(this IHostApplicationBuilder builder)
+	{
+		builder.AddDatabase<PlacesDbContext>(Schemas.Places, options => options.UseNetTopologySuite());
 
 		builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<PlacesDbContext>());
 
-        builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
-        builder.Services.AddScoped<ILocationInfoRepository, LocationInfoRepository>();
-
-
+		builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
+		builder.Services.AddScoped<ILocationInfoRepository, LocationInfoRepository>();
 
 
 		//services.AddHostedService<PlacesLookupBackgroundService>();
@@ -72,7 +69,6 @@ public static class PlacesModule
 		builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();
 
 
-
 		//services.Configure<OutboxOptions>(configuration.GetSection("Users:Outbox"));
 
 		//services.ConfigureOptions<ConfigureProcessOutboxJob>();
@@ -82,50 +78,50 @@ public static class PlacesModule
 		//services.ConfigureOptions<ConfigureProcessInboxJob>();
 	}
 
-    private static void AddDomainEventHandlers(this IServiceCollection services)
-    {
-        //Type[] domainEventHandlers = Application.AssemblyReference.Assembly
-        //    .GetTypes()
-        //    .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
-        //    .ToArray();
+	private static void AddDomainEventHandlers(this IServiceCollection services)
+	{
+		//Type[] domainEventHandlers = Application.AssemblyReference.Assembly
+		//    .GetTypes()
+		//    .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
+		//    .ToArray();
 
-        //foreach (Type domainEventHandler in domainEventHandlers)
-        //{
-        //    services.TryAddScoped(domainEventHandler);
+		//foreach (Type domainEventHandler in domainEventHandlers)
+		//{
+		//    services.TryAddScoped(domainEventHandler);
 
-        //    Type domainEvent = domainEventHandler
-        //        .GetInterfaces()
-        //        .Single(i => i.IsGenericType)
-        //        .GetGenericArguments()
-        //        .Single();
+		//    Type domainEvent = domainEventHandler
+		//        .GetInterfaces()
+		//        .Single(i => i.IsGenericType)
+		//        .GetGenericArguments()
+		//        .Single();
 
-        //    Type closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
+		//    Type closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
 
-        //    //services.Decorate(domainEventHandler, closedIdempotentHandler);
-       // }
-    }
+		//    //services.Decorate(domainEventHandler, closedIdempotentHandler);
+		// }
+	}
 
-    private static void AddIntegrationEventHandlers(this IServiceCollection services)
-    {
-       // Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
-        //    .GetTypes()
-        //    .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
-        //    .ToArray();
+	private static void AddIntegrationEventHandlers(this IServiceCollection services)
+	{
+		// Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
+		//    .GetTypes()
+		//    .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
+		//    .ToArray();
 
-        //foreach (Type integrationEventHandler in integrationEventHandlers)
-        //{
-        //    services.TryAddScoped(integrationEventHandler);
+		//foreach (Type integrationEventHandler in integrationEventHandlers)
+		//{
+		//    services.TryAddScoped(integrationEventHandler);
 
-        //    Type integrationEvent = integrationEventHandler
-        //        .GetInterfaces()
-        //        .Single(i => i.IsGenericType)
-        //        .GetGenericArguments()
-        //        .Single();
+		//    Type integrationEvent = integrationEventHandler
+		//        .GetInterfaces()
+		//        .Single(i => i.IsGenericType)
+		//        .GetGenericArguments()
+		//        .Single();
 
-        //    Type closedIdempotentHandler =
-        //        typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
+		//    Type closedIdempotentHandler =
+		//        typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
 
-        //    //services.Decorate(integrationEventHandler, closedIdempotentHandler);
-        //}
-    }
+		//    //services.Decorate(integrationEventHandler, closedIdempotentHandler);
+		//}
+	}
 }

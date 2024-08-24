@@ -4,16 +4,17 @@ using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
 
-public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService) : WorldExplorerAuthBaseComponent
+public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)
+	: WorldExplorerAuthBaseComponent
 {
 	private List<PlaceResponse> places = [];
-	private List<UserResponse> users = [];
 	private List<LocationInfoRequestResponse> requests = [];
+	private List<UserResponse> users = [];
 
 	private async Task ClearPlaces()
 	{
 		var isConfirmed = await dialogService.ShowMessageBox("Clear places",
-															  "Are you sure you want to clear all places?");
+		                                                     "Are you sure you want to clear all places?");
 		if (isConfirmed == true)
 		{
 			await apiClient.ClearPlaces(CancellationToken.None);
@@ -24,7 +25,7 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 	private async Task ClearRequests()
 	{
 		var isConfirmed = await dialogService.ShowMessageBox("Clear requests",
-															 "Are you sure you want to clear all requests?");
+		                                                     "Are you sure you want to clear all requests?");
 		if (isConfirmed == true)
 		{
 			await apiClient.ClearLocationInfoRequests(CancellationToken.None);

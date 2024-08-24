@@ -10,18 +10,18 @@ using User = Domain.Users.User;
 
 public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options), IUnitOfWork
 {
-    internal DbSet<User> Users { get; set; }
+	internal DbSet<User> Users { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.HasDefaultSchema(Schemas.Users);
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.HasDefaultSchema(Schemas.Users);
 
-        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
-    }
+		modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
+		modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
+		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
+		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+		modelBuilder.ApplyConfiguration(new UserConfiguration());
+	}
 }
 
 #if DEBUG
@@ -31,8 +31,8 @@ public class UsersDbContextFactory : IDesignTimeDbContextFactory<UsersDbContext>
 	public UsersDbContext CreateDbContext(string[] args)
 	{
 		return new UsersDbContext(new DbContextOptionsBuilder<UsersDbContext>()
-			.UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password")
-			.Options);
+		                          .UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password")
+		                          .Options);
 	}
 }
 #endif

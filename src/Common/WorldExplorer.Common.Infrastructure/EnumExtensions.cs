@@ -8,10 +8,10 @@ public static class EnumExtensions
 	public static string GetDescription(this Enum enumValue)
 	{
 		return enumValue.GetType()
-						.GetField(enumValue.ToString())
-						?.GetCustomAttribute<DescriptionAttribute>()
-						?.Description ??
-			   enumValue.ToString();
+		                .GetField(enumValue.ToString())
+		                ?.GetCustomAttribute<DescriptionAttribute>()
+		                ?.Description ??
+		       enumValue.ToString();
 	}
 
 	public static T? GetValueFromDescription<T>(this string description) where T : Enum

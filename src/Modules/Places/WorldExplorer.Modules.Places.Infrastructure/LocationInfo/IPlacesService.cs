@@ -6,6 +6,7 @@ using Domain.Places;
 public interface IPlacesService
 {
 	Task<List<Place>> GetPlaces(CancellationToken cancellationToken);
+
 	//Task<OperationResult<List<Place>>> GetNearByPlaces(Location location, CancellationToken cancellationToken);
 	Task<Place?> GetPlaceDetails(Guid id, CancellationToken cancellationToken);
 	Task ClearPlaces(CancellationToken cancellationToken);
