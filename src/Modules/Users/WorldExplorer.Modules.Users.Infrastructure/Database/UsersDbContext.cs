@@ -1,12 +1,11 @@
-﻿using WorldExplorer.Common.Infrastructure.Inbox;
-using WorldExplorer.Common.Infrastructure.Outbox;
-using WorldExplorer.Modules.Users.Infrastructure.Users;
-using Microsoft.EntityFrameworkCore;
-
-namespace WorldExplorer.Modules.Users.Infrastructure.Database;
+﻿namespace WorldExplorer.Modules.Users.Infrastructure.Database;
 
 using Common.Application.Abstractions.Data;
+using Common.Infrastructure.Inbox;
+using Common.Infrastructure.Outbox;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Users;
 using User = Domain.Users.User;
 
 public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options), IUnitOfWork

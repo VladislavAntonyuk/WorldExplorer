@@ -6,7 +6,6 @@ using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Quartz;
-using StackExchange.Redis;
 
 namespace WorldExplorer.Common.Infrastructure;
 
@@ -26,8 +25,7 @@ public static class InfrastructureConfiguration
 
     public static IHostApplicationBuilder AddInfrastructure(
         this IHostApplicationBuilder builder,
-        Action<IRegistrationConfigurator>[] moduleConfigureConsumers,
-        string redisConnectionString)
+        Action<IRegistrationConfigurator>[] moduleConfigureConsumers)
     {
         builder.Services.AddAuthenticationInternal(builder.Configuration);
 
@@ -51,21 +49,17 @@ public static class InfrastructureConfiguration
 
         builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-	    builder.Services.AddHybridCache();
-        try
-        {
-            IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
-            builder.Services.AddSingleton(connectionMultiplexer);
-            builder.Services.AddStackExchangeRedisCache(options =>
-                options.ConnectionMultiplexerFactory = () => Task.FromResult(connectionMultiplexer));
-        }
-        catch
-        {
+	    //builder.Services.AddHybridCache();
+	    if (builder.Environment.IsDevelopment())
+	    {
             builder.Services.AddDistributedMemoryCache();
-        }
+	    }
+	    else
+	    {
+			builder.AddRedisDistributedCache("cache");
+	    }
 
-		builder.AddRabbitMQClient("servicebus");
-        builder.Services.AddMassTransit(configure =>
+		builder.Services.AddMassTransit(configure =>
         {
 			foreach (Action<IRegistrationConfigurator> configureConsumers in moduleConfigureConsumers)
             {
@@ -74,10 +68,22 @@ public static class InfrastructureConfiguration
 
             configure.SetKebabCaseEndpointNameFormatter();
 
-            configure.UsingRabbitMq((context, cfg) =>
+            if (builder.Environment.IsDevelopment())
             {
-                cfg.ConfigureEndpoints(context);
-            });
+	            configure.UsingInMemory(static (context, cfg) =>
+	            {
+		            cfg.ConfigureEndpoints(context);
+	            });
+            }
+            else
+            {
+	            configure.UsingRabbitMq((context, cfg) =>
+	            {
+		            cfg.Host(builder.Configuration.GetConnectionString("servicebus"), h => { });
+	            
+					cfg.ConfigureEndpoints(context);
+				});
+			}
         });
 
         //services

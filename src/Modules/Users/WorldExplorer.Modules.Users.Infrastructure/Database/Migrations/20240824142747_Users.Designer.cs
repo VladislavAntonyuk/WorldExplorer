@@ -5,23 +5,23 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WorldExplorer.Modules.Travellers.Infrastructure.Database;
+using WorldExplorer.Modules.Users.Infrastructure.Database;
 
 #nullable disable
 
-namespace WorldExplorer.Modules.Travellers.Database.Migrations
+namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 {
-	[DbContext(typeof(TravellersDbContext))]
-    [Migration("20240818141858_Travellers")]
-    partial class Travellers
+    [DbContext(typeof(UsersDbContext))]
+    [Migration("20240824142747_Users")]
+    partial class Users
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("travellers")
-                .HasAnnotation("ProductVersion", "9.0.0-preview.6.24327.4")
+                .HasDefaultSchema("users")
+                .HasAnnotation("ProductVersion", "9.0.0-preview.7.24405.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -52,7 +52,7 @@ namespace WorldExplorer.Modules.Travellers.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("inbox_messages", "travellers");
+                    b.ToTable("inbox_messages", "users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Inbox.InboxMessageConsumer", b =>
@@ -66,7 +66,7 @@ namespace WorldExplorer.Modules.Travellers.Database.Migrations
 
                     b.HasKey("InboxMessageId", "Name");
 
-                    b.ToTable("inbox_message_consumers", "travellers");
+                    b.ToTable("inbox_message_consumers", "users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Outbox.OutboxMessage", b =>
@@ -77,8 +77,7 @@ namespace WorldExplorer.Modules.Travellers.Database.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Error")
                         .HasColumnType("nvarchar(max)");
@@ -95,7 +94,7 @@ namespace WorldExplorer.Modules.Travellers.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("outbox_messages", "travellers");
+                    b.ToTable("outbox_messages", "users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Outbox.OutboxMessageConsumer", b =>
@@ -109,10 +108,10 @@ namespace WorldExplorer.Modules.Travellers.Database.Migrations
 
                     b.HasKey("OutboxMessageId", "Name");
 
-                    b.ToTable("outbox_message_consumers", "travellers");
+                    b.ToTable("outbox_message_consumers", "users");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Traveller", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,62 +119,37 @@ namespace WorldExplorer.Modules.Travellers.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Travellers", "travellers");
-                });
+                    b.ToTable("Users", "users");
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.TravellerRoute", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TravellerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TravellerId");
-
-                    b.ToTable("TravellerRoute", "travellers");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.TravellerRoute", b =>
-                {
-                    b.HasOne("WorldExplorer.Modules.Travellers.Traveller", null)
-                        .WithMany("Routes")
-                        .HasForeignKey("TravellerId");
-
-                    b.OwnsMany("WorldExplorer.Modules.Travellers.Location", "Locations", b1 =>
+                    b.HasData(
+                        new
                         {
-                            b1.Property<Guid>("TravellerRouteId")
+                            Id = new Guid("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
+                        });
+                });
+
+            modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>
+                {
+                    b.OwnsOne("WorldExplorer.Modules.Users.Domain.Users.UserSettings", "Settings", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
+                            b1.Property<bool>("TrackUserLocation")
+                                .HasColumnType("bit");
 
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("float");
+                            b1.HasKey("UserId");
 
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("float");
+                            b1.ToTable("Users", "users");
 
-                            b1.HasKey("TravellerRouteId", "Id");
-
-                            b1.ToTable("TravellerRoute", "travellers");
-
-                            b1.ToJson("Locations");
+                            b1.ToJson("Settings");
 
                             b1.WithOwner()
-                                .HasForeignKey("TravellerRouteId");
+                                .HasForeignKey("UserId");
                         });
 
-                    b.Navigation("Locations");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Traveller", b =>
-                {
-                    b.Navigation("Routes");
+                    b.Navigation("Settings")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

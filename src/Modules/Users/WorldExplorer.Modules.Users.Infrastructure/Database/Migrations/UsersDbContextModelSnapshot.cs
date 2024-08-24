@@ -18,7 +18,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("users")
-                .HasAnnotation("ProductVersion", "9.0.0-preview.6.24327.4")
+                .HasAnnotation("ProductVersion", "9.0.0-preview.7.24405.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -74,8 +74,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Error")
                         .HasColumnType("nvarchar(max)");
@@ -118,6 +117,12 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", "users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
+                        });
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>
