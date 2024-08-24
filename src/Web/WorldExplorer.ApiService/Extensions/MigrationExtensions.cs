@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.ApiService.Extensions;
 
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Modules.Places.Infrastructure.Database;
 using Modules.Travellers.Infrastructure.Database;
@@ -11,17 +10,16 @@ public static class MigrationExtensions
 {
 	public static void ApplyMigrations(this IApplicationBuilder app)
 	{
-		using IServiceScope scope = app.ApplicationServices.CreateScope();
+		using var scope = app.ApplicationServices.CreateScope();
 
 		ApplyMigration<UsersDbContext>(scope);
 		ApplyMigration<PlacesDbContext>(scope);
 		ApplyMigration<TravellersDbContext>(scope);
 	}
 
-	private static void ApplyMigration<TDbContext>(IServiceScope scope)
-		where TDbContext : DbContext
+	private static void ApplyMigration<TDbContext>(IServiceScope scope) where TDbContext : DbContext
 	{
-		using TDbContext context = scope.ServiceProvider.GetRequiredService<TDbContext>();
+		using var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 		context.Database.Migrate();
 
 		// todo remove

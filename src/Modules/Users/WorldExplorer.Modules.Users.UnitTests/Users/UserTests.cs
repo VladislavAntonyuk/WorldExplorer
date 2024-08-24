@@ -7,67 +7,59 @@ using FluentAssertions;
 
 public class UserTests : BaseTest
 {
-    [Fact]
-    public void Create_ShouldReturnUser()
-    {
-        // Act
-        var user = User.Create(
-	        Guid.NewGuid(),
-			Faker.Create<UserSettings>());
-
-        // Assert
-        user.Should().NotBeNull();
-    }
-
-    [Fact]
-    public void Create_ShouldRaiseDomainEvent_WhenUserCreated()
-    {
+	[Fact]
+	public void Create_ShouldReturnUser()
+	{
 		// Act
-		var user = User.Create(
-			Guid.NewGuid(),
-			Faker.Create<UserSettings>());
+		var user = User.Create(Guid.NewGuid(), Faker.Create<UserSettings>());
 
 		// Assert
-		UserRegisteredDomainEvent domainEvent =
-            AssertDomainEventWasPublished<UserRegisteredDomainEvent>(user);
+		user.Should().NotBeNull();
+	}
 
-        domainEvent.UserId.Should().Be(user.Id);
-    }
+	[Fact]
+	public void Create_ShouldRaiseDomainEvent_WhenUserCreated()
+	{
+		// Act
+		var user = User.Create(Guid.NewGuid(), Faker.Create<UserSettings>());
 
-    [Fact]
-    public void Update_ShouldRaiseDomainEvent_WhenUserUpdated()
-    {
+		// Assert
+		var domainEvent = AssertDomainEventWasPublished<UserRegisteredDomainEvent>(user);
+
+		domainEvent.UserId.Should().Be(user.Id);
+	}
+
+	[Fact]
+	public void Update_ShouldRaiseDomainEvent_WhenUserUpdated()
+	{
 		// Arrange
-		var user = User.Create(
-			Guid.NewGuid(),
-			Faker.Create<UserSettings>());
+		var user = User.Create(Guid.NewGuid(), Faker.Create<UserSettings>());
 
 		// Act
 		user.Update(new UserSettings
-			            { TrackUserLocation = true });
+		{
+			TrackUserLocation = true
+		});
 
 		// Assert
-		UserProfileUpdatedDomainEvent domainEvent =
-            AssertDomainEventWasPublished<UserProfileUpdatedDomainEvent>(user);
+		var domainEvent = AssertDomainEventWasPublished<UserProfileUpdatedDomainEvent>(user);
 
-        domainEvent.UserId.Should().Be(user.Id);
-        domainEvent.Settings.Should().Be(user.Settings);
-    }
+		domainEvent.UserId.Should().Be(user.Id);
+		domainEvent.Settings.Should().Be(user.Settings);
+	}
 
-    [Fact]
-    public void Update_ShouldNotRaiseDomainEvent_WhenUserNotUpdated()
-    {
+	[Fact]
+	public void Update_ShouldNotRaiseDomainEvent_WhenUserNotUpdated()
+	{
 		// Arrange
-		var user = User.Create(
-			Guid.NewGuid(),
-			Faker.Create<UserSettings>());
+		var user = User.Create(Guid.NewGuid(), Faker.Create<UserSettings>());
 
 		user.ClearDomainEvents();
 
-        // Act
-        user.Update(user.Settings);
+		// Act
+		user.Update(user.Settings);
 
-        // Assert
-        user.DomainEvents.Should().BeEmpty();
-    }
+		// Assert
+		user.DomainEvents.Should().BeEmpty();
+	}
 }

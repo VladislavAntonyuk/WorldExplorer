@@ -2,7 +2,7 @@
 
 using System.Security.Claims;
 using Microsoft.Identity.Web;
-using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
+using Modules.Users.Application.Abstractions.Identity;
 
 public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {

@@ -2,7 +2,7 @@
 
 <MudRTLProvider RightToLeft="@rightToLeft">
 	<MudThemeProvider @ref="@mudThemeProvider" @bind-IsDarkMode="@isDarkMode"/>
-	<MudPopoverProvider />
+	<MudPopoverProvider/>
 	<MudDialogProvider CloseButton="true"
 	                   CloseOnEscapeKey="true"
 	                   BackdropClick="false"
@@ -44,25 +44,25 @@
 			</AuthorizeView>
 		</MudAppBar>
 
-        <MudDrawer @bind-Open="drawerOpen" Elevation="1" ClipMode="DrawerClipMode.Always">
-            <NavMenu />
-            <AuthorizeView>
-	            <NotAuthorized>
-		            <LanguageControl />
-	            </NotAuthorized>
-	            <Authorized>
-		            <MudHidden Breakpoint="Breakpoint.MdAndUp">
-			            <SearchControl />
-		            </MudHidden>
-	            </Authorized>
-            </AuthorizeView>
-            <MudLink Href="https://www.buymeacoffee.com/vlad.antonyuk" Target="_blank">
-	            <MudImage Src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
-	                      Alt="Buy Me A Coffee"
-	                      Fluid="true"
-	                      Class="side-image"/>
-            </MudLink>
-        </MudDrawer>
+		<MudDrawer @bind-Open="drawerOpen" Elevation="1" ClipMode="DrawerClipMode.Always">
+			<NavMenu/>
+			<AuthorizeView>
+				<NotAuthorized>
+					<LanguageControl/>
+				</NotAuthorized>
+				<Authorized>
+					<MudHidden Breakpoint="Breakpoint.MdAndUp">
+						<SearchControl/>
+					</MudHidden>
+				</Authorized>
+			</AuthorizeView>
+			<MudLink Href="https://www.buymeacoffee.com/vlad.antonyuk" Target="_blank">
+				<MudImage Src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
+				          Alt="Buy Me A Coffee"
+				          Fluid="true"
+				          Class="side-image"/>
+			</MudLink>
+		</MudDrawer>
 		<MudMainContent>
 			<MudContainer MaxWidth="MaxWidth.False">
 				<ErrorBoundary @ref="errorBoundary" MaximumErrorCount="5">
@@ -83,7 +83,7 @@
 </MudRTLProvider>
 
 <div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+	An unhandled error has occurred.
+	<a href="" class="reload">Reload</a>
+	<a class="dismiss">🗙</a>
 </div>

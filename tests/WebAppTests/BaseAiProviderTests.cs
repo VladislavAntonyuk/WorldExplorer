@@ -20,7 +20,8 @@ public abstract class BaseAiProviderTests(ITestOutputHelper testOutputHelper)
 	public async Task GetPlaceDetailsShouldReturnDetailedDescription()
 	{
 		var aiService = GetAiService();
-		var placeDescription = await aiService.GetPlaceDescription("Dnipro Circus", new Location(48.455833330000026, 35.06388889000002));
+		var placeDescription =
+			await aiService.GetPlaceDescription("Dnipro Circus", new Location(48.455833330000026, 35.06388889000002));
 		placeDescription?.Length.Should().BeGreaterThan(100);
 		testOutputHelper.WriteLine(placeDescription);
 	}

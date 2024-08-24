@@ -12,17 +12,17 @@ public static class Constants
 
 internal static class AuthorizationExtensions
 {
-    internal static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
-    {
-	    services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
+	internal static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
+	{
+		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
 		services.AddAuthorization(options =>
 		{
 			var administratorOrHigherPolicyBuilder = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(
-					OpenIdConnectDefaults.AuthenticationScheme, JwtBearerDefaults.AuthenticationScheme);
+				OpenIdConnectDefaults.AuthenticationScheme, JwtBearerDefaults.AuthenticationScheme);
 			administratorOrHigherPolicyBuilder.Requirements.Add(new AdministratorAuthorizationRequirement());
 			options.AddPolicy(Constants.AdministratorPolicy, administratorOrHigherPolicyBuilder.Build());
 		});
 
-        return services;
-    }
+		return services;
+	}
 }

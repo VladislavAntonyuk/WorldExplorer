@@ -13,8 +13,7 @@ using Users.IntegrationEvents;
 
 public static class TravellersModule
 {
-	public static IHostApplicationBuilder AddTravellersModule(
-		this IHostApplicationBuilder builder)
+	public static IHostApplicationBuilder AddTravellersModule(this IHostApplicationBuilder builder)
 	{
 		//builder.Services.AddDomainEventHandlers();
 

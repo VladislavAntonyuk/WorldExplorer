@@ -21,11 +21,8 @@ internal sealed class GePlaceDetailsQueryHandler(IPlaceRepository placeRepositor
 
 	private PlaceResponse ToPlace(Place place)
 	{
-		return new PlaceResponse(place.Id,
-		                         place.Name,
-		                         place.Description,
-		                         new Location(place.Location.X, place.Location.Y),
-		                         1,
+		return new PlaceResponse(place.Id, place.Name, place.Description,
+		                         new Location(place.Location.X, place.Location.Y), 1,
 		                         place.Images.Select(x => x.Source).ToList());
 	}
 }

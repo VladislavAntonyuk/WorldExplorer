@@ -9,27 +9,25 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbContext dbConnectionFactory)
-    : IConsumer<TIntegrationEvent>
-    where TIntegrationEvent : IntegrationEvent
+	: IConsumer<TIntegrationEvent> where TIntegrationEvent : IntegrationEvent
 {
-    public async Task Consume(ConsumeContext<TIntegrationEvent> context)
-    {
-        TIntegrationEvent integrationEvent = context.Message;
+	public async Task Consume(ConsumeContext<TIntegrationEvent> context)
+	{
+		var integrationEvent = context.Message;
 
-        var inboxMessage = new InboxMessage
-        {
-            Id = integrationEvent.Id,
-            Type = integrationEvent.GetType().Name,
-            Content = JsonSerializer.Serialize(integrationEvent, SerializerSettings.Instance),
-            OccurredOnUtc = integrationEvent.OccurredOnUtc
-        };
+		var inboxMessage = new InboxMessage
+		{
+			Id = integrationEvent.Id,
+			Type = integrationEvent.GetType().Name,
+			Content = JsonSerializer.Serialize(integrationEvent, SerializerSettings.Instance),
+			OccurredOnUtc = integrationEvent.OccurredOnUtc
+		};
 
-        const string sql =
-            """
-            INSERT INTO travellers.inbox_messages(id, type, content, occurred_on_utc)
-            VALUES (@Id, @Type, @Content, @OccurredOnUtc)
-            """;
+		const string sql = """
+		                   INSERT INTO travellers.inbox_messages(id, type, content, occurred_on_utc)
+		                   VALUES (@Id, @Type, @Content, @OccurredOnUtc)
+		                   """;
 
-        await dbConnectionFactory.Database.ExecuteSqlRawAsync(sql, inboxMessage);
-    }
+		await dbConnectionFactory.Database.ExecuteSqlRawAsync(sql, inboxMessage);
+	}
 }

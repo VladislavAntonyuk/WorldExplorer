@@ -19,8 +19,7 @@ internal sealed class PlaceRepository(PlacesDbContext context) : IPlaceRepositor
 
 	public async Task<List<Place>> GetNearestPlacesAsync(Point userLocation, CancellationToken cancellationToken)
 	{
-		return await context.Places
-		             .Where(x => x.Location.IsWithinDistance(userLocation, 1000))
-		             .ToListAsync(cancellationToken);
+		return await context.Places.Where(x => x.Location.IsWithinDistance(userLocation, 1000))
+		                    .ToListAsync(cancellationToken);
 	}
 }

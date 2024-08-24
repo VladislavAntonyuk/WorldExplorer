@@ -2,16 +2,19 @@
 
 using Abstractions;
 using Abstractions.Data;
+using Common.Application.Messaging;
+using Common.Domain;
 using Domain.LocationInfo;
 using Domain.Places;
 using GetPlace;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
 
-internal sealed class GetNearByPlacesQueryHandler(ILocationInfoRepository locationInfoRepository, IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
-	: IQueryHandler<GetNearByPlacesQuery, OperationResult<List<PlaceResponse>>>
+internal sealed class GetNearByPlacesQueryHandler(
+	ILocationInfoRepository locationInfoRepository,
+	IPlaceRepository placeRepository,
+	IUnitOfWork unitOfWork) : IQueryHandler<GetNearByPlacesQuery, OperationResult<List<PlaceResponse>>>
 {
-	public async Task<Result<OperationResult<List<PlaceResponse>>>> Handle(GetNearByPlacesQuery request, CancellationToken cancellationToken)
+	public async Task<Result<OperationResult<List<PlaceResponse>>>> Handle(GetNearByPlacesQuery request,
+		CancellationToken cancellationToken)
 	{
 		var userLocation = request.ToPoint();
 
@@ -51,11 +54,8 @@ internal sealed class GetNearByPlacesQueryHandler(ILocationInfoRepository locati
 
 	private PlaceResponse ToPlace(Place place)
 	{
-		return new PlaceResponse(place.Id,
-		                         place.Name,
-		                         place.Description,
-		                         new Location(place.Location.X, place.Location.Y),
-		                         1,
+		return new PlaceResponse(place.Id, place.Name, place.Description,
+		                         new Location(place.Location.X, place.Location.Y), 1,
 		                         place.Images.Select(x => x.Source).ToList());
 	}
 }

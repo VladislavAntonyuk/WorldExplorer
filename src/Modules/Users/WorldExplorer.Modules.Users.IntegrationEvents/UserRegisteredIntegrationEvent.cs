@@ -12,9 +12,9 @@ public sealed class UserRegisteredIntegrationEvent(
 {
 	public Guid UserId { get; init; } = userId;
 
-    public string Email { get; init; } = email;
+	public string Email { get; init; } = email;
 
-    public string Name { get; init; } = name;
+	public string Name { get; init; } = name;
 
-    public string Language { get; init; } = language;
+	public string Language { get; init; } = language;
 }

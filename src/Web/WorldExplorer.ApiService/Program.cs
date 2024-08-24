@@ -25,20 +25,19 @@ builder.Services.AddOpenApi(options =>
 	options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
-Assembly[] moduleApplicationAssemblies = [
-	AssemblyReference.Assembly,
-	WorldExplorer.Modules.Places.Application.AssemblyReference.Assembly,
+Assembly[] moduleApplicationAssemblies =
+[
+	AssemblyReference.Assembly, WorldExplorer.Modules.Places.Application.AssemblyReference.Assembly
 	//WorldExplorer.Modules.Travellers.AssemblyReference.Assembly,
 ];
 
 builder.Services.AddApplication(moduleApplicationAssemblies);
 
-builder.AddInfrastructure(
-	[
-		//EventsModule.ConfigureConsumers(redisConnectionString),
-		TravellersModule.ConfigureConsumers,
-		//AttendanceModule.ConfigureConsumers
-	]);
+builder.AddInfrastructure([
+	//EventsModule.ConfigureConsumers(redisConnectionString),
+	TravellersModule.ConfigureConsumers
+	//AttendanceModule.ConfigureConsumers
+]);
 
 builder.Configuration.AddModuleConfiguration(["users", "places", "traveller"]);
 
@@ -70,5 +69,5 @@ app.Run();
 
 namespace WorldExplorer.ApiService
 {
-	public partial class Program;
+	public class Program;
 }

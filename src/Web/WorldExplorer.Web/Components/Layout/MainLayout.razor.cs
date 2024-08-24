@@ -7,10 +7,10 @@ using MudBlazor;
 public partial class MainLayout : WorldExplorerBaseLayout
 {
 	private bool drawerOpen = true;
+	private ErrorBoundary? errorBoundary;
 	private bool isDarkMode = true;
 	private MudThemeProvider? mudThemeProvider;
 	private bool rightToLeft;
-	private ErrorBoundary? errorBoundary;
 
 	[Inject]
 	public required NavigationManager NavigationManager { get; set; }
@@ -41,6 +41,7 @@ public partial class MainLayout : WorldExplorerBaseLayout
 
 		return Task.CompletedTask;
 	}
+
 	private void ResetError()
 	{
 		errorBoundary?.Recover();

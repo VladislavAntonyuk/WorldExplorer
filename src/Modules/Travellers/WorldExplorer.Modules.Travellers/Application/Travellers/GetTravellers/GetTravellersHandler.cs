@@ -10,8 +10,7 @@ public sealed class GetTravellersHandler(TravellersDbContext context)
 	[UseFiltering]
 	[UseSorting]
 	public IQueryable<Traveller> GetTravellers(CancellationToken ct = default)
-		=> context.Travellers
-						.AsNoTracking()
-						.OrderBy(t => t.Id)
-						.ThenBy(t => t.Id);
+	{
+		return context.Travellers.AsNoTracking().OrderBy(t => t.Id).ThenBy(t => t.Id);
+	}
 }

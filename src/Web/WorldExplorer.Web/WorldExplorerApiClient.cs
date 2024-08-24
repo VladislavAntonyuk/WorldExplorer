@@ -6,7 +6,9 @@ using Modules.Places.Application.Abstractions;
 using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;
 
-public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdentityConsentAndConditionalAccessHandler handler)
+public class WorldExplorerApiClient(
+	IDownstreamApi downstreamApi,
+	MicrosoftIdentityConsentAndConditionalAccessHandler handler)
 {
 	public async Task ClearPlaces(CancellationToken none)
 	{
@@ -65,7 +67,6 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 	//ToDo should be place request
 	public async Task UpdatePlace(PlaceResponse place, CancellationToken none)
 	{
-
 	}
 
 	public Task<UserResponse?> GetUser(string providerId, CancellationToken none)
@@ -90,11 +91,13 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 
 	public async Task<OperationResult<List<PlaceResponse>>> GetNearByPlaces(Location location, CancellationToken none)
 	{
-		var r = await GetAsync<OperationResult<List<PlaceResponse>>>($"places/recommendations?Latitude={location.Latitude}&Longitude={location.Longitude}", none);
-		return r ?? new OperationResult<List<PlaceResponse>>
-		{
-			StatusCode = StatusCode.LocationInfoRequestPending
-		};
+		var r = await GetAsync<OperationResult<List<PlaceResponse>>>(
+			$"places/recommendations?Latitude={location.Latitude}&Longitude={location.Longitude}", none);
+		return r ??
+		       new OperationResult<List<PlaceResponse>>
+		       {
+			       StatusCode = StatusCode.LocationInfoRequestPending
+		       };
 	}
 
 	public bool IsNearby(Location currentLocation, Location location)
@@ -118,8 +121,7 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 		}
 	}
 
-	private async Task<T?> GetAsync<T>(string url, CancellationToken cancellationToken)
-		where T : class
+	private async Task<T?> GetAsync<T>(string url, CancellationToken cancellationToken) where T : class
 	{
 		try
 		{
@@ -137,9 +139,9 @@ public class WorldExplorerApiClient(IDownstreamApi downstreamApi, MicrosoftIdent
 		return default;
 	}
 
-	private async Task<TOutput?> PostAsync<TInput, TOutput>(string url, TInput content, CancellationToken cancellationToken)
-		where TInput : class
-		where TOutput : class
+	private async Task<TOutput?> PostAsync<TInput, TOutput>(string url,
+		TInput content,
+		CancellationToken cancellationToken) where TInput : class where TOutput : class
 	{
 		try
 		{

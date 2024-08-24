@@ -5,7 +5,7 @@
 		@if (place is null || string.IsNullOrWhiteSpace(place.Description))
 		{
 			<div class="d-flex flex-column align-center">
-				<MudProgressCircular Color="Color.Primary" Style="height: 70px; width: 70px;" Indeterminate="true" />
+				<MudProgressCircular Color="Color.Primary" Style="height: 70px; width: 70px;" Indeterminate="true"/>
 				<MudText Align="Align.Justify">
 					@Translation.LoadingDetails
 				</MudText>
@@ -19,19 +19,19 @@
 					<PreviousButtonTemplate>
 						<div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
 							<span class="mud-icon-button-label">
-								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipPrevious" Color="@Color.Inherit" />
+								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipPrevious" Color="@Color.Inherit"/>
 							</span>
 						</div>
 					</PreviousButtonTemplate>
 					<NextButtonTemplate>
 						<div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
 							<span class="mud-icon-button-label">
-								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipNext" Color="@Color.Inherit" />
+								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipNext" Color="@Color.Inherit"/>
 							</span>
 						</div>
 					</NextButtonTemplate>
 					<ItemTemplate>
-						<MudImage Src="@context" Alt="@place.Name" Height="400" ObjectFit="@ObjectFit.Contain" ObjectPosition="@ObjectPosition.Center" Class="rounded-lg" />
+						<MudImage Src="@context" Alt="@place.Name" Height="400" ObjectFit="@ObjectFit.Contain" ObjectPosition="@ObjectPosition.Center" Class="rounded-lg"/>
 					</ItemTemplate>
 				</MudCarousel>
 			}
@@ -49,7 +49,7 @@
 			<MudList T="string">
 				@foreach (var review in reviews)
 				{
-					<MudListItem Text="@review.Id.ToString()" SecondaryText="@review.Id.ToString()" />
+					<MudListItem Text="@review.Id.ToString()" SecondaryText="@review.Id.ToString()"/>
 					<MudDivider/>
 				}
 			</MudList>

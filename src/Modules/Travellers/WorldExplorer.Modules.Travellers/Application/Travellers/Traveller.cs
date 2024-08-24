@@ -1,4 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers;
+
 public class Traveller
 {
 	public Guid Id { get; set; }

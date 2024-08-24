@@ -16,9 +16,7 @@ internal sealed class UpdateUserProfile : IEndpoint
 	{
 		app.MapPut("users/profile", async (ClaimsPrincipal claims, Request settings, ISender sender) =>
 		   {
-			   var result = await sender.Send(new UpdateUserCommand(
-				                                  claims.GetUserId(),
-				                                  settings.TrackUserLocation));
+			   var result = await sender.Send(new UpdateUserCommand(claims.GetUserId(), settings.TrackUserLocation));
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })

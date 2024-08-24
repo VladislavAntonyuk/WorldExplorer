@@ -6,7 +6,8 @@ using Modules.Places.Application.Abstractions;
 using MudBlazor;
 using User;
 
-public sealed partial class WorldExplorerMap(IJSRuntime jsRuntime,
+public sealed partial class WorldExplorerMap(
+	IJSRuntime jsRuntime,
 	WorldExplorerApiClient apiClient,
 	ICurrentUserService currentUserService,
 	IDialogService dialogService,

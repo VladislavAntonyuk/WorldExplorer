@@ -26,7 +26,6 @@
 //	}
 
 
-
 //	public async Task<Place?> GetPlaceDetails(Guid id, CancellationToken cancellationToken)
 //	{
 //		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
@@ -89,3 +88,4 @@
 //		dbPlace.Location = place.Location.ToPoint();
 //	}
 //}
+

@@ -2,8 +2,6 @@
 
 using System.Security.Claims;
 using Application.Users.DeleteUser;
-using Application.Users.GetUser;
-using Common.Domain;
 using Common.Infrastructure.Authentication;
 using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
@@ -18,7 +16,7 @@ internal sealed class DeleteUserProfile : IEndpoint
 	{
 		app.MapDelete("users/profile", async (ClaimsPrincipal claims, ISender sender) =>
 		   {
-			   Result result = await sender.Send(new DeleteUserCommand(claims.GetUserId()));
+			   var result = await sender.Send(new DeleteUserCommand(claims.GetUserId()));
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })

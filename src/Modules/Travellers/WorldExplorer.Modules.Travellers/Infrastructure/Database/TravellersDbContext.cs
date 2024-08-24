@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 public sealed class TravellersDbContext(DbContextOptions<TravellersDbContext> options) : DbContext(options), IUnitOfWork
 {
+	internal DbSet<Traveller> Travellers => Set<Traveller>();
+	internal DbSet<Visit> Visits => Set<Visit>();
+	internal DbSet<Place> Places => Set<Place>();
+
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.HasDefaultSchema(Schemas.Travellers);
@@ -25,8 +29,4 @@ public sealed class TravellersDbContext(DbContextOptions<TravellersDbContext> op
 		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
 		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
 	}
-
-	internal DbSet<Traveller> Travellers => Set<Traveller>();
-	internal DbSet<Visit> Visits => Set<Visit>();
-	internal DbSet<Place> Places => Set<Place>();
 }

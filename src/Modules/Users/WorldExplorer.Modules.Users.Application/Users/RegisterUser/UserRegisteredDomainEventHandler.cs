@@ -9,29 +9,21 @@ using IntegrationEvents;
 using MediatR;
 
 internal sealed class UserRegisteredDomainEventHandler(ISender sender, IEventBus bus)
-    : DomainEventHandler<UserRegisteredDomainEvent>
+	: DomainEventHandler<UserRegisteredDomainEvent>
 {
-    public override async Task Handle(
-        UserRegisteredDomainEvent domainEvent,
-        CancellationToken cancellationToken = default)
-    {
-        var result = await sender.Send(
-            new GetUserQuery(domainEvent.UserId),
-            cancellationToken);
+	public override async Task Handle(UserRegisteredDomainEvent domainEvent,
+		CancellationToken cancellationToken = default)
+	{
+		var result = await sender.Send(new GetUserQuery(domainEvent.UserId), cancellationToken);
 
-        if (result.IsFailure)
-        {
-            throw new WorldExplorerException(nameof(GetUserQuery), result.Error);
-        }
+		if (result.IsFailure)
+		{
+			throw new WorldExplorerException(nameof(GetUserQuery), result.Error);
+		}
 
-        await bus.PublishAsync(
-            new UserRegisteredIntegrationEvent(
-                domainEvent.Id,
-                domainEvent.OccurredOnUtc,
-                result.Value.Id,
-                result.Value.Email,
-                result.Value.Name,
-                result.Value.Language.ToString()),
-            cancellationToken);
-    }
+		await bus.PublishAsync(
+			new UserRegisteredIntegrationEvent(domainEvent.Id, domainEvent.OccurredOnUtc, result.Value.Id,
+			                                   result.Value.Email, result.Value.Name, result.Value.Language.ToString()),
+			cancellationToken);
+	}
 }

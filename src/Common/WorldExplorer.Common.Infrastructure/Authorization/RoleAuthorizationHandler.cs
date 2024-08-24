@@ -13,7 +13,7 @@ public abstract class RoleAuthorizationHandler<T> : AuthorizationHandler<T> wher
 		}
 
 		if (context.User.HasClaim(c => c.Type == "extension_Groups" &&
-									   requirement.RequiredRoles.TrueForAll(x => c.Value.Split(',').Contains(x))))
+		                               requirement.RequiredRoles.TrueForAll(x => c.Value.Split(',').Contains(x))))
 		{
 			context.Succeed(requirement);
 		}

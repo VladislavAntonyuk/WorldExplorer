@@ -2,5 +2,5 @@
 
 internal static class Schemas
 {
-    internal const string Places = "places";
+	internal const string Places = "places";
 }

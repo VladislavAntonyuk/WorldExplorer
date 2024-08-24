@@ -8,6 +8,11 @@ public sealed partial class LanguageControl : WorldExplorerBaseComponent, IDispo
 {
 	private Language currentLang;
 
+	public void Dispose()
+	{
+		I18NText.ChangeLanguage -= I18NText_ChangeLanguage;
+	}
+
 	protected override Task OnInitializedAsync()
 	{
 		I18NText.ChangeLanguage += I18NText_ChangeLanguage;
@@ -27,10 +32,5 @@ public sealed partial class LanguageControl : WorldExplorerBaseComponent, IDispo
 		}
 
 		await base.OnAfterRenderAsync(firstRender);
-	}
-
-	public void Dispose()
-	{
-		I18NText.ChangeLanguage -= I18NText_ChangeLanguage;
 	}
 }

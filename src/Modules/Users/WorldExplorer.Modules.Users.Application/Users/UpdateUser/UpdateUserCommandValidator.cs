@@ -4,8 +4,8 @@ using FluentValidation;
 
 internal sealed class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {
-    public UpdateUserCommandValidator()
-    {
-        RuleFor(c => c.UserId).NotEmpty();
-    }
+	public UpdateUserCommandValidator()
+	{
+		RuleFor(c => c.UserId).NotEmpty();
+	}
 }

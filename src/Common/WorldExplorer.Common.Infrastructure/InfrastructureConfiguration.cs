@@ -22,110 +22,112 @@ public static class InfrastructureConfiguration
 		return services;
 	}
 
-    public static IHostApplicationBuilder AddInfrastructure(
-        this IHostApplicationBuilder builder,
-        Action<IRegistrationConfigurator>[] moduleConfigureConsumers)
-    {
-        builder.Services.AddAuthenticationInternal(builder.Configuration);
+	public static IHostApplicationBuilder AddInfrastructure(this IHostApplicationBuilder builder,
+		Action<IRegistrationConfigurator>[] moduleConfigureConsumers)
+	{
+		builder.Services.AddAuthenticationInternal(builder.Configuration);
 
-        builder.Services.AddAuthorizationInternal();
+		builder.Services.AddAuthorizationInternal();
 
-        builder.Services.TryAddSingleton<IEventBus, EventBus.EventBus>();
+		builder.Services.TryAddSingleton<IEventBus, EventBus.EventBus>();
 
-        builder.Services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
+		builder.Services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
 
-        //NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
-        //services.TryAddSingleton(npgsqlDataSource);
+		//NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
+		//services.TryAddSingleton(npgsqlDataSource);
 
-        //services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
+		//services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
 
-        builder.Services.AddQuartz(configurator =>
-        {
-            var scheduler = Guid.NewGuid();
-            configurator.SchedulerId = $"default-id-{scheduler}";
-            configurator.SchedulerName = $"default-name-{scheduler}";
-        });
+		builder.Services.AddQuartz(configurator =>
+		{
+			var scheduler = Guid.NewGuid();
+			configurator.SchedulerId = $"default-id-{scheduler}";
+			configurator.SchedulerName = $"default-name-{scheduler}";
+		});
 
-        builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+		builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-	    //builder.Services.AddHybridCache();
-	    if (builder.Environment.IsDevelopment())
-	    {
-            builder.Services.AddDistributedMemoryCache();
-	    }
-	    else
-	    {
+		//builder.Services.AddHybridCache();
+		if (builder.Environment.IsDevelopment())
+		{
+			builder.Services.AddDistributedMemoryCache();
+		}
+		else
+		{
 			builder.AddRedisDistributedCache("cache");
-	    }
+		}
 
 		builder.Services.AddMassTransit(configure =>
-        {
-			foreach (Action<IRegistrationConfigurator> configureConsumers in moduleConfigureConsumers)
-            {
-                configureConsumers(configure);
-            }
+		{
+			foreach (var configureConsumers in moduleConfigureConsumers)
+			{
+				configureConsumers(configure);
+			}
 
-            configure.SetKebabCaseEndpointNameFormatter();
+			configure.SetKebabCaseEndpointNameFormatter();
 
-            if (builder.Environment.IsDevelopment())
-            {
-	            configure.UsingInMemory(static (context, cfg) =>
-	            {
-		            cfg.ConfigureEndpoints(context);
-	            });
-            }
-            else
-            {
-	            configure.UsingRabbitMq((context, cfg) =>
-	            {
-		            cfg.Host(builder.Configuration.GetConnectionString("servicebus"), h => { });
-	            
+			if (builder.Environment.IsDevelopment())
+			{
+				configure.UsingInMemory(static (context, cfg) =>
+				{
 					cfg.ConfigureEndpoints(context);
 				});
 			}
-        });
+			else
+			{
+				configure.UsingRabbitMq((context, cfg) =>
+				{
+					cfg.Host(builder.Configuration.GetConnectionString("servicebus"), h => { });
 
-        //services
-        //    .AddOpenTelemetry()
-        //    .ConfigureResource(resource => resource.AddService(serviceName))
-        //    .WithTracing(tracing =>
-        //    {
-        //        tracing
-        //            .AddAspNetCoreInstrumentation()
-        //            .AddHttpClientInstrumentation()
-        //            .AddEntityFrameworkCoreInstrumentation()
-        //            .AddRedisInstrumentation()
-        //            .AddNpgsql()
-        //            .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
+					cfg.ConfigureEndpoints(context);
+				});
+			}
+		});
 
-        //        tracing.AddOtlpExporter();
-        //    });
+		//services
+		//    .AddOpenTelemetry()
+		//    .ConfigureResource(resource => resource.AddService(serviceName))
+		//    .WithTracing(tracing =>
+		//    {
+		//        tracing
+		//            .AddAspNetCoreInstrumentation()
+		//            .AddHttpClientInstrumentation()
+		//            .AddEntityFrameworkCoreInstrumentation()
+		//            .AddRedisInstrumentation()
+		//            .AddNpgsql()
+		//            .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
 
-        return builder;
-    }
+		//        tracing.AddOtlpExporter();
+		//    });
 
-    public static IHostApplicationBuilder AddDatabase<T>(this IHostApplicationBuilder builder,
-	    string schema,
-	    Action<SqlServerDbContextOptionsBuilder>? configure = null)
-		where T:DbContext
-    {
-	    builder.Services.AddDbContextPool<T>((sp, options) =>
-		                                                      options
-			                                                      .UseSqlServer(
-				                                                      builder.Configuration.GetConnectionString("Database"),
-				                                                      optionsBuilder =>
-				                                                      {
-					                                                      optionsBuilder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schema)
-						                                                      .UseAzureSqlDefaults();
-					                                                      configure?.Invoke(optionsBuilder);
-					                                                      optionsBuilder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), [0]);
-				                                                      })
-			                                                      // todo remove
-			                                                      .EnableDetailedErrors()
-			                                                      .EnableSensitiveDataLogging()
+		return builder;
+	}
 
-			                                                      .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
-	    builder.EnrichSqlServerDbContext<T>();
-	    return builder;
-    }
+	public static IHostApplicationBuilder AddDatabase<T>(this IHostApplicationBuilder builder,
+		string schema,
+		Action<SqlServerDbContextOptionsBuilder>? configure = null) where T : DbContext
+	{
+		builder.Services.AddDbContextPool<T>((sp, options) => options
+		                                                      .UseSqlServer(
+			                                                      builder.Configuration.GetConnectionString("Database"),
+			                                                      optionsBuilder =>
+			                                                      {
+				                                                      optionsBuilder
+					                                                      .MigrationsHistoryTable(
+						                                                      HistoryRepository.DefaultTableName,
+						                                                      schema)
+					                                                      .UseAzureSqlDefaults();
+				                                                      configure?.Invoke(optionsBuilder);
+				                                                      optionsBuilder.EnableRetryOnFailure(
+					                                                      5, TimeSpan.FromSeconds(30), [0]);
+			                                                      })
+		                                                      // todo remove
+		                                                      .EnableDetailedErrors()
+		                                                      .EnableSensitiveDataLogging()
+		                                                      .AddInterceptors(
+			                                                      sp.GetRequiredService<
+				                                                      InsertOutboxMessagesInterceptor>()));
+		builder.EnrichSqlServerDbContext<T>();
+		return builder;
+	}
 }

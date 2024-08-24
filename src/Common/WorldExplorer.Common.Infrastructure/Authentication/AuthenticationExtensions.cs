@@ -6,10 +6,11 @@ using Microsoft.Identity.Web;
 
 internal static class AuthenticationExtensions
 {
-    internal static IServiceCollection AddAuthenticationInternal(this IServiceCollection services, IConfiguration configuration)
-    {
-	    services.AddMicrosoftIdentityWebApiAuthentication(configuration, Constants.AzureAdB2C);
+	internal static IServiceCollection AddAuthenticationInternal(this IServiceCollection services,
+		IConfiguration configuration)
+	{
+		services.AddMicrosoftIdentityWebApiAuthentication(configuration, Constants.AzureAdB2C);
 
 		return services;
-    }
+	}
 }

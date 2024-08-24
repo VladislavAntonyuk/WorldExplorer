@@ -10,8 +10,9 @@ public class TravellersDbContextFactory : IDesignTimeDbContextFactory<Travellers
 	public TravellersDbContext CreateDbContext(string[] args)
 	{
 		return new TravellersDbContext(new DbContextOptionsBuilder<TravellersDbContext>()
-									   .UseSqlServer("Host=localhost;Database=worldexplorer;Username=sa;Password=password")
-									   .Options);
+		                               .UseSqlServer(
+			                               "Host=localhost;Database=worldexplorer;Username=sa;Password=password")
+		                               .Options);
 	}
 }
 #endif
