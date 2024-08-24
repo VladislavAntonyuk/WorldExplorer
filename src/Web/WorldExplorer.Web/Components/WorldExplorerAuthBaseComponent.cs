@@ -1,11 +1,9 @@
 ﻿namespace WorldExplorer.Web.Components;
 
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Http;
-using Modules.Users.Infrastructure.User;
+using User;
 
 public abstract class WorldExplorerAuthBaseComponent : WorldExplorerBaseComponent
 {

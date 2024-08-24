@@ -3,10 +3,8 @@
 using Dialogs;
 using Microsoft.JSInterop;
 using Modules.Places.Application.Abstractions;
-using Modules.Places.Domain.Places;
-using Modules.Users.Infrastructure.User;
 using MudBlazor;
-using WorldExplorer.Web.Components;
+using User;
 
 public sealed partial class WorldExplorerMap(IJSRuntime jsRuntime,
 	WorldExplorerApiClient apiClient,

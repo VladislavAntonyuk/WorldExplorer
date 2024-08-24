@@ -1,8 +1,8 @@
-﻿namespace WebApp.Services.Place;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
 
+using Domain.LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using WorldExplorer.Modules.Places.Domain.LocationInfo;
 using WorldExplorer.Modules.Places.Infrastructure.Database;
 
 public class LocationInfoRepository(PlacesDbContext placesDbContext) : ILocationInfoRepository

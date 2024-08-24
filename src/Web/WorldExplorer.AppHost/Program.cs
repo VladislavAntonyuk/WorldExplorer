@@ -1,6 +1,11 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
+
+var cache = builder.AddRedis("cache")
+                   .WithImageTag("latest")
+                   .WithDataVolume("world-explorer-cache");
 
 var openai = builder.AddConnectionString("openai");
 
@@ -15,13 +20,15 @@ var sqlServer = builder.AddSqlServer("server")
 // var travellerService = builder.AddFusionGateway<Projects.WorldExplorer_Modules_Travellers>("graphql")
 //                            .WithReference(sqlServer);
 
-var apiService = builder.AddProject<Projects.WorldExplorer_ApiService>("apiservice")
+var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
 						.WithReference(sqlServer)
+						.WithReference(cache)
 						.WithReference(openai);
 
-var frontend = builder.AddProject<Projects.WorldExplorer_Web>("webfrontend")
+builder.AddProject<WorldExplorer_Web>("webfrontend")
 	   .WithExternalHttpEndpoints()
-	   .WithReference(apiService);
+	   .WithReference(apiService)
+	   .WithReference(cache);
 
 if (!builder.Environment.IsDevelopment())
 {
@@ -29,14 +36,7 @@ if (!builder.Environment.IsDevelopment())
 							.WithImageTag("3.13")
 							.WithDataVolume("world-explorer-servicebus");
 
-	var cache = builder.AddRedis("cache")
-					   .WithImageTag("latest")
-					   .WithDataVolume("world-explorer-cache");
-
-	apiService.WithReference(serviceBus)
-			  .WithReference(cache);
-
-	frontend.WithReference(cache);
+	apiService.WithReference(serviceBus);
 }
 
 builder.Build().Run();

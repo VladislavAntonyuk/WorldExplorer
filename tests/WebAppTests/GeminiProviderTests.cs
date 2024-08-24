@@ -2,7 +2,8 @@
 
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using WebApp.Services.AI;
+using WorldExplorer.Modules.Places.Application.Abstractions;
+using WorldExplorer.Modules.Places.Infrastructure.AI;
 using Xunit.Abstractions;
 
 public class GeminiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiProviderTests(testOutputHelper)

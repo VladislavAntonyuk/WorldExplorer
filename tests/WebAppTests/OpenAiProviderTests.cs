@@ -2,9 +2,9 @@ namespace WebAppTests;
 
 using System.ClientModel;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using OpenAI;
-using WebApp.Services.AI;
+using WorldExplorer.Modules.Places.Application.Abstractions;
+using WorldExplorer.Modules.Places.Infrastructure.AI;
 using Xunit.Abstractions;
 
 public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiProviderTests(testOutputHelper)
@@ -12,7 +12,7 @@ public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 	public override IAiService GetAiService()
 	{
 		return new AiService(
-			new OpenAiProvider(new OpenAIClient(new ApiKeyCredential("API-Key"), new OpenAIClientOptions()
+			new OpenAiProvider(new OpenAIClient(new ApiKeyCredential("API-Key"), new OpenAIClientOptions
 			{
 				 Endpoint = new Uri("https://openai.com")
 			}), NullLogger<OpenAiProvider>.Instance));

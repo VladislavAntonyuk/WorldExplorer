@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using Quartz;
+﻿namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
 
-namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
+using Microsoft.Extensions.Options;
+using Quartz;
 
 internal sealed class ConfigureProcessOutboxJob(IOptions<OutboxOptions> outboxOptions)
     : IConfigureOptions<QuartzOptions>

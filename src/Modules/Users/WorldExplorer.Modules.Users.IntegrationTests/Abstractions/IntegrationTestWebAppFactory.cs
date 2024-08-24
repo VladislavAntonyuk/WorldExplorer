@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Testcontainers.Redis;
-
-namespace WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
+﻿namespace WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
 
 using ApiService;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Testcontainers.Redis;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {

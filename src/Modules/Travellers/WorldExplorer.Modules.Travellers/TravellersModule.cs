@@ -3,15 +3,13 @@
 using Abstractions.Data;
 using Application.Travellers.GetById;
 using Application.Travellers.GetTravellers;
+using Common.Infrastructure;
+using Infrastructure.Database;
+using Infrastructure.Inbox;
 using MassTransit;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Users.IntegrationEvents;
-using WorldExplorer.Common.Infrastructure;
-using WorldExplorer.Modules.Travellers.Infrastructure.Database;
-using WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
 public static class TravellersModule
 {

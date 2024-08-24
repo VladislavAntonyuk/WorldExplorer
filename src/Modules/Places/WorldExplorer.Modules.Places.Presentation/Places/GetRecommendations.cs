@@ -1,17 +1,12 @@
 ﻿namespace WorldExplorer.Modules.Places.Presentation.Places;
 
-using System.Security.Claims;
-using Application.Places.GetPlace;
-using Common.Domain;
-using Common.Infrastructure.Authentication;
+using Application.Places.GetNearByPlaces;
+using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Users.Application.Users.GetUser;
-using WorldExplorer.Common.Presentation.Endpoints;
-using WorldExplorer.Modules.Places.Domain.Places;
 
 internal sealed class GetRecommendations : IEndpoint
 {

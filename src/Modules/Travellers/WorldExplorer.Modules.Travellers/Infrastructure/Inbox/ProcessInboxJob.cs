@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Users.Infrastructure.Inbox;
+﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
 using System.Text.Json;
 using Common.Application.EventBus;
@@ -9,26 +9,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Presentation;
 using Quartz;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessInboxJob(
-    UsersDbContext dbConnectionFactory,
+    TravellersDbContext dbConnectionFactory,
     IServiceScopeFactory serviceScopeFactory,
 	TimeProvider timeProvider,
     IOptions<InboxOptions> inboxOptions,
     ILogger<ProcessInboxJob> logger) : IJob
 {
-    private const string ModuleName = "Users";
+    private const string ModuleName = "Travellers";
 
     public async Task Execute(IJobExecutionContext context)
     {
         logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
 
-        IReadOnlyList<InboxMessageResponse> inboxMessages = await GetInboxMessagesAsync();
         await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
+        IReadOnlyList<InboxMessageResponse> inboxMessages = await GetInboxMessagesAsync();
 
         foreach (InboxMessageResponse inboxMessage in inboxMessages)
         {
@@ -78,10 +77,9 @@ internal sealed class ProcessInboxJob(
              SELECT TOP {inboxOptions.Value.BatchSize}
                 id AS {nameof(InboxMessageResponse.Id)},
                 content AS {nameof(InboxMessageResponse.Content)}
-             FROM users.inbox_messages WITH (UPDLOCK, ROWLOCK)
+             FROM travellers.inbox_messages
              WHERE ProcessedOnUtc IS NULL
-             ORDER BY OccurredOnUtc;
-             
+             ORDER BY OccuredOnUtc
              """;
 		
         IEnumerable<InboxMessageResponse> inboxMessages = await dbConnectionFactory.Database.SqlQueryRaw<InboxMessageResponse>(
@@ -94,13 +92,12 @@ internal sealed class ProcessInboxJob(
         InboxMessageResponse inboxMessage,
         Exception? exception)
     {
-        await dbConnectionFactory.Database.ExecuteSqlAsync(
-	        $"""
-	         UPDATE users.inbox_messages
-	         SET ProcessedOnUtc = {timeProvider.GetUtcNow()},
-	             error = {exception}
-	         WHERE id = {inboxMessage.Id}
-	         """);
+        await dbConnectionFactory.Database.ExecuteSqlInterpolatedAsync( $"""
+            UPDATE travellers.inbox_messages
+            SET ProcessedOnUtc = {timeProvider.GetUtcNow()},
+                error = {exception}
+            WHERE id = {inboxMessage.Id}
+            """);
     }
 
     internal sealed record InboxMessageResponse(Guid Id, string Content);

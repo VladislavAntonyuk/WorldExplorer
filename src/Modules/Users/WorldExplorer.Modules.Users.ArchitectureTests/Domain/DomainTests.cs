@@ -1,10 +1,10 @@
-﻿using System.Reflection;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
+﻿namespace WorldExplorer.Modules.Users.ArchitectureTests.Domain;
+
+using System.Reflection;
+using Abstractions;
+using Common.Domain;
 using FluentAssertions;
 using NetArchTest.Rules;
-
-namespace WorldExplorer.Modules.Users.ArchitectureTests.Domain;
 
 public class DomainTests : BaseTest
 {

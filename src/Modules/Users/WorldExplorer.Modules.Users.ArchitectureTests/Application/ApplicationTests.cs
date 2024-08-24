@@ -1,9 +1,9 @@
-﻿using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
+﻿namespace WorldExplorer.Modules.Users.ArchitectureTests.Application;
+
+using Abstractions;
+using Common.Application.Messaging;
 using FluentValidation;
 using NetArchTest.Rules;
-
-namespace WorldExplorer.Modules.Users.ArchitectureTests.Application;
 
 public class ApplicationTests : BaseTest
 {

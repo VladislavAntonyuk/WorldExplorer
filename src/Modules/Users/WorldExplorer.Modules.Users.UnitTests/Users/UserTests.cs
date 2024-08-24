@@ -1,10 +1,9 @@
-﻿using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.UnitTests.Abstractions;
-using FluentAssertions;
+﻿namespace WorldExplorer.Modules.Users.UnitTests.Users;
 
-namespace WorldExplorer.Modules.Users.UnitTests.Users;
-
+using Abstractions;
 using AutoFixture;
+using Domain.Users;
+using FluentAssertions;
 
 public class UserTests : BaseTest
 {
@@ -44,7 +43,8 @@ public class UserTests : BaseTest
 			Faker.Create<UserSettings>());
 
 		// Act
-		user.Update(new UserSettings(){ TrackUserLocation = true });
+		user.Update(new UserSettings
+			            { TrackUserLocation = true });
 
 		// Assert
 		UserProfileUpdatedDomainEvent domainEvent =

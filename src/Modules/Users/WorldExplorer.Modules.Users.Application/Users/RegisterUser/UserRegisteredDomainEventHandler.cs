@@ -1,13 +1,12 @@
-﻿using WorldExplorer.Common.Application.EventBus;
-using WorldExplorer.Common.Application.Exceptions;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Users.Application.Users.GetUser;
-using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.IntegrationEvents;
-using MediatR;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
+using Common.Application.EventBus;
+using Common.Application.Exceptions;
+using Common.Application.Messaging;
+using Domain.Users;
+using GetUser;
+using IntegrationEvents;
+using MediatR;
 
 internal sealed class UserRegisteredDomainEventHandler(ISender sender, IEventBus bus)
     : DomainEventHandler<UserRegisteredDomainEvent>

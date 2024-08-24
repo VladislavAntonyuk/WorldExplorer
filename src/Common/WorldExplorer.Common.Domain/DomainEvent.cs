@@ -1,20 +1,12 @@
 ﻿namespace WorldExplorer.Common.Domain;
 
-public abstract class DomainEvent : IDomainEvent
+public abstract class DomainEvent(Guid id, DateTime occurredOnUtc) : IDomainEvent
 {
-    protected DomainEvent()
+    protected DomainEvent() : this(Guid.CreateVersion7(), DateTime.UtcNow)
     {
-        Id = Guid.CreateVersion7();
-        OccurredOnUtc = DateTime.UtcNow;
     }
 
-    protected DomainEvent(Guid id, DateTime occurredOnUtc)
-    {
-        Id = id;
-        OccurredOnUtc = occurredOnUtc;
-    }
+    public Guid Id { get; init; } = id;
 
-    public Guid Id { get; init; }
-
-    public DateTime OccurredOnUtc { get; init; }
+    public DateTime OccurredOnUtc { get; init; } = occurredOnUtc;
 }

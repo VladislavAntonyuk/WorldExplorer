@@ -1,17 +1,13 @@
-﻿using WorldExplorer.Common.Domain;
+﻿namespace WorldExplorer.Common.Application.Exceptions;
 
-namespace WorldExplorer.Common.Application.Exceptions;
+using Domain;
 
-public sealed class WorldExplorerException : Exception
+public sealed class WorldExplorerException(
+	string requestName,
+	Error? error = default,
+	Exception? innerException = default) : Exception("Application exception", innerException)
 {
-    public WorldExplorerException(string requestName, Error? error = default, Exception? innerException = default)
-        : base("Application exception", innerException)
-    {
-        RequestName = requestName;
-        Error = error;
-    }
+	public string RequestName { get; } = requestName;
 
-    public string RequestName { get; }
-
-    public Error? Error { get; }
+    public Error? Error { get; } = error;
 }

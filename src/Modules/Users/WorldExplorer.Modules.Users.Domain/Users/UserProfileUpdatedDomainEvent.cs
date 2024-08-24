@@ -1,6 +1,6 @@
-﻿using WorldExplorer.Common.Domain;
+﻿namespace WorldExplorer.Modules.Users.Domain.Users;
 
-namespace WorldExplorer.Modules.Users.Domain.Users;
+using Common.Domain;
 
 public sealed class UserProfileUpdatedDomainEvent(Guid userId, UserSettings settings) : DomainEvent
 {

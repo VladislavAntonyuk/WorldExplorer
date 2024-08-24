@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Users.Infrastructure.Inbox;
+﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
 using System.Data.Common;
 using Common.Application.EventBus;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 internal sealed class IdempotentIntegrationEventHandler<TIntegrationEvent>(
     IIntegrationEventHandler<TIntegrationEvent> decorated,
-    UsersDbContext dbConnectionFactory)
+    TravellersDbContext dbConnectionFactory)
     : IntegrationEventHandler<TIntegrationEvent>
     where TIntegrationEvent : IIntegrationEvent
 {
@@ -20,24 +20,22 @@ internal sealed class IdempotentIntegrationEventHandler<TIntegrationEvent>(
 
         var inboxMessageConsumer = new InboxMessageConsumer(integrationEvent.Id, decorated.GetType().Name);
 
-        if (await InboxConsumerExistsAsync(connection, inboxMessageConsumer))
+        if (await InboxConsumerExistsAsync(inboxMessageConsumer))
         {
             return;
         }
 
         await decorated.Handle(integrationEvent, cancellationToken);
 
-        await InsertInboxConsumerAsync(connection, inboxMessageConsumer);
+        await InsertInboxConsumerAsync(inboxMessageConsumer);
     }
 
-    private async Task<bool> InboxConsumerExistsAsync(
-        DbConnection dbConnection,
-        InboxMessageConsumer inboxMessageConsumer)
+    private async Task<bool> InboxConsumerExistsAsync(InboxMessageConsumer inboxMessageConsumer)
     {
         string sql =
             $"""
                 SELECT 1
-                FROM users.inbox_message_consumers
+                FROM travellers.inbox_message_consumers
                 WHERE inbox_message_id = {inboxMessageConsumer.InboxMessageId} AND
                       name = {inboxMessageConsumer.Name}
             """;
@@ -45,13 +43,11 @@ internal sealed class IdempotentIntegrationEventHandler<TIntegrationEvent>(
         return await dbConnectionFactory.Database.SqlQueryRaw<int>(sql).AnyAsync();
     }
 
-    private async Task InsertInboxConsumerAsync(
-        DbConnection dbConnection,
-        InboxMessageConsumer inboxMessageConsumer)
+    private async Task InsertInboxConsumerAsync(InboxMessageConsumer inboxMessageConsumer)
     {
         string sql =
             $"""
-            INSERT INTO users.inbox_message_consumers(inbox_message_id, name)
+            INSERT INTO travellers.inbox_message_consumers(inbox_message_id, name)
             VALUES ({inboxMessageConsumer.InboxMessageId}, {inboxMessageConsumer.Name})
             """;
 

@@ -1,9 +1,8 @@
-﻿namespace WorldExplorer.Modules.Users.Infrastructure.User;
+﻿namespace WorldExplorer.Web.User;
 
 using System.Security.Claims;
-using Application.Abstractions.Identity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Identity.Web;
+using WorldExplorer.Modules.Users.Application.Abstractions.Identity;
 
 public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {

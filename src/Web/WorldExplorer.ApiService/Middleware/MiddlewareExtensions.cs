@@ -1,4 +1,4 @@
-﻿namespace WebApp.Middleware;
+﻿namespace WorldExplorer.ApiService.Middleware;
 
 internal static class MiddlewareExtensions
 {

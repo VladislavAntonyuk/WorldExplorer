@@ -1,10 +1,8 @@
 ﻿namespace WorldExplorer.Web.Components.Pages.Admin;
 
-using Microsoft.AspNetCore.Components;
 using Modules.Places.Application.Places.GetPlace;
+using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
-using WorldExplorer.Modules.Users.Application.Users.GetUser;
-using WorldExplorer.Web.Components;
 
 public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService) : WorldExplorerAuthBaseComponent
 {

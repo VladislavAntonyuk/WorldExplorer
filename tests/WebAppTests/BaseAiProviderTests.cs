@@ -2,8 +2,7 @@
 
 using System.Text.Json;
 using FluentAssertions;
-using WebApp.Services.AI;
-using WorldExplorer.Modules.Places.Domain.Places;
+using WorldExplorer.Modules.Places.Application.Abstractions;
 using Xunit.Abstractions;
 
 public abstract class BaseAiProviderTests(ITestOutputHelper testOutputHelper)

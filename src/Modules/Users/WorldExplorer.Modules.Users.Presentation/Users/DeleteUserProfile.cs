@@ -1,16 +1,16 @@
-﻿using System.Security.Claims;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Common.Infrastructure.Authentication;
-using WorldExplorer.Common.Presentation.Endpoints;
-using WorldExplorer.Common.Presentation.Results;
-using WorldExplorer.Modules.Users.Application.Users.GetUser;
+﻿namespace WorldExplorer.Modules.Users.Presentation.Users;
+
+using System.Security.Claims;
+using Application.Users.DeleteUser;
+using Application.Users.GetUser;
+using Common.Domain;
+using Common.Infrastructure.Authentication;
+using Common.Presentation.Endpoints;
+using Common.Presentation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using System.Threading;
-
-namespace WorldExplorer.Modules.Users.Presentation.Users;
 
 internal sealed class DeleteUserProfile : IEndpoint
 {

@@ -1,11 +1,8 @@
 ﻿namespace WorldExplorer.Modules.Users.Infrastructure;
 
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Web;
 using Presentation.Users;
 
 internal static class AuthenticationExtensions

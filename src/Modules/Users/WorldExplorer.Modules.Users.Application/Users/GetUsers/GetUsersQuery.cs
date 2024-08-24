@@ -1,5 +1,6 @@
-﻿using WorldExplorer.Common.Application.Messaging;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.GetUsers;
 
-namespace WorldExplorer.Modules.Users.Application.Users.GetUser;
+using GetUser;
+using WorldExplorer.Common.Application.Messaging;
 
-public sealed record GetUsersQuery() : IQuery<List<UserResponse>>;
+public sealed record GetUsersQuery : IQuery<List<UserResponse>>;

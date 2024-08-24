@@ -1,12 +1,14 @@
 namespace WorldExplorer.Tests;
 
+using Projects;
+
 public class WebTests
 {
     [Fact]
     public async Task GetWebResourceRootReturnsOkStatusCode()
     {
         // Arrange
-        var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.WorldExplorer_AppHost>();
+        var appHost = await DistributedApplicationTestingBuilder.CreateAsync<WorldExplorer_AppHost>();
         appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
         {
             clientBuilder.AddStandardResilienceHandler();

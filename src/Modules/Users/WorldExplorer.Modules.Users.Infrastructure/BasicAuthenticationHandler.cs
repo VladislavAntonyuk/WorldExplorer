@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Users.Presentation.Users;
+﻿namespace WorldExplorer.Modules.Users.Infrastructure;
 
 using System.Net;
 using System.Security.Claims;

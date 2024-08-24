@@ -36,7 +36,8 @@ public partial class PlaceDetailsDialog(WorldExplorerApiClient apiClient, IWorld
 				if (reviewResponse.IsSuccessResult())
 				{
 					reviews = reviewResponse.Data?.Travellers?.Items?
-						.Select(x => new ReviewResponse() { Id = x.Id })
+						.Select(x => new ReviewResponse
+							        { Id = x.Id })
 						.ToList() ?? [];
 				}
 			}

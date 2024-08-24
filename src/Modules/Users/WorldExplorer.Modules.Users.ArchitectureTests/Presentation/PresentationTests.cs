@@ -1,8 +1,8 @@
-﻿using WorldExplorer.Common.Application.EventBus;
-using WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
-using NetArchTest.Rules;
+﻿namespace WorldExplorer.Modules.Users.ArchitectureTests.Presentation;
 
-namespace WorldExplorer.Modules.Users.ArchitectureTests.Presentation;
+using Abstractions;
+using Common.Application.EventBus;
+using NetArchTest.Rules;
 
 public class PresentationTests : BaseTest
 {

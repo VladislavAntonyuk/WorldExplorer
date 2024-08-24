@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿namespace WorldExplorer.Common.Domain;
 
-namespace WorldExplorer.Common.Domain;
+using System.Diagnostics.CodeAnalysis;
 
 public class Result
 {
@@ -33,19 +33,11 @@ public class Result
         new(default, false, error);
 }
 
-public class Result<TValue> : Result
+public class Result<TValue>(TValue? value, bool isSuccess, Error error) : Result(isSuccess, error)
 {
-    private readonly TValue? _value;
-
-    public Result(TValue? value, bool isSuccess, Error error)
-        : base(isSuccess, error)
-    {
-        _value = value;
-    }
-
-    [NotNull]
+	[NotNull]
     public TValue Value => IsSuccess
-        ? _value!
+        ? value!
         : throw new InvalidOperationException("The value of a failure result can't be accessed.");
 
     public static implicit operator Result<TValue>(TValue? value) =>

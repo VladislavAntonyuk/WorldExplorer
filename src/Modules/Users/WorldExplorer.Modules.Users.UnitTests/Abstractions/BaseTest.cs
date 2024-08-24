@@ -1,8 +1,7 @@
-﻿using WorldExplorer.Common.Domain;
-
-namespace WorldExplorer.Modules.Users.UnitTests.Abstractions;
+﻿namespace WorldExplorer.Modules.Users.UnitTests.Abstractions;
 
 using AutoFixture;
+using Common.Domain;
 
 public abstract class BaseTest
 {

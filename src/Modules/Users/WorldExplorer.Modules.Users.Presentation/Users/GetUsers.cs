@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Users.Presentation.Users;
 
 using Application.Users.GetUser;
+using Application.Users.GetUsers;
 using Common.Infrastructure.Authorization;
 using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
@@ -17,7 +18,7 @@ internal sealed class GetUsers : IEndpoint
 		   {
 			   var result = await sender.Send(new GetUsersQuery());
 
-			   return result.Match(Results.Ok<List<UserResponse>>, ApiResults.Problem);
+			   return result.Match(Results.Ok, ApiResults.Problem);
 		   })
 		   .RequireAuthorization(Constants.AdministratorPolicy)
 		   .WithTags(Tags.Users);

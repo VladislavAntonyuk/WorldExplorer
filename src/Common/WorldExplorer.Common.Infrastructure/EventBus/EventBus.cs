@@ -1,7 +1,7 @@
-﻿using WorldExplorer.Common.Application.EventBus;
-using MassTransit;
+﻿namespace WorldExplorer.Common.Infrastructure.EventBus;
 
-namespace WorldExplorer.Common.Infrastructure.EventBus;
+using Application.EventBus;
+using MassTransit;
 
 internal sealed class EventBus(IBus bus) : IEventBus
 {

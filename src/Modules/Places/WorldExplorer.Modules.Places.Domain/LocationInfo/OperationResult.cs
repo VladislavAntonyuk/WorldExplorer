@@ -1,6 +1,4 @@
-﻿namespace Shared.Models;
-
-using Enums;
+﻿namespace WorldExplorer.Modules.Places.Domain.LocationInfo;
 
 public class OperationResult<T> where T : new()
 {

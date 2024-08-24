@@ -1,7 +1,5 @@
-﻿using WorldExplorer.Common.Application.Messaging;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.UpdateUser;
-
-using Domain.Users;
+using Common.Application.Messaging;
 
 public sealed record UpdateUserCommand(Guid UserId, bool TrackUserLocation) : ICommand;

@@ -117,12 +117,6 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", "users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
-                        });
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>

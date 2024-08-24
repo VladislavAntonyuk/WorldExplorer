@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
 
-namespace WorldExplorer.Modules.Users.Application.Users.RegisterUser;
+using FluentValidation;
 
 internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {

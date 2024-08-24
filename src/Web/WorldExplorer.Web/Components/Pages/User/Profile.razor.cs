@@ -1,9 +1,7 @@
 ﻿namespace WorldExplorer.Web.Components.Pages.User;
 
-using Microsoft.AspNetCore.Components;
+using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
-using WorldExplorer.Modules.Users.Application.Users.GetUser;
-using WorldExplorer.Web.Components;
 
 public partial class Profile(IDialogService dialogService, WorldExplorerApiClient apiClient, ISnackbar snackbar) : WorldExplorerAuthBaseComponent
 {

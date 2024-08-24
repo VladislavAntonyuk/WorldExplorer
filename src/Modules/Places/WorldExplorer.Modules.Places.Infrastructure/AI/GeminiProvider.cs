@@ -1,10 +1,10 @@
-﻿namespace WebApp.Services.AI;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.AI;
 
+using Common.Infrastructure;
 using GenerativeAI.Models;
 using GenerativeAI.Types;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Shared.Extensions;
 
 public class GeminiProvider(HttpClient httpClient, IOptions<GeminiAiSettings> aiOptions, ILogger<GeminiProvider> logger) : IAiProvider
 {

@@ -1,9 +1,9 @@
-﻿using System.Collections.Concurrent;
-using System.Reflection;
-using WorldExplorer.Common.Application.Messaging;
-using Microsoft.Extensions.DependencyInjection;
+﻿namespace WorldExplorer.Common.Infrastructure.Outbox;
 
-namespace WorldExplorer.Common.Infrastructure.Outbox;
+using System.Collections.Concurrent;
+using System.Reflection;
+using Application.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 
 public static class DomainEventHandlersFactory
 {

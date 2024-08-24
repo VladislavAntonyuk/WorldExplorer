@@ -1,12 +1,13 @@
-﻿using System.Reflection;
-using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.Infrastructure;
+﻿namespace WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
 
-namespace WorldExplorer.Modules.Users.ArchitectureTests.Abstractions;
+using System.Reflection;
+using Infrastructure;
+using Users.Application;
+using Users.Domain.Users;
 
 public abstract class BaseTest
 {
-    protected static readonly Assembly ApplicationAssembly = typeof(Users.Application.AssemblyReference).Assembly;
+    protected static readonly Assembly ApplicationAssembly = typeof(AssemblyReference).Assembly;
 
     protected static readonly Assembly DomainAssembly = typeof(User).Assembly;
 

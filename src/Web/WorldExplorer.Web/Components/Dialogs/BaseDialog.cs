@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using WorldExplorer.Web.Components;
 
 public abstract class BaseDialog : WorldExplorerBaseComponent
 {

@@ -1,4 +1,4 @@
-﻿namespace WebApp.Middleware;
+﻿namespace WorldExplorer.ApiService.Middleware;
 
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;

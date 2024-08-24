@@ -1,30 +1,30 @@
-﻿namespace OpenAITestsV1;
+﻿namespace OpenAITestsV2;
 
 using System.ClientModel;
+using FluentAssertions;
 using OpenAI;
 using OpenAI.Chat;
 using Xunit;
 using Xunit.Abstractions;
 
-public class UnitTest1
+public class UnitTest1(ITestOutputHelper testOutputHelper)
 {
-	private readonly ITestOutputHelper testOutputHelper;
-
-	public UnitTest1(ITestOutputHelper testOutputHelper)
+	[Theory]
+	[InlineData("https://free.gpt.ge/v1", "API_KEY1", "gpt-3.5-turbo")]
+	[InlineData("https://api.chatanywhere.tech/v1", "API_KEY2", "gpt-3.5-turbo")]
+	[InlineData("https://free.gpt.ge/v1", "API_KEY1", "gpt-4o-mini")]
+	[InlineData("https://api.chatanywhere.tech/v1", "API_KEY2", "gpt-4o-mini")]
+	public async Task Test(string url, string key, string model)
 	{
-		this.testOutputHelper = testOutputHelper;
-	}
-
-	[Fact]
-	public async Task Test1()
-	{
-		var client = new OpenAIClient(new ApiKeyCredential("API-KEY"),
-		                              new OpenAIClientOptions()
+		var client = new OpenAIClient(new ApiKeyCredential(key),
+		                              new OpenAIClientOptions
 		                              {
-										  Endpoint = new Uri("https://free.gpt.ge/v1")
+										  Endpoint = new Uri(url)
 									  });
-		var chatClient = client.GetChatClient("gpt-3.5-turbo");
+		var chatClient = client.GetChatClient(model);
 		var result = await chatClient.CompleteChatAsync(new UserChatMessage("hello"));
-		testOutputHelper.WriteLine(result.Value.Content[0].ToString());
+		var content = result.Value.Content[0].ToString();
+		testOutputHelper.WriteLine(content);
+		content.Should().NotBeEmpty();
 	}
 }

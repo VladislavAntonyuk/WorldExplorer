@@ -1,21 +1,14 @@
-﻿using WorldExplorer.Common.Application.EventBus;
+﻿namespace WorldExplorer.Modules.Users.IntegrationEvents;
 
-namespace WorldExplorer.Modules.Users.IntegrationEvents;
+using Common.Application.EventBus;
 
-public sealed class UserProfileUpdatedIntegrationEvent : IntegrationEvent
+public sealed class UserProfileUpdatedIntegrationEvent(
+	Guid id,
+	DateTime occurredOnUtc,
+	Guid userId,
+	bool trackUserLocation) : IntegrationEvent(id, occurredOnUtc)
 {
-	public UserProfileUpdatedIntegrationEvent(
-		Guid id,
-		DateTime occurredOnUtc,
-		Guid userId,
-		bool trackUserLocation)
-		: base(id, occurredOnUtc)
-	{
-		UserId = userId;
-		TrackUserLocation = trackUserLocation;
-	}
+	public Guid UserId { get; init; } = userId;
 
-	public Guid UserId { get; init; }
-
-	public bool TrackUserLocation { get; init; }
+	public bool TrackUserLocation { get; init; } = trackUserLocation;
 }

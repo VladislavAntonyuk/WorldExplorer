@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Users.Infrastructure.User;
+﻿namespace WorldExplorer.Web.User;
 public interface ICurrentUserService
 {
 	UserInfo GetCurrentUser();

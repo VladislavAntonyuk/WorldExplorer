@@ -1,6 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Users.Infrastructure.Database;
 
-using Common.Application.Abstractions.Data;
+using Application.Abstractions.Data;
 using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;

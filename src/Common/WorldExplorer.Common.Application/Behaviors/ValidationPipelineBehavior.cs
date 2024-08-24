@@ -1,11 +1,11 @@
-﻿using System.Reflection;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
+﻿namespace WorldExplorer.Common.Application.Behaviors;
+
+using System.Reflection;
+using Domain;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-
-namespace WorldExplorer.Common.Application.Behaviors;
+using Messaging;
 
 internal sealed class ValidationPipelineBehavior<TRequest, TResponse>(
     IEnumerable<IValidator<TRequest>> validators)

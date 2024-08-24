@@ -1,10 +1,8 @@
-﻿using System.Data.Common;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Common.Infrastructure.Outbox;
+﻿namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
 
-namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
-
+using Common.Application.Messaging;
+using Common.Domain;
+using Common.Infrastructure.Outbox;
 using Database;
 using Microsoft.EntityFrameworkCore;
 

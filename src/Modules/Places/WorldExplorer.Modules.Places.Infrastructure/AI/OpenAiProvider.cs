@@ -1,7 +1,5 @@
-﻿namespace WebApp.Services.AI;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.AI;
 
-using System.ClientModel;
-using System.ClientModel.Primitives;
 using Microsoft.Extensions.Logging;
 using OpenAI;
 using OpenAI.Chat;
@@ -19,7 +17,7 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 			[
 				new SystemChatMessage("You are a tour guide with a great knowledge of history."),
 				new UserChatMessage(request)
-			], new ChatCompletionOptions()
+			], new ChatCompletionOptions
 			{
 				ResponseFormat = ChatResponseFormat.Text
 			});
@@ -46,7 +44,15 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 		try
 		{
 			var client = api.GetImageClient("gpt-4");
-			var imageResult = await client.GenerateImageAsync(request, new ImageGenerationOptions(){Quality = GeneratedImageQuality.High, ResponseFormat = GeneratedImageFormat.Uri, Size = GeneratedImageSize.W1024xH1024, Style = GeneratedImageStyle.Natural});
+			var imageResult = await client.GenerateImageAsync(
+				request,
+				new ImageGenerationOptions
+				{
+					Quality = GeneratedImageQuality.High,
+					ResponseFormat = GeneratedImageFormat.Uri,
+					Size = GeneratedImageSize.W1024xH1024,
+					Style = GeneratedImageStyle.Natural
+				});
 			return imageResult.Value.ImageUri.ToString();
 		}
 		catch (Exception e)

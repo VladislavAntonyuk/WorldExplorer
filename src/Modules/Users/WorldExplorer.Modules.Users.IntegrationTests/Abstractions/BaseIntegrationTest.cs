@@ -1,13 +1,12 @@
-﻿using System.Net.Http.Json;
+﻿namespace WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
+
+using System.Net.Http.Json;
 using System.Text.Json.Serialization;
-using WorldExplorer.Modules.Users.Infrastructure.Database;
+using AutoFixture;
+using Infrastructure.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
-
-using AutoFixture;
 
 [Collection(nameof(IntegrationTestCollection))]
 public abstract class BaseIntegrationTest : IDisposable

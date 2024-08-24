@@ -1,4 +1,4 @@
-﻿namespace Shared.Extensions;
+﻿namespace WorldExplorer.Common.Infrastructure;
 
 public static class TaskExtensions
 {

@@ -1,6 +1,6 @@
-﻿using WorldExplorer.Common.Domain;
+﻿namespace WorldExplorer.Common.Presentation.Results;
 
-namespace WorldExplorer.Common.Presentation.Results;
+using Domain;
 
 public static class ResultExtensions
 {

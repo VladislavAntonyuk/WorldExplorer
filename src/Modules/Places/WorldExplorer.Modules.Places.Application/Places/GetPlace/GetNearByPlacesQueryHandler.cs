@@ -1,14 +1,9 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlace;
 
-using Shared.Enums;
-using Shared.Models;
-using Users.Application.Users.GetUser;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Places.Application.Abstractions;
-using WorldExplorer.Modules.Places.Domain.LocationInfo;
-using WorldExplorer.Modules.Places.Domain.Places;
-using WorldExplorer.Modules.Places.Infrastructure.Places;
+using Abstractions;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.Places;
 
 internal sealed class GePlaceDetailsQueryHandler(IPlaceRepository placeRepository)
 	: IQueryHandler<GetPlaceDetailsQuery, PlaceResponse>

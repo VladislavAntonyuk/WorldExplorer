@@ -1,7 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Domain.LocationInfo;
 
 using NetTopologySuite.Geometries;
-using WorldExplorer.Modules.Places.Domain.Places;
 
 public class LocationInfoRequest
 {
