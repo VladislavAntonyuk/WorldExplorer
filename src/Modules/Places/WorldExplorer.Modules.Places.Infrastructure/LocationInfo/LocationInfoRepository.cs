@@ -23,9 +23,9 @@ public class LocationInfoRepository(PlacesDbContext placesDbContext) : ILocation
 		await placesDbContext.LocationInfoRequests.Where(x => x.Id == requestId).ExecuteDeleteAsync(cancellationToken);
 	}
 
-	public Task<LocationInfoRequest?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+	public async Task<LocationInfoRequest?> GetAsync(int id, CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
+		return await placesDbContext.LocationInfoRequests.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 	}
 
 	public void Insert(LocationInfoRequest locationInfoRequest)

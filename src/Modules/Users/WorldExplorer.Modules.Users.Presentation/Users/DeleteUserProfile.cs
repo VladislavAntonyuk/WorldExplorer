@@ -3,6 +3,7 @@
 using System.Security.Claims;
 using Application.Users.DeleteUser;
 using Common.Infrastructure.Authentication;
+using Common.Infrastructure.Authorization;
 using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
 using MediatR;
@@ -21,6 +22,15 @@ internal sealed class DeleteUserProfile : IEndpoint
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })
 		   .RequireAuthorization()
+		   .WithTags(Tags.Users);
+
+		app.MapDelete("users/{id:guid}", async (Guid id, ISender sender) =>
+		   {
+			   var result = await sender.Send(new DeleteUserCommand(id));
+
+			   return result.Match(Results.NoContent, ApiResults.Problem);
+		   })
+		   .RequireAuthorization(Constants.AdministratorPolicy)
 		   .WithTags(Tags.Users);
 	}
 }

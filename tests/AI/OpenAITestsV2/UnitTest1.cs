@@ -2,6 +2,7 @@
 
 using System.ClientModel;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using OpenAI;
 using OpenAI.Chat;
 using Xunit;
@@ -16,7 +17,12 @@ public class UnitTest1(ITestOutputHelper testOutputHelper)
 	[InlineData("https://api.chatanywhere.tech/v1", "API_KEY2", "gpt-4o-mini")]
 	public async Task Test(string url, string key, string model)
 	{
-		var client = new OpenAIClient(new ApiKeyCredential(key), new OpenAIClientOptions
+		var configuration = new ConfigurationBuilder()
+		                    .AddJsonFile("settings.json", false)
+		                    .AddJsonFile("settings.Development.json", true)
+		                    .Build();
+
+		var client = new OpenAIClient(new ApiKeyCredential(configuration[key]), new OpenAIClientOptions
 		{
 			Endpoint = new Uri(url)
 		});

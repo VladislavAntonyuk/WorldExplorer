@@ -5,8 +5,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="8.1.0" />
-		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.1.0" />
+		<PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="8.2.0" />
+		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.2.0" />
 
 		<PackageReference Include="MassTransit" Version="8.2.5" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />

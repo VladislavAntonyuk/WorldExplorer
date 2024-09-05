@@ -3,6 +3,8 @@
 using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
+using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequest;
+using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 
 public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)
 	: WorldExplorerAuthBaseComponent
@@ -60,7 +62,7 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 		await GetPlaces();
 	}
 
-	private async Task DeleteRequest(Guid requestId)
+	private async Task DeleteRequest(int requestId)
 	{
 		await apiClient.DeleteLocationInfoRequest(requestId, CancellationToken.None);
 		await GetRequests();

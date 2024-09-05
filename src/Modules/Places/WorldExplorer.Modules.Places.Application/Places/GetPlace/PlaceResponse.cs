@@ -1,7 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlace;
 
 using Abstractions;
-using Domain.LocationInfo;
 
 public sealed record PlaceResponse(
 	Guid Id,
@@ -12,12 +11,4 @@ public sealed record PlaceResponse(
 	ICollection<string> Images)
 {
 	public string? MainImage => Images.FirstOrDefault();
-}
-
-public sealed record LocationInfoRequestResponse
-{
-	public Guid Id { get; set; }
-	public required Location Location { get; set; }
-	public LocationInfoRequestStatus Status { get; set; }
-	public DateTime CreationDate { get; set; }
 }

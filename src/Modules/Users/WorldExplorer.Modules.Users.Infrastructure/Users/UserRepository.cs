@@ -8,7 +8,7 @@ internal sealed class UserRepository(UsersDbContext context) : IUserRepository
 {
 	public async Task<User?> GetAsync(Guid id, CancellationToken cancellationToken = default)
 	{
-		return await context.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+		return await context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 	}
 
 	public async Task<List<User>> GetAsync(CancellationToken cancellationToken = default)

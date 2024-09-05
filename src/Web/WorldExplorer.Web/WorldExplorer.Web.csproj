@@ -13,20 +13,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference
-			Include="..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
-		<ProjectReference
-			Include="..\..\Modules\Places\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj" />
-		<ProjectReference
-			Include="..\..\Modules\Users\WorldExplorer.Modules.Users.Application\WorldExplorer.Modules.Users.Application.csproj" />
+		<ProjectReference Include="..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\Modules\Places\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj" />
+		<ProjectReference Include="..\..\Modules\Users\WorldExplorer.Modules.Users.Application\WorldExplorer.Modules.Users.Application.csproj" />
 		<ProjectReference Include="..\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.1.0" />
-		<PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="8.1.0" />
+		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.2.0" />
+		<PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="8.2.0" />
 		<PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="3.1.0" />
-		<PackageReference Include="MudBlazor" Version="7.6.0" />
+		<PackageReference Include="MudBlazor" Version="7.7.0" />
 		<PackageReference Include="StrawberryShake.Blazor" Version="14.0.0-rc.0" />
 		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="13.0.0" />
 		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.1.0" />

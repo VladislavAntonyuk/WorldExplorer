@@ -18,7 +18,7 @@ public static class InfrastructureConfiguration
 {
 	public static IServiceCollection AddAuthZ(this IServiceCollection services)
 	{
-		services.AddAuthorizationInternal();
+		services.AddAuthorizationInternal2();
 		return services;
 	}
 

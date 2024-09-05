@@ -2,6 +2,7 @@
 
 using Common.Infrastructure;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Identity.Client.Kerberos;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Modules.Users.Application.Abstractions.Identity;
@@ -27,7 +28,6 @@ public static class ServiceExtensions
 		var scopes = configuration.GetSection("WorldExplorerApiClient:Scopes").Get<string[]>();
 		services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
 		        .EnableTokenAcquisitionToCallDownstreamApi(scopes)
-		        .AddDownstreamApi("WorldExplorerApiClient", configuration.GetSection("WorldExplorerApiClient"))
 		        .AddDistributedTokenCaches();
 
 		services.AddCascadingAuthenticationState();
@@ -42,7 +42,14 @@ public static class ServiceExtensions
 
 	public static void AddWorldExplorerServices(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddTransient<WorldExplorerApiClient>();
+		services.AddOptions<MicrosoftIdentityAuthenticationMessageHandlerOptions>()
+		        .Bind(configuration.GetSection("WorldExplorerApiClient"));
+		services.AddTransient<WorldExplorer.Web.MicrosoftIdentityUserAuthenticationMessageHandler>();
+		services.AddHttpClient<WorldExplorerApiClient>(s =>
+		        {
+			        s.BaseAddress = new Uri("https+http://apiservice");
+		        })
+				.AddHttpMessageHandler<Web.MicrosoftIdentityUserAuthenticationMessageHandler>();
 
 		var baseUrl = configuration.GetSection("WorldExplorerApiClient:BaseUrl").Get<string>();
 		services.AddWorldExplorerTravellersClient()
