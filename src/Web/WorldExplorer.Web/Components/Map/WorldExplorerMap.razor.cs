@@ -17,21 +17,36 @@ public sealed partial class WorldExplorerMap(
 	private string? errorMessage;
 	private bool isLoading = true;
 	private DotNetObjectReference<WorldExplorerMap>? mapRef;
+	private bool isRendered;
+	private CancellationTokenSource cancellationTokenSource = new();
+
+	protected override void OnInitialized()
+	{
+		cancellationTokenSource = new();
+		base.OnInitialized();
+	}
 
 	public async ValueTask DisposeAsync()
 	{
-		//await jsRuntime.InvokeVoidAsync("leafletInterop.destroyMap");
-		//mapRef?.Dispose();
+		if (isRendered)
+		{
+			await cancellationTokenSource.CancelAsync();
+			await jsRuntime.InvokeVoidAsyncIgnoreErrors("leafletInterop.destroyMap");
+			mapRef?.Dispose();
+			cancellationTokenSource.Dispose();
+			isRendered = false;
+		}
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
+		isRendered = true;
 		await base.OnAfterRenderAsync(firstRender);
-		if (firstRender)
+		if (firstRender && !cancellationTokenSource.IsCancellationRequested)
 		{
-			var user = await apiClient.GetCurrentUser(CancellationToken.None);
+			var user = await apiClient.GetCurrentUser(cancellationTokenSource.Token);
 			mapRef = DotNetObjectReference.Create(this);
-			await jsRuntime.InvokeVoidAsync("leafletInterop.initMap", mapRef, new MapOptions(null, 15)
+			await jsRuntime.InvokeVoidAsyncIgnoreErrors("leafletInterop.initMap", cancellationTokenSource.Token, mapRef, new MapOptions(null, 15)
 			{
 				TrackUserLocation = user?.Settings.TrackUserLocation == true
 			});
@@ -40,7 +55,7 @@ public sealed partial class WorldExplorerMap(
 
 	private async Task<StatusCode> AddNearbyPlaces(Location location)
 	{
-		var placesResult = await apiClient.GetNearByPlaces(location, CancellationToken.None);
+		var placesResult = await apiClient.GetNearByPlaces(location, cancellationTokenSource.Token);
 		switch (placesResult.StatusCode)
 		{
 			case StatusCode.Success:
@@ -76,8 +91,8 @@ public sealed partial class WorldExplorerMap(
 			do
 			{
 				statusCode = await AddNearbyPlaces(currentLocation);
-				await Task.Delay(TimeSpan.FromSeconds(10));
-			} while (statusCode == StatusCode.LocationInfoRequestPending);
+				await Task.Delay(TimeSpan.FromSeconds(10), cancellationTokenSource.Token);
+			} while (statusCode == StatusCode.LocationInfoRequestPending || !cancellationTokenSource.IsCancellationRequested);
 		}
 	}
 
@@ -102,7 +117,7 @@ public sealed partial class WorldExplorerMap(
 	{
 		const string defaultIcon = "/assets/default-location-pin.png";
 		var marker = new Marker(location, label, icon ?? defaultIcon);
-		await jsRuntime.InvokeVoidAsync("leafletInterop.addMarker", mapRef, id, marker);
+		await jsRuntime.InvokeVoidAsyncIgnoreErrors("leafletInterop.addMarker", cancellationTokenSource.Token, mapRef, id, marker);
 		return marker;
 	}
 }

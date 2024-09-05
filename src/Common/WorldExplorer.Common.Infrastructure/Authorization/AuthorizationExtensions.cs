@@ -17,8 +17,20 @@ internal static class AuthorizationExtensions
 		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
 		services.AddAuthorization(options =>
 		{
-			var administratorOrHigherPolicyBuilder = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(
-				OpenIdConnectDefaults.AuthenticationScheme, JwtBearerDefaults.AuthenticationScheme);
+			var administratorOrHigherPolicyBuilder = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+			administratorOrHigherPolicyBuilder.Requirements.Add(new AdministratorAuthorizationRequirement());
+			options.AddPolicy(Constants.AdministratorPolicy, administratorOrHigherPolicyBuilder.Build());
+		});
+
+		return services;
+	}
+
+	internal static IServiceCollection AddAuthorizationInternal2(this IServiceCollection services)
+	{
+		services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
+		services.AddAuthorization(options =>
+		{
+			var administratorOrHigherPolicyBuilder = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme);
 			administratorOrHigherPolicyBuilder.Requirements.Add(new AdministratorAuthorizationRequirement());
 			options.AddPolicy(Constants.AdministratorPolicy, administratorOrHigherPolicyBuilder.Build());
 		});

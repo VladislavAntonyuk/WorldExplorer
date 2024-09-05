@@ -9,7 +9,12 @@ internal sealed class PlaceRepository(PlacesDbContext context) : IPlaceRepositor
 {
 	public async Task<Place?> GetAsync(Guid id, CancellationToken cancellationToken = default)
 	{
-		return await context.Places.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+		return await context.Places.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+	}
+
+	public async Task<List<Place>> GetAsync(CancellationToken cancellationToken = default)
+	{
+		return await context.Places.ToListAsync(cancellationToken);
 	}
 
 	public void Insert(Place place)

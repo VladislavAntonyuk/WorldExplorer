@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 public interface ILocationInfoRepository
 {
-	Task<LocationInfoRequest?> GetAsync(Guid id, CancellationToken cancellationToken = default);
+	Task<LocationInfoRequest?> GetAsync(int id, CancellationToken cancellationToken = default);
 	void Insert(LocationInfoRequest locationInfoRequest);
 	Task<List<LocationInfoRequest>> IsNearby(Point userLocation);
 	Task Clear(CancellationToken cancellationToken);

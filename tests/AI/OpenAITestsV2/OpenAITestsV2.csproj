@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>$(NetVersion)</TargetFramework>
@@ -8,12 +8,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-preview.7.24405.7" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-preview.7.24405.7" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0-preview.7.24405.7" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
-		<PackageReference Include="OpenAI" Version="2.0.0-beta.8" />
+		<PackageReference Include="OpenAI" Version="2.0.0-beta.11" />
 		<PackageReference Include="xunit" Version="2.9.0" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.0.0-pre.24">
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.0.0-pre.30">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -21,6 +22,12 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="*.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

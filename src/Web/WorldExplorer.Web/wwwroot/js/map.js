@@ -36,9 +36,9 @@ window.leafletInterop = {
 						latitude: e.latlng.lat,
 						longitude: e.latlng.lng
 					},
-					title: "My location"
+					title: `My location (${e.latlng.lat}, ${e.latlng.lng})`
 				});
-				dotnetRef.invokeMethodAsync("UpdatePosition", {latitude: e.latlng.lat, longitude: e.latlng.lng});
+				dotnetRef.invokeMethodAsync("UpdatePosition", { latitude: e.latlng.lat, longitude: e.latlng.lng });
 			});
 		map.on("locationerror",
 			(e) => {
@@ -49,7 +49,7 @@ window.leafletInterop = {
 		const marker = createMarker(options);
 		marker.on("click",
 			(e) => {
-				dotnetRef.invokeMethodAsync("OpenDetails", id,	options.title);
+				dotnetRef.invokeMethodAsync("OpenDetails", id, options.title);
 			});
 	},
 	destroyMap: function () {
@@ -69,7 +69,7 @@ function createMarker(options) {
 	const icon = L.icon({
 		iconUrl: options.icon
 	});
-	return L.marker([options.location.latitude, options.location.longitude], {icon: icon, title: options.title})
+	return L.marker([options.location.latitude, options.location.longitude], { icon: icon, title: options.title })
 		.addTo(map);
 }
 
