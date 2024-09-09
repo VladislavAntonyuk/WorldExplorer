@@ -63,9 +63,9 @@ public class WorldExplorerApiClient(HttpClient httpClient)
 		return await httpClient.GetFromJsonAsync<PlaceResponse>($"places/{placeId}", none);
 	}
 
-	//ToDo should be place request
-	public async Task UpdatePlace(PlaceResponse place, CancellationToken none)
+	public async Task UpdatePlace(Guid id, PlaceRequest place, CancellationToken none)
 	{
+		await httpClient.PutAsJsonAsync($"places/{id}", place, none);
 	}
 
 	public Task<UserResponse?> GetUser(string providerId, CancellationToken none)

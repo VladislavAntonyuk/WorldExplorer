@@ -28,23 +28,12 @@ internal sealed class IdempotentIntegrationEventHandler<TIntegrationEvent>(
 
 	private async Task<bool> InboxConsumerExistsAsync(InboxMessageConsumer inboxMessageConsumer)
 	{
-		var sql = $"""
-		               SELECT 1
-		               FROM travellers.inbox_message_consumers
-		               WHERE inbox_message_id = {inboxMessageConsumer.InboxMessageId} AND
-		                     name = {inboxMessageConsumer.Name}
-		           """;
-
-		return await dbConnectionFactory.Database.SqlQueryRaw<int>(sql).AnyAsync();
+		return await dbConnectionFactory.InboxMessagesConsumers.AnyAsync(x=>x.Name == inboxMessageConsumer.Name && x.InboxMessageId == inboxMessageConsumer.InboxMessageId);
 	}
 
 	private async Task InsertInboxConsumerAsync(InboxMessageConsumer inboxMessageConsumer)
 	{
-		var sql = $"""
-		           INSERT INTO travellers.inbox_message_consumers(inbox_message_id, name)
-		           VALUES ({inboxMessageConsumer.InboxMessageId}, {inboxMessageConsumer.Name})
-		           """;
-
-		await dbConnectionFactory.Database.ExecuteSqlRawAsync(sql);
+		dbConnectionFactory.InboxMessagesConsumers.Add(inboxMessageConsumer);
+		await dbConnectionFactory.SaveChangesAsync();
 	}
 }

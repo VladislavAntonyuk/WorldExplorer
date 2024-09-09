@@ -26,20 +26,13 @@ internal sealed class IdempotentDomainEventHandler<TDomainEvent>(
 
 	private async Task<bool> OutboxConsumerExistsAsync(OutboxMessageConsumer outboxMessageConsumer)
 	{
-		return await dbConnectionFactory.Database.SqlQuery<int>($"""
-		                                                             SELECT 1
-		                                                             FROM users.outbox_message_consumers
-		                                                             WHERE OutboxMessageId = "{outboxMessageConsumer.OutboxMessageId}" AND
-		                                                                   Name = "{outboxMessageConsumer.Name}"
-		                                                         """)
-		                                .AnyAsync();
+		return await dbConnectionFactory.OutboxMessagesConsumers
+		                                .AnyAsync(x=>x.Name == outboxMessageConsumer.Name && x.OutboxMessageId == outboxMessageConsumer.OutboxMessageId);
 	}
 
 	private async Task InsertOutboxConsumerAsync(OutboxMessageConsumer outboxMessageConsumer)
 	{
-		await dbConnectionFactory.Database.ExecuteSqlAsync($"""
-		                                                    INSERT INTO users.outbox_message_consumers(OutboxMessageId, Name)
-		                                                    VALUES ({outboxMessageConsumer.OutboxMessageId}, {outboxMessageConsumer.Name})
-		                                                    """);
+		dbConnectionFactory.OutboxMessagesConsumers.Add(outboxMessageConsumer);
+		await dbConnectionFactory.SaveChangesAsync();
 	}
 }

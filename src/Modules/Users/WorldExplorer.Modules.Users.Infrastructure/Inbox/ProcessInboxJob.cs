@@ -85,12 +85,11 @@ internal sealed class ProcessInboxJob(
 
 	private async Task UpdateInboxMessageAsync(InboxMessageResponse inboxMessage, Exception? exception)
 	{
-		await dbConnectionFactory.Database.ExecuteSqlAsync($"""
-		                                                    UPDATE users.inbox_messages
-		                                                    SET ProcessedOnUtc = {timeProvider.GetUtcNow()},
-		                                                        error = {exception}
-		                                                    WHERE id = {inboxMessage.Id}
-		                                                    """);
+		var message = exception?.Message ?? null;
+		await dbConnectionFactory.InboxMessages.Where(x => x.Id == inboxMessage.Id)
+		                         .ExecuteUpdateAsync(
+			                         m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
+			                               .SetProperty(p => p.Error, message));
 	}
 
 	internal sealed record InboxMessageResponse(Guid Id, string Content);

@@ -10,7 +10,12 @@ using User = Domain.Users.User;
 
 public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options), IUnitOfWork
 {
-	internal DbSet<User> Users { get; set; }
+	internal DbSet<User> Users => Set<User>();
+
+	internal DbSet<InboxMessage> InboxMessages => Set<InboxMessage>();
+	internal DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+	internal DbSet<InboxMessageConsumer> InboxMessagesConsumers => Set<InboxMessageConsumer>();
+	internal DbSet<OutboxMessageConsumer> OutboxMessagesConsumers => Set<OutboxMessageConsumer>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -20,6 +25,8 @@ public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : D
 		modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
 		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
 		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+
+
 		modelBuilder.ApplyConfiguration(new UserConfiguration());
 	}
 }

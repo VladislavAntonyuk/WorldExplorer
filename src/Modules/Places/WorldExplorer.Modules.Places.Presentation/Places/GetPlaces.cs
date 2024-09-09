@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Places.Presentation.Places;
 
-using Application.Places.GetPlace;
 using Application.Places.GetPlaces;
 using Common.Infrastructure.Authorization;
 using Common.Presentation.Endpoints;

@@ -12,3 +12,12 @@ public sealed record PlaceResponse(
 {
 	public string? MainImage => Images.FirstOrDefault();
 }
+
+public sealed record PlaceRequest
+{
+	public required string Name { get; set; } = string.Empty;
+	public string? Description { get; set; }
+	public Location Location { get; set; } = Location.Default;
+	public double Rating { get; set; }
+	public ICollection<string> Images { get; set; } = [];
+}

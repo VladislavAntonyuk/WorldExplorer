@@ -38,16 +38,19 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 	private async Task GetUsers()
 	{
 		users = await apiClient.GetUsers(CancellationToken.None);
+		StateHasChanged();
 	}
 
 	private async Task GetPlaces()
 	{
 		places = await apiClient.GetPlaces(CancellationToken.None);
+		StateHasChanged();
 	}
 
 	private async Task GetRequests()
 	{
 		requests = await apiClient.GetLocationInfoRequests(CancellationToken.None);
+		StateHasChanged();
 	}
 
 	private async Task DeleteUser(Guid userId)

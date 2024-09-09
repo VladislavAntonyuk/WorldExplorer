@@ -5,14 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Components\Pages\Admin\PlaceDetails.razor.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Remove="Components\Pages\Admin\PlaceDetails.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
 		<ProjectReference Include="..\..\Modules\Places\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj" />
 		<ProjectReference Include="..\..\Modules\Users\WorldExplorer.Modules.Users.Application\WorldExplorer.Modules.Users.Application.csproj" />
