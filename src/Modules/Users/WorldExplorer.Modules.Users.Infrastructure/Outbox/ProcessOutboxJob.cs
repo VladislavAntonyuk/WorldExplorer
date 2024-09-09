@@ -28,7 +28,7 @@ internal sealed class ProcessOutboxJob(
 		logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
 
 		var outboxMessages = await GetOutboxMessagesAsync();
-		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
+		//await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
 
 		foreach (var outboxMessage in outboxMessages)
@@ -54,7 +54,7 @@ internal sealed class ProcessOutboxJob(
 			catch (Exception caughtException)
 			{
 				logger.LogError(caughtException, "{Module} - Exception while processing outbox message {MessageId}",
-				                ModuleName, outboxMessage.Id);
+								ModuleName, outboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -62,7 +62,7 @@ internal sealed class ProcessOutboxJob(
 			await UpdateOutboxMessageAsync(outboxMessage, exception);
 		}
 
-		await transaction.CommitAsync();
+		//await transaction.CommitAsync();
 
 		logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
 	}
@@ -91,19 +91,23 @@ internal sealed class ProcessOutboxJob(
 		           """;
 
 		IEnumerable<OutboxMessageResponse> outboxMessages =
-			await dbConnectionFactory.Database.SqlQueryRaw<OutboxMessageResponse>(sql).ToListAsync();
+			await dbConnectionFactory.OutboxMessages
+									 .Where(x => x.ProcessedOnUtc == null)
+									 .Take(outboxOptions.Value.BatchSize)
+									 .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
+									 .ToListAsync();
 
 		return outboxMessages.ToList();
 	}
 
 	private async Task UpdateOutboxMessageAsync(OutboxMessageResponse outboxMessage, Exception? exception)
 	{
-		await dbConnectionFactory.Database.ExecuteSqlAsync($"""
-		                                                    UPDATE users.outbox_messages
-		                                                    SET ProcessedOnUtc = "{dateTimeProvider.GetUtcNow()}",
-		                                                        Error = "{exception?.ToString()}"
-		                                                    WHERE Id = "{outboxMessage.Id}"
-		                                                    """);
+		var error = exception?.ToString();
+		await dbConnectionFactory.OutboxMessages.Where(x => x.Id == outboxMessage.Id)
+		                         .ExecuteUpdateAsync(m => m.SetProperty(p => p.Error, error)
+		                                                   .SetProperty(
+			                                                   p => p.ProcessedOnUtc,
+			                                                   dateTimeProvider.GetUtcNow().UtcDateTime));
 	}
 
 	internal sealed record OutboxMessageResponse(Guid Id, string Content, string Type);

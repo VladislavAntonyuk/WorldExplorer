@@ -17,36 +17,24 @@ internal sealed class IdempotentIntegrationEventHandler<TIntegrationEvent>(
 
 		var inboxMessageConsumer = new InboxMessageConsumer(integrationEvent.Id, decorated.GetType().Name);
 
-		if (await InboxConsumerExistsAsync(connection, inboxMessageConsumer))
+		if (await InboxConsumerExistsAsync(inboxMessageConsumer))
 		{
 			return;
 		}
 
 		await decorated.Handle(integrationEvent, cancellationToken);
 
-		await InsertInboxConsumerAsync(connection, inboxMessageConsumer);
+		await InsertInboxConsumerAsync(inboxMessageConsumer);
 	}
 
-	private async Task<bool> InboxConsumerExistsAsync(DbConnection dbConnection,
-		InboxMessageConsumer inboxMessageConsumer)
+	private async Task<bool> InboxConsumerExistsAsync(InboxMessageConsumer inboxMessageConsumer)
 	{
-		var sql = $"""
-		               SELECT 1
-		               FROM users.inbox_message_consumers
-		               WHERE inbox_message_id = {inboxMessageConsumer.InboxMessageId} AND
-		                     name = {inboxMessageConsumer.Name}
-		           """;
-
-		return await dbConnectionFactory.Database.SqlQueryRaw<int>(sql).AnyAsync();
+		return await dbConnectionFactory.InboxMessagesConsumers.AnyAsync(x => x.Name == inboxMessageConsumer.Name && x.InboxMessageId == inboxMessageConsumer.InboxMessageId);
 	}
 
-	private async Task InsertInboxConsumerAsync(DbConnection dbConnection, InboxMessageConsumer inboxMessageConsumer)
+	private async Task InsertInboxConsumerAsync(InboxMessageConsumer inboxMessageConsumer)
 	{
-		var sql = $"""
-		           INSERT INTO users.inbox_message_consumers(inbox_message_id, name)
-		           VALUES ({inboxMessageConsumer.InboxMessageId}, {inboxMessageConsumer.Name})
-		           """;
-
-		await dbConnectionFactory.Database.ExecuteSqlRawAsync(sql);
+		dbConnectionFactory.InboxMessagesConsumers.Add(inboxMessageConsumer);
+		await dbConnectionFactory.SaveChangesAsync();
 	}
 }

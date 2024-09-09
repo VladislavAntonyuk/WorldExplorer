@@ -69,9 +69,10 @@
 					<ChildContent>
 						@Body
 					</ChildContent>
-					<ErrorContent>
+					<ErrorContent Context="exception">
 						<MudText Typo="Typo.h1">Error has occurred</MudText>
-						<MudButton OnClick="ResetError">Go To The Homepage</MudButton>
+						<MudText Typo="Typo.body1">@exception.Message</MudText>
+						<MudButton OnClick="ResetError" Variant="Variant.Filled">Go To The Homepage</MudButton>
 					</ErrorContent>
 				</ErrorBoundary>
 			</MudContainer>

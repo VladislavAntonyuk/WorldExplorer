@@ -2,14 +2,14 @@
 
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
+using Modules.Places.Application.Abstractions;
 using Modules.Places.Application.Places.GetPlace;
-using Modules.Places.Domain.Places;
 using MudBlazor;
 using WorldExplorer.Web.Components;
 
-public partial class PlaceDetails(WorldExplorerApiClient apiClient) : WorldExplorerAuthBaseComponent
+public partial class PlaceDetails(WorldExplorerApiClient apiClient, ISnackbar snackbar) : WorldExplorerAuthBaseComponent
 {
-	private PlaceResponse? place;
+	private PlaceRequest? place;
 
 	[Parameter]
 	public Guid PlaceId { get; set; }
@@ -23,17 +23,36 @@ public partial class PlaceDetails(WorldExplorerApiClient apiClient) : WorldExplo
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
-		place = await apiClient.GetPlaceDetails(PlaceId, CancellationToken.None);
+		var placeResponse = await apiClient.GetPlaceDetails(PlaceId, CancellationToken.None);
+		if (placeResponse is null)
+		{
+			return;
+		}
+
+		place = new PlaceRequest()
+		{
+			Description = placeResponse.Description,
+			Location = placeResponse.Location,
+			Name = placeResponse.Name,
+			Images = placeResponse.Images,
+			Rating = placeResponse.Rating
+		};
 	}
 
-	private Task SavePlace()
+	private async Task SavePlace()
 	{
-		return place is null ? Task.CompletedTask : apiClient.UpdatePlace(place, CancellationToken.None);
+		if (place is null)
+		{
+			return;
+		}
+		await apiClient.UpdatePlace(PlaceId, place, CancellationToken.None);
+		snackbar.Add("Saved", Severity.Success);
 	}
 
-	private Task DeletePlace()
+	private async Task DeletePlace()
 	{
-		return apiClient.DeletePlace(PlaceId, CancellationToken.None);
+		await apiClient.DeletePlace(PlaceId, CancellationToken.None);
+		snackbar.Add("Deleted", Severity.Success);
 	}
 
 	private void DeleteImage(string image)

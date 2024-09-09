@@ -13,6 +13,10 @@ public sealed class PlacesDbContext(DbContextOptions<PlacesDbContext> options) :
 {
 	internal DbSet<Place> Places => Set<Place>();
 	internal DbSet<LocationInfoRequest> LocationInfoRequests => Set<LocationInfoRequest>();
+	internal DbSet<InboxMessage> InboxMessages => Set<InboxMessage>();
+	internal DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+	internal DbSet<InboxMessageConsumer> InboxMessagesConsumers => Set<InboxMessageConsumer>();
+	internal DbSet<OutboxMessageConsumer> OutboxMessagesConsumers => Set<OutboxMessageConsumer>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -22,11 +26,11 @@ public sealed class PlacesDbContext(DbContextOptions<PlacesDbContext> options) :
 		modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
 		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
 		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+
 		modelBuilder.ApplyConfiguration(new PlaceConfiguration());
 		modelBuilder.ApplyConfiguration(new LocationInfoRequestConfiguration());
 	}
 }
-
 
 #if DEBUG
 // dotnet ef migrations add "Places" -o "Database\Migrations"

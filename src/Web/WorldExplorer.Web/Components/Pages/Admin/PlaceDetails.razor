@@ -1,6 +1,6 @@
-﻿@using WorldExplorer.Modules.Places.Domain.Places
+﻿@using WorldExplorer.Modules.Places.Application.Abstractions
 @inherits WorldExplorerAuthBaseComponent
-@page "/admin/places/{placeId:guid}"
+@page "/admin/places/{PlaceId:guid}"
 
 @attribute [Authorize(Policy = "IsAdministrator")]
 

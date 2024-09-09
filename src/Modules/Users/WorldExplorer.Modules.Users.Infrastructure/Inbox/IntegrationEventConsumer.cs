@@ -25,11 +25,7 @@ internal sealed class IntegrationEventConsumer<TIntegrationEvent>(UsersDbContext
 			OccurredOnUtc = integrationEvent.OccurredOnUtc
 		};
 
-		const string sql = """
-		                   INSERT INTO users.inbox_messages(id, type, content, occurred_on_utc)
-		                   VALUES (@Id, @Type, @Content::json, @OccurredOnUtc)
-		                   """;
-
-		await dbConnectionFactory.Database.ExecuteSqlRawAsync(sql, inboxMessage);
+		dbConnectionFactory.InboxMessages.Add(inboxMessage);
+		await dbConnectionFactory.SaveChangesAsync();
 	}
 }

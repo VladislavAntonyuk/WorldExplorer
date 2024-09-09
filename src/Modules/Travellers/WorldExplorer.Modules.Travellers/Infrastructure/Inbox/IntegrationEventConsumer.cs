@@ -23,11 +23,7 @@ internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbCo
 			OccurredOnUtc = integrationEvent.OccurredOnUtc
 		};
 
-		const string sql = """
-		                   INSERT INTO travellers.inbox_messages(id, type, content, occurred_on_utc)
-		                   VALUES (@Id, @Type, @Content, @OccurredOnUtc)
-		                   """;
-
-		await dbConnectionFactory.Database.ExecuteSqlRawAsync(sql, inboxMessage);
+		dbConnectionFactory.InboxMessages.Add(inboxMessage);
+		await dbConnectionFactory.SaveChangesAsync();
 	}
 }

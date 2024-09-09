@@ -21,6 +21,6 @@ internal sealed class GetLocationInfoRequest : IEndpoint
 			   return result.Match(Results.Ok, ApiResults.Problem);
 		   })
 		   .RequireAuthorization(Constants.AdministratorPolicy)
-		   .WithTags(Tags.Places);
+		   .WithTags(Tags.LocationInfoRequests);
 	}
 }

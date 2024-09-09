@@ -27,4 +27,9 @@ internal sealed class PlaceRepository(PlacesDbContext context) : IPlaceRepositor
 		return await context.Places.Where(x => x.Location.IsWithinDistance(userLocation, 1000))
 		                    .ToListAsync(cancellationToken);
 	}
+
+	public async Task Delete(Guid placeRequestId, CancellationToken cancellationToken)
+	{
+		await context.Places.Where(x => x.Id == placeRequestId).ExecuteDeleteAsync(cancellationToken);
+	}
 }
