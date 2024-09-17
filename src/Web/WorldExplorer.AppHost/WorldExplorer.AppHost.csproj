@@ -8,11 +8,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Client\Client.ClientStub\Client.ClientStub.csproj" />
 		<ProjectReference Include="..\WorldExplorer.ApiService\WorldExplorer.ApiService.csproj" />
 		<ProjectReference Include="..\WorldExplorer.Web\WorldExplorer.Web.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+
+		<PackageReference Include="AspireMobile.Hosting" Version="0.7.130-beta" />
 		<PackageReference Include="Aspire.Hosting.AppHost" Version="8.2.0" />
 		<PackageReference Include="Aspire.Hosting.Azure.CognitiveServices" Version="8.2.0" />
 		<PackageReference Include="Aspire.Hosting.Azure.Sql" Version="8.2.0" />

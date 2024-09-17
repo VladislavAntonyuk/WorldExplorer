@@ -6,7 +6,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>$(NetVersion)-android;$(NetVersion)-ios;$(NetVersion)-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);$(NetVersion)-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(NetVersion)-windows10.0.19041.0</TargetFrameworks>
 		<TargetFrameworks Condition="'$(IncludeTizenTargetFrameworks)' == 'true'">$(TargetFrameworks);$(NetVersion)-tizen</TargetFrameworks>
 
 		<OutputType>Exe</OutputType>
@@ -79,7 +79,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Shared\Shared.csproj" />
+	  <ProjectReference Include="..\..\Web\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

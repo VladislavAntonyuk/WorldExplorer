@@ -1,6 +1,7 @@
 ﻿namespace Client.Services.Navigation;
 
 using Framework;
+using Models.Enums;
 using ViewModels;
 
 internal sealed class NavigationService : INavigationService, IDisposable

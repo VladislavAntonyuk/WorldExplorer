@@ -4,6 +4,7 @@ using System.Reflection;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Maps;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Services;
 using Services.API;
 using Services.Auth;
@@ -19,6 +20,8 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
+
+		builder.AddAppDefaults();
 
 		var config = GetConfiguration();
 		builder.Configuration.AddConfiguration(config);
@@ -94,7 +97,9 @@ public static class MauiProgram
 		builder.Services.AddTransientWithShellRoute<CameraPage, CameraViewModel>($"//home/{nameof(CameraPage)}");
 		builder.Services.AddSingleton<ShellViewModel>();
 
-		return builder.Build();
+		var app = builder.Build();
+		app.InitOpenTelemetryServices();
+		return app;
 	}
 
 	private static IConfiguration GetConfiguration()
@@ -103,6 +108,7 @@ public static class MauiProgram
 		builder.AddConfiguration("Client.appsettings.json");
 #if DEBUG
 		builder.AddConfiguration("Client.appsettings.Development.json");
+		builder.AddInMemoryCollection(AspireAppSettings.Settings);
 #endif
 		return builder.Build();
 	}

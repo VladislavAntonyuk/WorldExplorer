@@ -2,6 +2,7 @@
 
 using System.Globalization;
 using CommunityToolkit.Maui.Converters;
+using Models.Enums;
 using SkiaSharp.Extended.UI.Controls;
 
 public class ErrorCodeToImageSourceConverter : BaseConverterOneWay<ErrorCode?, SKLottieImageSource>

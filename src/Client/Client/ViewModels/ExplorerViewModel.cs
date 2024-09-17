@@ -10,7 +10,7 @@ using Resources.Localization;
 using Services;
 using Services.API;
 using Services.Auth;
-using Shared.Enums;
+using Shared.Models;
 using Views;
 using Location = Location;
 
@@ -141,7 +141,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	private async Task<StatusCode> GetRecommendations(Location location)
 	{
-		var placesResponse = await placesApi.GetRecommendations(new Shared.Models.Location(location.Latitude, location.Longitude), CancellationToken.None);
+		var placesResponse = await placesApi.GetRecommendations(new Location(location.Latitude, location.Longitude), CancellationToken.None);
 
 		if (!placesResponse.IsSuccessStatusCode)
 		{
@@ -165,7 +165,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 					Pins.Add(new WorldExplorerPin
 					{
 						PlaceId = place.Id,
-						Location = new Location(place.Location.Latitude, place.Location.Longitude),
+						Location = new Location(place.Location.X, place.Location.Y),
 						Label = place.Name,
 						Type = PinType.Place,
 						Image = place.MainImage,
