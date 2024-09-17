@@ -3,12 +3,14 @@
 		<TargetFramework>$(NetVersion)</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference
-			Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
-		<ProjectReference
-			Include="..\..\..\Common\WorldExplorer.Common.Presentation\WorldExplorer.Common.Presentation.csproj" />
-		<ProjectReference
-			Include="..\..\Users\WorldExplorer.Modules.Users.IntegrationEvents\WorldExplorer.Modules.Users.IntegrationEvents.csproj" />
+	  <Compile Remove="Infrastructure\Database\Configurations\ReviewConfiguration.cs" />
+	  <Compile Remove="Infrastructure\Database\Configurations\UserConfiguration.cs" />
+	  <Compile Remove="Infrastructure\Database\Configurations\VisitConfiguration.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Presentation\WorldExplorer.Common.Presentation.csproj" />
+		<ProjectReference Include="..\..\Users\WorldExplorer.Modules.Users.IntegrationEvents\WorldExplorer.Modules.Users.IntegrationEvents.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

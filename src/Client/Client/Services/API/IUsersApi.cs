@@ -5,7 +5,7 @@ using Shared.Models;
 
 public interface IUsersApi
 {
-	[Delete("/self")]
+	[Delete("/profile")]
 	internal Task<IApiResponse> DeleteInternal(CancellationToken cancellationToken);
 
 	async Task<IApiResponse> Delete(CancellationToken cancellationToken)
@@ -20,7 +20,7 @@ public interface IUsersApi
 		}
 	}
 
-	[Get("/self")]
+	[Get("/profile")]
 	internal Task<ApiResponse<User>> GetCurrentUserInternal(CancellationToken cancellationToken);
 
 	async Task<ApiResponse<User>> GetCurrentUser(CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ public interface IUsersApi
 		}
 	}
 
-	[Put("/self")]
+	[Put("/profile")]
 	internal Task<IApiResponse> UpdateCurrentUserInternal(User user, CancellationToken cancellationToken);
 
 	async Task<IApiResponse> UpdateCurrentUser(User user, CancellationToken cancellationToken)

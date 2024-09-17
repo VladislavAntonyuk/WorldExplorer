@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using Framework;
+using Models.Enums;
 using Resources.Localization;
 
 public partial class ErrorViewModel : BaseViewModel, IQueryAttributable

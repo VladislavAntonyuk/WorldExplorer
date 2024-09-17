@@ -35,4 +35,7 @@ if (!builder.Environment.IsDevelopment())
 	apiService.WithReference(serviceBus);
 }
 
+builder.AddMobileProject("mauiclient", "../../Client/Client")
+       .WithReference(apiService);
+
 builder.Build().Run();

@@ -26,4 +26,10 @@
       <ProjectReference Include="..\..\src\Modules\Places\WorldExplorer.Modules.Places.Infrastructure\WorldExplorer.Modules.Places.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="*.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
