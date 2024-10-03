@@ -2,10 +2,13 @@
 
 using Database;
 using Domain.Places;
+using LocationInfo;
+using MassTransit.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NetTopologySuite.Geometries;
 
-internal sealed class PlaceRepository(PlacesDbContext context) : IPlaceRepository
+internal sealed class PlaceRepository(PlacesDbContext context, IOptions<PlacesSettings> placeOptions) : IPlaceRepository
 {
 	public async Task<Place?> GetAsync(Guid id, CancellationToken cancellationToken = default)
 	{
@@ -24,7 +27,7 @@ internal sealed class PlaceRepository(PlacesDbContext context) : IPlaceRepositor
 
 	public async Task<List<Place>> GetNearestPlacesAsync(Point userLocation, CancellationToken cancellationToken)
 	{
-		return await context.Places.Where(x => x.Location.IsWithinDistance(userLocation, 1000))
+		return await context.Places.Where(x => x.Location.IsWithinDistance(userLocation, placeOptions.Value.LocationRequestNearbyDistance))
 		                    .ToListAsync(cancellationToken);
 	}
 

@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
 using Domain.Places;
+using LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetTopologySuite.Geometries;
@@ -17,18 +18,18 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
 		{
 			Id = Guid.CreateVersion7(),
 			Name = "Place1",
-			Location = new Point(49.419500, 26.995900)
+			Location = new Point(26.995900, 49.419500)
 			{
-				SRID = 4326
+				SRID = DistanceConstants.SRID
 			},
 			Description = "Description1"
 		}, new
 		{
 			Id = Guid.CreateVersion7(),
 			Name = "Dnipro",
-			Location = new Point(48.482, 34.998)
+			Location = new Point(34.998, 48.482)
 			{
-				SRID = 4326
+				SRID = DistanceConstants.SRID
 			},
 			Description = "Description2"
 		});

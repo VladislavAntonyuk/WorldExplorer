@@ -13,9 +13,7 @@ public static class ApiExtensions
 					c.BaseAddress = new Uri(baseAddress);
 					c.Timeout = TimeSpan.FromSeconds(15);
 				})
-				.AddServiceDiscovery()
-				.AddHttpMessageHandler<AuthHeaderHandler>()
-				.AddStandardResilienceHandler();
+				.AddHttpMessageHandler<AuthHeaderHandler>();
 	}
 
 	public static async Task<IApiResponse> GetErrorResponse(this Exception e, HttpMethod httpMethod)

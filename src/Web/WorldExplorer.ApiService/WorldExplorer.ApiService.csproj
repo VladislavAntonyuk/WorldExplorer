@@ -5,21 +5,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference
-			Include="..\..\Modules\Places\WorldExplorer.Modules.Places.Infrastructure\WorldExplorer.Modules.Places.Infrastructure.csproj" />
-		<ProjectReference
-			Include="..\..\Modules\Travellers\WorldExplorer.Modules.Travellers\WorldExplorer.Modules.Travellers.csproj" />
-		<ProjectReference
-			Include="..\..\Modules\Users\WorldExplorer.Modules.Users.Infrastructure\WorldExplorer.Modules.Users.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\Modules\Places\WorldExplorer.Modules.Places.Infrastructure\WorldExplorer.Modules.Places.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\Modules\Travellers\WorldExplorer.Modules.Travellers\WorldExplorer.Modules.Travellers.csproj" />
+		<ProjectReference Include="..\..\Modules\Users\WorldExplorer.Modules.Users.Infrastructure\WorldExplorer.Modules.Users.Infrastructure.csproj" />
 		<ProjectReference Include="..\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.7.24406.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-preview.7.24405.3">
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-rc.1.24452.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-rc.1.24451.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Scalar.AspNetCore" Version="1.1.2" />
+		<PackageReference Include="Scalar.AspNetCore" Version="1.2.7" />
 	</ItemGroup>
 </Project>

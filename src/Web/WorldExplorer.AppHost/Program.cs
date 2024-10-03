@@ -15,13 +15,13 @@ var sqlServer = builder.AddSqlServer("server")
                        .PublishAsAzureSqlDatabase()
                        .AddDatabase("database", "worldexplorer");
 
-// var travellerService = builder.AddFusionGateway<Projects.WorldExplorer_Modules_Travellers>("graphql")
-//                            .WithReference(sqlServer);
+ var aiService = builder.AddOllama("ai");
 
 var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
                         .WithReference(sqlServer)
                         .WithReference(cache)
-                        .WithReference(openai);
+                        .WithReference(openai)
+                        .WithReference(aiService);
 
 builder.AddProject<WorldExplorer_Web>("webfrontend")
        .WithExternalHttpEndpoints()

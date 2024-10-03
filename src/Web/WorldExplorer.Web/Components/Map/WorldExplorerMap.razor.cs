@@ -1,8 +1,10 @@
 ﻿namespace WorldExplorer.Web.Components.Map;
 
 using Dialogs;
+using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using Modules.Places.Application.Abstractions;
+using Modules.Places.Application.Places.GetPlace;
 using MudBlazor;
 using User;
 
@@ -11,7 +13,8 @@ public sealed partial class WorldExplorerMap(
 	WorldExplorerApiClient apiClient,
 	ICurrentUserService currentUserService,
 	IDialogService dialogService,
-	ISnackbar snackbar) : WorldExplorerBaseComponent, IAsyncDisposable
+	ISnackbar snackbar,
+	IOptions<PlacesSettings> placeOptions) : WorldExplorerBaseComponent, IAsyncDisposable
 {
 	private Location? currentLocation;
 	private string? errorMessage;
@@ -67,7 +70,7 @@ public sealed partial class WorldExplorerMap(
 
 				foreach (var place in placesResult.Result)
 				{
-					await CreateMarker(place.Id, place.Location, place.Name, place.MainImage);
+					await CreateMarker(place);
 				}
 
 				break;
@@ -82,7 +85,7 @@ public sealed partial class WorldExplorerMap(
 	[JSInvokable]
 	public async Task UpdatePosition(Location location)
 	{
-		if (currentLocation is null || !apiClient.IsNearby(currentLocation, location))
+		if (currentLocation is null || currentLocation.CalculateDistanceTo(location) > placeOptions.Value.LocationDistance)
 		{
 			currentLocation = location;
 			isLoading = false;
@@ -92,7 +95,7 @@ public sealed partial class WorldExplorerMap(
 			{
 				statusCode = await AddNearbyPlaces(currentLocation);
 				await Task.Delay(TimeSpan.FromSeconds(10), cancellationTokenSource.Token);
-			} while (statusCode == StatusCode.LocationInfoRequestPending || !cancellationTokenSource.IsCancellationRequested);
+			} while (statusCode == StatusCode.LocationInfoRequestPending);
 		}
 	}
 
@@ -113,11 +116,13 @@ public sealed partial class WorldExplorerMap(
 		});
 	}
 
-	private async Task<Marker> CreateMarker(Guid id, Location location, string label, string? icon)
+	private async Task<Marker> CreateMarker(PlaceResponse place)
 	{
+		var distanceToPlace = currentLocation?.CalculateDistanceTo(place.Location);
+		var title = distanceToPlace.HasValue ? $"{place.Name} ({distanceToPlace} {Translation.Meters})" : place.Name;
 		const string defaultIcon = "/assets/default-location-pin.png";
-		var marker = new Marker(location, label, icon ?? defaultIcon);
-		await jsRuntime.InvokeVoidAsyncIgnoreErrors("leafletInterop.addMarker", cancellationTokenSource.Token, mapRef, id, marker);
+		var marker = new Marker(place.Location, title, place.MainImage ?? defaultIcon);
+		await jsRuntime.InvokeVoidAsyncIgnoreErrors("leafletInterop.addMarker", cancellationTokenSource.Token, mapRef, place.Id, marker);
 		return marker;
 	}
 }

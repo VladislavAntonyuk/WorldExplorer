@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 
 public class GeminiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiProviderTests(testOutputHelper)
 {
-	public override IAiService GetAiService()
+	public override Task<IAiService> GetAiService()
 	{
 		var configuration = new ConfigurationBuilder()
 		                    .AddJsonFile("settings.json", false)
@@ -19,9 +19,9 @@ public class GeminiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 		var httpClient = new HttpClient();
 		httpClient.DefaultRequestHeaders.Add("x-goog-api-client", "genai-swift/0.4.8");
 		httpClient.DefaultRequestHeaders.Add("User-Agent", "AIChat/1 CFNetwork/1410.1 Darwin/22.6.0");
-		return new AiService(new GeminiProvider(httpClient, Options.Create(new GeminiAiSettings
+		return Task.FromResult<IAiService>(new AiService(new GeminiProvider(httpClient, Options.Create(new GeminiAiSettings
 		{
 			ApiKey = configuration["GeminiKey"]
-		}), NullLogger<GeminiProvider>.Instance));
+		}), NullLogger<GeminiProvider>.Instance)));
 	}
 }

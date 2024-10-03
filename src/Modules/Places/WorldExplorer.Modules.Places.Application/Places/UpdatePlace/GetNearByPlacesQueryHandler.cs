@@ -19,7 +19,7 @@ internal sealed class UpdatePlaceCommandHandler(IPlaceRepository placeRepository
 			return Result.Failure(PlaceErrors.NotFound(request.Id));
 		}
 
-		place.Update(request.PlaceRequest.Name, new Point(request.PlaceRequest.Location.Latitude, request.PlaceRequest.Location.Longitude), request.PlaceRequest.Description);
+		place.Update(request.PlaceRequest.Name, request.PlaceRequest.Location.ToPoint(), request.PlaceRequest.Description);
 		await unitOfWork.SaveChangesAsync(cancellationToken);
 		return Result.Success();
 	}

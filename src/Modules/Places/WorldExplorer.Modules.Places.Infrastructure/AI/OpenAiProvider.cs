@@ -9,8 +9,8 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 {
 	public async Task<string?> GetResponse(string request)
 	{
-		var client = api.GetChatClient("gpt-3.5-turbo");
-
+		var client = api.GetChatClient("gpt-4o-mini");
+		
 		try
 		{
 			var result = await client.CompleteChatAsync(
@@ -19,7 +19,7 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 				new UserChatMessage(request)
 			], new ChatCompletionOptions
 			{
-				ResponseFormat = ChatResponseFormat.Text
+				ResponseFormat = ChatResponseFormat.JsonObject
 			});
 			if (result.Value.Content.Count == 0)
 			{
