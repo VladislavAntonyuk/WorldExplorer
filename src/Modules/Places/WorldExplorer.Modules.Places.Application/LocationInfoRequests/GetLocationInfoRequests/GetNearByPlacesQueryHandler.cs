@@ -19,7 +19,7 @@ internal sealed class GePLocationInfoRequestsQueryHandler(ILocationInfoRepositor
 	{
 		return new LocationInfoRequestResponse
 		{
-			Location = new Location(place.Location.X, place.Location.Y),
+			Location = new Location(place.Location.Y, place.Location.X),
 			CreationDate = place.CreationDate,
 			Id = place.Id,
 			Status = place.Status

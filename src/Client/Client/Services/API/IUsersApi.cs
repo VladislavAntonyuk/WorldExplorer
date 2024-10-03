@@ -36,9 +36,9 @@ public interface IUsersApi
 	}
 
 	[Put("/profile")]
-	internal Task<IApiResponse> UpdateCurrentUserInternal(User user, CancellationToken cancellationToken);
+	internal Task<IApiResponse> UpdateCurrentUserInternal(UpdateUserRequest user, CancellationToken cancellationToken);
 
-	async Task<IApiResponse> UpdateCurrentUser(User user, CancellationToken cancellationToken)
+	async Task<IApiResponse> UpdateCurrentUser(UpdateUserRequest user, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -48,5 +48,10 @@ public interface IUsersApi
 		{
 			return await e.GetErrorResponse(HttpMethod.Put);
 		}
+	}
+
+	public sealed class UpdateUserRequest
+	{
+		public bool TrackUserLocation { get; set; }
 	}
 }

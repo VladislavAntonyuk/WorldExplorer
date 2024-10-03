@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
 using Domain.LocationInfo;
+using LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetTopologySuite.Geometries;
@@ -14,9 +15,9 @@ public class LocationInfoRequestConfiguration : IEntityTypeConfiguration<Locatio
 		builder.HasData(new
 		{
 			Id = 1,
-			Location = new Point(49.419500, 26.995900)
+			Location = new Point(26.995900, 49.419500)
 			{
-				SRID = 4326
+				SRID = DistanceConstants.SRID
 			},
 			Status = LocationInfoRequestStatus.Completed,
 			CreationDate = DateTime.Today

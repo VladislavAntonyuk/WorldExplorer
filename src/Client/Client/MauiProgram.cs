@@ -97,9 +97,7 @@ public static class MauiProgram
 		builder.Services.AddTransientWithShellRoute<CameraPage, CameraViewModel>($"//home/{nameof(CameraPage)}");
 		builder.Services.AddSingleton<ShellViewModel>();
 
-		var app = builder.Build();
-		app.InitOpenTelemetryServices();
-		return app;
+		return builder.Build();
 	}
 
 	private static IConfiguration GetConfiguration()

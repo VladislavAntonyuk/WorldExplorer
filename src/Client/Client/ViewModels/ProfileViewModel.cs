@@ -80,6 +80,6 @@ public partial class ProfileViewModel : BaseViewModel
 	private Task SaveChanges(CancellationToken cancellationToken)
 	{
 		WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(User));
-		return User is null ? Task.CompletedTask : usersApi.UpdateCurrentUser(User, cancellationToken);
+		return User is null ? Task.CompletedTask : usersApi.UpdateCurrentUser(new IUsersApi.UpdateUserRequest(){TrackUserLocation = User.Settings.TrackUserLocation}, cancellationToken);
 	}
 }

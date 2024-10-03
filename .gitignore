@@ -406,3 +406,4 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 *.[Dd]evelopment.json
+/src/Client/Client/AspireAppSettings.g.cs

@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.GetNearByPlaces;
 
-using Abstractions;
 using Abstractions.Data;
 using Common.Application.Messaging;
 using Common.Domain;
@@ -16,7 +15,7 @@ internal sealed class GetNearByPlacesQueryHandler(
 	public async Task<Result<OperationResult<List<PlaceResponse>>>> Handle(GetNearByPlacesQuery request,
 		CancellationToken cancellationToken)
 	{
-		var userLocation = request.ToPoint();
+		var userLocation = request.Location.ToPoint();
 
 		var locationInfoRequests = await locationInfoRepository.IsNearby(userLocation);
 
@@ -34,7 +33,7 @@ internal sealed class GetNearByPlacesQueryHandler(
 			var nearestPlacesNearby = await placeRepository.GetNearestPlacesAsync(userLocation, cancellationToken);
 			return new OperationResult<List<PlaceResponse>>
 			{
-				Result = nearestPlacesNearby.Select(ToPlace).ToList()
+				Result = nearestPlacesNearby.Select(x => x.ToPlaceResponse()).ToList()
 			};
 		}
 
@@ -50,12 +49,5 @@ internal sealed class GetNearByPlacesQueryHandler(
 		{
 			StatusCode = StatusCode.LocationInfoRequestPending
 		};
-	}
-
-	private PlaceResponse ToPlace(Place place)
-	{
-		return new PlaceResponse(place.Id, place.Name, place.Description,
-		                         new Location(place.Location.X, place.Location.Y), 1,
-		                         place.Images.Select(x => x.Source).ToList());
 	}
 }

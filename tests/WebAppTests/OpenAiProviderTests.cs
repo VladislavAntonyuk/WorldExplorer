@@ -10,7 +10,7 @@ using Xunit.Abstractions;
 
 public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiProviderTests(testOutputHelper)
 {
-	public override IAiService GetAiService()
+	public override Task<IAiService> GetAiService()
 	{
 		var configuration = new ConfigurationBuilder()
 		                    .AddJsonFile("settings.json", false)
@@ -20,6 +20,6 @@ public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 		{
 			Endpoint = new Uri(configuration["OpenAiEndpoint"])
 		});
-		return new AiService(new OpenAiProvider(client, NullLogger<OpenAiProvider>.Instance));
+		return Task.FromResult<IAiService>(new AiService(new OpenAiProvider(client, NullLogger<OpenAiProvider>.Instance)));
 	}
 }

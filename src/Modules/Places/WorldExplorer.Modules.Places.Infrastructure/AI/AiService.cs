@@ -2,15 +2,13 @@
 
 using System.Text.Json;
 using Application.Abstractions;
+using Common.Infrastructure.Serialization;
 using Domain.Places;
+using NetTopologySuite.Geometries;
+using Location = Application.Abstractions.Location;
 
 public class AiService(IAiProvider aiProvider) : IAiService
 {
-	private readonly JsonSerializerOptions serializerOptions = new()
-	{
-		PropertyNameCaseInsensitive = true
-	};
-
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
 		var generalPrompt = $$"""
@@ -19,10 +17,14 @@ public class AiService(IAiProvider aiProvider) : IAiService
 		                      Format the output in JSON format with the next properties: name, location (longitude, latitude).
 		                      The output must contain only JSON because I will parse it later. Do not include any information or formatting except valid JSON.
 		                      Example JSON:
-		                          [{
-		                              "name": "Dmytro Yavornytsky National Historical Museum of Dnipro",
-		                              "location": { "latitude": 48.455833330000026, "longitude": 35.06388889000002 }
-		                          }]
+		                      {
+		                          "places": [
+		                              {
+		                                  "name": "Dmytro Yavornytsky National Historical Museum of Dnipro",
+		                                  "location": { "latitude": 48.455833330000026, "longitude": 35.06388889000002 }
+		                              }
+		                          ]
+		                      }
 		                      """;
 
 		var result = await aiProvider.GetResponse(generalPrompt);
@@ -31,8 +33,10 @@ public class AiService(IAiProvider aiProvider) : IAiService
 			return [];
 		}
 
-		var response = JsonSerializer.Deserialize<List<Place>>(result, serializerOptions);
-		return response ?? [];
+		var response = JsonSerializer.Deserialize<AIResponse>(result, SerializerSettings.Instance);
+		return response?.Places
+			.Select(x => Place.Create(x.Name,x.Location.ToPoint(), null))
+			.ToList() ?? [];
 	}
 
 	public Task<string?> GetPlaceDescription(string placeName, Location location)
@@ -52,7 +56,18 @@ public class AiService(IAiProvider aiProvider) : IAiService
 	public Task<string?> GenerateImage(string placeName, Location location)
 	{
 		var prompt =
-			$"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'";
+			$"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'. In output return either url of the image or base64 image. Do not include any another text.";
 		return aiProvider.GetImageResponse(prompt);
+	}
+
+	private record AiPlaceResponse
+	{
+		public string Name { get; init; }
+		public Location Location { get; init; }
+	}
+
+	private class AIResponse
+	{
+		public AiPlaceResponse[] Places { get; set; } = [];
 	}
 }

@@ -113,7 +113,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 schema: "places",
                 table: "LocationInfoRequests",
                 columns: new[] { "Id", "CreationDate", "Location", "Status" },
-                values: new object[] { 1, new DateTime(2024, 8, 24, 0, 0, 0, 0, DateTimeKind.Local), (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (49.4195 26.9959)"), 2 });
+                values: new object[] { 1, new DateTime(2024, 10, 2, 0, 0, 0, 0, DateTimeKind.Local), (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (26.9959 49.4195)"), 2 });
 
             migrationBuilder.InsertData(
                 schema: "places",
@@ -121,8 +121,8 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 columns: new[] { "Id", "Description", "Location", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("019184c5-a895-7179-b6b6-f9ff5ba19d53"), "Description1", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (49.4195 26.9959)"), "Place1" },
-                    { new Guid("019184c5-a899-7d2e-a94d-3eed0925c523"), "Description2", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (48.482 34.998)"), "Dnipro" }
+                    { new Guid("01924d9c-067a-7060-b824-fb3a646a6697"), "Description1", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (26.9959 49.4195)"), "Place1" },
+                    { new Guid("01924d9c-067e-7215-bfa5-b8808bd464b8"), "Description2", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (34.998 48.482)"), "Dnipro" }
                 });
         }
 

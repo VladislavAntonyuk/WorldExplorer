@@ -98,11 +98,6 @@ public class WorldExplorerApiClient(HttpClient httpClient)
 			       StatusCode = StatusCode.LocationInfoRequestPending
 		       };
 	}
-
-	public bool IsNearby(Location currentLocation, Location location)
-	{
-		return false;
-	}
 }
 
 public class OperationResult<T> where T : new()

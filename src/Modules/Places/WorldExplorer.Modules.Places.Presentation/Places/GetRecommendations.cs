@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Presentation.Places;
 
+using Application.Abstractions;
 using Application.Places.GetNearByPlaces;
 using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
@@ -14,7 +15,7 @@ internal sealed class GetRecommendations : IEndpoint
 	{
 		app.MapGet("places/recommendations", async ([AsParameters] Request location, ISender sender) =>
 		   {
-			   var result = await sender.Send(new GetNearByPlacesQuery(location.Longitude, location.Latitude));
+			   var result = await sender.Send(new GetNearByPlacesQuery(new Location(location.Latitude, location.Longitude)));
 
 			   return result.Match(Results.Ok, ApiResults.Problem);
 		   })

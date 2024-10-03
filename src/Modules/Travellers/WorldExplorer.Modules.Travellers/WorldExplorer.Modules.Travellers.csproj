@@ -14,15 +14,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HotChocolate.AspNetCore" Version="14.0.0-rc.0" />
-		<PackageReference Include="HotChocolate.Data" Version="14.0.0-rc.0" />
-		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="14.0.0-rc.0" />
+		<PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0-p.5" />
+		<PackageReference Include="HotChocolate.Data" Version="15.0.0-p.5" />
+		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.0.0-p.5" />
 		<PackageReference Include="HotChocolate.Data.EntityFramework.Helpers" Version="14.0.0-p.100" />
-		<PackageReference Include="HotChocolate.Types.Analyzers" Version="14.0.0-rc.0">
+		<PackageReference Include="HotChocolate.Types.Analyzers" Version="15.0.0-p.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-preview.7.24405.3">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.1.24451.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
