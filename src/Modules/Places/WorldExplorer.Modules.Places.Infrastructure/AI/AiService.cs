@@ -27,7 +27,7 @@ public class AiService(IAiProvider aiProvider) : IAiService
 		                      }
 		                      """;
 
-		var result = await aiProvider.GetResponse(generalPrompt);
+		var result = await aiProvider.GetResponse(generalPrompt, AiOutputFormat.Json);
 		if (string.IsNullOrWhiteSpace(result))
 		{
 			return [];
@@ -50,7 +50,7 @@ public class AiService(IAiProvider aiProvider) : IAiService
 		                     Dmytro Yavornytsky National Historical Museum of Dnipro is a museum, established in Dnipro (Ukraine) in 1848 by Andriy Fabr, local governor. Its permanent collection consists of 283 thousand objects from ancient Paleolithic implements to display units of World War II. Among its notable objects are the Kurgan stelae, Kernosivsky idol and vast collection of cossack's antiquities.
 		                     """;
 
-		return aiProvider.GetResponse(generalPrompt);
+		return aiProvider.GetResponse(generalPrompt, AiOutputFormat.Text);
 	}
 
 	public Task<string?> GenerateImage(string placeName, Location location)

@@ -18,7 +18,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("travellers")
-                .HasAnnotation("ProductVersion", "9.0.0-preview.7.24405.3")
+                .HasAnnotation("ProductVersion", "9.0.0-rc.1.24451.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

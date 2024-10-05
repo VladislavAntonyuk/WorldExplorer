@@ -1,13 +1,14 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.AI;
 
 using Microsoft.Extensions.Logging;
+using Ollama;
 using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Images;
 
 public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : IAiProvider
 {
-	public async Task<string?> GetResponse(string request)
+	public async Task<string?> GetResponse(string request, AiOutputFormat outputFormat)
 	{
 		var client = api.GetChatClient("gpt-4o-mini");
 		
@@ -19,7 +20,7 @@ public class OpenAiProvider(OpenAIClient api, ILogger<OpenAiProvider> logger) : 
 				new UserChatMessage(request)
 			], new ChatCompletionOptions
 			{
-				ResponseFormat = ChatResponseFormat.JsonObject
+				ResponseFormat = outputFormat == AiOutputFormat.Json ? ChatResponseFormat.JsonObject : ChatResponseFormat.Text
 			});
 			if (result.Value.Content.Count == 0)
 			{

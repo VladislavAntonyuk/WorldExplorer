@@ -25,35 +25,26 @@ internal sealed class PlaceDetailsJob(
 		logger.LogInformation("{Module} - Beginning to process locationInfoRequests messages", ModuleName);
 
 		var notFilledPlaces = await dbContext.Places
-		                                     .AsTracking()
-		                                     .Where(x => x.Images.Count < MinImagesCount || string.IsNullOrEmpty(x.Description))
-		                                     .OrderBy(x => x.Images.Count)
-		                                     .ToListAsync(context.CancellationToken);
+											 .AsTracking()
+											 .Where(x => x.Images.Count < MinImagesCount || string.IsNullOrEmpty(x.Description))
+											 .OrderBy(x => x.Images.Count)
+											 .ToListAsync(context.CancellationToken);
 
 		if (notFilledPlaces.Count == 0)
 		{
 			return;
 		}
-		
+
 		var placesChunks = notFilledPlaces.Chunk(10);
 		foreach (var places in placesChunks)
 		{
-			var fillPlacesTasks = places.Select(async place =>
-			{
-				if (string.IsNullOrWhiteSpace(place.Description))
-				{
-					await GenerateDescription(place);
-				}
-
-				if (place.Images.Count < MinImagesCount)
-				{
-					await GenerateImages(place, context.CancellationToken);
-				}
-			});
+			var fillPlacesDescriptionsTasks = places.Select(GenerateDescription);
+			var fillPlacesImagesTasks = places.Select(place => GenerateImages(place, context.CancellationToken));
 
 			try
 			{
-				await Task.WhenAll(fillPlacesTasks);
+				await Task.WhenAll(fillPlacesDescriptionsTasks);
+				await Task.WhenAll(fillPlacesImagesTasks);
 				await dbContext.SaveChangesAsync(context.CancellationToken);
 			}
 			catch (Exception e)
@@ -68,13 +59,12 @@ internal sealed class PlaceDetailsJob(
 
 	private async Task GenerateImages(Place place, CancellationToken stoppingToken)
 	{
-		var images = new List<string>();
-		var mainImage = await aiService.GenerateImage(place.Name, Location.FromPoint(place.Location));
-		if (!string.IsNullOrWhiteSpace(mainImage))
+		if (place.Images.Count >= MinImagesCount)
 		{
-			images.Add(mainImage);
+			return;
 		}
 
+		var images = new List<string>();
 		images.AddRange(await imageSearchService.GetPlaceImages(place.Name, stoppingToken));
 		foreach (var image in images)
 		{
@@ -89,7 +79,11 @@ internal sealed class PlaceDetailsJob(
 	{
 		if (string.IsNullOrWhiteSpace(place.Description))
 		{
-			place.Update(place.Name, place.Location, await aiService.GetPlaceDescription(place.Name, Location.FromPoint(place.Location)));
+			var placeDescription = await aiService.GetPlaceDescription(place.Name, Location.FromPoint(place.Location));
+			if (!string.IsNullOrWhiteSpace(placeDescription))
+			{
+				place.Update(place.Name, place.Location, placeDescription);
+			}
 		}
 	}
 }

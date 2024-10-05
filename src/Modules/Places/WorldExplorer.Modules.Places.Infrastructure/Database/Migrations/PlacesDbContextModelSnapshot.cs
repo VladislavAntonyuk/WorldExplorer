@@ -19,7 +19,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("places")
-                .HasAnnotation("ProductVersion", "9.0.0-preview.7.24405.3")
+                .HasAnnotation("ProductVersion", "9.0.0-rc.1.24451.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -130,15 +130,6 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LocationInfoRequests", "places");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreationDate = new DateTime(2024, 10, 2, 0, 0, 0, 0, DateTimeKind.Local),
-                            Location = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (26.9959 49.4195)"),
-                            Status = 2
-                        });
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>
@@ -161,22 +152,6 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Places", "places");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("01924d9c-067a-7060-b824-fb3a646a6697"),
-                            Description = "Description1",
-                            Location = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (26.9959 49.4195)"),
-                            Name = "Place1"
-                        },
-                        new
-                        {
-                            Id = new Guid("01924d9c-067e-7215-bfa5-b8808bd464b8"),
-                            Description = "Description2",
-                            Location = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (34.998 48.482)"),
-                            Name = "Dnipro"
-                        });
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>

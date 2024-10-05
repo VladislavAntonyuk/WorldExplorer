@@ -37,9 +37,10 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 		                            {
 			                            Id = domainEvent.Id,
 			                            Type = domainEvent.GetType().FullName,
-			                            Content = JsonSerializer.Serialize(domainEvent,
-				                                                               domainEvent.GetType(),
-				                                                               SerializerSettings.Instance),
+			                            Content = "{}",
+				                            //JsonSerializer.Serialize(domainEvent,
+				                            //                                   domainEvent.GetType(),
+				                            //                                   SerializerSettings.Instance),
 			                            OccurredOnUtc = domainEvent.OccurredOnUtc
 		                            })
 		                            .ToList();

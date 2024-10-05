@@ -65,7 +65,8 @@ public static class PlacesModule
 		{
 			builder.Services.AddSingleton<IOllamaApiClient, OllamaApiClient>(provider =>
 			{
-				var httpClient = provider.GetRequiredService<IHttpClientFactory>().CreateClient();
+				var httpClient = new HttpClient();
+				httpClient.Timeout = TimeSpan.FromMinutes(5);
 				var ollamaBaseUrl = builder.Configuration.GetConnectionStringOrThrow("ai");
 				return new OllamaApiClient(httpClient, new Uri(ollamaBaseUrl));
 			});
