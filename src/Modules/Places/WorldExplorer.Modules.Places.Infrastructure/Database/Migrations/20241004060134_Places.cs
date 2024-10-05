@@ -4,8 +4,6 @@ using NetTopologySuite.Geometries;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
@@ -107,22 +105,6 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Places", x => x.Id);
-                });
-
-            migrationBuilder.InsertData(
-                schema: "places",
-                table: "LocationInfoRequests",
-                columns: new[] { "Id", "CreationDate", "Location", "Status" },
-                values: new object[] { 1, new DateTime(2024, 10, 2, 0, 0, 0, 0, DateTimeKind.Local), (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (26.9959 49.4195)"), 2 });
-
-            migrationBuilder.InsertData(
-                schema: "places",
-                table: "Places",
-                columns: new[] { "Id", "Description", "Location", "Name" },
-                values: new object[,]
-                {
-                    { new Guid("01924d9c-067a-7060-b824-fb3a646a6697"), "Description1", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (26.9959 49.4195)"), "Place1" },
-                    { new Guid("01924d9c-067e-7215-bfa5-b8808bd464b8"), "Description2", (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=4326;POINT (34.998 48.482)"), "Dnipro" }
                 });
         }
 

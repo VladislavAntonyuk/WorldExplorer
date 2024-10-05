@@ -12,16 +12,6 @@ public class LocationInfoRequestConfiguration : IEntityTypeConfiguration<Locatio
 	{
 		builder.HasKey(e => e.Id);
 
-		builder.HasData(new
-		{
-			Id = 1,
-			Location = new Point(26.995900, 49.419500)
-			{
-				SRID = DistanceConstants.SRID
-			},
-			Status = LocationInfoRequestStatus.Completed,
-			CreationDate = DateTime.Today
-		});
 		//.HasColumnType(Geometry.TypeNamePoint);
 		//builder.HasMany(x => x.Reviews)
 		//	   .WithOne().HasForeignKey(d => d.PlaceId)

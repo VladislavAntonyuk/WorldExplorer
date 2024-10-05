@@ -5,7 +5,7 @@ using Ollama;
 
 public class OllamaProvider(IOllamaApiClient api, ILogger<OllamaProvider> logger) : IAiProvider
 {
-	public async Task<string?> GetResponse(string request)
+	public async Task<string?> GetResponse(string request, AiOutputFormat outputFormat)
 	{
 		try
 		{
@@ -16,7 +16,7 @@ public class OllamaProvider(IOllamaApiClient api, ILogger<OllamaProvider> logger
 					new Message(MessageRole.System, "You are a tour guide with a great knowledge of history."),
 					new Message(MessageRole.User, request)
 				],
-				Format = ResponseFormat.Json
+				Format = outputFormat == AiOutputFormat.Json ? ResponseFormat.Json : null
 			});
 			
 			logger.LogInformation("Received a response from AI: {Response}, Duration: {Duration}",
@@ -25,7 +25,7 @@ public class OllamaProvider(IOllamaApiClient api, ILogger<OllamaProvider> logger
 		}
 		catch (Exception e)
 		{
-			logger.LogError(e, "Failed generating response for {Request}", request);
+			 logger.LogError(e, "Failed generating response for {Request}", request);
 			return null;
 		}
 	}

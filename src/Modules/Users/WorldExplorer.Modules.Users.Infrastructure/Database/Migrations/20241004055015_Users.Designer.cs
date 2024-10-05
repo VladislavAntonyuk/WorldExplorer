@@ -12,7 +12,7 @@ using WorldExplorer.Modules.Users.Infrastructure.Database;
 namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(UsersDbContext))]
-    [Migration("20240824143721_Users")]
+    [Migration("20241004055015_Users")]
     partial class Users
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("users")
-                .HasAnnotation("ProductVersion", "9.0.0-preview.7.24405.3")
+                .HasAnnotation("ProductVersion", "9.0.0-rc.1.24451.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

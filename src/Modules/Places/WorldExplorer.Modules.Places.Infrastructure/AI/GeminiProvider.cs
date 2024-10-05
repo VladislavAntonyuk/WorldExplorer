@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 public class GeminiProvider(HttpClient httpClient, IOptions<GeminiAiSettings> aiOptions, ILogger<GeminiProvider> logger)
 	: IAiProvider
 {
-	public async Task<string?> GetResponse(string request)
+	public async Task<string?> GetResponse(string request, AiOutputFormat outputFormat)
 	{
 		var result = await new GenerativeModel(aiOptions.Value.ApiKey, client: httpClient).GenerateContentAsync([
 				new Part
