@@ -8,7 +8,6 @@ using Services;
 using Services.Navigation;
 
 public partial class CameraViewModel(INavigationService navigationService,
-	IDispatcher dispatcher,
 	IDialogService dialogService,
 	IDeviceDisplay deviceDisplay) : BaseViewModel
 {
