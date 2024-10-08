@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>World Explorer - Leaflet</title>
+
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline' https://unpkg.com https://*.openstreetmap.org; style-src 'self' 'unsafe-inline' https://unpkg.com https://*.openstreetmap.org; media-src *">
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		#map {
+			height: 100%;
+			width: 100vw;
+		}</style>
+</head>
+<body>
+
+	<div id='map'></div>
+
+	<script>
+		let map;
+		let userMarker;
+		initMap();
+
+	function initMap() {
+				map = L.map("map",
+			{
+				zoom: 15
+			});
+		L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+			{
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(map);
+		map.locate({
+			watch: true,
+			setView: true, //options.trackUserLocation
+			enableHighAccuracy: true,
+			timeout: Infinity
+		});
+		map.on("locationfound",
+			(e) => {
+				if (userMarker) {
+					const location = userMarker.getLatLng();
+					if (isNearbyLocation(location.lat, e.latlng, 100)) {
+						return;
+					}
+
+					userMarker.removeFrom(map);
+				}
+				else {
+					map.setView(e.latlng, 15);
+				}
+
+				userMarker = createMarker({
+					icon: "/assets/user-location-pin.png",
+					location: {
+						latitude: e.latlng.lat,
+						longitude: e.latlng.lng
+					},
+					title: `My location (${e.latlng.lat}, ${e.latlng.lng})`
+				});
+				dotnetRef.invokeMethodAsync("UpdatePosition", { latitude: e.latlng.lat, longitude: e.latlng.lng });
+			});
+		map.on("locationerror",
+			(e) => {
+				alert(e.message);
+				dotnetRef.invokeMethodAsync("UpdatePositionError", e.message);
+			});
+	}
+
+	function addMarker(dotnetRef, id, options) {
+		const marker = createMarker(options);
+		marker.on("click",
+			(e) => {
+				dotnetRef.invokeMethodAsync("OpenDetails", id, options.title);
+			});
+	}
+
+	function destroyMap() {
+		if (userMarker) {
+			userMarker.remove();
+			userMarker = undefined;
+		}
+
+		if (map) {
+			map.stopLocate();
+			map.remove();
+		}
+	}
+		
+		function createMarker(options) {
+			const icon = L.icon({
+				iconUrl: options.icon
+			});
+			return L.marker([options.location.latitude, options.location.longitude], { icon: icon, title: options.title })
+				.addTo(map);
+		}
+
+		function isNearbyLocation(location1, location2, distance) {
+			const metersPerDegree = 111139; // Approximate for both latitude and longitude
+			const latLongDifferenceEquivalentToM = distance / metersPerDegree;
+
+			const latDifference = Math.abs(location1.lat - location2.lat);
+			const longDifference = Math.abs(location1.lng - location2.lng);
+
+			return (
+				latDifference <= latLongDifferenceEquivalentToM &&
+				longDifference <= latLongDifferenceEquivalentToM
+			);
+		}
+	</script>
+
+
+
+</body>
+</html>

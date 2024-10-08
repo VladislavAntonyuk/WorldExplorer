@@ -1,9 +1,8 @@
 ﻿namespace Client.Views;
 
 using Controls;
+using Controls.WorldExplorerMap;
 using Framework;
-using Microsoft.Maui.Controls.Maps;
-using Microsoft.Maui.Maps;
 using Syncfusion.Maui.Popup;
 using ViewModels;
 
@@ -27,10 +26,10 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 
 		dispatcher.Dispatch(() =>
 		{
-			Map.MoveToRegion(MapSpan.FromCenterAndRadius(e.Location, Distance.FromKilometers(1)));
+			//Map.MoveToRegion(MapSpan.FromCenterAndRadius(e.Location, Distance.FromKilometers(1)));
 		});
 	}
-
+	/*
 	private void Pin_OnMarkerClicked(object? sender, PinClickedEventArgs e)
 	{
 		if (sender is not WorldExplorerPin pin)
@@ -64,5 +63,5 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 		};
 		popup.Show();
 		placeDetailsView.Popup = popup;
-	}
+	}*/
 }

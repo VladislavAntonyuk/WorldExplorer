@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Controls;
+using Controls.WorldExplorerMap;
 using Framework;
-using Microsoft.Maui.Controls.Maps;
 using Resources.Localization;
 using Services;
 using Services.API;
@@ -167,7 +167,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 						PlaceId = place.Id,
 						Location = place.Location,
 						Label = place.Name,
-						Type = PinType.Place,
 						Image = place.MainImage,
 						Address = OperatingSystem.IsWindows() ? string.Empty : place.Description ?? string.Empty
 					});
@@ -190,7 +189,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	private async Task CheckLocation(Location location)
 	{
-		Pin? closestPlace = null;
+		WorldExplorerPin? closestPlace = null;
 		double closestDistanceToPlace = 1;
 		foreach (var pin in Pins)
 		{
