@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.Runtime.InteropServices;
+using Microsoft.Extensions.Hosting;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -7,13 +8,20 @@ var cache = builder.AddRedis("cache").WithImageTag("latest").WithDataVolume("wor
 
 var openai = builder.AddConnectionString("openai");
 
-var sqlServer = builder.AddSqlServer("server")
-                       //.WithImage("azure-sql-edge")
-                       //.WithImageRegistry("mcr.microsoft.com")
-                       .WithImageTag("2019-CU18-ubuntu-20.04")
-                       .WithDataVolume("world-explorer-database")
-                       .PublishAsAzureSqlDatabase()
-                       .AddDatabase("database", "worldexplorer");
+var sqlServer = builder.AddSqlServer("server");
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+	sqlServer.WithImageTag("2019-CU18-ubuntu-20.04");
+}
+else
+{
+	sqlServer.WithImage("azure-sql-edge")
+	         .WithImageRegistry("mcr.microsoft.com");
+}
+
+sqlServer.WithDataVolume("world-explorer-database")
+         .PublishAsAzureSqlDatabase()
+         .AddDatabase("database", "worldexplorer");
 
  var aiService = builder.AddOllama("ai");
 
