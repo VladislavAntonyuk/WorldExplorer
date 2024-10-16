@@ -36,4 +36,4 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.MapDefaultEndpoints();
 
-app.Run();
+await app.RunAsync();

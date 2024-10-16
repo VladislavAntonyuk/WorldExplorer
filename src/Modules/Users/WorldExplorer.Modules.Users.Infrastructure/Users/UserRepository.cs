@@ -25,4 +25,9 @@ internal sealed class UserRepository(UsersDbContext context) : IUserRepository
 	{
 		await context.Users.Where(x => x.Id == id).ExecuteDeleteAsync(cancellationToken);
 	}
+
+	public void Delete(User user)
+	{
+		context.Users.Remove(user);
+	}
 }

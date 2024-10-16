@@ -46,7 +46,14 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 			var getDetailsResult = await placesApi.GetDetails(placeId.Value, CancellationToken.None);
 			if (getDetailsResult.IsSuccessStatusCode)
 			{
-				Place = getDetailsResult.Content;
+				Place = new Place
+				{
+					Id = getDetailsResult.Content.Id,
+					Name = getDetailsResult.Content.Name,
+					Location = getDetailsResult.Content.Location,
+					Description = getDetailsResult.Content.Description,
+					Images = getDetailsResult.Content.Images.ToList()
+				};
 				if (Place.Images.Count > 0 && arService.IsSupported())
 				{
 					IsLiveViewEnabled = true;
@@ -111,16 +118,16 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 		if (DeviceInfo.Current.Platform == DevicePlatform.iOS || DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
 		{
 			// https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-			await Launcher.OpenAsync($"http://maps.apple.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.X},{Place.Location.Y}");
+			await Launcher.OpenAsync($"http://maps.apple.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.Latitude},{Place.Location.Longitude}");
 		}
 		else if (DeviceInfo.Current.Platform == DevicePlatform.Android)
 		{
 			// opens the 'task chooser' so the user can pick Maps, Chrome or other mapping app
-			await Launcher.OpenAsync($"http://maps.google.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.X},{Place.Location.Y}");
+			await Launcher.OpenAsync($"http://maps.google.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.Latitude},{Place.Location.Longitude}");
 		}
 		else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
 		{
-			await Launcher.OpenAsync($"bingmaps:?rtp=adr.{myLocation.Latitude},{myLocation.Longitude}~adr.{Place.Location.X},{Place.Location.Y}");
+			await Launcher.OpenAsync($"bingmaps:?rtp=adr.{myLocation.Latitude},{myLocation.Longitude}~adr.{Place.Location.Latitude},{Place.Location.Longitude}");
 		}
 	}
 }

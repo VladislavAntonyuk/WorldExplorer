@@ -6,5 +6,5 @@ public interface IUserRepository
 	Task<List<User>> GetAsync(CancellationToken cancellationToken = default);
 
 	void Insert(User user);
-	Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+	void Delete(User user);
 }

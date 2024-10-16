@@ -1,14 +1,15 @@
-﻿namespace OpenAITestsV2;
+﻿namespace WebAppTests;
 
 using System.ClientModel;
 using FluentAssertions;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using OpenAI;
 using OpenAI.Chat;
-using Xunit;
 using Xunit.Abstractions;
+using ChatMessage = Microsoft.Extensions.AI.ChatMessage;
 
-public class UnitTest1(ITestOutputHelper testOutputHelper)
+public class OpenAiTests(ITestOutputHelper testOutputHelper)
 {
 	[Theory]
 	[InlineData("https://free.gpt.ge/v1", "API_KEY1", "gpt-3.5-turbo")]
@@ -22,13 +23,12 @@ public class UnitTest1(ITestOutputHelper testOutputHelper)
 		                    .AddJsonFile("settings.Development.json", true)
 		                    .Build();
 
-		var client = new OpenAIClient(new ApiKeyCredential(configuration[key]), new OpenAIClientOptions
+		var client = new OpenAIChatClient(new OpenAIClient(new ApiKeyCredential(configuration[key]), new OpenAIClientOptions
 		{
 			Endpoint = new Uri(url)
-		});
-		var chatClient = client.GetChatClient(model);
-		var result = await chatClient.CompleteChatAsync(new UserChatMessage("hello"));
-		var content = result.Value.Content[0].ToString();
+		}), model);
+		var result = await client.CompleteAsync([new ChatMessage(ChatRole.User, "hello")]);
+		var content = result.Message.Text;
 		testOutputHelper.WriteLine(content);
 		content.Should().NotBeEmpty();
 	}

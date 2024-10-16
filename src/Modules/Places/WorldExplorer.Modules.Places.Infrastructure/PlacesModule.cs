@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure;
 
-using System.ClientModel;
 using AI;
 using Application.Abstractions;
 using Application.Abstractions.Data;
@@ -12,16 +11,17 @@ using Domain.LocationInfo;
 using Domain.Places;
 using Image;
 using LocationInfo;
-using MassTransit.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Ollama;
 using OpenAI;
 using Places;
 using Presentation;
+using WorldExplorer.Common.Application.EventBus;
+using WorldExplorer.Common.Application.Messaging;
 using WorldExplorer.Modules.Users.Infrastructure.Inbox;
 
 public static class PlacesModule
@@ -55,34 +55,24 @@ public static class PlacesModule
 		//services.AddSingleton<IPlacesService, PlacesService>();
 		//services.Configure<PlacesSettings>(configuration.GetRequiredSection("Places"));
 		//services.AddSingleton<ILocationInfoRequestsService, LocationInfoRepository>();
-		var aiProvider = builder.Configuration.GetValue<string>("AIProvider");
-		if (aiProvider == "OpenAI")
+		builder.AddAzureOpenAIClient("openai");
+		builder.Services.AddChatClient(b =>
 		{
-			builder.AddAzureOpenAIClient("openai");
-			builder.Services.AddSingleton<IAiProvider, OpenAiProvider>();
-		}
-		else if (aiProvider == "Ollama")
-		{
-			builder.Services.AddSingleton<IOllamaApiClient, OllamaApiClient>(provider =>
+			var aiProvider = b.Services.GetRequiredService<IConfiguration>().GetValue<string>("AIProvider");
+			var client = b.UseLogging()
+						  .UseFunctionInvocation()
+						  .UseDistributedCache()
+						  .UseOpenTelemetry();
+			if (aiProvider == "Ollama")
 			{
-				var httpClient = new HttpClient();
-				httpClient.Timeout = TimeSpan.FromMinutes(5);
 				var ollamaBaseUrl = builder.Configuration.GetConnectionStringOrThrow("ai");
-				return new OllamaApiClient(httpClient, new Uri(ollamaBaseUrl));
-			});
-			builder.Services.AddSingleton<IAiProvider, OllamaProvider>();
-		}
-		else
-		{
-			builder.Services.Configure<GeminiAiSettings>(builder.Configuration.GetRequiredSection("GeminiAISettings"));
-			builder.Services.AddHttpClient<IAiProvider, GeminiProvider>("Gemini", client =>
-			{
-				client.DefaultRequestHeaders.Add("x-goog-api-client", "genai-swift/0.4.8");
-				client.DefaultRequestHeaders.Add("User-Agent", "AIChat/1 CFNetwork/1410.1 Darwin/22.6.0");
-			});
-		}
+				return client.Use(new OllamaChatClient(new Uri(ollamaBaseUrl), "llama3.2"));
+			}
 
-		builder.Services.AddSingleton<IAiService, AiService>();
+			return client.Use(new OpenAIChatClient(b.Services.GetRequiredService<OpenAIClient>(), "gpt-4o-mini"));
+		});
+
+		builder.Services.AddScoped<IAiService, AiService>();
 
 		builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
 		builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();
@@ -99,48 +89,43 @@ public static class PlacesModule
 
 	private static void AddDomainEventHandlers(this IServiceCollection services)
 	{
-		//Type[] domainEventHandlers = Application.AssemblyReference.Assembly
-		//    .GetTypes()
-		//    .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
-		//    .ToArray();
+		var domainEventHandlers = Application.AssemblyReference.Assembly.GetTypes()
+											 .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
+											 .ToArray();
 
-		//foreach (Type domainEventHandler in domainEventHandlers)
-		//{
-		//    services.TryAddScoped(domainEventHandler);
+		foreach (var domainEventHandler in domainEventHandlers)
+		{
+			services.TryAddScoped(domainEventHandler);
 
-		//    Type domainEvent = domainEventHandler
-		//        .GetInterfaces()
-		//        .Single(i => i.IsGenericType)
-		//        .GetGenericArguments()
-		//        .Single();
+			var domainEvent = domainEventHandler.GetInterfaces()
+												.Single(i => i.IsGenericType)
+												.GetGenericArguments()
+												.Single();
 
-		//    Type closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
+			//var closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
 
-		//    //services.Decorate(domainEventHandler, closedIdempotentHandler);
-		// }
+			//services.Decorate(domainEventHandler, closedIdempotentHandler);
+		}
 	}
 
 	private static void AddIntegrationEventHandlers(this IServiceCollection services)
 	{
-		// Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
-		//    .GetTypes()
-		//    .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
-		//    .ToArray();
+		var integrationEventHandlers = AssemblyReference.Assembly.GetTypes()
+														.Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
+														.ToArray();
 
-		//foreach (Type integrationEventHandler in integrationEventHandlers)
-		//{
-		//    services.TryAddScoped(integrationEventHandler);
+		foreach (var integrationEventHandler in integrationEventHandlers)
+		{
+			services.TryAddScoped(integrationEventHandler);
 
-		//    Type integrationEvent = integrationEventHandler
-		//        .GetInterfaces()
-		//        .Single(i => i.IsGenericType)
-		//        .GetGenericArguments()
-		//        .Single();
+			var integrationEvent = integrationEventHandler.GetInterfaces()
+														  .Single(i => i.IsGenericType)
+														  .GetGenericArguments()
+														  .Single();
 
-		//    Type closedIdempotentHandler =
-		//        typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
+			//var closedIdempotentHandler = typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
 
-		//    //services.Decorate(integrationEventHandler, closedIdempotentHandler);
-		//}
+			//services.Decorate(integrationEventHandler, closedIdempotentHandler);
+		}
 	}
 }

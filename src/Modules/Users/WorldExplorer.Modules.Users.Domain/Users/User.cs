@@ -36,4 +36,9 @@ public sealed class User : Entity
 
 		Raise(new UserProfileUpdatedDomainEvent(Id, Settings));
 	}
+
+	public void Delete()
+	{
+		Raise(new UserDeletedDomainEvent(Id));
+	}
 }

@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
+using System.Diagnostics.Eventing.Reader;
 using System.Text.Json;
 using Common.Application.EventBus;
 using Common.Infrastructure.Inbox;
@@ -7,6 +8,7 @@ using Common.Infrastructure.Serialization;
 using Database;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbContext dbConnectionFactory)
 	: IConsumer<TIntegrationEvent> where TIntegrationEvent : IntegrationEvent
@@ -19,7 +21,7 @@ internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbCo
 		{
 			Id = integrationEvent.Id,
 			Type = integrationEvent.GetType().Name,
-			Content = JsonSerializer.Serialize(integrationEvent, SerializerSettings.Instance),
+			Content = JsonConvert.SerializeObject(integrationEvent, SerializerSettings.JsonSerializerSettingsInstance),
 			OccurredOnUtc = integrationEvent.OccurredOnUtc
 		};
 
