@@ -1,10 +1,9 @@
 ﻿namespace WorldExplorer.Common.Infrastructure.Outbox;
 
-using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Newtonsoft.Json;
 using Serialization;
 
 public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
@@ -37,11 +36,8 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 		                            {
 			                            Id = domainEvent.Id,
 			                            Type = domainEvent.GetType().FullName,
-			                            Content = "{}",
-				                            //JsonSerializer.Serialize(domainEvent,
-				                            //                                   domainEvent.GetType(),
-				                            //                                   SerializerSettings.Instance),
-			                            OccurredOnUtc = domainEvent.OccurredOnUtc
+			                            Content = JsonConvert.SerializeObject(domainEvent, SerializerSettings.JsonSerializerSettingsInstance),
+										OccurredOnUtc = domainEvent.OccurredOnUtc
 		                            })
 		                            .ToList();
 

@@ -1,6 +1,7 @@
 {
 	"OpenAiEndpoint": "",
 	"OpenAiKey": "API_KEY1",
-	"GeminiKey": "API_KEY2",
-	"OllamaEndpoint": ""
+	"OllamaEndpoint": "",
+	"API_KEY1": "API_KEY1",
+	"API_KEY2": "API_KEY2"
 }

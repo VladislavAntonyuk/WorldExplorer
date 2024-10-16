@@ -1,6 +1,7 @@
 ﻿namespace WebAppTests;
 
 using System.ClientModel;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using OpenAI;
@@ -20,6 +21,6 @@ public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 		{
 			Endpoint = new Uri(configuration["OpenAiEndpoint"])
 		});
-		return Task.FromResult<IAiService>(new AiService(new OpenAiProvider(client, NullLogger<OpenAiProvider>.Instance)));
+		return Task.FromResult<IAiService>(new AiService(new OpenAIChatClient(client, "gpt-4o-mini")));
 	}
 }

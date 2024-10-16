@@ -7,6 +7,7 @@ using Common.Infrastructure.Serialization;
 using Database;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 internal sealed class IntegrationEventConsumer<TIntegrationEvent>(UsersDbContext dbConnectionFactory)
 	: IConsumer<TIntegrationEvent> where TIntegrationEvent : IntegrationEvent
@@ -21,7 +22,7 @@ internal sealed class IntegrationEventConsumer<TIntegrationEvent>(UsersDbContext
 		{
 			Id = integrationEvent.Id,
 			Type = integrationEvent.GetType().Name,
-			Content = JsonSerializer.Serialize(integrationEvent, SerializerSettings.Instance),
+			Content = JsonConvert.SerializeObject(integrationEvent, SerializerSettings.JsonSerializerSettingsInstance),
 			OccurredOnUtc = integrationEvent.OccurredOnUtc
 		};
 

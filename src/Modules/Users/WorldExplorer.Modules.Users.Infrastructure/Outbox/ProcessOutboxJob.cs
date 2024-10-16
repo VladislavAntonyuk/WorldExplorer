@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Quartz;
 
 [DisallowConcurrentExecution]
@@ -37,9 +38,8 @@ internal sealed class ProcessOutboxJob(
 
 			try
 			{
-				var t = typeof(UserProfileUpdatedDomainEvent).Assembly.GetType(outboxMessage.Type);
-				var domainEvent = (IDomainEvent)JsonSerializer.Deserialize(
-					outboxMessage.Content, t, SerializerSettings.Instance)!;
+				var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
+					outboxMessage.Content, SerializerSettings.JsonSerializerSettingsInstance)!;
 
 				using var scope = serviceScopeFactory.CreateScope();
 

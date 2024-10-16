@@ -6,12 +6,10 @@ using Microsoft.JSInterop;
 using Modules.Places.Application.Abstractions;
 using Modules.Places.Application.Places.GetPlace;
 using MudBlazor;
-using User;
 
 public sealed partial class WorldExplorerMap(
 	IJSRuntime jsRuntime,
 	WorldExplorerApiClient apiClient,
-	ICurrentUserService currentUserService,
 	IDialogService dialogService,
 	ISnackbar snackbar,
 	IOptions<PlacesSettings> placeOptions) : WorldExplorerBaseComponent, IAsyncDisposable

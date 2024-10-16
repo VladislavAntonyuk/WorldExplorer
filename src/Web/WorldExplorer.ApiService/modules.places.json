@@ -10,9 +10,6 @@
 		}
 	},
 	"AIProvider": "#{AI_PROVIDER}#",
-	"GeminiAISettings": {
-		"ApiKey": "#{GEMINI_KEY}#"
-	},
 	"GoogleSearch": {
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"
 	},

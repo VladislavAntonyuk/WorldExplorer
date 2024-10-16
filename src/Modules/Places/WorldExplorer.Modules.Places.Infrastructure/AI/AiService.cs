@@ -4,10 +4,11 @@ using System.Text.Json;
 using Application.Abstractions;
 using Common.Infrastructure.Serialization;
 using Domain.Places;
+using Microsoft.Extensions.AI;
 using NetTopologySuite.Geometries;
 using Location = Application.Abstractions.Location;
 
-public class AiService(IAiProvider aiProvider) : IAiService
+public class AiService(IChatClient client) : IAiService
 {
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
@@ -27,7 +28,7 @@ public class AiService(IAiProvider aiProvider) : IAiService
 		                      }
 		                      """;
 
-		var result = await aiProvider.GetResponse(generalPrompt, AiOutputFormat.Json);
+		var result = await GetResponse(generalPrompt, AiOutputFormat.Json);
 		if (string.IsNullOrWhiteSpace(result))
 		{
 			return [];
@@ -50,14 +51,39 @@ public class AiService(IAiProvider aiProvider) : IAiService
 		                     Dmytro Yavornytsky National Historical Museum of Dnipro is a museum, established in Dnipro (Ukraine) in 1848 by Andriy Fabr, local governor. Its permanent collection consists of 283 thousand objects from ancient Paleolithic implements to display units of World War II. Among its notable objects are the Kurgan stelae, Kernosivsky idol and vast collection of cossack's antiquities.
 		                     """;
 
-		return aiProvider.GetResponse(generalPrompt, AiOutputFormat.Text);
+		return GetResponse(generalPrompt, AiOutputFormat.Text);
 	}
 
 	public Task<string?> GenerateImage(string placeName, Location location)
 	{
-		var prompt =
-			$"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'. In output return either url of the image or base64 image. Do not include any another text.";
-		return aiProvider.GetImageResponse(prompt);
+		var prompt = $"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'. In output return either url of the image or base64 image. Do not include any another text.";
+		return GetImageResponse(prompt, AiOutputFormat.Text);
+	}
+
+	private async Task<string?> GetImageResponse(string request, AiOutputFormat outputFormat)
+	{
+		return null;
+	}
+
+	private async Task<string?> GetResponse(string request, AiOutputFormat outputFormat)
+	{
+		try
+		{
+			var result = await client.CompleteAsync(
+			[
+				new ChatMessage(ChatRole.System, "You are a tour guide with a great knowledge of history."),
+				new ChatMessage(ChatRole.User, request)
+			], new ChatOptions
+			{
+				ResponseFormat = outputFormat == AiOutputFormat.Json ? ChatResponseFormat.Json : ChatResponseFormat.Text
+			});
+
+			return result.Message.Text;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	private record AiPlaceResponse

@@ -12,26 +12,22 @@ public class MicrosoftIdentityUserAuthenticationMessageHandler : MicrosoftIdenti
 {
 	private readonly MicrosoftIdentityConsentAndConditionalAccessHandler handler;
 	private readonly IOptionsMonitor<MicrosoftIdentityAuthenticationMessageHandlerOptions> namedMessageHandlerOptions;
-	private readonly IOptionsMonitor<MicrosoftIdentityOptions> microsoftIdentityOptions;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MicrosoftIdentityUserAuthenticationMessageHandler"/> class.
 	/// </summary>
 	/// <param name="tokenAcquisition">Token acquisition service.</param>
 	/// <param name="namedMessageHandlerOptions">Named options provider.</param>
-	/// <param name="microsoftIdentityOptions">Configuration options.</param>
 	/// <param name="serviceName">Name of the service describing the downstream web API.</param>
 	public MicrosoftIdentityUserAuthenticationMessageHandler(
 		ITokenAcquisition tokenAcquisition,
 		MicrosoftIdentityConsentAndConditionalAccessHandler handler,
 		IOptionsMonitor<MicrosoftIdentityAuthenticationMessageHandlerOptions> namedMessageHandlerOptions,
-		IOptionsMonitor<MicrosoftIdentityOptions> microsoftIdentityOptions,
 		string? serviceName = null)
 		: base(tokenAcquisition, namedMessageHandlerOptions, serviceName)
 	{
 		this.handler = handler;
 		this.namedMessageHandlerOptions = namedMessageHandlerOptions;
-		this.microsoftIdentityOptions = microsoftIdentityOptions;
 	}
 
 	/// <inheritdoc/>

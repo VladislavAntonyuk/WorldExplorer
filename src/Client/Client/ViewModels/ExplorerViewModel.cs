@@ -165,7 +165,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 					Pins.Add(new WorldExplorerPin
 					{
 						PlaceId = place.Id,
-						Location = new Location(place.Location.X, place.Location.Y),
+						Location = place.Location,
 						Label = place.Name,
 						Type = PinType.Place,
 						Image = place.MainImage,

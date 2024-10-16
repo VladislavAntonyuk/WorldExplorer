@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Presentation;
 using Quartz;
 
@@ -27,7 +28,7 @@ internal sealed class ProcessInboxJob(
 		logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
 
 		var inboxMessages = await GetInboxMessagesAsync();
-		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
+		//await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
 
 		foreach (var inboxMessage in inboxMessages)
@@ -36,8 +37,8 @@ internal sealed class ProcessInboxJob(
 
 			try
 			{
-				var integrationEvent = JsonSerializer.Deserialize<IIntegrationEvent>(
-					inboxMessage.Content, SerializerSettings.Instance)!;
+				var integrationEvent = JsonConvert.DeserializeObject<IIntegrationEvent>(
+					inboxMessage.Content, SerializerSettings.JsonSerializerSettingsInstance)!;
 
 				using var scope = serviceScopeFactory.CreateScope();
 
@@ -52,7 +53,7 @@ internal sealed class ProcessInboxJob(
 			catch (Exception caughtException)
 			{
 				logger.LogError(caughtException, "{Module} - Exception while processing inbox message {MessageId}",
-				                ModuleName, inboxMessage.Id);
+								ModuleName, inboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -60,7 +61,7 @@ internal sealed class ProcessInboxJob(
 			await UpdateInboxMessageAsync(inboxMessage, exception);
 		}
 
-		await transaction.CommitAsync();
+		//await transaction.CommitAsync();
 
 		logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
 	}
@@ -87,9 +88,9 @@ internal sealed class ProcessInboxJob(
 	{
 		var message = exception?.Message ?? null;
 		await dbConnectionFactory.InboxMessages.Where(x => x.Id == inboxMessage.Id)
-		                         .ExecuteUpdateAsync(
-			                         m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
-			                               .SetProperty(p => p.Error, message));
+								 .ExecuteUpdateAsync(
+									 m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
+										   .SetProperty(p => p.Error, message));
 	}
 
 	internal sealed record InboxMessageResponse(Guid Id, string Content);

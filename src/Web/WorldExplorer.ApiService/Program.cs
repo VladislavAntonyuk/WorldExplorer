@@ -27,8 +27,9 @@ builder.Services.AddOpenApi(options =>
 
 Assembly[] moduleApplicationAssemblies =
 [
-	AssemblyReference.Assembly, WorldExplorer.Modules.Places.Application.AssemblyReference.Assembly
-	//WorldExplorer.Modules.Travellers.AssemblyReference.Assembly,
+	AssemblyReference.Assembly,
+	WorldExplorer.Modules.Places.Application.AssemblyReference.Assembly,
+	WorldExplorer.Modules.Travellers.AssemblyReference.Assembly,
 ];
 
 builder.Services.AddApplication(moduleApplicationAssemblies);
@@ -64,7 +65,7 @@ app.MapEndpoints();
 app.MapDefaultEndpoints();
 app.MapGraphQL();
 
-app.Run();
+await app.RunAsync();
 
 
 namespace WorldExplorer.ApiService

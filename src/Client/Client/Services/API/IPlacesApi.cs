@@ -6,10 +6,10 @@ using Shared.Models;
 public interface IPlacesApi
 {
 	[Get("/recommendations")]
-	internal Task<ApiResponse<OperationResult<List<Place>>>> GetRecommendationsInternal([Query] Location location,
+	internal Task<ApiResponse<OperationResult<List<PlaceResponse>>>> GetRecommendationsInternal([Query] Location location,
 		CancellationToken cancellationToken);
 
-	async Task<ApiResponse<OperationResult<List<Place>>>> GetRecommendations([Query] Location location,
+	async Task<ApiResponse<OperationResult<List<PlaceResponse>>>> GetRecommendations([Query] Location location,
 		CancellationToken cancellationToken)
 	{
 		try
@@ -18,14 +18,14 @@ public interface IPlacesApi
 		}
 		catch (Exception e)
 		{
-			return await e.GetErrorResponse<OperationResult<List<Place>>>(HttpMethod.Get);
+			return await e.GetErrorResponse<OperationResult<List<PlaceResponse>>>(HttpMethod.Get);
 		}
 	}
 
 	[Get("/{id}")]
-	internal Task<ApiResponse<Place>> GetDetailsInternal(Guid id, CancellationToken cancellationToken);
+	internal Task<ApiResponse<PlaceResponse>> GetDetailsInternal(Guid id, CancellationToken cancellationToken);
 
-	async Task<ApiResponse<Place>> GetDetails(Guid id, CancellationToken cancellationToken)
+	async Task<ApiResponse<PlaceResponse>> GetDetails(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -33,7 +33,7 @@ public interface IPlacesApi
 		}
 		catch (Exception e)
 		{
-			return await e.GetErrorResponse<Place>(HttpMethod.Get);
+			return await e.GetErrorResponse<PlaceResponse>(HttpMethod.Get);
 		}
 	}
 }
