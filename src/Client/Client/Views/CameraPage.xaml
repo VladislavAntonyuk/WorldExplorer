@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<framework:BaseContentPage
+	x:TypeArguments="viewModels:CameraViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+	x:Class="Client.Views.CameraPage"
+	Shell.PresentationMode="ModalAnimated"
+	x:DataType="viewModels:CameraViewModel">
+
+	<Grid>
+		<Button
+			Text="X"
+			Command="{Binding CloseCommand}"
+			HorizontalOptions="End"
+			VerticalOptions="Start"
+			ZIndex="1" />
+
+		<ImageButton
+			Command="{Binding PhotoCommand}"
+			HorizontalOptions="Center"
+			VerticalOptions="End"
+			Margin="30"
+			ZIndex="1"
+			IsVisible="{Binding IsCameraLoaded}">
+
+			<ImageButton.Source>
+				<FontImageSource
+					FontFamily="FASolid"
+					Glyph="{x:Static fonts:FontAwesomeIcons.Camera}"
+					Size="40" />
+			</ImageButton.Source>
+		</ImageButton>
+
+		<toolkit:CameraView
+			x:Name="CameraView"
+			CaptureImageCommand="{Binding PhotoCommand}"
+			ZIndex="0" />
+
+		<Label
+			Text="{x:Static localization:Localization.CameraNotLoaded}"
+			IsVisible="{Binding IsCameraLoaded, Converter={StaticResource InvertedBoolConverter}}"
+			HorizontalOptions="Center"
+			VerticalOptions="Center"
+			ZIndex="2"/>
+	</Grid>
+</framework:BaseContentPage>
