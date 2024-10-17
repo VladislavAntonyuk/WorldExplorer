@@ -7,6 +7,7 @@ using MassTransit.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NetTopologySuite.Geometries;
+using WorldExplorer.Modules.Places.Application.Places.GetPlace;
 
 internal sealed class PlaceRepository(PlacesDbContext context, IOptions<PlacesSettings> placeOptions) : IPlaceRepository
 {
@@ -27,12 +28,18 @@ internal sealed class PlaceRepository(PlacesDbContext context, IOptions<PlacesSe
 
 	public async Task<List<Place>> GetNearestPlacesAsync(Point userLocation, CancellationToken cancellationToken)
 	{
-		return await context.Places.Where(x => x.Location.IsWithinDistance(userLocation, placeOptions.Value.LocationRequestNearbyDistance))
-		                    .ToListAsync(cancellationToken);
+		return await context.Places
+							.Where(x => x.Location.IsWithinDistance(userLocation, placeOptions.Value.LocationRequestNearbyDistance))
+							.ToListAsync(cancellationToken);
 	}
 
 	public async Task Delete(Guid placeRequestId, CancellationToken cancellationToken)
 	{
 		await context.Places.Where(x => x.Id == placeRequestId).ExecuteDeleteAsync(cancellationToken);
+	}
+
+	public async Task Clear(CancellationToken cancellationToken)
+	{
+		await context.Places.ExecuteDeleteAsync(cancellationToken);
 	}
 }

@@ -109,14 +109,13 @@ public static class InfrastructureConfiguration
 	{
 		builder.Services.AddDbContextPool<T>((sp, options) => options
 		                                                      .UseSqlServer(
-			                                                      builder.Configuration.GetConnectionString("Database"),
+			                                                      builder.Configuration.GetConnectionString("server"),
 			                                                      optionsBuilder =>
 			                                                      {
 				                                                      optionsBuilder
 					                                                      .MigrationsHistoryTable(
 						                                                      HistoryRepository.DefaultTableName,
-						                                                      schema)
-					                                                      .UseAzureSqlDefaults();
+						                                                      schema);
 				                                                      configure?.Invoke(optionsBuilder);
 				                                                      optionsBuilder.EnableRetryOnFailure(
 					                                                      5, TimeSpan.FromSeconds(30), [0]);

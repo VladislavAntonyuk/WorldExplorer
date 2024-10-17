@@ -35,7 +35,8 @@ public class LocationInfoRepository(PlacesDbContext placesDbContext) : ILocation
 
 	public async Task<List<LocationInfoRequest>> IsNearby(Point userLocation)
 	{
-		return await placesDbContext.LocationInfoRequests.Where(x => x.Location.IsWithinDistance(userLocation, 100))
+		return await placesDbContext.LocationInfoRequests
+		                            .Where(x => x.Location.IsWithinDistance(userLocation, 100))
 		                            .ToListAsync();
 	}
 }

@@ -13,7 +13,8 @@ public class AiService(IChatClient client) : IAiService
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
 		var generalPrompt = $$"""
-		                      Tell me about 10 places near the following location: Latitude='{{location.Latitude}}', Longitude='{{location.Longitude}}'.
+		                      Tell me about all places near the following location: Latitude='{{location.Latitude}}', Longitude='{{location.Longitude}}'.
+		                      You must provide at least 10 places, but the more you provide, the better. You must provide places in 10 km zone.
 		                      As they are famous places you must know their coordinates. Provide location as accurately as possible.
 		                      Format the output in JSON format with the next properties: name, location (longitude, latitude).
 		                      The output must contain only JSON because I will parse it later. Do not include any information or formatting except valid JSON.

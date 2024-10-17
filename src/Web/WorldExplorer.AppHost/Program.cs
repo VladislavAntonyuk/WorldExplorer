@@ -20,21 +20,25 @@ else
 }
 
 sqlServer.WithDataVolume("world-explorer-database")
-         .PublishAsAzureSqlDatabase()
          .AddDatabase("database", "worldexplorer");
 
  var aiService = builder.AddOllama("ai");
 
 var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
                         .WithReference(sqlServer)
+                        .WaitFor(sqlServer)
                         .WithReference(cache)
+                        .WaitFor(cache)
                         .WithReference(openai)
-                        .WithReference(aiService);
+                        .WithReference(aiService)
+                        .WaitFor(aiService);
 
 builder.AddProject<WorldExplorer_Web>("webfrontend")
        .WithExternalHttpEndpoints()
        .WithReference(apiService)
-       .WithReference(cache);
+       .WaitFor(apiService)
+       .WithReference(cache)
+       .WaitFor(cache);
 
 if (!builder.Environment.IsDevelopment())
 {
@@ -44,6 +48,7 @@ if (!builder.Environment.IsDevelopment())
 }
 
 builder.AddMobileProject("mauiclient", "../../Client/Client", clientStubProjectPath: "../../Client/Client.ClientStub/Client.ClientStub.csproj")
-       .WithReference(apiService);
+       .WithReference(apiService)
+       .WaitFor(apiService);
 
-builder.Build().Run();
+await builder.Build().RunAsync();

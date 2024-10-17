@@ -10,3 +10,7 @@
 .side-image {
 	padding: 5px 10px;
 }
+
+.components-reconnect-overlay p {
+	color: black;
+}
