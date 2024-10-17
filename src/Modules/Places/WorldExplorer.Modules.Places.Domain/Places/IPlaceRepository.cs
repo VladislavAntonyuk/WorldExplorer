@@ -9,4 +9,5 @@ public interface IPlaceRepository
 	void Insert(Place place);
 	Task<List<Place>> GetNearestPlacesAsync(Point userLocation, CancellationToken cancellationToken);
 	Task Delete(Guid placeRequestId, CancellationToken cancellationToken);
+	Task Clear(CancellationToken cancellationToken);
 }

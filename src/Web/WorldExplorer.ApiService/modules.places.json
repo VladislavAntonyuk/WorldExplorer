@@ -13,5 +13,5 @@
 	"GoogleSearch": {
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"
 	},
-	"LocationRequestNearbyDistance": "2000"
+	"LocationRequestNearbyDistance": "3000"
 }

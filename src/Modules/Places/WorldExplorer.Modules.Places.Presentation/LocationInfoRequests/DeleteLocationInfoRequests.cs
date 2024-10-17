@@ -21,5 +21,14 @@ internal sealed class DeleteLocationInfoRequests : IEndpoint
 		   })
 		   .RequireAuthorization(Constants.AdministratorPolicy)
 		   .WithTags(Tags.LocationInfoRequests);
+
+		app.MapDelete("locationInfoRequests", async (ISender sender) =>
+		   {
+			   var result = await sender.Send(new DeleteLocationInfoRequestsCommand());
+
+			   return result.Match(Results.NoContent, ApiResults.Problem);
+		   })
+		   .RequireAuthorization(Constants.AdministratorPolicy)
+		   .WithTags(Tags.LocationInfoRequests);
 	}
 }

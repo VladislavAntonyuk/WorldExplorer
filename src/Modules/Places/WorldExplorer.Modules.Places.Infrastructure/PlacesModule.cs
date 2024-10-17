@@ -82,9 +82,11 @@ public static class PlacesModule
 
 		//services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
-		//services.Configure<InboxOptions>(configuration.GetSection("Users:Inbox"));
+		//builder.Services.Configure<InboxOptions>(configuration.GetSection("Users:Inbox"));
 
 		builder.Services.ConfigureOptions<ConfigurePlacesJob>();
+		builder.Services.Configure<PlacesSettings>(builder.Configuration);
+
 	}
 
 	private static void AddDomainEventHandlers(this IServiceCollection services)

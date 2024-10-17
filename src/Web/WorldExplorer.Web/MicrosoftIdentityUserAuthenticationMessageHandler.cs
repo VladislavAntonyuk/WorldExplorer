@@ -33,14 +33,14 @@ public class MicrosoftIdentityUserAuthenticationMessageHandler : MicrosoftIdenti
 	/// <inheritdoc/>
 	protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 	{
-		var authResult = await TokenAcquisition.GetAccessTokenForUserAsync(namedMessageHandlerOptions.CurrentValue.GetScopes())
-											   .ConfigureAwait(false);
-
-
-		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult);
-
 		try
 		{
+			var authResult = await TokenAcquisition.GetAccessTokenForUserAsync(namedMessageHandlerOptions.CurrentValue.GetScopes())
+												   .ConfigureAwait(false);
+
+
+			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult);
+
 			return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 		}
 		catch (Exception e)
