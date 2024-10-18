@@ -79,6 +79,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Web\WorldExplorer.ServiceDefaults\WorldExplorer.ServiceDefaults.csproj" />
+	  <ProjectReference Include="..\WorldExplorer.Client.Map\WorldExplorer.Client.Map.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

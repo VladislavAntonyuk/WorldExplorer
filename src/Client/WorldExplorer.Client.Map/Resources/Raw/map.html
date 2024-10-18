@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>World Explorer - Leaflet</title>
+
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';">
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		#map {
+			height: 100%;
+			width: 100vw;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id='map'></div>
+
+	<script>
+		let map;
+		let userMarker;
+		let markers = [];
+
+		function initMap() {
+			map = L.map('map').fitWorld();
+
+			const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				maxZoom: 19,
+				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			}).addTo(map);
+		}
+
+		function addMarker(latitude, longitude, label, id) {
+			const marker = createMarker({
+				icon: "https://ik.imagekit.io/VladislavAntonyuk/projects/world-explorer/default-location-pin.png",
+				location: {
+					latitude: latitude,
+					longitude: longitude
+				},
+				title: label
+			});
+			marker.on("click",
+				(e) => {
+					invokeHandlerAction("markerClicked", { placeId: id });
+				});
+			markers.push(marker);
+		}
+
+		function addLocationPin(latitude, longitude) {
+			userMarker = createMarker({
+				icon: "https://ik.imagekit.io/VladislavAntonyuk/projects/world-explorer/user-location-pin.png",
+				iconSize: [38, 53],
+				location: {
+					latitude: latitude,
+					longitude: longitude
+				},
+				title: `My location (${latitude}, ${longitude})`
+			});
+			map.setView(L.latLng(latitude, longitude), 15, null);
+		}
+
+		function removeLocationPin() {
+			if (userMarker) {
+				userMarker.remove();
+				userMarker = undefined;
+			}
+		}
+
+		function removeAllPins() {
+			markers.forEach(marker => marker.remove());
+			markers = [];
+		}
+
+		function destroyMap() {
+			if (userMarker) {
+				userMarker.remove();
+				userMarker = undefined;
+			}
+
+			if (map) {
+				map.remove();
+			}
+		}
+
+		function createMarker(options) {
+			const icon = L.icon({
+				iconUrl: options.icon,
+				iconSize: options.iconSize || [38, 38],
+			});
+			return L.marker([options.location.latitude, options.location.longitude], { icon: icon, title: options.title })
+				.addTo(map);
+		}
+
+		function invokeHandlerAction(id, data) {
+			var eventMessage = {
+				id: id,
+				payload: data
+			};
+
+			window.chrome.webview.postMessage(eventMessage);
+		}
+	</script>
+</body>
+
+</html>
