@@ -1,7 +1,6 @@
 ﻿namespace Client;
 
 using System.Reflection;
-using Client.Controls.WorldExplorerMap;
 using CommunityToolkit.Maui;
 using Controls;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +14,7 @@ using Syncfusion.Licensing;
 using Syncfusion.Maui.Core.Hosting;
 using ViewModels;
 using Views;
+using WorldExplorer.Client.Map.WorldExplorerMap;
 
 public static class MauiProgram
 {

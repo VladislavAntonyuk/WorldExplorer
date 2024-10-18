@@ -6,8 +6,8 @@
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:localization="using:Client.Resources.Localization"
 	xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
-	xmlns:controls="clr-namespace:Client.Controls" 
-	xmlns:worldExplorerMap="using:Client.Controls.WorldExplorerMap"
+	xmlns:controls="clr-namespace:Client.Controls"
+	xmlns:worldExplorerMap="clr-namespace:WorldExplorer.Client.Map.WorldExplorerMap;assembly=WorldExplorer.Client.Map"
 	x:Class="Client.Views.ExplorerPage"
 	x:DataType="viewModels:ExplorerViewModel"
 	Shell.NavBarIsVisible="True">
@@ -48,19 +48,6 @@
 	</framework:BaseContentPage.MenuBarItems>
 
 	<worldExplorerMap:WorldExplorerMap
-		x:Name="Map"
 		Pins="{Binding Pins}"
-		IsShowingUser="{Binding IsShowingUser}">
-
-		<worldExplorerMap:WorldExplorerMap.ItemTemplate>
-			<DataTemplate x:DataType="{x:Type worldExplorerMap:WorldExplorerPin}">
-				<worldExplorerMap:WorldExplorerPin
-					PlaceId="{Binding PlaceId}"
-					Image="{Binding Image}"
-					Location="{Binding Location}"
-					Address="{Binding Address}"
-					Label="{Binding Label}" />
-			</DataTemplate>
-		</worldExplorerMap:WorldExplorerMap.ItemTemplate>
-	</worldExplorerMap:WorldExplorerMap>
+		UserLocation="{Binding CurrentLocation}"/>
 </framework:BaseContentPage>

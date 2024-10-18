@@ -87,7 +87,7 @@ internal class AuthService : IAuthService
 				Value = result.AccessToken
 			};
 		}
-		catch (MsalUiRequiredException ex)
+		catch (Exception ex) when(ex is MsalUiRequiredException or TaskCanceledException)
 		{
 			var operationResult = new OperationResult<string>();
 			operationResult.AddError(ex.Message);

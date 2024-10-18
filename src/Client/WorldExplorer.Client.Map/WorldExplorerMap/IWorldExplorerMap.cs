@@ -1,9 +1,9 @@
-﻿namespace Client.Controls.WorldExplorerMap;
+﻿namespace WorldExplorer.Client.Map.WorldExplorerMap;
 
 using System.Collections.ObjectModel;
 
 public interface IWorldExplorerMap : IView
 {
 	ObservableCollection<WorldExplorerPin> Pins { get; }
-	bool IsShowingUser { get; }
+	Location? UserLocation { get; }
 }

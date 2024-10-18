@@ -81,6 +81,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldExplorer.Modules.Trave
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.ClientStub", "src\Client\Client.ClientStub\Client.ClientStub.csproj", "{9FE87272-E7A7-4C71-9EC6-22924635E74F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldExplorer.Client.Map", "src\Client\WorldExplorer.Client.Map\WorldExplorer.Client.Map.csproj", "{CE80184C-AEEC-4522-9E6F-B7B97535615D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,6 +191,10 @@ Global
 		{9FE87272-E7A7-4C71-9EC6-22924635E74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FE87272-E7A7-4C71-9EC6-22924635E74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FE87272-E7A7-4C71-9EC6-22924635E74F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE80184C-AEEC-4522-9E6F-B7B97535615D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE80184C-AEEC-4522-9E6F-B7B97535615D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE80184C-AEEC-4522-9E6F-B7B97535615D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE80184C-AEEC-4522-9E6F-B7B97535615D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,6 +232,7 @@ Global
 		{CF20E7CE-7302-4B42-9001-AEE2D9C7E7DD} = {EB5EDB93-E22B-49BD-8014-7531587B29E2}
 		{943C5366-E11A-4651-9643-1DD8BB0E9EDA} = {CF20E7CE-7302-4B42-9001-AEE2D9C7E7DD}
 		{9FE87272-E7A7-4C71-9EC6-22924635E74F} = {9FE720AF-8788-4C28-8C76-4736001FE87E}
+		{CE80184C-AEEC-4522-9E6F-B7B97535615D} = {9FE720AF-8788-4C28-8C76-4736001FE87E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {13BDE4A2-81B8-494D-B82D-60780D2AB107}
