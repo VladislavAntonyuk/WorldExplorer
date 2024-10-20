@@ -16,24 +16,8 @@ using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Web.WebView2.Core;
 
-public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMapper? commandMapper)
-	: ViewHandler<IWorldExplorerMap, PlatformMap>(mapper ?? Mapper, commandMapper ?? ViewCommandMapper)
+public partial class WorldExplorerMapHandler
 {
-	readonly JsonSerializerOptions jsonSerializerOptions = new()
-	{
-		PropertyNameCaseInsensitive = true
-	};
-
-	public static IPropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler> Mapper = new PropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler>(ViewMapper)
-	{
-		[nameof(IWorldExplorerMap.UserLocation)] = MapUserLocation,
-		[nameof(IWorldExplorerMap.Pins)] = MapPins
-	};
-
-	public WorldExplorerMapHandler() : this(Mapper, ViewCommandMapper)
-	{
-
-	}
 
 	protected override PlatformMap CreatePlatformView()
 	{
@@ -67,26 +51,6 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 	{
 		CallJsMethod(sender, "initMap()");
 		Mapper.UpdateProperties(this, VirtualView);
-	}
-
-	public static void MapUserLocation(WorldExplorerMapHandler handler, IWorldExplorerMap map)
-	{
-		CallJsMethod(handler.PlatformView,
-					 map.UserLocation is not null
-						 ? $"addLocationPin({map.UserLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{map.UserLocation.Longitude.ToString(CultureInfo.InvariantCulture)});"
-						 : "removeLocationPin();");
-	}
-
-	public static void MapPins(WorldExplorerMapHandler handler, IWorldExplorerMap map)
-	{
-		CallJsMethod(handler.PlatformView, "removeAllPins();");
-
-		foreach (var pin in map.Pins)
-		{
-			CallJsMethod(handler.PlatformView, $"addMarker({pin.Location.Latitude.ToString(CultureInfo.InvariantCulture)}," +
-											   $"{pin.Location.Longitude.ToString(CultureInfo.InvariantCulture)},'{pin.Label}', '{pin.PlaceId}');");
-
-		}
 	}
 
 	static void CallJsMethod(PlatformMap platformWebView, string script)
