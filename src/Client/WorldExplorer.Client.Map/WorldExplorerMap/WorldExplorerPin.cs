@@ -2,54 +2,23 @@
 
 using System.Windows.Input;
 
-public class WorldExplorerPin : View, IWorldExplorerPin
+public class WorldExplorerPin
 {
-	public static readonly BindableProperty MarkerClickedProperty = BindableProperty.Create(nameof(MarkerClicked), typeof(ICommand), typeof(WorldExplorerPin));
+	private string? image;
 
-	public static readonly BindableProperty LabelProperty =
-		BindableProperty.Create(nameof(Label), typeof(string), typeof(WorldExplorerPin));
-
-	public static readonly BindableProperty LocationProperty =
-		BindableProperty.Create(nameof(Location), typeof(Location), typeof(WorldExplorerPin));
-
-	public static readonly BindableProperty PlaceIdProperty =
-		BindableProperty.Create(nameof(PlaceId), typeof(Guid), typeof(WorldExplorerPin), default(Guid));
-
-	public Guid PlaceId
-	{
-		get => (Guid)GetValue(PlaceIdProperty);
-		set => SetValue(PlaceIdProperty, value);
-	}
-
-	public static readonly BindableProperty ImageProperty =
-		BindableProperty.Create(nameof(Image), typeof(string), typeof(WorldExplorerPin));
+	public required Guid PlaceId { get; set; }
 
 	public string? Image
 	{
-		get => (string?)GetValue(ImageProperty);
-		set => SetValue(ImageProperty, value);
+		get => image ?? DefaultImage;
+		set => image = value;
 	}
 
-	public Location Location
-	{
-		get => (Location)GetValue(LocationProperty);
-		set => SetValue(LocationProperty, value);
-	}
+	public required Location Location { get; set; }
 
-	public string Label
-	{
-		get => (string)GetValue(LabelProperty);
-		set => SetValue(LabelProperty, value);
-	}
+	public required string Label { get; set; }
 
-	public ICommand? MarkerClicked
-	{
-		get => (ICommand)GetValue(MarkerClickedProperty);
-		set => SetValue(MarkerClickedProperty, value);
-	}
+	public ICommand? MarkerClicked { get; set; }
 
-	void IWorldExplorerPin.OnMarkerClicked()
-	{
-		MarkerClicked?.Execute(this);
-	}
+	public static string DefaultImage { get; set; } = "https://ik.imagekit.io/VladislavAntonyuk/projects/world-explorer/default-location-pin.png";
 }
