@@ -11,14 +11,12 @@ using Microsoft.Maui.Platform;
 public partial class WorldExplorerMapHandler
 {
 	private WebViewJavaScriptInterface _javaScriptInterface;
-	WebViewHandler webViewHandler;
 
 	protected override PlatformMap CreatePlatformView()
 	{
 		_javaScriptInterface = new WebViewJavaScriptInterface(this);
-		webViewHandler = new WebViewHandler();
+		var webViewHandler = new WebViewHandler();
 		var webView = new MauiWebView(webViewHandler, Context);
-		webView.SetWebViewClient(new MapWebViewClient(this, webViewHandler));
 		return webView;
 	}
 
@@ -42,29 +40,6 @@ public partial class WorldExplorerMapHandler
 		platformWebView.EvaluateJavaScript(new EvaluateJavaScriptAsyncRequest(script));
 	}
 
-	private sealed class MapWebViewClient(WorldExplorerMapHandler mapHandler, WebViewHandler handler) : WebViewClient
-	{
-		public override void OnLoadResource(WebView? view, string? url)
-		{
-			base.OnLoadResource(view, url);
-		}
-
-		public override WebResourceResponse? ShouldInterceptRequest(WebView? view, IWebResourceRequest? request)
-		{
-			return base.ShouldInterceptRequest(view, request);
-		}
-
-		public override bool ShouldOverrideUrlLoading(WebView? view, IWebResourceRequest? request)
-		{
-			return base.ShouldOverrideUrlLoading(view, request);
-		}
-
-		public override void OnPageFinished(WebView? view, string? url)
-		{
-			base.OnPageFinished(view, url);
-			WorldExplorerMapPropertyMapper.UpdateProperties(mapHandler, mapHandler.VirtualView);
-		}
-	}
 	private sealed class WebViewJavaScriptInterface(WorldExplorerMapHandler handler) : Java.Lang.Object
 	{
 		[JavascriptInterface]

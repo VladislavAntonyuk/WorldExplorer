@@ -2,13 +2,10 @@
 
 namespace WorldExplorer.Client.Map.WorldExplorerMap;
 
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text.Json;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Web.WebView2.Core;
-using Windows.Storage.Streams;
 
 public partial class WorldExplorerMapHandler
 {
@@ -27,12 +24,11 @@ public partial class WorldExplorerMapHandler
 		base.ConnectHandler(platformView);
 		var mapPage = GetWebPage();
 		platformView.NavigationStarting += OnNavigationStarting;
-		platformView.NavigationCompleted += WebViewNavigationCompleted;
 		platformView.WebMessageReceived += WebViewWebMessageReceived;
 		platformView.LoadHtml(mapPage, null);
 	}
 
-	private void OnNavigationStarting(WebView2 sender, CoreWebView2NavigationStartingEventArgs args)
+	private static void OnNavigationStarting(WebView2 sender, CoreWebView2NavigationStartingEventArgs args)
 	{
 		args.Cancel = args.IsUserInitiated;
 	}
@@ -40,15 +36,9 @@ public partial class WorldExplorerMapHandler
 	protected override void DisconnectHandler(PlatformMap platformView)
 	{
 		CallJsMethod(platformView, "destroyMap()");
-		platformView.NavigationCompleted -= WebViewNavigationCompleted;
 		platformView.WebMessageReceived -= WebViewWebMessageReceived;
 		platformView.NavigationStarting -= OnNavigationStarting;
 		base.DisconnectHandler(platformView);
-	}
-
-	void WebViewNavigationCompleted(WebView2 sender, CoreWebView2NavigationCompletedEventArgs args)
-	{
-		WorldExplorerMapPropertyMapper.UpdateProperties(this, VirtualView);
 	}
 
 	static void CallJsMethod(PlatformMap platformWebView, string script)
