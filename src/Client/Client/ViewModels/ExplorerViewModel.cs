@@ -3,15 +3,15 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Controls;
 using Framework;
-using Microsoft.Maui.Controls.Maps;
 using Resources.Localization;
 using Services;
 using Services.API;
 using Services.Auth;
 using Shared.Models;
+using Syncfusion.Maui.Popup;
 using Views;
+using WorldExplorer.Client.Map.WorldExplorerMap;
 using Location = Location;
 
 public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
@@ -22,9 +22,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	ICurrentUserService currentUserService,
 	IDeviceDisplay deviceDisplay) : BaseViewModel, IDisposable
 {
-	[ObservableProperty]
-	private bool isShowingUser;
-
 	[ObservableProperty]
 	private Location? currentLocation;
 
@@ -43,24 +40,11 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	private void UpdateLocation(Location location)
 	{
-		var moveToRegion = CurrentLocation is null || currentUserService.GetCurrentUser()?.Settings.TrackUserLocation == true;
 		CurrentLocation = location;
-		weakEventManager.HandleEvent(this, new LocationChangedEventArgs
-		{
-			Location = location,
-			MoveToRegion = moveToRegion
-		}, nameof(LocationChanged));
 	}
 
 	public ObservableCollection<WorldExplorerPin> Pins { get; } = [];
-
-	private readonly WeakEventManager weakEventManager = new();
-	public event EventHandler<LocationChangedEventArgs> LocationChanged
-	{
-		add => weakEventManager.AddEventHandler(value);
-		remove => weakEventManager.RemoveEventHandler(value);
-	}
-
+	
 	public override async Task InitializeAsync()
 	{
 		deviceDisplay.KeepScreenOn = true;
@@ -78,7 +62,8 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	[RelayCommand]
 	private void ToggleUserLocation()
 	{
-		IsShowingUser = !IsShowingUser;
+		geoLocation.StopListeningForeground();
+		CurrentLocation = null;
 	}
 
 	[RelayCommand]
@@ -91,6 +76,36 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	private void About()
 	{
 		Application.Current?.OpenWindow(new Window(new AboutPage(new AboutViewModel())));
+	}
+
+	[RelayCommand]
+	private void MarkerClicked(WorldExplorerPin? pin)
+	{
+		var placeDetailsViewModel = IPlatformApplication.Current?.Services.GetRequiredService<PlaceDetailsViewModel>();
+		if (placeDetailsViewModel is null)
+		{
+			return;
+		}
+
+		var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
+		placeDetailsViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+		{
+			{
+				"place", pin.PlaceId
+			}
+		});
+		var popup = new SfPopup
+		{
+			ContentTemplate = new DataTemplate(() => placeDetailsView),
+			StaysOpen = true,
+			ShowCloseButton = true,
+			//Parent = this,
+			AnimationMode = PopupAnimationMode.Fade,
+			AutoSizeMode = PopupAutoSizeMode.Both,
+			HeaderTitle = pin.Label
+		};
+		popup.Show();
+		placeDetailsView.Popup = popup;
 	}
 
 	[RelayCommand(AllowConcurrentExecutions = false)]
@@ -113,7 +128,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		geoLocation.LocationChanged += GeoLocationOnLocationChanged;
 		geoLocation.ListeningFailed += GeoLocationOnListeningFailed;
 		await geoLocation.StartListeningForegroundAsync(new GeolocationListeningRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(30)));
-		IsShowingUser = true;
 	}
 
 	async partial void OnCurrentLocationChanged(Location? value)
@@ -167,9 +181,8 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 						PlaceId = place.Id,
 						Location = place.Location,
 						Label = place.Name,
-						Type = PinType.Place,
 						Image = place.MainImage,
-						Address = OperatingSystem.IsWindows() ? string.Empty : place.Description ?? string.Empty
+						MarkerClicked = new RelayCommand<WorldExplorerPin>(MarkerClicked)
 					});
 				}
 
@@ -190,7 +203,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	private async Task CheckLocation(Location location)
 	{
-		Pin? closestPlace = null;
+		WorldExplorerPin? closestPlace = null;
 		double closestDistanceToPlace = 1;
 		foreach (var pin in Pins)
 		{

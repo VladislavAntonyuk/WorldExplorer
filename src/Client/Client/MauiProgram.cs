@@ -2,7 +2,7 @@
 
 using System.Reflection;
 using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Maps;
+using Controls;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Services;
@@ -14,6 +14,7 @@ using Syncfusion.Licensing;
 using Syncfusion.Maui.Core.Hosting;
 using ViewModels;
 using Views;
+using WorldExplorer.Client.Map.WorldExplorerMap;
 
 public static class MauiProgram
 {
@@ -31,11 +32,6 @@ public static class MauiProgram
 		ArgumentNullException.ThrowIfNull(keysSettings);
 
 		builder.UseMauiApp<App>()
-#if WINDOWS
-			   .UseMauiCommunityToolkitMaps(keysSettings.WindowsMaps)
-#else
-			   .UseMauiMaps()
-#endif
 			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
 			   .ConfigureFonts(fonts =>
@@ -47,6 +43,7 @@ public static class MauiProgram
 			   .ConfigureMauiHandlers(handlers =>
 			   {
 				   handlers.AddHandler<Shell, CustomShellHandler>();
+				   handlers.AddHandler<WorldExplorerMap, WorldExplorerMapHandler>();
 #if ANDROID || IOS
 				   handlers.AddHandler<Controls.ArView, ArViewHandler>();
 #endif
