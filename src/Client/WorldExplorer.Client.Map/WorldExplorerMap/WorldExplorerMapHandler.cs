@@ -1,7 +1,7 @@
 ﻿#if ANDROID
 using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 #elif IOS || MACCATALYST
-using PlatformMap = UIKit.UIView;
+using PlatformMap = WebKit.WKWebView;
 #elif WINDOWS
 using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 #endif
@@ -84,6 +84,9 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 
 		switch (eventId)
 		{
+			case EventIdentifier.MapInitialized:
+				WorldExplorerMapPropertyMapper.UpdateProperties(this, VirtualView);
+				break;
 			case EventIdentifier.MarkerClicked:
 				var clickedPinWebView = JsonSerializer.Deserialize<Payload>(payloadAsString, jsonSerializerOptions);
 				var clickedPinWebViewId = clickedPinWebView?.PlaceId;
