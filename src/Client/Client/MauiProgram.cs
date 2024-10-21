@@ -2,9 +2,7 @@
 
 using System.Reflection;
 using CommunityToolkit.Maui;
-using Controls;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Services;
 using Services.API;
 using Services.Auth;

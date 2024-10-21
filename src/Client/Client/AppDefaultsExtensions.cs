@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿namespace Client;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
-
-namespace Microsoft.Extensions.Hosting;
-
-using OpenTelemetry.Logs;
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This code is the client equivalent of the ServiceDefaults project. See https://aka.ms/dotnet/aspire/service-defaults
@@ -75,7 +74,7 @@ public static class AppDefaultsExtensions
 		return builder;
 	}
 
-	private static MauiAppBuilder AddOpenTelemetryExporters(this MauiAppBuilder builder)
+	private static void AddOpenTelemetryExporters(this MauiAppBuilder builder)
 	{
 		var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 
@@ -85,27 +84,19 @@ public static class AppDefaultsExtensions
 
 			builder.Services.AddOpenTelemetry().UseOtlpExporter();
 		}
-
-		// Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.Exporter package)
-		// builder.Services.AddOpenTelemetry()
-		//    .UseAzureMonitor();
-
-		return builder;
 	}
 
 	private static void SetOpenTelemetryEnvironmentVariables(this MauiAppBuilder builder)
 	{
-		var settings = builder.Configuration.AsEnumerable();
+		var settings = builder.Configuration.AsEnumerable().Where(setting=>setting.Key.StartsWith("OTEL_"));
 		foreach (var setting in settings)
 		{
-			if (setting.Key.StartsWith("OTEL_"))
-			{
-				Environment.SetEnvironmentVariable(setting.Key, setting.Value);
-			}
+			Environment.SetEnvironmentVariable(setting.Key, setting.Value);
 		}
 	}
 
-	private static MeterProviderBuilder AddAppMeters(this MeterProviderBuilder meterProviderBuilder) =>
-		meterProviderBuilder.AddMeter(
-			"System.Net.Http");
+	private static void AddAppMeters(this MeterProviderBuilder meterProviderBuilder)
+	{
+		meterProviderBuilder.AddMeter("System.Net.Http");
+	}
 }

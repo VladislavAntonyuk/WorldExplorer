@@ -4,5 +4,5 @@ using Framework;
 
 public class AboutViewModel : BaseViewModel
 {
-	public string Version => VersionTracking.CurrentVersion;
+	public static string Version => VersionTracking.CurrentVersion;
 }

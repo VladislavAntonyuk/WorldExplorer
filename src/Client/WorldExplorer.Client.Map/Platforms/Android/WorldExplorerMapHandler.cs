@@ -10,11 +10,11 @@ using Microsoft.Maui.Platform;
 
 public partial class WorldExplorerMapHandler
 {
-	private WebViewJavaScriptInterface _javaScriptInterface;
+	private WebViewJavaScriptInterface javaScriptInterface;
 
 	protected override PlatformMap CreatePlatformView()
 	{
-		_javaScriptInterface = new WebViewJavaScriptInterface(this);
+		javaScriptInterface = new WebViewJavaScriptInterface(this);
 		var webViewHandler = new WebViewHandler();
 		var webView = new MauiWebView(webViewHandler, Context);
 		return webView;
@@ -24,7 +24,7 @@ public partial class WorldExplorerMapHandler
 	{
 		base.ConnectHandler(platformView);
 		var mapPage = GetWebPage();
-		platformView.AddJavascriptInterface(_javaScriptInterface, "worldExplorerMap");
+		platformView.AddJavascriptInterface(javaScriptInterface, "worldExplorerMap");
 		((IWebViewDelegate)platformView).LoadHtml(mapPage, null);
 	}
 
