@@ -1,0 +1,81 @@
+﻿namespace WorldExplorer.Web.Components.Pages.Admin;
+
+using Modules.Places.Application.Places.GetPlace;
+using Modules.Users.Application.Users.GetUser;
+using MudBlazor;
+using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequest;
+using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
+
+public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)
+	: WorldExplorerAuthBaseComponent
+{
+	private List<PlaceResponse> places = [];
+	private List<LocationInfoRequestResponse> requests = [];
+	private List<UserResponse> users = [];
+
+	private async Task ClearPlaces()
+	{
+		var isConfirmed = await dialogService.ShowMessageBox("Clear places",
+		                                                     "Are you sure you want to clear all places?");
+		if (isConfirmed == true)
+		{
+			await apiClient.ClearPlaces(CancellationToken.None);
+			await GetPlaces();
+		}
+	}
+
+	private async Task ClearRequests()
+	{
+		var isConfirmed = await dialogService.ShowMessageBox("Clear requests",
+		                                                     "Are you sure you want to clear all requests?");
+		if (isConfirmed == true)
+		{
+			await apiClient.ClearLocationInfoRequests(CancellationToken.None);
+			await GetRequests();
+		}
+	}
+
+	private async Task GetUsers()
+	{
+		users = await apiClient.GetUsers(CancellationToken.None);
+		StateHasChanged();
+	}
+
+	private async Task GetPlaces()
+	{
+		places = await apiClient.GetPlaces(CancellationToken.None);
+		StateHasChanged();
+	}
+
+	private async Task GetRequests()
+	{
+		requests = await apiClient.GetLocationInfoRequests(CancellationToken.None);
+		StateHasChanged();
+	}
+
+	private async Task DeleteUser(Guid userId)
+	{
+		await apiClient.DeleteUser(userId, CancellationToken.None);
+		await GetUsers();
+	}
+
+	private async Task DeletePlace(Guid placeId)
+	{
+		await apiClient.DeletePlace(placeId, CancellationToken.None);
+		await GetPlaces();
+	}
+
+	private async Task DeleteRequest(int requestId)
+	{
+		await apiClient.DeleteLocationInfoRequest(requestId, CancellationToken.None);
+		await GetRequests();
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		await GetPlaces();
+		await GetUsers();
+		await GetRequests();
+	}
+}

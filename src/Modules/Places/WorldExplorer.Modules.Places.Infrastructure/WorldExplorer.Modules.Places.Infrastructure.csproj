@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetVersion)</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Places.Presentation\WorldExplorer.Modules.Places.Presentation.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="WorldExplorer.Modules.Places.IntegrationTests" />
+		<InternalsVisibleTo Include="WorldExplorer.IntegrationTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Aspire.Azure.AI.OpenAI" Version="9.0.0-preview.4.24511.1" />
+
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="9.0.0-rc.2.24474.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.2.24474.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.AI" Version="9.0.0-preview.9.24507.7" />
+		<PackageReference Include="Microsoft.Extensions.AI.Ollama" Version="9.0.0-preview.9.24507.7" />
+		<PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.0.0-preview.9.24507.7" />
+	</ItemGroup>
+
+</Project>
