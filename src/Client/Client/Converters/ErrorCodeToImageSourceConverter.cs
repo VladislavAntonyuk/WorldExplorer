@@ -5,7 +5,8 @@ using CommunityToolkit.Maui.Converters;
 using Models.Enums;
 using SkiaSharp.Extended.UI.Controls;
 
-public class ErrorCodeToImageSourceConverter : BaseConverterOneWay<ErrorCode?, SKLottieImageSource>
+[AcceptEmptyServiceProvider]
+public partial class ErrorCodeToImageSourceConverter : BaseConverterOneWay<ErrorCode?, SKLottieImageSource>
 {
 	public override SKLottieImageSource DefaultConvertReturnValue { get; set; } = new SKFileLottieImageSource
 	{

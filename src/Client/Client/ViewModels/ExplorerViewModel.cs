@@ -7,9 +7,8 @@ using Framework;
 using Resources.Localization;
 using Services;
 using Services.API;
-using Services.Auth;
+using Services.Navigation;
 using Shared.Models;
-using Syncfusion.Maui.Popup;
 using Views;
 using WorldExplorer.Client.Map.WorldExplorerMap;
 using Location = Location;
@@ -19,8 +18,8 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	IGeolocation geoLocation,
 	IDialogService dialogService,
 	IDispatcher dispatcher,
-	ICurrentUserService currentUserService,
-	IDeviceDisplay deviceDisplay) : BaseViewModel, IDisposable
+	IDeviceDisplay deviceDisplay,
+	INavigationService navigationService) : BaseViewModel, IDisposable
 {
 	[ObservableProperty]
 	private Location? currentLocation;
@@ -78,34 +77,20 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		Application.Current?.OpenWindow(new Window(new AboutPage(new AboutViewModel())));
 	}
 
-	[RelayCommand]
-	private void MarkerClicked(WorldExplorerPin? pin)
+	[RelayCommand(AllowConcurrentExecutions = false)]
+	private async Task MarkerClicked(WorldExplorerPin? pin)
 	{
-		var placeDetailsViewModel = IPlatformApplication.Current?.Services.GetRequiredService<PlaceDetailsViewModel>();
-		if (placeDetailsViewModel is null)
+		if (pin is null)
 		{
 			return;
 		}
 
-		var placeDetailsView = new PlaceDetailsView(placeDetailsViewModel);
-		placeDetailsViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+		await navigationService.NavigateAsync<PlaceDetailsViewModel, ErrorViewModel>(new Dictionary<string, object?>
 		{
 			{
 				"place", pin.PlaceId
 			}
 		});
-		var popup = new SfPopup
-		{
-			ContentTemplate = new DataTemplate(() => placeDetailsView),
-			StaysOpen = true,
-			ShowCloseButton = true,
-			//Parent = this,
-			AnimationMode = PopupAnimationMode.Fade,
-			AutoSizeMode = PopupAutoSizeMode.Both,
-			HeaderTitle = pin.Label
-		};
-		popup.Show();
-		placeDetailsView.Popup = popup;
 	}
 
 	[RelayCommand(AllowConcurrentExecutions = false)]
@@ -143,9 +128,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		{
 			statusCode = await dispatcher.DispatchAsync(() => GetRecommendations(value));
 			attempts++;
-#pragma warning disable S2583
 			if (attempts > 5)
-#pragma warning restore S2583
 			{
 				Status = Localization.UnableToGetPlaceDetails;
 				break;
@@ -182,7 +165,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 						Location = place.Location,
 						Label = place.Name,
 						Image = place.MainImage,
-						MarkerClicked = new RelayCommand<WorldExplorerPin>(MarkerClicked)
+						MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
 					});
 				}
 

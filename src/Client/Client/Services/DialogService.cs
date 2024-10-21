@@ -20,22 +20,29 @@ internal class DialogService : IDialogService
 
 	public Task AlertAsync(string title, string message, string cancel)
 	{
-		if (Application.Current?.MainPage is null)
+		var activePage = GetActivePage();
+		if (activePage is null)
 		{
 			return Task.CompletedTask;
 		}
 
-		return Application.Current.MainPage.DisplayAlert(title, message, cancel);
+		return activePage.DisplayAlert(title, message, cancel);
 	}
 
 	public async Task<bool> ConfirmAsync(string title, string message, string ok, string cancel)
 	{
-		if (Application.Current?.MainPage is null)
+		var activePage = GetActivePage();
+		if (activePage is null)
 		{
 			return false;
 		}
 
-		var result = await Application.Current.MainPage.DisplayAlert(title, message, ok, cancel);
+		var result = await activePage.DisplayAlert(title, message, ok, cancel);
 		return result;
+	}
+
+	private static Page? GetActivePage()
+	{
+		return Application.Current?.Windows.LastOrDefault()?.Page;
 	}
 }

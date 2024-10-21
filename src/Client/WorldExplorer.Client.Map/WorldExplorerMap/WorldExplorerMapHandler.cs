@@ -97,5 +97,5 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 		}
 	}
 
-	private record Payload(Guid PlaceId);
+	private sealed record Payload(Guid PlaceId);
 }

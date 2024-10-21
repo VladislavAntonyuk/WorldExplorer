@@ -14,7 +14,7 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 	IShare share,
 	IArService arService,
 	IDialogService dialogService,
-	INavigationService navigationService) : BaseViewModel, IQueryAttributable
+	INavigationService navigationService) : BasePopupViewModel
 {
 	private Guid? placeId;
 
@@ -27,8 +27,9 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 	[ObservableProperty]
 	private Place place = Place.Default;
 
-	public void ApplyQueryAttributes(IDictionary<string, object> query)
+	public override void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
+		base.ApplyQueryAttributes(query);
 		placeId = query["place"] as Guid?;
 	}
 
@@ -52,7 +53,7 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 					Name = getDetailsResult.Content.Name,
 					Location = getDetailsResult.Content.Location,
 					Description = getDetailsResult.Content.Description,
-					Images = getDetailsResult.Content.Images.ToList()
+					Images = getDetailsResult.Content.Images
 				};
 				if (Place.Images.Count > 0 && arService.IsSupported())
 				{
@@ -82,6 +83,7 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 	private async Task Ar()
 	{
 		await dialogService.ToastAsync("Opening AR...");
+		await ClosePopup();
 		await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object?>
 		{
 			{

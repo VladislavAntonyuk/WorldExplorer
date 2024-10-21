@@ -8,8 +8,8 @@
 		<PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-rc.1.24511.1" />
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.0.0-rc.1.24511.1" />
 
-		<PackageReference Include="MassTransit" Version="8.3.1-develop.2084" />
-		<PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1-develop.2084" />
+		<PackageReference Include="MassTransit" Version="8.3.1-develop.2089" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1-develop.2089" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 
 		<PackageReference Include="Scrutor" Version="5.0.1" />

@@ -23,7 +23,7 @@ public partial class WorldExplorerMapHandler
 	{
 		base.ConnectHandler(platformView);
 		var mapPage = GetWebPage();
-		platformView.LoadHtmlString(mapPage, null);
+		platformView.LoadHtmlString(new NSString(mapPage), null);
 		WorldExplorerMapPropertyMapper.UpdateProperties(this, VirtualView);
 	}
 
