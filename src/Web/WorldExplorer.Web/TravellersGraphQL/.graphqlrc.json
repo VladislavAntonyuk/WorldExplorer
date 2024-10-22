@@ -1,0 +1,21 @@
+{
+  "schema": "schema.graphql",
+  "documents": "**/*.graphql",
+  "extensions": {
+	"strawberryShake": {
+		"name": "WorldExplorerTravellersClient",
+		"namespace": "WorldExplorer.Web",
+		"url": "https://localhost:5002/graphql/",
+		"records": {
+			"inputs": false,
+			"entities": false
+		},
+		"transportProfiles": [
+			{
+				"default": "Http",
+				"subscription": "WebSocket"
+			}
+		]
+	}
+  }
+}

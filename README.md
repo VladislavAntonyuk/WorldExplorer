@@ -13,6 +13,13 @@ A journey is not just about reaching the destination; it's about the experiences
 
 ## Development
 
+### WebApp
+
+```bash
+cd "src/Web/WorldExplorer.AppHost"
+dotnet run -c Release
+```
+
 ### MacCatalyst
 
 Run on Device

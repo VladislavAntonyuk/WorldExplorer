@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetVersion)</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Presentation\WorldExplorer.Common.Presentation.csproj" />
+		<ProjectReference Include="..\WorldExplorer.Modules.Places.Application\WorldExplorer.Modules.Places.Application.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="WorldExplorer.Modules.Places.IntegrationTests" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Window xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:client="clr-namespace:Client"
+             xmlns:viewModels="clr-namespace:Client.ViewModels"
+             x:Class="Client.MainWindow">
+	<Window.TitleBar>
+		<TitleBar Title="World Explorer"
+		          Subtitle="{x:Static viewModels:AboutViewModel.Version}"
+		          IsVisible="True"
+		          HeightRequest="48">
+			<TitleBar.Content>
+				<SearchBar Placeholder="Search"
+				           MaximumWidthRequest="300"
+				           HorizontalOptions="FillAndExpand"
+				           VerticalOptions="Center" />
+			</TitleBar.Content>
+			<TitleBar.TrailingContent>
+				<ImageButton HeightRequest="36"
+				             WidthRequest="36"
+				             BorderWidth="0"
+				             Background="Transparent">
+					<ImageButton.Source>
+						<FontImageSource Size="16"
+						                 Glyph="&#xE713;"
+						                 FontFamily="SegoeMDL2"/>
+					</ImageButton.Source>
+				</ImageButton>
+			</TitleBar.TrailingContent>
+		</TitleBar>
+	</Window.TitleBar>
+	<Window.Page>
+		<client:AppShell x:Name="MainShell"/>
+	</Window.Page>
+</Window>
