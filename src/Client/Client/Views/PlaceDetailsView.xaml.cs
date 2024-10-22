@@ -1,5 +1,6 @@
 ﻿namespace Client.Views;
 
+using Framework;
 using ViewModels;
 
 public partial class PlaceDetailsView

@@ -6,7 +6,6 @@
 	xmlns:views="clr-namespace:Client.Views"
 	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
-	xmlns:client="clr-namespace:Client"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:controls="clr-namespace:Client.Controls"

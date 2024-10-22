@@ -1,13 +1,9 @@
 ﻿namespace Client;
 
-using ViewModels;
-
 public partial class AppShell : Shell
 {
-	public AppShell(ShellViewModel viewModel)
+	public AppShell()
 	{
 		InitializeComponent();
-
-		BindingContext = viewModel;
 	}
 }
