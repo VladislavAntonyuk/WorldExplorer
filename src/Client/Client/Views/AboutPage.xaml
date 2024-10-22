@@ -21,7 +21,7 @@
 			HeightRequest="200" />
 
 		<Label Text="{x:Static localization:Localization.CreatedBy}" />
-		<Label Text="{Binding Version}" HorizontalOptions="Center" />
+		<Label Text="{x:Static viewModels:AboutViewModel.Version}" HorizontalOptions="Center" />
 	</VerticalStackLayout>
 
 </framework:BaseContentPage>

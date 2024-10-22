@@ -7,9 +7,8 @@ using Services;
 using Services.API;
 using Services.Auth;
 using Services.Navigation;
+using SimpleRatingControlMaui;
 using SkiaSharp.Views.Maui.Controls.Hosting;
-using Syncfusion.Licensing;
-using Syncfusion.Maui.Core.Hosting;
 using ViewModels;
 using Views;
 using WorldExplorer.Client.Map.WorldExplorerMap;
@@ -24,14 +23,13 @@ public static class MauiProgram
 
 		var config = GetConfiguration();
 		builder.Configuration.AddConfiguration(config);
-		var keysSettings = builder.Configuration.GetRequiredSection("Keys").Get<KeysSettings>();
 		var apiSettings = builder.Configuration.GetRequiredSection("API").Get<ApiSettings>();
 		ArgumentNullException.ThrowIfNull(apiSettings);
-		ArgumentNullException.ThrowIfNull(keysSettings);
 
 		builder.UseMauiApp<App>()
 			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
+			   .UseSimpleRatingControl()
 			   .ConfigureFonts(fonts =>
 			   {
 				   fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
@@ -55,10 +53,7 @@ public static class MauiProgram
 			x.SetShouldSuppressExceptionsInAnimations(true);
 #endif
 		});
-
-		SyncfusionLicenseProvider.RegisterLicense(keysSettings.Syncfusion);
-		builder.ConfigureSyncfusionCore();
-
+		
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 
 #if IOS || MACCATALYST

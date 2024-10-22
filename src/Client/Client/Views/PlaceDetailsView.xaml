@@ -4,12 +4,11 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
-	xmlns:rating="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView"
-	x:Name="PlaceDetails"
-	BackgroundColor="{StaticResource Gray300}">
+	x:Name="PlaceDetails">
 
 	<Grid
 		WidthRequest="{Binding Window.Width, Source={x:Reference PlaceDetails}}"
@@ -36,18 +35,13 @@
 					HeightRequest="300"
 					Aspect="AspectFit" />
 
-				<rating:SfRating
-					Value="{Binding Place.Rating}"
-					ItemCount="5"
-					Precision="Exact"
-					ItemSize="20"
-					IsReadOnly="True"
-					BackgroundColor="Transparent">
-						<rating:SfRating.RatingSettings>
-							<rating:RatingSettings
-							UnratedStroke="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
-						</rating:SfRating.RatingSettings>
-				</rating:SfRating>
+				<simpleRatingControlMaui:SimpleRatingControl
+					CurrentValue="{Binding Place.Rating}"
+					Amount="5"
+					FontSize="20"
+					BackgroundColor="Transparent"
+					RatingType="Star"
+					AccentColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
 
 				<ScrollView
 					Orientation="Horizontal">
