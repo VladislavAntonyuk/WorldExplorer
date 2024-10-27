@@ -7,12 +7,17 @@
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
 	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
 	x:DataType="viewModels:PlaceDetailsViewModel"
-	x:Class="Client.Views.PlaceDetailsView"
-	x:Name="PlaceDetails">
+	x:Class="Client.Views.PlaceDetailsView">
 
-	<Grid
-		WidthRequest="{Binding Window.Width, Source={x:Reference PlaceDetails}}"
-		MinimumHeightRequest="500">
+	<Grid>
+		<Button
+			ZIndex="100"
+			Margin="15"
+			HorizontalOptions="End"
+			VerticalOptions="Start"
+			Command="{Binding ClosePopupCommand}"
+			Text="X"/>
+
 		<VerticalStackLayout
 			IsVisible="{Binding IsPlacedLoaded, Converter={StaticResource InvertedBoolConverter}}">
 
@@ -77,7 +82,10 @@
 					</HorizontalStackLayout>
 				</ScrollView>
 
-				<Label Text="{Binding Place.Description}" />
+				<Label
+					Padding="10"
+					Text="{Binding Place.Description}"
+					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"/>
 
 				<CollectionView
 					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"

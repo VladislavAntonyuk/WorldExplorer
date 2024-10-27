@@ -59,6 +59,7 @@ public partial class ProfileViewModel : BaseViewModel
 	private async Task Logout(CancellationToken cancellationToken)
 	{
 		await authService.LogoutAsync(cancellationToken);
+		WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(null));
 		await navigationService.NavigateAsync<LoginViewModel, ErrorViewModel>();
 	}
 

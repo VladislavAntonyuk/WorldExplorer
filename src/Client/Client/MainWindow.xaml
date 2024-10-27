@@ -4,33 +4,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:client="clr-namespace:Client"
              xmlns:viewModels="clr-namespace:Client.ViewModels"
-             x:Class="Client.MainWindow">
+             xmlns:controls="clr-namespace:AlohaKit.Controls;assembly=AlohaKit"
+             x:Class="Client.MainWindow"
+             x:DataType="viewModels:MainViewModel">
 	<Window.TitleBar>
-		<TitleBar Title="World Explorer"
+		<TitleBar Title="{Binding Title}"
 		          Subtitle="{x:Static viewModels:AboutViewModel.Version}"
 		          IsVisible="True"
 		          HeightRequest="48">
 			<TitleBar.Content>
-				<SearchBar Placeholder="Search"
-				           MaximumWidthRequest="300"
-				           HorizontalOptions="FillAndExpand"
-				           VerticalOptions="Center" />
+				<SearchBar
+					x:Name="SearchBar"
+					Placeholder="Search"
+					MaximumWidthRequest="300"
+					HorizontalOptions="FillAndExpand"
+					VerticalOptions="Center">
+				</SearchBar>
 			</TitleBar.Content>
 			<TitleBar.TrailingContent>
-				<ImageButton HeightRequest="36"
-				             WidthRequest="36"
-				             BorderWidth="0"
-				             Background="Transparent">
-					<ImageButton.Source>
-						<FontImageSource Size="16"
-						                 Glyph="&#xE713;"
-						                 FontFamily="SegoeMDL2"/>
-					</ImageButton.Source>
-				</ImageButton>
+				<controls:Avatar
+					x:Name="Avatar"
+					Name="{Binding User.Name}"
+					AvatarSize="Small"
+					ZIndex="100">
+					<controls:Avatar.GestureRecognizers>
+						<TapGestureRecognizer
+							Tapped="OnProfileTapped"
+							Command="{Binding ProfileCommand}"/>
+					</controls:Avatar.GestureRecognizers>
+				</controls:Avatar>
 			</TitleBar.TrailingContent>
 		</TitleBar>
 	</Window.TitleBar>
 	<Window.Page>
-		<client:AppShell x:Name="MainShell"/>
+		<client:AppShell />
 	</Window.Page>
 </Window>

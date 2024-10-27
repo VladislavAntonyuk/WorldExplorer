@@ -1,6 +1,6 @@
 ﻿using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 
-namespace WorldExplorer.Client.Map.WorldExplorerMap;
+namespace Client.Controls.WorldExplorerMap;
 
 using System.Text.Json;
 using Android.Webkit;

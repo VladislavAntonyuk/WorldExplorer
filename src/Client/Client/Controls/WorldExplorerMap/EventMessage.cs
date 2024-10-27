@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Client.Map.WorldExplorerMap;
+﻿namespace Client.Controls.WorldExplorerMap;
 class EventMessage
 {
 	public string Id { get; set; } = string.Empty;

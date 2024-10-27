@@ -43,21 +43,6 @@ jobs:
             -   name: Install workloads
                 run: dotnet workload install maui
 
-            -   name: Install Tizen
-                run: |
-                    Invoke-WebRequest 'https://raw.githubusercontent.com/Samsung/Tizen.NET/main/workload/scripts/workload-install.ps1' -OutFile 'workload-install.ps1'
-                    .\workload-install.ps1
-
-            -   uses: cschleiden/replace-tokens@v1
-                env:
-                    ANDROID_MAPS_KEY: ${{ secrets.ANDROID_MAPS_KEY }}
-                    WINDOWS_MAPS_KEY: ${{ secrets.WINDOWS_MAPS_KEY }}
-                    SYNCFUSION_KEY: ${{ secrets.SYNCFUSION_KEY }}
-                with:
-                    tokenPrefix: '#{'
-                    tokenSuffix: '}#'
-                    files: '["**/appsettings.json", "**/AndroidManifest.xml"]'
-
             -   name: Prepare build
                 run: |
                     (Get-Content src\Client\Platforms\Windows\Package.appxmanifest).Replace('1.0.0.0', '${{ env.VERSION }}') | Set-Content src\Client\Platforms\Windows\Package.appxmanifest
@@ -69,12 +54,6 @@ jobs:
                     dotnet publish src/Client/Client.csproj -f net9.0-android /p:Version="${{ env.VERSION }}"
                     mkdir output\android
                     copy ".\src\Client\bin\Release\net9.0-android\publish\com.vladislavantonyuk.worldexplorer.aab" "output\android"
-
-            -   name: Build Client (Tizen)
-                run: |
-                    dotnet publish src/Client/Client.csproj -f net9.0-tizen /p:Version="${{ env.VERSION }}"
-                    mkdir output\tizen
-                    copy ".\src\Client\bin\Release\net9.0-tizen\tizen-x86\*.tpk" "output\tizen"
 
             -   name: Build Client (Apple)
                 run: |

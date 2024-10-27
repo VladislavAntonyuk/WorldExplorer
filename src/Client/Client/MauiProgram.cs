@@ -2,6 +2,7 @@
 
 using System.Reflection;
 using CommunityToolkit.Maui;
+using Controls.WorldExplorerMap;
 using Microsoft.Extensions.Configuration;
 using Services;
 using Services.API;
@@ -9,9 +10,9 @@ using Services.Auth;
 using Services.Navigation;
 using SimpleRatingControlMaui;
 using SkiaSharp.Views.Maui.Controls.Hosting;
+using Syncfusion.Maui.Toolkit.Hosting;
 using ViewModels;
 using Views;
-using WorldExplorer.Client.Map.WorldExplorerMap;
 
 public static class MauiProgram
 {
@@ -27,6 +28,7 @@ public static class MauiProgram
 		ArgumentNullException.ThrowIfNull(apiSettings);
 
 		builder.UseMauiApp<App>()
+		       .ConfigureSyncfusionToolkit()
 			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
 			   .UseSimpleRatingControl()
@@ -72,20 +74,19 @@ public static class MauiProgram
 		builder.Services.AddSingleton(Launcher.Default);
 		builder.Services.AddSingleton(Geolocation.Default);
 		builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
-		builder.Services.AddTransient<AuthHeaderHandler>();
 		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
 		builder.Services.AddApi<IUsersApi>(apiSettings.Users);
 
 		builder.Services.AddSingleton<AboutPage, AboutViewModel>();
-		builder.Services.AddSingleton<ProfilePage, ProfileViewModel>();
-		builder.Services.AddTransient<PlaceDetailsView, PlaceDetailsViewModel>();
-		builder.Services.AddSingleton<LoginPage, LoginViewModel>();
-		builder.Services.AddSingleton<ExplorerPage, ExplorerViewModel>();
-		builder.Services.AddSingleton<LoadingPage, LoadingViewModel>();
-		builder.Services.AddSingleton<ErrorPage, ErrorViewModel>();
+		builder.Services.AddSingletonWithShellRoute<LoginPage, LoginViewModel>($"//{nameof(LoginPage)}");
+		builder.Services.AddSingletonWithShellRoute<ProfilePage, ProfileViewModel>($"//home/{nameof(ProfilePage)}");
+		builder.Services.AddTransientWithShellRoute<PlaceDetailsView, PlaceDetailsViewModel>($"//home/{nameof(PlaceDetailsView)}");
+		builder.Services.AddSingletonWithShellRoute<ExplorerPage, ExplorerViewModel>($"//home/{nameof(ExplorerPage)}");
+		builder.Services.AddSingletonWithShellRoute<LoadingPage, LoadingViewModel>($"//{nameof(LoadingPage)}");
+		builder.Services.AddSingletonWithShellRoute<ErrorPage, ErrorViewModel>($"//{nameof(ErrorViewModel)}");
 		builder.Services.AddTransientWithShellRoute<ArPage, ArViewModel>($"//home/{nameof(ArPage)}");
 		builder.Services.AddTransientWithShellRoute<CameraPage, CameraViewModel>($"//home/{nameof(CameraPage)}");
-		builder.Services.AddSingleton<ShellViewModel>();
+		builder.Services.AddSingleton<MainViewModel>();
 
 		return builder.Build();
 	}

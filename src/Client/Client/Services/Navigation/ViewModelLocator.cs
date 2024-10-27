@@ -23,6 +23,9 @@ internal static class ViewModelLocator
 			typeof(ExplorerViewModel), $"//home/{nameof(ExplorerPage)}"
 		},
 		{
+			typeof(PlaceDetailsViewModel), $"//home/{nameof(PlaceDetailsView)}"
+		},
+		{
 			typeof(ArViewModel), $"//home/{nameof(ArPage)}"
 		},
 		{

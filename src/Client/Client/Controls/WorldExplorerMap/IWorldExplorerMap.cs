@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Client.Map.WorldExplorerMap;
+﻿namespace Client.Controls.WorldExplorerMap;
 
 using System.Collections.ObjectModel;
 

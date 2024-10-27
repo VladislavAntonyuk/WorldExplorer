@@ -11,7 +11,7 @@
 	xmlns:controls="clr-namespace:Client.Controls"
 	x:Class="Client.AppShell"
 	FlyoutBehavior="Disabled"
-	x:DataType="viewModels:ShellViewModel">
+	x:DataType="viewModels:MainViewModel">
 
 	<ShellContent
 		Route="LoadingPage"
@@ -60,6 +60,12 @@
 		<Tab
 			Route="ProfilePage"
 			Title="{x:Static localization:Localization.Profile}">
+
+			<Tab.IsVisible>
+				<OnPlatform x:TypeArguments="system:Boolean" Default="True">
+					<On Platform="WinUI" Value="False" />
+				</OnPlatform>
+			</Tab.IsVisible>
 
 			<Tab.Icon>
 				<FontImageSource
