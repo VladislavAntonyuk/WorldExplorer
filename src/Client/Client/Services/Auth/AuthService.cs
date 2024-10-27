@@ -43,19 +43,7 @@ internal class AuthService : IAuthService
 				Value = result.AccessToken
 			};
 		}
-		catch (MsalClientException ex)
-		{
-			var operationResult = new OperationResult<string>();
-			operationResult.AddError(ex.Message);
-			return operationResult;
-		}
-		catch (MsalServiceException ex)
-		{
-			var operationResult = new OperationResult<string>();
-			operationResult.AddError(ex.Message);
-			return operationResult;
-		}
-		catch (OperationCanceledException ex)
+		catch (Exception ex)
 		{
 			var operationResult = new OperationResult<string>();
 			operationResult.AddError(ex.Message);
@@ -87,7 +75,7 @@ internal class AuthService : IAuthService
 				Value = result.AccessToken
 			};
 		}
-		catch (Exception ex) when(ex is MsalUiRequiredException or TaskCanceledException)
+		catch (Exception ex)
 		{
 			var operationResult = new OperationResult<string>();
 			operationResult.AddError(ex.Message);

@@ -1,6 +1,6 @@
 ﻿using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 
-namespace WorldExplorer.Client.Map.WorldExplorerMap;
+namespace Client.Controls.WorldExplorerMap;
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
@@ -13,8 +13,13 @@ public partial class WorldExplorerMapHandler
 	{
 		var webView = new MauiWebView(new WebViewHandler())
 		{
-			IsRightTapEnabled = false , CanGoBack = false, CanGoForward = false, AllowDrop = false,
-			CanDrag = false, IsDoubleTapEnabled = false, IsHoldingEnabled = false
+			IsRightTapEnabled = false,
+			CanGoBack = false,
+			CanGoForward = false,
+			AllowDrop = false,
+			CanDrag = false,
+			IsDoubleTapEnabled = false,
+			IsHoldingEnabled = false
 		};
 		return webView;
 	}
@@ -41,11 +46,11 @@ public partial class WorldExplorerMapHandler
 		base.DisconnectHandler(platformView);
 	}
 
-	static void CallJsMethod(PlatformMap platformWebView, string script)
+	static async void CallJsMethod(PlatformMap platformWebView, string script)
 	{
 		if (platformWebView.CoreWebView2 != null)
 		{
-			platformWebView.DispatcherQueue.TryEnqueue(async () => await platformWebView.CoreWebView2.ExecuteScriptAsync(script));
+			await platformWebView.CoreWebView2.ExecuteScriptAsync(script);
 		}
 	}
 

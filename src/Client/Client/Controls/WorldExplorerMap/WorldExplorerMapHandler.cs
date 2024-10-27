@@ -6,7 +6,7 @@ using PlatformMap = WebKit.WKWebView;
 using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 #endif
 
-namespace WorldExplorer.Client.Map.WorldExplorerMap;
+namespace Client.Controls.WorldExplorerMap;
 
 using System.Globalization;
 using System.Text.Json;
@@ -46,7 +46,6 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 		foreach (var pin in map.Pins)
 		{
 			CallJsMethod(handler.PlatformView, $"addMarker('{pin.Location.Latitude.ToString(CultureInfo.InvariantCulture)}','{pin.Location.Longitude.ToString(CultureInfo.InvariantCulture)}','{pin.Label}', '{pin.Image}', '{pin.PlaceId}');");
-
 		}
 	}
 

@@ -8,7 +8,8 @@
 	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
 	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
 	xmlns:controls="clr-namespace:AlohaKit.Controls;assembly=AlohaKit" 
-	xmlns:models="using:Shared.Models"
+	xmlns:models="clr-namespace:Shared.Models" 
+	xmlns:charts="http://schemas.syncfusion.com/maui/toolkit"
 	x:DataType="viewModels:ProfileViewModel"
 	x:Class="Client.Views.ProfilePage"
 	Shell.NavBarIsVisible="False">
@@ -104,7 +105,7 @@
 						<Border StrokeShape="RoundRectangle 20">
 							<Grid>
 								<Image
-									Source="{Binding Place.Images[0]}"
+									Source="{Binding Place.MainImage}"
 									HorizontalOptions="Center"
 									Aspect="AspectFit"
 									HeightRequest="140" />
@@ -128,55 +129,55 @@
 				Style="{StaticResource TitleStyle}"
 				IsVisible="{Binding User.Activities, Converter={StaticResource IsListNotNullOrEmptyConverter}}" />
 
-			<!--<chart:SfCartesianChart>
+			<charts:SfCartesianChart>
 
-				<chart:SfCartesianChart.XAxes>
-					<chart:DateTimeAxis
+				<charts:SfCartesianChart.XAxes>
+					<charts:DateTimeAxis
 						IntervalType="Days"
 						EdgeLabelsVisibilityMode="AlwaysVisible"
 						EdgeLabelsDrawingMode="Center">
 
-						<chart:DateTimeAxis.Title>
-							<chart:ChartAxisTitle
+						<charts:DateTimeAxis.Title>
+							<charts:ChartAxisTitle
 								Text="{x:Static localization:Localization.Date}"
 								TextColor="Gray" />
-						</chart:DateTimeAxis.Title>
+						</charts:DateTimeAxis.Title>
 
-						<chart:DateTimeAxis.LabelStyle>
-							<chart:ChartAxisLabelStyle TextColor="Gray" />
-						</chart:DateTimeAxis.LabelStyle>
-					</chart:DateTimeAxis>
-				</chart:SfCartesianChart.XAxes>
+						<charts:DateTimeAxis.LabelStyle>
+							<charts:ChartAxisLabelStyle TextColor="Gray" />
+						</charts:DateTimeAxis.LabelStyle>
+					</charts:DateTimeAxis>
+				</charts:SfCartesianChart.XAxes>
 
-				<chart:SfCartesianChart.YAxes>
-					<chart:NumericalAxis
+				<charts:SfCartesianChart.YAxes>
+					<charts:NumericalAxis
 						EdgeLabelsVisibilityMode="AlwaysVisible"
 						EdgeLabelsDrawingMode="Center">
 
-						<chart:DateTimeAxis.Title>
-							<chart:ChartAxisTitle
+						<charts:DateTimeAxis.Title>
+							<charts:ChartAxisTitle
 								Text="{x:Static localization:Localization.Steps}"
 								TextColor="Gray" />
-						</chart:DateTimeAxis.Title>
+						</charts:DateTimeAxis.Title>
 
-						<chart:NumericalAxis.LabelStyle>
-							<chart:ChartAxisLabelStyle TextColor="Gray" />
-						</chart:NumericalAxis.LabelStyle>
-					</chart:NumericalAxis>
-				</chart:SfCartesianChart.YAxes>
+						<charts:NumericalAxis.LabelStyle>
+							<charts:ChartAxisLabelStyle TextColor="Gray" />
+						</charts:NumericalAxis.LabelStyle>
+					</charts:NumericalAxis>
+				</charts:SfCartesianChart.YAxes>
 
-				<chart:ColumnSeries
+				<charts:ColumnSeries
 					ItemsSource="{Binding User.Activities}"
 					XBindingPath="Date"
 					YBindingPath="Steps"
 					EnableTooltip="True"
 					ShowDataLabels="True">
 
-					<chart:ColumnSeries.DataLabelSettings>
-						<chart:CartesianDataLabelSettings LabelPlacement="Inner" />
-					</chart:ColumnSeries.DataLabelSettings>
-				</chart:ColumnSeries>
-			</chart:SfCartesianChart>-->
+					<charts:ColumnSeries.DataLabelSettings>
+						<charts:CartesianDataLabelSettings LabelPlacement="Inner" />
+					</charts:ColumnSeries.DataLabelSettings>
+				</charts:ColumnSeries>
+			</charts:SfCartesianChart>
 
 			<toolkit:Expander
 				x:Name="DangerZoneExpander"

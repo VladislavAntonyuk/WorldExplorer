@@ -784,6 +784,7 @@
 		body {
 			height: 100%;
 			margin: 0;
+			padding: 0;
 		}
 
 		.leaflet-container {
@@ -791,13 +792,6 @@
 			width: 600px;
 			max-width: 100%;
 			max-height: 100%;
-		}
-	</style>
-
-	<style>
-		body {
-			padding: 0;
-			margin: 0;
 		}
 
 		#map {
@@ -829,7 +823,7 @@
 		function initMap() {
 			map = L.map('map').fitWorld();
 
-			const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 19,
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			}).addTo(map);

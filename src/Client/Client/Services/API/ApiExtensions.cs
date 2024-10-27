@@ -1,19 +1,26 @@
 ﻿namespace Client.Services.API;
 
 using System.Net;
+using Auth;
 using Refit;
 
 public static class ApiExtensions
 {
 	public static void AddApi<T>(this IServiceCollection services, string baseAddress) where T : class
 	{
-		services.AddRefitClient<T>()
-				.ConfigureHttpClient(c =>
-				{
-					c.BaseAddress = new Uri(baseAddress);
-					c.Timeout = TimeSpan.FromSeconds(15);
-				})
-				.AddHttpMessageHandler<AuthHeaderHandler>();
+		services.AddRefitClient<T>(serviceProvider => new RefitSettings
+		{
+			AuthorizationHeaderValueGetter = async (_, token) =>
+			{
+				var authService = serviceProvider.GetRequiredService<IAuthService>();
+				var tokenResult = await authService.AcquireTokenSilent(token);
+				return tokenResult.IsSuccessful ? tokenResult.Value : string.Empty;
+			}
+		})
+		.ConfigureHttpClient(c =>
+		{
+			c.BaseAddress = new Uri(baseAddress);
+		});
 	}
 
 	public static async Task<IApiResponse> GetErrorResponse(this Exception e, HttpMethod httpMethod)

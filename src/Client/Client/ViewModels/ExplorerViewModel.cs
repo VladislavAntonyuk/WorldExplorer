@@ -3,6 +3,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Controls.WorldExplorerMap;
 using Framework;
 using Resources.Localization;
 using Services;
@@ -10,7 +11,6 @@ using Services.API;
 using Services.Navigation;
 using Shared.Models;
 using Views;
-using WorldExplorer.Client.Map.WorldExplorerMap;
 using Location = Location;
 
 public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
@@ -21,6 +21,8 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	IDeviceDisplay deviceDisplay,
 	INavigationService navigationService) : BaseViewModel, IDisposable
 {
+	private const string DefaultPinImage = "https://ik.imagekit.io/VladislavAntonyuk/projects/world-explorer/default-location-pin.png";
+
 	[ObservableProperty]
 	private Location? currentLocation;
 
@@ -59,10 +61,16 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	}
 
 	[RelayCommand]
-	private void ToggleUserLocation()
+	private async Task ToggleUserLocation()
 	{
-		geoLocation.StopListeningForeground();
-		CurrentLocation = null;
+		if (CurrentLocation is null)
+		{
+			await StartTracking();
+		}
+		else
+		{
+			StopTracking();
+		}
 	}
 
 	[RelayCommand]
@@ -85,12 +93,17 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 			return;
 		}
 
+		var taskCompletionSource = new TaskCompletionSource();
 		await navigationService.NavigateAsync<PlaceDetailsViewModel, ErrorViewModel>(new Dictionary<string, object?>
 		{
 			{
 				"place", pin.PlaceId
+			},
+			{
+				BasePopupViewModel.TaskCompletionSourceKey, taskCompletionSource
 			}
 		});
+		await taskCompletionSource.Task;
 	}
 
 	[RelayCommand(AllowConcurrentExecutions = false)]
@@ -164,7 +177,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 						PlaceId = place.Id,
 						Location = place.Location,
 						Label = place.Name,
-						Image = place.MainImage,
+						Image = string.IsNullOrEmpty(place.MainImage) ? DefaultPinImage : place.MainImage,
 						MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
 					});
 				}
@@ -212,9 +225,9 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	private void StopTracking()
 	{
-		CurrentLocation = null;
 		geoLocation.ListeningFailed -= GeoLocationOnListeningFailed;
 		geoLocation.LocationChanged -= GeoLocationOnLocationChanged;
 		geoLocation.StopListeningForeground();
+		CurrentLocation = null;
 	}
 }

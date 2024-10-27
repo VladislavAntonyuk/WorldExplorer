@@ -1,6 +1,6 @@
 ﻿using PlatformMap = WebKit.WKWebView;
 
-namespace WorldExplorer.Client.Map.WorldExplorerMap;
+namespace Client.Controls.WorldExplorerMap;
 
 using CoreGraphics;
 using Foundation;

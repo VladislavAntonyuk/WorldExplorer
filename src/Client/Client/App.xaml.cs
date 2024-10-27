@@ -4,16 +4,16 @@ using ViewModels;
 
 public partial class App : Application
 {
-	private readonly ShellViewModel viewModel;
+	private readonly MainViewModel mainViewModel;
 
-	public App(ShellViewModel viewModel)
+	public App(MainViewModel mainViewModel)
 	{
-		this.viewModel = viewModel;
+		this.mainViewModel = mainViewModel;
 		InitializeComponent();
 	}
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		return new MainWindow(viewModel);
+		return new MainWindow(mainViewModel);
 	}
 }

@@ -6,6 +6,7 @@ using Shared.Models;
 public interface IPlacesApi
 {
 	[Get("/recommendations")]
+	[Headers("Authorization: Bearer")]
 	internal Task<ApiResponse<OperationResult<List<PlaceResponse>>>> GetRecommendationsInternal([Query] Location location,
 		CancellationToken cancellationToken);
 
@@ -23,6 +24,7 @@ public interface IPlacesApi
 	}
 
 	[Get("/{id}")]
+	[Headers("Authorization: Bearer")]
 	internal Task<ApiResponse<PlaceResponse>> GetDetailsInternal(Guid id, CancellationToken cancellationToken);
 
 	async Task<ApiResponse<PlaceResponse>> GetDetails(Guid id, CancellationToken cancellationToken)
