@@ -45,28 +45,28 @@ jobs:
 
             -   name: Prepare build
                 run: |
-                    (Get-Content src\Client\Platforms\Windows\Package.appxmanifest).Replace('1.0.0.0', '${{ env.VERSION }}') | Set-Content src\Client\Platforms\Windows\Package.appxmanifest
-                    (Get-Content src\Client\Client.csproj).Replace('<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>${{ env.VERSION }}</ApplicationDisplayVersion>') | Set-Content src\Client\Client.csproj
-                    (Get-Content src\Client\Client.csproj).Replace('<ApplicationVersion>1</ApplicationVersion>', '<ApplicationVersion>${{github.run_number}}</ApplicationVersion>') | Set-Content src\Client\Client.csproj
+                    (Get-Content src\Client\Client\Platforms\Windows\Package.appxmanifest).Replace('1.0.0.0', '${{ env.VERSION }}') | Set-Content src\Client\Client\Platforms\Windows\Package.appxmanifest
+                    (Get-Content src\Client\Client\Client.csproj).Replace('<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>${{ env.VERSION }}</ApplicationDisplayVersion>') | Set-Content src\Client\Client\Client.csproj
+                    (Get-Content src\Client\Client\Client.csproj).Replace('<ApplicationVersion>1</ApplicationVersion>', '<ApplicationVersion>${{github.run_number}}</ApplicationVersion>') | Set-Content src\Client\Client\Client.csproj
 
             -   name: Build Client (Android)
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net9.0-android /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client/Client.csproj -f net9.0-android /p:Version="${{ env.VERSION }}"
                     mkdir output\android
-                    copy ".\src\Client\bin\Release\net9.0-android\publish\com.vladislavantonyuk.worldexplorer.aab" "output\android"
+                    copy ".\src\Client\Client\bin\Release\net9.0-android\publish\com.vladislavantonyuk.worldexplorer.aab" "output\android"
 
             -   name: Build Client (Apple)
                 run: |
-                    dotnet build src/Client/Client.csproj -f net9.0-ios /p:Version="${{ env.VERSION }}"
-                    dotnet publish src/Client/Client.csproj -f net9.0-maccatalyst /p:Version="${{ env.VERSION }}"
+                    dotnet build src/Client/Client/Client.csproj -f net9.0-ios /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client/Client.csproj -f net9.0-maccatalyst /p:Version="${{ env.VERSION }}"
                     mkdir output\maccatalyst
-                    copy ".\src\Client\bin\Release\net9.0-maccatalyst\**\*.pkg" "output\maccatalyst"
+                    copy ".\src\Client\Client\bin\Release\net9.0-maccatalyst\**\*.pkg" "output\maccatalyst"
 
             -   name: Build Client (Windows)
                 run: |
-                    dotnet publish src/Client/Client.csproj -f net9.0-windows10.0.19041.0 /p:Version="${{ env.VERSION }}"
+                    dotnet publish src/Client/Client/Client.csproj -f net9.0-windows10.0.19041.0 /p:Version="${{ env.VERSION }}"
                     mkdir output\windows
-                    copy ".\src\Client\bin\Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\**\*.msix" "output\windows"
+                    copy ".\src\Client\Client\bin\Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\**\*.msix" "output\windows"
 
             -   name: Upload artifact for deployment job
                 uses: actions/upload-artifact@v4
