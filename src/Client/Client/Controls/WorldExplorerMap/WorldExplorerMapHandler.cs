@@ -8,6 +8,7 @@ using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 
 namespace Client.Controls.WorldExplorerMap;
 
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Text.Json;
 using Microsoft.Maui.Handlers;
@@ -43,9 +44,19 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 	{
 		CallJsMethod(handler.PlatformView, "removeAllPins();");
 
-		foreach (var pin in map.Pins)
+		foreach (var pins in map.Pins.Chunk(50))
 		{
-			CallJsMethod(handler.PlatformView, $"addMarker('{pin.Location.Latitude.ToString(CultureInfo.InvariantCulture)}','{pin.Location.Longitude.ToString(CultureInfo.InvariantCulture)}','{pin.Label}', '{pin.Image}', '{pin.PlaceId}');");
+			var pinsArray = JsonSerializer.Serialize(pins.Select(p => new
+			{
+				p.Location.Latitude,
+				p.Location.Longitude,
+				p.Label,
+				p.Image,
+				p.PlaceId
+			}));
+
+			var script = $"addMarkers({pinsArray});";
+			CallJsMethod(handler.PlatformView, script);
 		}
 	}
 
@@ -57,15 +68,15 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 	}
 
 
-	void WebViewWebMessageReceived(string WebMessageAsJson)
+	void WebViewWebMessageReceived(string webMessageAsJson)
 	{
 		// For some reason the web message is empty
-		if (string.IsNullOrEmpty(WebMessageAsJson))
+		if (string.IsNullOrEmpty(webMessageAsJson))
 		{
 			return;
 		}
 
-		var eventMessage = JsonSerializer.Deserialize<EventMessage>(WebMessageAsJson, jsonSerializerOptions);
+		var eventMessage = JsonSerializer.Deserialize<EventMessage>(webMessageAsJson, jsonSerializerOptions);
 
 		// The web message (or it's ID) could not be deserialized to something we recognize
 		if (eventMessage is null || !Enum.TryParse<EventIdentifier>(eventMessage.Id, true, out var eventId))
@@ -84,7 +95,7 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 		switch (eventId)
 		{
 			case EventIdentifier.MapInitialized:
-				WorldExplorerMapPropertyMapper.UpdateProperties(this, VirtualView);
+				VirtualView.OnMapReady();
 				break;
 			case EventIdentifier.MarkerClicked:
 				var clickedPinWebView = JsonSerializer.Deserialize<Payload>(payloadAsString, jsonSerializerOptions);
@@ -97,4 +108,9 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 	}
 
 	private sealed record Payload(Guid PlaceId);
+
+	private void Pins_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		WorldExplorerMapPropertyMapper.UpdateProperty(this, VirtualView, nameof(IWorldExplorerMap.Pins));
+	}
 }

@@ -8,6 +8,7 @@ using Microsoft.Maui.Handlers;
 
 public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, GLSurfaceView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
 {
+	private ArRenderer? arRenderer;
 	public static readonly IPropertyMapper<IArView, ArViewHandler> ArViewMapper =
 		new PropertyMapper<IArView, ArViewHandler>(ViewMapper)
 		{
@@ -22,7 +23,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 
 	private static void MapImages(ArViewHandler handler, IArView view)
 	{
-		// map images
+		handler.arRenderer?.AddImages(view.Images);
 	}
 
 	protected override GLSurfaceView CreatePlatformView()
@@ -63,7 +64,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		}
 
 		// Set up renderer.
-		var arRenderer = new ArRenderer(Context);
+		arRenderer = new ArRenderer(Context);
 		PlatformView.SetRenderer(arRenderer);
 		PlatformView.RenderMode = Rendermode.Continuously;
 		PlatformView.OnResume();

@@ -8,15 +8,7 @@
 	xmlns:worldExplorerMap="clr-namespace:Client.Controls.WorldExplorerMap"
 	x:Class="Client.Views.ExplorerPage"
 	x:DataType="viewModels:ExplorerViewModel"
-	Shell.NavBarIsVisible="True">
-
-	<Shell.TitleView>
-		<Label
-			Text="{Binding Status}"
-			TextColor="{StaticResource White}"
-			HorizontalTextAlignment="Center"
-			VerticalOptions="Center"/>
-	</Shell.TitleView>
+	Shell.NavBarIsVisible="False">
 
 	<framework:BaseContentPage.MenuBarItems>
 		<MenuBarItem Text="Preferences">
@@ -45,7 +37,17 @@
 
 	</framework:BaseContentPage.MenuBarItems>
 
-	<worldExplorerMap:WorldExplorerMap
-		Pins="{Binding Pins}"
-		UserLocation="{Binding CurrentLocation}"/>
+	<Grid>
+		<worldExplorerMap:WorldExplorerMap
+			Pins="{Binding Pins}"
+			UserLocation="{Binding CurrentLocation}"
+			MapReadyCommand="{Binding MapReadyCommand}"/>
+
+		<Label
+			Text="{Binding Status}"
+			BackgroundColor="{StaticResource White}"
+			TextColor="{StaticResource Black}"
+			HorizontalOptions="Start"
+			VerticalOptions="End"/>
+	</Grid>
 </framework:BaseContentPage>

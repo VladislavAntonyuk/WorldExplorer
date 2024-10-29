@@ -1,5 +1,6 @@
 ﻿namespace Client;
 
+using System.Collections.ObjectModel;
 using Android.Content;
 using Android.Graphics;
 using Android.Opengl;
@@ -28,6 +29,7 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 	private readonly ObjectRenderer mVirtualObject = new();
 	private readonly ObjectRenderer mVirtualObjectShadow = new();
 	private readonly Session session;
+	private readonly Config config;
 
 	private Snackbar? mLoadingMessageSnackbar;
 
@@ -35,7 +37,8 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 	{
 		this.context = context;
 		session = new Session(context);
-		var config = new Config(session);
+		config = new Config(session);
+		config.SetFocusMode(Config.FocusMode.Auto);
 		config.SetUpdateMode(Config.UpdateMode.LatestCameraImage);
 		session.Configure(config);
 
@@ -49,6 +52,20 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 			mLoadingMessageSnackbar.View.SetBackgroundColor(Color.DarkGray);
 			mLoadingMessageSnackbar.Show();
 		});
+	}
+
+	public void AddImages(ICollection<string> viewImages)
+	{
+		var imageDatabase = new AugmentedImageDatabase(session);
+
+		foreach (var image in viewImages)
+		{
+			var bitmap = BitmapFactory.DecodeFile(image);
+			imageDatabase.AddImage(image, bitmap);
+		}
+
+		config.SetAugmentedImageDatabase(imageDatabase);
+		session.Configure(config);
 	}
 
 	protected override void Dispose(bool disposing)

@@ -8,5 +8,5 @@ public abstract class BaseDialog : WorldExplorerBaseComponent
 	protected bool IsBusy { get; set; }
 
 	[CascadingParameter]
-	protected MudDialogInstance? MudDialog { get; set; }
+	protected IMudDialogInstance? MudDialog { get; set; }
 }

@@ -33,7 +33,7 @@ public class ArTouchListener : Object, View.IOnTouchListener
 		return mGestureDetector.OnTouchEvent(e);
 	}
 
-	private void OnSingleTap(MotionEvent e)
+	private static void OnSingleTap(MotionEvent e)
 	{
 		// Queue tap if there is space. Tap is lost if queue is full.
 		if (MQueuedSingleTaps.Count < 16)

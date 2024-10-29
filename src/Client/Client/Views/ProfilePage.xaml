@@ -62,24 +62,24 @@
 				Style="{StaticResource TitleStyle}" />
 
 			<Grid
-				ColumnDefinitions="Auto, *">
+				ColumnDefinitions="*, *">
 
 				<Label
 					Grid.Column="0"
 					Grid.Row="0"
 					Text="{x:Static localization:Localization.TrackUserLocation}" />
 
-				<CheckBox
+				<Switch
 					Grid.Column="1"
 					Grid.Row="0"
 					HorizontalOptions="End"
-					IsChecked="{Binding User.Settings.TrackUserLocation}">
-					<CheckBox.Behaviors>
+					IsToggled="{Binding User.Settings.TrackUserLocation}">
+					<Switch.Behaviors>
 						<toolkit:EventToCommandBehavior
 							Command="{Binding SaveChangesCommand}"
-							EventName="CheckedChanged"/>
-					</CheckBox.Behaviors>
-				</CheckBox>
+							EventName="Toggled"/>
+					</Switch.Behaviors>
+				</Switch>
 
 			</Grid>
 

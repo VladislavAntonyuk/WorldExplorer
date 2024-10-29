@@ -40,7 +40,9 @@ public static class MauiProgram
 			   })
 			   .ConfigureMauiHandlers(handlers =>
 			   {
+#if !WINDOWS
 				   handlers.AddHandler<Shell, CustomShellHandler>();
+#endif
 				   handlers.AddHandler<WorldExplorerMap, WorldExplorerMapHandler>();
 #if ANDROID || IOS
 				   handlers.AddHandler<Controls.ArView, ArViewHandler>();

@@ -129,6 +129,9 @@
   <data name="Profile" xml:space="preserve">
     <value>Профіль</value>
   </data>
+  <data name="Slogan" xml:space="preserve">
+    <value>World Explorer: досліджуйте світ, одне місце за одним.</value>
+  </data>
   <data name="DeleteProfile" xml:space="preserve">
     <value>Видалити профіль</value>
   </data>
@@ -175,10 +178,7 @@
     <value>Немає інтернету</value>
   </data>
   <data name="NoPlacesFound" xml:space="preserve">
-	  <value>Місць поблизу не знайдено. Змініть своє місцезнаходження, щоб знайти більше місць.</value>
-  </data>
-  <data name="Slogan" xml:space="preserve">
-	  <value>World Explorer: досліджуйте світ, одне місце за одним.</value>
+    <value>Місць поблизу не знайдено. Змініть своє місцезнаходження, щоб знайти більше місць.</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Так</value>
@@ -243,13 +243,16 @@
   <data name="CameraNotLoaded" xml:space="preserve">
     <value>Камера не завантажилась</value>
   </data>
-  <data name="UserSettings" xml:space="preserve">
-	  <value>Налаштування</value>
-  </data>
   <data name="TrackUserLocation" xml:space="preserve">
-	  <value>Відстежувати місцезнаходження користувача</value>
+    <value>Відстежувати місцезнаходження користувача</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>Налаштування</value>
   </data>
   <data name="FoundPlaces" xml:space="preserve">
-	  <value>Поряд знайдено {0} місць.</value>
+    <value>Поряд знайдено {0} місць.</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Пошук</value>
   </data>
 </root>

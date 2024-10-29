@@ -22,13 +22,14 @@ public partial class WorldExplorerMapHandler
 	protected override void ConnectHandler(PlatformMap platformView)
 	{
 		base.ConnectHandler(platformView);
+		VirtualView.Pins.CollectionChanged += Pins_CollectionChanged;
 		var mapPage = GetWebPage();
 		platformView.LoadHtmlString(new NSString(mapPage), null);
-		WorldExplorerMapPropertyMapper.UpdateProperties(this, VirtualView);
 	}
 
 	protected override void DisconnectHandler(PlatformMap platformView)
 	{
+		VirtualView.Pins.CollectionChanged -= Pins_CollectionChanged;
 		CallJsMethod(platformView, "destroyMap()");
 
 		base.DisconnectHandler(platformView);

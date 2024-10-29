@@ -1,16 +1,19 @@
 ﻿namespace Client.ViewModels;
 
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Controls.WorldExplorerMap;
 using Framework;
+using MvvmHelpers;
 using Resources.Localization;
 using Services;
 using Services.API;
 using Services.Navigation;
 using Shared.Models;
 using Views;
+using BaseViewModel = Framework.BaseViewModel;
 using Location = Location;
 
 public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
@@ -44,20 +47,12 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		CurrentLocation = location;
 	}
 
-	public ObservableCollection<WorldExplorerPin> Pins { get; } = [];
+	public ObservableRangeCollection<WorldExplorerPin> Pins { get; } = [];
 	
-	public override async Task InitializeAsync()
+	[RelayCommand]
+	private async Task MapReady()
 	{
-		deviceDisplay.KeepScreenOn = true;
-		await base.InitializeAsync();
 		await StartTracking();
-	}
-
-	public override Task UnInitializeAsync()
-	{
-		StopTracking();
-		deviceDisplay.KeepScreenOn = false;
-		return base.UnInitializeAsync();
 	}
 
 	[RelayCommand]
@@ -116,6 +111,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 			return;
 		}
 
+		deviceDisplay.KeepScreenOn = true;
 		var lastKnownLocation = await geoLocation.GetLastKnownLocationAsync();
 		if (lastKnownLocation is not null)
 		{
@@ -170,20 +166,20 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 				}
 
 				Status = string.Format(Localization.FoundPlaces, placesResponse.Content.Result.Count);
-				foreach (var place in placesResponse.Content.Result.Where(x => Pins.All(pin => pin.PlaceId != x.Id)))
-				{
-					Pins.Add(new WorldExplorerPin
-					{
-						PlaceId = place.Id,
-						Location = place.Location,
-						Label = place.Name,
-						Image = string.IsNullOrEmpty(place.MainImage) ? DefaultPinImage : place.MainImage,
-						MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
-					});
-				}
+				Pins.AddRange(placesResponse.Content.Result
+				                            .Where(x => Pins.All(pin => pin.PlaceId != x.Id))
+				                            .Select(place => new WorldExplorerPin
+				                            {
+					                            PlaceId = place.Id,
+					                            Location = place.Location,
+					                            Label = place.Name,
+					                            Image = string.IsNullOrEmpty(place.MainImage)
+						                            ? DefaultPinImage
+						                            : place.MainImage,
+					                            MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
+				                            }));
 
 				await CheckLocation(location);
-
 				break;
 			case StatusCode.LocationInfoRequestPending:
 				Status = Localization.LookingForPlaces;
@@ -229,5 +225,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		geoLocation.LocationChanged -= GeoLocationOnLocationChanged;
 		geoLocation.StopListeningForeground();
 		CurrentLocation = null;
+		deviceDisplay.KeepScreenOn = false;
 	}
 }
