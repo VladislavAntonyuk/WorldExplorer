@@ -31,6 +31,6 @@ public partial class MainWindow : Window, IRecipient<UserAuthenticatedEvent>
 	private void SetTitleBar(User? user)
 	{
 		Avatar.Name = user?.Name;
-		Avatar.IsVisible = SearchBar.IsVisible = DeviceInfo.Platform == DevicePlatform.WinUI && user is not null;
+		TrailingContent.IsVisible = SearchBar.IsVisible = DeviceInfo.Platform == DevicePlatform.WinUI && user is not null;
 	}
 }

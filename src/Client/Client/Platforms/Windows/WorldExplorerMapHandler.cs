@@ -30,6 +30,7 @@ public partial class WorldExplorerMapHandler
 		var mapPage = GetWebPage();
 		platformView.NavigationStarting += OnNavigationStarting;
 		platformView.WebMessageReceived += WebViewWebMessageReceived;
+		VirtualView.Pins.CollectionChanged += Pins_CollectionChanged;
 		platformView.LoadHtml(mapPage, null);
 	}
 
@@ -40,6 +41,7 @@ public partial class WorldExplorerMapHandler
 
 	protected override void DisconnectHandler(PlatformMap platformView)
 	{
+		VirtualView.Pins.CollectionChanged -= Pins_CollectionChanged;
 		CallJsMethod(platformView, "destroyMap()");
 		platformView.WebMessageReceived -= WebViewWebMessageReceived;
 		platformView.NavigationStarting -= OnNavigationStarting;

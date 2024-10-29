@@ -56,7 +56,8 @@ internal class CustomShellItemRenderer(IShellContext context) : ShellItemRendere
 				rootLayout.AddView(backgroundView);
 			}
 
-			tabBar.CenterViewImageSource?.LoadImage(Application.Current!.MainPage!.Handler!.MauiContext!, result =>
+			var handler = Application.Current?.Windows.LastOrDefault()?.Page?.Handler ?? tabBar.Handler;
+			tabBar.CenterViewImageSource?.LoadImage(handler!.MauiContext!, result =>
 			{
 				if (result?.Value is not BitmapDrawable drawable || drawable.Bitmap is null)
 				{

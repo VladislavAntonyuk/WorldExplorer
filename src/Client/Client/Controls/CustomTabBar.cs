@@ -1,21 +1,36 @@
-﻿#pragma warning disable CS0169
-#pragma warning disable CS0414
-namespace Client.Controls;
+﻿namespace Client.Controls;
 
 using System.Windows.Input;
-using Maui.BindableProperty.Generator.Core;
 
-public partial class CustomTabBar : TabBar
+public class CustomTabBar : TabBar
 {
-	[AutoBindable]
-	private Color? centerViewBackgroundColor;
+	public static readonly BindableProperty CenterViewVisibleProperty = BindableProperty.Create(nameof(CenterViewVisible), typeof(bool), typeof(CustomTabBar), default(bool));
+	public static readonly BindableProperty CenterViewImageSourceProperty = BindableProperty.Create(nameof(CenterViewImageSource), typeof(ImageSource), typeof(CustomTabBar));
+	public static readonly BindableProperty CenterViewBackgroundColorProperty = BindableProperty.Create(nameof(CenterViewBackgroundColor), typeof(Color), typeof(CustomTabBar));
 
-	[AutoBindable]
-	private ICommand? centerViewCommand;
+	public static readonly BindableProperty CenterViewCommandProperty = BindableProperty.Create(nameof(CenterViewCommand), typeof(ICommand), typeof(CustomTabBar));
+	
+	public ICommand CenterViewCommand
+	{
+		get => (ICommand)GetValue(CenterViewCommandProperty);
+		set => SetValue(CenterViewCommandProperty, value);
+	}
 
-	[AutoBindable]
-	private ImageSource? centerViewImageSource;
+	public Color? CenterViewBackgroundColor
+	{
+		get => (Color?)GetValue(CenterViewBackgroundColorProperty);
+		set => SetValue(CenterViewBackgroundColorProperty, value);
+	}
 
-	[AutoBindable]
-	private bool centerViewVisible;
+	public ImageSource? CenterViewImageSource
+	{
+		get => (ImageSource?)GetValue(CenterViewImageSourceProperty);
+		set => SetValue(CenterViewImageSourceProperty, value);
+	}
+
+	public bool CenterViewVisible
+	{
+		get => (bool)GetValue(CenterViewVisibleProperty);
+		set => SetValue(CenterViewVisibleProperty, value);
+	}
 }

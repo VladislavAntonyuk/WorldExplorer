@@ -4,7 +4,7 @@ public abstract class Entity
 {
 	private readonly List<IDomainEvent> domainEvents = [];
 
-	public IReadOnlyCollection<IDomainEvent> DomainEvents => domainEvents.ToList();
+	public IReadOnlyCollection<IDomainEvent> DomainEvents => domainEvents.ToList().AsReadOnly();
 
 	public void ClearDomainEvents()
 	{

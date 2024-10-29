@@ -830,6 +830,13 @@
 			invokeHandlerAction("mapInitialized", { });
 		}
 
+		function addMarkers(data) {
+			for (let i = 0; i < data.length; i++) {
+				const item = data[i];
+				addMarker(item.Latitude, item.Longitude, item.Label, item.Image, item.PlaceId);
+			}
+		}
+
 		function addMarker(latitude, longitude, label, image, id) {
 			const marker = createMarker({
 				icon: image,
