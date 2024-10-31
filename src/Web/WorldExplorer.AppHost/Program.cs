@@ -23,8 +23,9 @@ sqlServer.WithDataVolume("world-explorer-database")
          .AddDatabase("database", "worldexplorer");
 
  var aiService = builder.AddOllama("ai")
-                        .WithDefaultModel("llama3.2")
-                        .WithDataVolume("ollama");
+                        .WithDefaultModel("llama3.2:latest")
+                        .WithDataVolume("ollama")
+                        .WithOpenWebUI();
 
 var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
                         .WithReference(sqlServer)
