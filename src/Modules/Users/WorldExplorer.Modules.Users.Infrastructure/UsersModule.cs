@@ -48,7 +48,21 @@ public static class UsersModule
 			return new GraphClientService(new GraphServiceClient(clientSecretCredential), config.DefaultApplicationId);
 		});
 
-		builder.AddDatabase<UsersDbContext>(Schemas.Users);
+		builder.AddDatabase<UsersDbContext>(Schemas.Users, optionsBuilder =>
+		{
+			optionsBuilder.UseAsyncSeeding(async (dbContext, _, cancellationToken) =>
+			{
+				var userGuid = Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6");
+				var user = dbContext.Find<User>(userGuid);
+				if (user != null)
+				{
+					return;
+				}
+
+				dbContext.Add(User.Create(userGuid, new UserSettings()));
+				await dbContext.SaveChangesAsync(cancellationToken);
+			});
+		});
 
 		builder.Services.AddScoped<IUserRepository, UserRepository>();
 

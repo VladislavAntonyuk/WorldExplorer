@@ -33,11 +33,6 @@ public static class InfrastructureConfiguration
 
 		builder.Services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
 
-		//NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
-		//services.TryAddSingleton(npgsqlDataSource);
-
-		//services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
-
 		builder.Services.AddQuartz(configurator =>
 		{
 			var scheduler = Guid.NewGuid();
@@ -84,48 +79,29 @@ public static class InfrastructureConfiguration
 			}
 		});
 
-		//services
-		//    .AddOpenTelemetry()
-		//    .ConfigureResource(resource => resource.AddService(serviceName))
-		//    .WithTracing(tracing =>
-		//    {
-		//        tracing
-		//            .AddAspNetCoreInstrumentation()
-		//            .AddHttpClientInstrumentation()
-		//            .AddEntityFrameworkCoreInstrumentation()
-		//            .AddRedisInstrumentation()
-		//            .AddNpgsql()
-		//            .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
-
-		//        tracing.AddOtlpExporter();
-		//    });
-
 		return builder;
 	}
 
 	public static IHostApplicationBuilder AddDatabase<T>(this IHostApplicationBuilder builder,
 		string schema,
-		Action<SqlServerDbContextOptionsBuilder>? configure = null) where T : DbContext
+		Action<DbContextOptionsBuilder>? dbContextConfigure = null,
+		Action<SqlServerDbContextOptionsBuilder>? sqlServerConfigure = null) where T : DbContext
 	{
-		builder.Services.AddDbContextPool<T>((sp, options) => options
-		                                                      .UseSqlServer(
-			                                                      builder.Configuration.GetConnectionString("server"),
-			                                                      optionsBuilder =>
-			                                                      {
-				                                                      optionsBuilder
-					                                                      .MigrationsHistoryTable(
-						                                                      HistoryRepository.DefaultTableName,
-						                                                      schema);
-				                                                      configure?.Invoke(optionsBuilder);
-				                                                      optionsBuilder.EnableRetryOnFailure(
-					                                                      5, TimeSpan.FromSeconds(30), [0]);
-			                                                      })
-		                                                      // todo remove
-		                                                      .EnableDetailedErrors()
-		                                                      .EnableSensitiveDataLogging()
-		                                                      .AddInterceptors(
-			                                                      sp.GetRequiredService<
-				                                                      InsertOutboxMessagesInterceptor>()));
+		builder.AddSqlServerDbContext<T>("server");
+		builder.Services.AddDbContextPool<T>((sp, options) =>
+		{
+			options.UseSqlServer(builder.Configuration.GetConnectionString("server"), optionsBuilder =>
+			       {
+				       optionsBuilder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schema);
+				       sqlServerConfigure?.Invoke(optionsBuilder);
+				       optionsBuilder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), [0]);
+			       })
+			       // todo remove
+			       .EnableDetailedErrors()
+			       .EnableSensitiveDataLogging()
+			       .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>());
+			dbContextConfigure?.Invoke(options);
+		});
 		builder.EnrichSqlServerDbContext<T>();
 		return builder;
 	}

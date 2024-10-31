@@ -4,10 +4,10 @@ using Modules.Users.Application.Abstractions.Identity;
 
 public class UserInfo
 {
-	public required string ProviderId { get; set; }
-	public required string Name { get; set; }
-	public required string Email { get; set; }
-	public bool IsNew { get; set; }
-	public Language Language { get; set; }
-	public bool EnableAccessibility { get; set; }
+	public string? ProviderId { get; init; }
+	public string? Name { get; init; }
+	public string? Email { get; init; }
+	public bool IsNew { get; init; }
+	public Language Language { get; init; }
+	public bool EnableAccessibility { get; init; }
 }

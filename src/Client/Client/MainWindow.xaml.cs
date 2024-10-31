@@ -1,8 +1,7 @@
 ﻿namespace Client;
 
-using AlohaKit.Controls;
-using Client.Services.Auth;
 using CommunityToolkit.Mvvm.Messaging;
+using Services.Auth;
 using Shared.Models;
 using ViewModels;
 
@@ -31,6 +30,11 @@ public partial class MainWindow : Window, IRecipient<UserAuthenticatedEvent>
 	private void SetTitleBar(User? user)
 	{
 		Avatar.Name = user?.Name;
-		TrailingContent.IsVisible = SearchBar.IsVisible = DeviceInfo.Platform == DevicePlatform.WinUI && user is not null;
+		Avatar.IsVisible = SearchBar.IsVisible = DeviceInfo.Platform == DevicePlatform.WinUI && user is not null;
+	}
+
+	private void AboutClicked(object? sender, EventArgs e)
+	{
+		mainViewModel.AboutCommand.Execute(null);
 	}
 }
