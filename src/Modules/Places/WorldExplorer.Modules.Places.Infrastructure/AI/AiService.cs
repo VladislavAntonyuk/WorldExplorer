@@ -54,18 +54,7 @@ public class AiService(IChatClient client) : IAiService
 
 		return GetResponse(generalPrompt, AiOutputFormat.Text);
 	}
-
-	public Task<string?> GenerateImage(string placeName, Location location)
-	{
-		var prompt = $"A photograph of the famous place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'. In output return either url of the image or base64 image. Do not include any another text.";
-		return GetImageResponse(prompt, AiOutputFormat.Text);
-	}
-
-	private async Task<string?> GetImageResponse(string request, AiOutputFormat outputFormat)
-	{
-		return null;
-	}
-
+	
 	private async Task<string?> GetResponse(string request, AiOutputFormat outputFormat)
 	{
 		try

@@ -17,7 +17,7 @@ public abstract class WorldExplorerAuthBaseComponent : WorldExplorerBaseComponen
 	protected override async Task OnInitializedAsync()
 	{
 		CurrentUser = CurrentUserService.GetCurrentUser();
-		if (CurrentUser.Email == string.Empty)
+		if (string.IsNullOrEmpty(CurrentUser.ProviderId))
 		{
 			Logout();
 		}

@@ -29,11 +29,11 @@
 
 			<TitleBar.TrailingContent>
 				<HorizontalStackLayout
-					x:Name="TrailingContent"
 					ZIndex="100">
 
 					<Button
 						Text="{x:Static localization:Localization.About}"
+						Clicked="AboutClicked"
 						Command="{Binding AboutCommand}"/>
 
 					<controls:Avatar
@@ -42,8 +42,8 @@
 						AvatarSize="Small">
 						<controls:Avatar.GestureRecognizers>
 							<TapGestureRecognizer
-							Tapped="OnProfileTapped"
-							Command="{Binding ProfileCommand}"/>
+								Tapped="OnProfileTapped"
+								Command="{Binding ProfileCommand}"/>
 						</controls:Avatar.GestureRecognizers>
 					</controls:Avatar>
 

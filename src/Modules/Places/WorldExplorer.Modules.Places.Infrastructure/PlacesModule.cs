@@ -41,20 +41,13 @@ public static class PlacesModule
 
 	private static void AddInfrastructure(this IHostApplicationBuilder builder)
 	{
-		builder.AddDatabase<PlacesDbContext>(Schemas.Places, options => options.UseNetTopologySuite());
+		builder.AddDatabase<PlacesDbContext>(Schemas.Places, null, options => options.UseNetTopologySuite());
 
 		builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<PlacesDbContext>());
 
 		builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 		builder.Services.AddScoped<ILocationInfoRepository, LocationInfoRepository>();
 
-
-		//services.AddHostedService<PlacesLookupBackgroundService>();
-		//services.AddHostedService<PlaceDetailsBackgroundService>();
-
-		//services.AddSingleton<IPlacesService, PlacesService>();
-		//services.Configure<PlacesSettings>(configuration.GetRequiredSection("Places"));
-		//services.AddSingleton<ILocationInfoRequestsService, LocationInfoRepository>();
 		builder.AddAzureOpenAIClient("openai");
 		builder.Services.AddChatClient(b =>
 		{

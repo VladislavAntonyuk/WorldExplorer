@@ -22,7 +22,9 @@ else
 sqlServer.WithDataVolume("world-explorer-database")
          .AddDatabase("database", "worldexplorer");
 
- var aiService = builder.AddOllama("ai");
+ var aiService = builder.AddOllama("ai")
+                        .WithDefaultModel("llama3.2")
+                        .WithDataVolume("ollama");
 
 var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
                         .WithReference(sqlServer)

@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="WorldExplorer-realm-export.json" />
-    <Content Include="WorldExplorer-realm-export.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Remove="Users\**" />
   </ItemGroup>
 
