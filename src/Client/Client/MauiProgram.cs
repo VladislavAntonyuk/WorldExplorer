@@ -19,9 +19,9 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
-
+#if DEBUG
 		builder.AddAppDefaults();
-
+#endif
 		var config = GetConfiguration();
 		builder.Configuration.AddConfiguration(config);
 		var apiSettings = builder.Configuration.GetRequiredSection("API").Get<ApiSettings>();

@@ -1,4 +1,5 @@
-﻿namespace Client;
+﻿#if DEBUG
+namespace Client;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -100,3 +101,4 @@ public static class AppDefaultsExtensions
 		meterProviderBuilder.AddMeter("System.Net.Http");
 	}
 }
+#endif
