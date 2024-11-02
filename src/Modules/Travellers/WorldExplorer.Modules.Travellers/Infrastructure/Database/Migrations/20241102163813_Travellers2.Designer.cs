@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
@@ -11,9 +12,11 @@ using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(TravellersDbContext))]
-    partial class TravellersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241102163813_Travellers2")]
+    partial class Travellers2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
