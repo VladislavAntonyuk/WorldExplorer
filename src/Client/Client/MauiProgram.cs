@@ -19,7 +19,7 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
-#if DEBUG
+#if DEBUG && WINDOWS
 		builder.AddAppDefaults();
 #endif
 		var config = GetConfiguration();
@@ -40,11 +40,9 @@ public static class MauiProgram
 			   })
 			   .ConfigureMauiHandlers(handlers =>
 			   {
-#if !WINDOWS
-				   handlers.AddHandler<Shell, CustomShellHandler>();
-#endif
 				   handlers.AddHandler<WorldExplorerMap, WorldExplorerMapHandler>();
 #if ANDROID || IOS
+				   handlers.AddHandler<Shell, CustomShellHandler>();
 				   handlers.AddHandler<Controls.ArView, ArViewHandler>();
 #endif
 			   });
