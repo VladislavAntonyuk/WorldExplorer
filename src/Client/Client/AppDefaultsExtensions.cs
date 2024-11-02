@@ -1,4 +1,4 @@
-﻿#if DEBUG
+﻿#if DEBUG && WINDOWS
 namespace Client;
 
 using Microsoft.Extensions.Configuration;

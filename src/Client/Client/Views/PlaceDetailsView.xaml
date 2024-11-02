@@ -6,6 +6,7 @@
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
 	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView">
 
@@ -99,7 +100,7 @@
 					</CollectionView.ItemsLayout>
 
 					<CollectionView.ItemTemplate>
-						<DataTemplate>
+						<DataTemplate x:DataType="system:String">
 							<VerticalStackLayout>
 								<Image
 									 Background="{DynamicResource Gray500}"
