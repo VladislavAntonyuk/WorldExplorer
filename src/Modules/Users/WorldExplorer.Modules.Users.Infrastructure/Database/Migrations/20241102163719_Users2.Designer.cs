@@ -3,22 +3,24 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetTopologySuite.Geometries;
-using WorldExplorer.Modules.Places.Infrastructure.Database;
+using WorldExplorer.Modules.Users.Infrastructure.Database;
 
 #nullable disable
 
-namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
+namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 {
-    [DbContext(typeof(PlacesDbContext))]
-    partial class PlacesDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(UsersDbContext))]
+    [Migration("20241102163719_Users2")]
+    partial class Users2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("places")
+                .HasDefaultSchema("users")
                 .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -49,7 +51,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("inbox_messages", "places");
+                    b.ToTable("inbox_messages", "users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Inbox.InboxMessageConsumer", b =>
@@ -63,7 +65,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasKey("InboxMessageId", "Name");
 
-                    b.ToTable("inbox_message_consumers", "places");
+                    b.ToTable("inbox_message_consumers", "users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Outbox.OutboxMessage", b =>
@@ -91,7 +93,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("outbox_messages", "places");
+                    b.ToTable("outbox_messages", "users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Outbox.OutboxMessageConsumer", b =>
@@ -105,80 +107,42 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasKey("OutboxMessageId", "Name");
 
-                    b.ToTable("outbox_message_consumers", "places");
+                    b.ToTable("outbox_message_consumers", "users");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.LocationInfo.LocationInfoRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Point>("Location")
-                        .IsRequired()
-                        .HasColumnType("geography");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LocationInfoRequests", "places");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Point>("Location")
-                        .IsRequired()
-                        .HasColumnType("geography");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Places", "places");
+                    b.ToTable("Users", "users");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>
                 {
-                    b.OwnsMany("WorldExplorer.Modules.Places.Domain.Places.Image", "Images", b1 =>
+                    b.OwnsOne("WorldExplorer.Modules.Users.Domain.Users.UserSettings", "Settings", b1 =>
                         {
-                            b1.Property<Guid>("PlaceId")
+                            b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
+                            b1.Property<bool>("TrackUserLocation")
+                                .HasColumnType("bit");
 
-                            b1.Property<string>("Source")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                            b1.HasKey("UserId");
 
-                            b1.HasKey("PlaceId", "__synthesizedOrdinal");
+                            b1.ToTable("Users", "users");
 
-                            b1.ToTable("Places", "places");
-
-                            b1.ToJson("Images");
+                            b1.ToJson("Settings");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlaceId");
+                                .HasForeignKey("UserId");
                         });
 
-                    b.Navigation("Images");
+                    b.Navigation("Settings")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

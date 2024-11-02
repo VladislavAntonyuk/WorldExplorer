@@ -8,18 +8,18 @@ using Modules.Users.Infrastructure.Database;
 
 public static class MigrationExtensions
 {
-	public static void ApplyMigrations(this IApplicationBuilder app)
+	public static async Task ApplyMigrations(this IApplicationBuilder app)
 	{
 		using var scope = app.ApplicationServices.CreateScope();
 
-		ApplyMigration<UsersDbContext>(scope);
-		ApplyMigration<PlacesDbContext>(scope);
-		ApplyMigration<TravellersDbContext>(scope);
+		await ApplyMigration<UsersDbContext>(scope);
+		await ApplyMigration<PlacesDbContext>(scope);
+		await ApplyMigration<TravellersDbContext>(scope);
 	}
 
-	private static void ApplyMigration<TDbContext>(IServiceScope scope) where TDbContext : DbContext
+	private static async Task ApplyMigration<TDbContext>(IServiceScope scope) where TDbContext : DbContext
 	{
-		using var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
-		context.Database.Migrate();
+		await using var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
+		await context.Database.MigrateAsync();
 	}
 }
