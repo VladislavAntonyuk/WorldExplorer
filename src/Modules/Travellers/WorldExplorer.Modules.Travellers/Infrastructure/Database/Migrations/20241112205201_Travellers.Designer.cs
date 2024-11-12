@@ -12,7 +12,7 @@ using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(TravellersDbContext))]
-    [Migration("20241004055316_Travellers")]
+    [Migration("20241112205201_Travellers")]
     partial class Travellers
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("travellers")
-                .HasAnnotation("ProductVersion", "9.0.0-rc.1.24451.1")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,8 +34,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Error")
                         .HasColumnType("nvarchar(max)");
@@ -213,7 +212,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                             b1.Property<Guid>("TravellerRouteId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<int>("Id")
+                            b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int");
 
@@ -223,7 +222,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                             b1.Property<double>("Longitude")
                                 .HasColumnType("float");
 
-                            b1.HasKey("TravellerRouteId", "Id");
+                            b1.HasKey("TravellerRouteId", "__synthesizedOrdinal");
 
                             b1.ToTable("TravellerRoute", "travellers");
 
