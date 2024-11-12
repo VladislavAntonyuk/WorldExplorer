@@ -18,12 +18,12 @@
 	<ItemGroup>
 
 		<PackageReference Include="AspireMobile.Hosting" Version="0.7.130-beta" />
-		<PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0-rc.1.24511.1" />
-		<PackageReference Include="Aspire.Hosting.Azure.CognitiveServices" Version="9.0.0-rc.1.24511.1" />
-		<PackageReference Include="Aspire.Hosting.Azure.Sql" Version="9.0.0-rc.1.24511.1" />
-		<PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.0.0-rc.1.24511.1" />
-		<PackageReference Include="Aspire.Hosting.Redis" Version="9.0.0-rc.1.24511.1" />
-		<PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" Version="9.0.0-beta.54" />
+		<PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+		<PackageReference Include="Aspire.Hosting.Azure.CognitiveServices" Version="9.0.0" />
+		<PackageReference Include="Aspire.Hosting.Azure.Sql" Version="9.0.0" />
+		<PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.0.0" />
+		<PackageReference Include="Aspire.Hosting.Redis" Version="9.0.0" />
+		<PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" Version="9.0.0-beta.63" />
 		<!--		<PackageReference Include="HotChocolate.Fusion.Aspire" Version="14.0.0-p.141" />-->
 	</ItemGroup>
 

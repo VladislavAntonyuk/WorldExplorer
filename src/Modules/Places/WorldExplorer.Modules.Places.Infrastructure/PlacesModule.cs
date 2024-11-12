@@ -48,22 +48,15 @@ public static class PlacesModule
 		builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 		builder.Services.AddScoped<ILocationInfoRepository, LocationInfoRepository>();
 
-		builder.AddAzureOpenAIClient("openai");
-		builder.Services.AddChatClient(b =>
+		if (builder.Configuration.GetValue<string>("AIProvider") == "Ollama")
 		{
-			var aiProvider = b.Services.GetRequiredService<IConfiguration>().GetValue<string>("AIProvider");
-			var client = b.UseLogging()
-						  .UseFunctionInvocation()
-						  .UseDistributedCache()
-						  .UseOpenTelemetry();
-			if (aiProvider == "Ollama")
-			{
-				var ollamaBaseUrl = builder.Configuration.GetConnectionStringOrThrow("ai");
-				return client.Use(new OllamaChatClient(new Uri(ollamaBaseUrl), "llama3.2"));
-			}
-
-			return client.Use(new OpenAIChatClient(b.Services.GetRequiredService<OpenAIClient>(), "gpt-4o-mini"));
-		});
+			//builder.AddOllamaApiClient("ai");
+			builder.AddOllamaSharpChatClient("ai-llama3-2");
+		}
+		else
+		{
+			builder.AddOpenAIClient("openai");
+		}
 
 		builder.Services.AddScoped<IAiService, AiService>();
 

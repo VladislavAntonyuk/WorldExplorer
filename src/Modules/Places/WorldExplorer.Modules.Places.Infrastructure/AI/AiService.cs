@@ -5,7 +5,6 @@ using Application.Abstractions;
 using Common.Infrastructure.Serialization;
 using Domain.Places;
 using Microsoft.Extensions.AI;
-using NetTopologySuite.Geometries;
 using Location = Application.Abstractions.Location;
 
 public class AiService(IChatClient client) : IAiService
