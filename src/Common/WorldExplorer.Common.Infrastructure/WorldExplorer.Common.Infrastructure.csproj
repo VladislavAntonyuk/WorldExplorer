@@ -5,16 +5,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-rc.1.24511.1" />
-		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.0.0-rc.1.24511.1" />
+		<PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.0.0" />
 
-		<PackageReference Include="MassTransit" Version="8.3.1-develop.2105" />
-		<PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1-develop.2105" />
+		<PackageReference Include="MassTransit" Version="8.3.2-develop.2115" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.3.2-develop.2115" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 
-		<PackageReference Include="Scrutor" Version="5.0.1" />
+		<PackageReference Include="Scrutor" Version="5.0.2" />
 
-		<PackageReference Include="Microsoft.Identity.Web" Version="3.3.0" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="3.3.1" />
 		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.1" />
 	</ItemGroup>
 
