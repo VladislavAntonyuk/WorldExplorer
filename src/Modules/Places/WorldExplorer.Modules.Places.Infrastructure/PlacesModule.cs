@@ -50,8 +50,8 @@ public static class PlacesModule
 
 		if (builder.Configuration.GetValue<string>("AIProvider") == "Ollama")
 		{
-			//builder.AddOllamaApiClient("ai");
-			builder.AddOllamaSharpChatClient("ai-llama3-2");
+			//builder.AddOllamaApiClient("ai-llama3-2");
+			builder.AddOllamaSharpChatClient("ai-phi3-5");
 		}
 		else
 		{

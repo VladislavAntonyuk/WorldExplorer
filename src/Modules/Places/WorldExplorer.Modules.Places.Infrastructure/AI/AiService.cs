@@ -5,9 +5,10 @@ using Application.Abstractions;
 using Common.Infrastructure.Serialization;
 using Domain.Places;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging;
 using Location = Application.Abstractions.Location;
 
-public class AiService(IChatClient client) : IAiService
+public class AiService(IChatClient client, ILogger<AiService> logger) : IAiService
 {
 	public async Task<List<Place>> GetNearByPlaces(Location location)
 	{
@@ -71,17 +72,18 @@ public class AiService(IChatClient client) : IAiService
 		}
 		catch (Exception e)
 		{
+			logger.LogError(e, "Error has occured during AI request");
 			return null;
 		}
 	}
 
-	private record AiPlaceResponse
+	private sealed record AiPlaceResponse
 	{
 		public string Name { get; init; }
 		public Location Location { get; init; }
 	}
 
-	private class AIResponse
+	private sealed class AIResponse
 	{
 		public AiPlaceResponse[] Places { get; set; } = [];
 	}

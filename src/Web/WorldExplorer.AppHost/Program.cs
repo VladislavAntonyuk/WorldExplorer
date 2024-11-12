@@ -6,19 +6,20 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache").WithImageTag("latest").WithDataVolume("world-explorer-cache");
 
-var sqlServer = builder.AddSqlServer("server");
+var sqlServer = builder.AddSqlServer("sqlserver")
+					   .WithDataVolume("world-explorer-database");
 if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 {
 	sqlServer.WithImage("azure-sql-edge")
 			 .WithImageRegistry("mcr.microsoft.com");
 }
-sqlServer.WithDataVolume("world-explorer-database")
-		 .AddDatabase("database", "worldexplorer");
 
+var database = sqlServer
+			   .AddDatabase("database", "worldexplorer");
 
 var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
 						.WithReference(sqlServer)
-						.WaitFor(sqlServer)
+						.WaitFor(database)
 						.WithReference(cache)
 						.WaitFor(cache);
 
@@ -26,10 +27,12 @@ if (builder.Environment.IsDevelopment())
 {
 	var aiService = builder.AddOllama("ai")
 						   .WithDataVolume("ollama")
-						   .WithOpenWebUI()
-						   .AddModel("llama3.2:latest");
-	apiService.WithReference(aiService)
-			  .WaitFor(aiService);
+						   .WithOpenWebUI();
+	var llama = aiService.AddModel("llama3.2:latest");
+	var phi = aiService.AddModel("phi3.5:latest");
+
+	apiService.WithReference(phi)
+			  .WaitFor(phi);
 }
 else
 {

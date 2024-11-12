@@ -1,0 +1,53 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/workflows/main_world-explorer_client.yml" />
+    <File Path=".github/workflows/main_world-explorer_webapp.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Client/">
+    <Project Path="src/Client/Client.ClientStub/Client.ClientStub.csproj" />
+    <Project Path="src/Client/Client/Client.csproj">
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/src/Common/">
+    <Project Path="src/Common/WorldExplorer.Common.Application/WorldExplorer.Common.Application.csproj" />
+    <Project Path="src/Common/WorldExplorer.Common.Domain/WorldExplorer.Common.Domain.csproj" />
+    <Project Path="src/Common/WorldExplorer.Common.Infrastructure/WorldExplorer.Common.Infrastructure.csproj" />
+    <Project Path="src/Common/WorldExplorer.Common.Presentation/WorldExplorer.Common.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Places/">
+    <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Application/WorldExplorer.Modules.Places.Application.csproj" />
+    <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Domain/WorldExplorer.Modules.Places.Domain.csproj" />
+    <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Infrastructure/WorldExplorer.Modules.Places.Infrastructure.csproj" />
+    <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Presentation/WorldExplorer.Modules.Places.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Travellers/">
+    <Project Path="src/Modules/Travellers/WorldExplorer.Modules.Travellers/WorldExplorer.Modules.Travellers.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Users/">
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.Application/WorldExplorer.Modules.Users.Application.csproj" />
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.ArchitectureTests/WorldExplorer.Modules.Users.ArchitectureTests.csproj" />
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.Domain/WorldExplorer.Modules.Users.Domain.csproj" />
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.Infrastructure/WorldExplorer.Modules.Users.Infrastructure.csproj" />
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.IntegrationEvents/WorldExplorer.Modules.Users.IntegrationEvents.csproj" />
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.IntegrationTests/WorldExplorer.Modules.Users.IntegrationTests.csproj" />
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.Presentation/WorldExplorer.Modules.Users.Presentation.csproj" />
+    <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.UnitTests/WorldExplorer.Modules.Users.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/src/Web/">
+    <Project Path="src/Web/WorldExplorer.ApiService/WorldExplorer.ApiService.csproj" />
+    <Project Path="src/Web/WorldExplorer.AppHost/WorldExplorer.AppHost.csproj" />
+    <Project Path="src/Web/WorldExplorer.ServiceDefaults/WorldExplorer.ServiceDefaults.csproj" />
+    <Project Path="src/Web/WorldExplorer.Web/WorldExplorer.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WebAppTests/WebAppTests.csproj" />
+    <Project Path="tests/WorldExplorer.Tests/WorldExplorer.Tests.csproj" />
+  </Folder>
+</Solution>

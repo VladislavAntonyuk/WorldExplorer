@@ -87,18 +87,15 @@ public static class InfrastructureConfiguration
 		Action<DbContextOptionsBuilder>? dbContextConfigure = null,
 		Action<SqlServerDbContextOptionsBuilder>? sqlServerConfigure = null) where T : DbContext
 	{
-		builder.AddSqlServerDbContext<T>("server");
+		builder.AddSqlServerDbContext<T>("sqlserver");
 		builder.Services.AddDbContextPool<T>((sp, options) =>
 		{
-			options.UseSqlServer(builder.Configuration.GetConnectionString("server"), optionsBuilder =>
+			options.UseSqlServer(builder.Configuration.GetConnectionString("sqlserver"), optionsBuilder =>
 			       {
 				       optionsBuilder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schema);
 				       sqlServerConfigure?.Invoke(optionsBuilder);
 				       optionsBuilder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), [0]);
 			       })
-			       // todo remove
-			       .EnableDetailedErrors()
-			       .EnableSensitiveDataLogging()
 			       .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>());
 			dbContextConfigure?.Invoke(options);
 		});
