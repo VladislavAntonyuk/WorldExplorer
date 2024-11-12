@@ -13,8 +13,8 @@ using WorldExplorer.Modules.Places.Infrastructure.Database;
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PlacesDbContext))]
-    [Migration("20241102163834_Places2")]
-    partial class Places2
+    [Migration("20241112205132_Places")]
+    partial class Places
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("places")
-                .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
