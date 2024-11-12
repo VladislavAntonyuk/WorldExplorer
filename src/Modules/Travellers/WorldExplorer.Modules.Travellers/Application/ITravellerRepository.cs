@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application;
 
+using Microsoft.EntityFrameworkCore;
 using WorldExplorer.Modules.Travellers.Application.Travellers;
 using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
@@ -18,6 +19,6 @@ public class TravellerRepository(TravellersDbContext dbContext) : ITravellerRepo
 
 	public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
 	{
-		
+		await dbContext.Travellers.Where(x => x.Id == id).ExecuteDeleteAsync(cancellationToken);
 	}
 }
