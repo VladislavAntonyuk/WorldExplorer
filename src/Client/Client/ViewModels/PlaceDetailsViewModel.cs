@@ -41,11 +41,10 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 			return;
 		}
 
-		await dialogService.ToastAsync(Localization.LoadingPlaceDetails);
 		do
 		{
 			var getDetailsResult = await placesApi.GetDetails(placeId.Value, CancellationToken.None);
-			if (getDetailsResult.IsSuccessStatusCode)
+			if (getDetailsResult.IsSuccessful)
 			{
 				Place = new Place
 				{

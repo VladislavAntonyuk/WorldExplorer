@@ -11,7 +11,7 @@ public class LoadingViewModel(INavigationService navigation, IUsersApi usersApi)
 	public override async Task InitializeAsync()
 	{
 		var user = await usersApi.GetCurrentUser(CancellationToken.None);
-		if (user.IsSuccessStatusCode)
+		if (user.IsSuccessful)
 		{
 			WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(user.Content));
 			await navigation.NavigateAsync<ExplorerViewModel, ErrorViewModel>();

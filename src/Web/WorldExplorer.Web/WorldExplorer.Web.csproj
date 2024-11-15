@@ -17,7 +17,7 @@
 		<PackageReference Include="MudBlazor" Version="8.0.0-preview.4" />
 		<PackageReference Include="StrawberryShake.Blazor" Version="14.0.0" />
 		<PackageReference Include="Toolbelt.Blazor.I18nText" Version="13.0.0" />
-		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.3.1" />
+		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.4.0" />
 
 	</ItemGroup>
 
