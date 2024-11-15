@@ -45,7 +45,7 @@ public partial class ProfileViewModel : BaseViewModel
 		}
 
 		var deleteResult = await usersApi.Delete(cancellationToken);
-		if (deleteResult.IsSuccessStatusCode)
+		if (deleteResult.IsSuccessful)
 		{
 			await Logout(cancellationToken);
 		}
@@ -67,7 +67,7 @@ public partial class ProfileViewModel : BaseViewModel
 	{
 		await base.InitializeAsync();
 		var getUserResult = await usersApi.GetCurrentUser(CancellationToken.None);
-		if (getUserResult.IsSuccessStatusCode)
+		if (getUserResult.IsSuccessful)
 		{
 			User = getUserResult.Content;
 		}

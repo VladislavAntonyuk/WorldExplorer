@@ -42,12 +42,10 @@ public static class InfrastructureConfiguration
 
 		builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-		//builder.Services.AddHybridCache();
-		if (builder.Environment.IsDevelopment())
-		{
-			builder.Services.AddDistributedMemoryCache();
-		}
-		else
+#pragma warning disable EXTEXP0018
+		builder.Services.AddHybridCache();
+#pragma warning restore EXTEXP0018
+		if (!builder.Environment.IsDevelopment())
 		{
 			builder.AddRedisDistributedCache("cache");
 		}
@@ -72,7 +70,7 @@ public static class InfrastructureConfiguration
 			{
 				configure.UsingRabbitMq((context, cfg) =>
 				{
-					cfg.Host(builder.Configuration.GetConnectionString("servicebus"), h => { });
+					cfg.Host(builder.Configuration.GetConnectionString("servicebus"));
 
 					cfg.ConfigureEndpoints(context);
 				});

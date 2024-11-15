@@ -60,7 +60,7 @@ public partial class LoginViewModel(INavigationService navigation,
 		if (token.IsSuccessful)
 		{
 			var getUserResponse = await usersApi.GetCurrentUser(cancellationToken);
-			if (getUserResponse.IsSuccessStatusCode)
+			if (getUserResponse.IsSuccessful)
 			{
 				WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(getUserResponse.Content));
 			}

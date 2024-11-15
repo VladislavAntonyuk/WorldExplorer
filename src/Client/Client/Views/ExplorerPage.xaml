@@ -6,9 +6,21 @@
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
 	xmlns:worldExplorerMap="clr-namespace:Client.Controls.WorldExplorerMap"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
 	x:Class="Client.Views.ExplorerPage"
 	x:DataType="viewModels:ExplorerViewModel"
 	Shell.NavBarIsVisible="False">
+
+	<framework:BaseContentPage.Resources>
+		<Thickness x:Key="EmptyPadding">0</Thickness>
+		<Thickness x:Key="Padding">10</Thickness>
+		<toolkit:IsEqualConverter x:Key="IsEqualConverter"/>
+		<toolkit:MultiConverter x:Key="PaddingConverter">
+			<toolkit:IsStringNullOrEmptyConverter />
+			<toolkit:BoolToObjectConverter TrueObject="{StaticResource EmptyPadding}" 
+			                               FalseObject="{StaticResource Padding}"/>
+		</toolkit:MultiConverter>
+	</framework:BaseContentPage.Resources>
 
 	<framework:BaseContentPage.MenuBarItems>
 		<MenuBarItem Text="Preferences">
@@ -43,11 +55,21 @@
 			UserLocation="{Binding CurrentLocation}"
 			MapReadyCommand="{Binding MapReadyCommand}"/>
 
-		<Label
-			Text="{Binding Status}"
+		<HorizontalStackLayout
 			BackgroundColor="{StaticResource White}"
-			TextColor="{StaticResource Black}"
 			HorizontalOptions="Start"
-			VerticalOptions="End"/>
+			VerticalOptions="End">
+			<Label
+				Text="{Binding Status}"
+				TextColor="{StaticResource Black}"
+				Padding="{Binding Status, Converter={StaticResource PaddingConverter}}"/>
+
+			<Button
+				BackgroundColor="{StaticResource White}"
+				Text="{x:Static localization:Localization.Refresh}"
+				IsVisible="{Binding Status, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static localization:Localization.UnableToGetPlaceDetails}}"
+				Command="{Binding RefreshCommand}"/>
+
+		</HorizontalStackLayout>
 	</Grid>
 </framework:BaseContentPage>

@@ -11,6 +11,5 @@
 	},
 	"GoogleSearch": {
 		"ApiKey": "321"
-	},
-	"AIProvider": "Ollama"
+	}
 }

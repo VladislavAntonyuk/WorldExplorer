@@ -48,10 +48,10 @@ public static class PlacesModule
 		builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 		builder.Services.AddScoped<ILocationInfoRepository, LocationInfoRepository>();
 
-		if (builder.Configuration.GetValue<string>("AIProvider") == "Ollama")
+		if (builder.Environment.IsDevelopment())
 		{
-			//builder.AddOllamaApiClient("ai-llama3-2");
-			builder.AddOllamaSharpChatClient("ai-phi3-5");
+			builder.AddOllamaApiClient("ai-llama3-2");
+			//builder.AddOllamaApiClient("ai-phi3-5");
 		}
 		else
 		{

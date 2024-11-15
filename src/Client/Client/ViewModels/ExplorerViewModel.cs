@@ -124,6 +124,13 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		await geoLocation.StartListeningForegroundAsync(new GeolocationListeningRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(30)));
 	}
 
+	[RelayCommand]
+	private void Refresh()
+	{
+		Status = Localization.LookingForPlaces;
+		OnCurrentLocationChanged(CurrentLocation);
+	}
+
 	async partial void OnCurrentLocationChanged(Location? value)
 	{
 		if (value is null)
@@ -149,7 +156,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	{
 		var placesResponse = await placesApi.GetRecommendations(new Location(location.Latitude, location.Longitude), CancellationToken.None);
 
-		if (!placesResponse.IsSuccessStatusCode)
+		if (!placesResponse.IsSuccessful)
 		{
 			await dialogService.ToastAsync(placesResponse.Error.Message);
 			Status = Localization.UnableToGetPlaceDetails;

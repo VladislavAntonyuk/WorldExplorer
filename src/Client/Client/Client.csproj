@@ -52,7 +52,7 @@
 		<PackageReference Include="AlohaKit" Version="1.0.100" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
 		<PackageReference Include="CommunityToolkit.Maui.Camera" Version="1.0.5" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0-preview1" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0-preview2" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.66.2" />
@@ -60,7 +60,7 @@
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 		<PackageReference Include="SimpleRatingControl.MAUI" Version="0.2.0" />
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="3.0.0-preview.11" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.10" />
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.1" />
 	</ItemGroup>
 

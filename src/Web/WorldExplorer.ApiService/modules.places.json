@@ -9,7 +9,6 @@
 			"BatchSize": 50
 		}
 	},
-	"AIProvider": "#{AI_PROVIDER}#",
 	"GoogleSearch": {
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"
 	},

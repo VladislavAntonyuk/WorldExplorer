@@ -255,4 +255,7 @@
   <data name="Search" xml:space="preserve">
     <value>Пошук</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Оновити</value>
+  </data>
 </root>
