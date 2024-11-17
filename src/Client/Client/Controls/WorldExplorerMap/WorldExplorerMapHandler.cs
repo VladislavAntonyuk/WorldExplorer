@@ -1,7 +1,7 @@
 ﻿#if ANDROID
 using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 #elif IOS || MACCATALYST
-using PlatformMap = WebKit.WKWebView;
+using PlatformMap = Microsoft.Maui.Platform.MauiWKWebView;
 #elif WINDOWS
 using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
 #endif
@@ -70,7 +70,6 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 
 	void WebViewWebMessageReceived(string webMessageAsJson)
 	{
-		// For some reason the web message is empty
 		if (string.IsNullOrEmpty(webMessageAsJson))
 		{
 			return;

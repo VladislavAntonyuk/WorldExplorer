@@ -1,4 +1,4 @@
-﻿using PlatformMap = WebKit.WKWebView;
+﻿using PlatformMap = Microsoft.Maui.Platform.MauiWKWebView;
 
 namespace Client.Controls.WorldExplorerMap;
 
