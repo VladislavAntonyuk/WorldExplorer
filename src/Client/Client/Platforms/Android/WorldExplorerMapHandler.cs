@@ -14,8 +14,20 @@ public partial class WorldExplorerMapHandler
 
 	protected override PlatformMap CreatePlatformView()
 	{
+		WebView.SetWebContentsDebuggingEnabled(true);
 		var webViewHandler = new WebViewHandler();
 		var webView = new MauiWebView(webViewHandler, Context);
+		webView.Settings.JavaScriptEnabled = true;
+		webView.Settings.DomStorageEnabled = true;
+		webView.Settings.LoadWithOverviewMode = (true);
+		webView.Settings.UseWideViewPort = (true);
+		webView.Settings.BuiltInZoomControls = (true);
+		webView.Settings.DisplayZoomControls = (false);
+		webView.Settings.SetSupportZoom(true);
+		webView.Settings.DefaultTextEncodingName= ("utf-8");
+		webView.SetWebChromeClient(new WebChromeClient());
+		webView.SetWebViewClient(new WebViewClient());
+
 		return webView;
 	}
 
