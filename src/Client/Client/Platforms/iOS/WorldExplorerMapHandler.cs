@@ -1,4 +1,4 @@
-﻿using PlatformMap = Microsoft.Maui.Platform.MauiWKWebView;
+﻿using PlatformMap = WebKit.WKWebView;
 
 namespace Client.Controls.WorldExplorerMap;
 
@@ -10,27 +10,18 @@ using WebKit;
 
 public partial class WorldExplorerMapHandler
 {
-	protected override PlatformMap CreatePlatformView()
-	{
-		var config = new WKWebViewConfiguration();
-		config.UserContentController.AddScriptMessageHandler(new WebViewScriptMessageHandler(WebViewWebMessageReceived), "worldExplorerMap");
-
-		var webView = new MauiWKWebView(CGRect.Empty, new WebViewHandler(), config);
-		return webView;
-	}
-
 	protected override void ConnectHandler(PlatformMap platformView)
 	{
 		base.ConnectHandler(platformView);
+		platformView.Configuration.UserContentController.AddScriptMessageHandler(new WebViewScriptMessageHandler(WebViewWebMessageReceived), "worldExplorerMap");
 		VirtualView.Pins.CollectionChanged += Pins_CollectionChanged;
-		var mapPage = GetWebPage();
-		platformView.LoadHtmlString(new NSString(mapPage), null);
 	}
 
 	protected override void DisconnectHandler(PlatformMap platformView)
 	{
 		VirtualView.Pins.CollectionChanged -= Pins_CollectionChanged;
 		CallJsMethod(platformView, "destroyMap()");
+		platformView.Configuration.UserContentController.RemoveScriptMessageHandler("worldExplorerMap");
 
 		base.DisconnectHandler(platformView);
 	}

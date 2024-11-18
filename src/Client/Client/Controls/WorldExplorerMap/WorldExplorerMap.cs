@@ -3,7 +3,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-public class WorldExplorerMap : View, IWorldExplorerMap
+public class WorldExplorerMap : WebView, IWorldExplorerMap
 {
 	public static readonly BindableProperty MapReadyCommandProperty = BindableProperty.Create(nameof(MapReadyCommand), typeof(ICommand), typeof(WorldExplorerMap));
 	public static readonly BindableProperty UserLocationProperty = BindableProperty.Create(nameof(UserLocation), typeof(Location), typeof(WorldExplorerMap));
