@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Controls.WorldExplorerMap;
 using Framework;
+using Microsoft.Maui.Dispatching;
 using MvvmHelpers;
 using Resources.Localization;
 using Services;
@@ -52,7 +53,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 	[RelayCommand]
 	private async Task MapReady()
 	{
-		await StartTracking();
+		await dispatcher.DispatchAsync(StartTracking);
 	}
 
 	[RelayCommand]
