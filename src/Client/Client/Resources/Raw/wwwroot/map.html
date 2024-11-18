@@ -8,8 +8,8 @@
 
 	<title>World Explorer</title>
 
-	<link rel="stylesheet" href="../wwwroot/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-	<script src="../wwwroot/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+	<link rel="stylesheet" href="leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<script src="leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 	<style>
 		html, body {
@@ -29,12 +29,20 @@
 			height: 100%;
 			width: 100vw;
 		}
+
+		#loading {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+		}
 	</style>
 </head>
 
 <body>
+	<p id="loading">Loading...</p>
 	<div id='map'>
-		Loading...
 	</div>
 
 	<script>
@@ -50,6 +58,7 @@
 				maxZoom: 19,
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			}).addTo(map);
+			document.getElementById('loading').remove();
 			invokeHandlerAction("mapInitialized", { });
 		}
 
@@ -126,11 +135,17 @@
 				id: id,
 				payload: data
 			};
-
+			let isSupported = false;
 			if (window.chrome && window.chrome.webview){
 				window.chrome.webview.postMessage(eventMessage);
+				isSupported = true;
 			}else{
-				alert("window.chrome.webview is required.")
+				// Android
+				worldExplorerMap.postMessage(JSON.stringify(eventMessage));
+				isSupported = true;
+			}
+			if (!isSupported){
+				alert("Your device is not supported.")
 			}
 		}
 	</script>

@@ -1,4 +1,4 @@
-﻿using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
+﻿using PlatformMap = Microsoft.UI.Xaml.Controls.WebView2;
 
 namespace Client.Controls.WorldExplorerMap;
 
@@ -9,20 +9,20 @@ using Microsoft.Web.WebView2.Core;
 
 public partial class WorldExplorerMapHandler
 {
-	protected override PlatformMap CreatePlatformView()
-	{
-		var webView = new MauiWebView(new WebViewHandler())
-		{
-			IsRightTapEnabled = false,
-			CanGoBack = false,
-			CanGoForward = false,
-			AllowDrop = false,
-			CanDrag = false,
-			IsDoubleTapEnabled = false,
-			IsHoldingEnabled = false
-		};
-		return webView;
-	}
+	//protected override PlatformMap CreatePlatformView()
+	//{
+	//	var webView = new MauiWebView(new WebViewHandler())
+	//	{
+	//		IsRightTapEnabled = false,
+	//		CanGoBack = false,
+	//		CanGoForward = false,
+	//		AllowDrop = false,
+	//		CanDrag = false,
+	//		IsDoubleTapEnabled = false,
+	//		IsHoldingEnabled = false
+	//	};
+	//	return webView;
+	//}
 
 	protected override void ConnectHandler(PlatformMap platformView)
 	{
@@ -31,7 +31,7 @@ public partial class WorldExplorerMapHandler
 		platformView.NavigationStarting += OnNavigationStarting;
 		platformView.WebMessageReceived += WebViewWebMessageReceived;
 		VirtualView.Pins.CollectionChanged += Pins_CollectionChanged;
-		platformView.LoadHtml(mapPage, null);
+		//platformView.LoadHtml(mapPage, null);
 	}
 
 	private static void OnNavigationStarting(WebView2 sender, CoreWebView2NavigationStartingEventArgs args)

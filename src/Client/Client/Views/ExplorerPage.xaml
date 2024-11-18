@@ -51,6 +51,7 @@
 
 	<Grid>
 		<worldExplorerMap:WorldExplorerMap
+			Source="wwwroot/map.html"
 			Pins="{Binding Pins}"
 			UserLocation="{Binding CurrentLocation}"
 			MapReadyCommand="{Binding MapReadyCommand}"/>

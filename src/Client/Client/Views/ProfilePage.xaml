@@ -195,7 +195,7 @@
 							Grid.Column="1"
 							VerticalOptions="Center"
 							HorizontalOptions="End"
-							Source="{Binding Source={x:Reference DangerZoneExpander}, Path=IsExpanded, Converter={StaticResource ExpanderArrowConverter}}" />
+							Source="{Binding IsExpanded, Source={x:Reference DangerZoneExpander}, Converter={StaticResource ExpanderArrowConverter}}" />
 					</Grid>
 				</toolkit:Expander.Header>
 

@@ -1,4 +1,4 @@
-﻿using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
+﻿using PlatformMap = Android.Webkit.WebView;
 
 namespace Client.Controls.WorldExplorerMap;
 
@@ -12,33 +12,37 @@ public partial class WorldExplorerMapHandler
 {
 	private WebViewJavaScriptInterface? javaScriptInterface;
 
-	protected override PlatformMap CreatePlatformView()
-	{
-		WebView.SetWebContentsDebuggingEnabled(true);
-		var webViewHandler = new WebViewHandler();
-		var webView = new MauiWebView(webViewHandler, Context);
-		webView.Settings.JavaScriptEnabled = true;
-		webView.Settings.DomStorageEnabled = true;
-		webView.Settings.LoadWithOverviewMode = (true);
-		webView.Settings.UseWideViewPort = (true);
-		webView.Settings.BuiltInZoomControls = (true);
-		webView.Settings.DisplayZoomControls = (false);
-		webView.Settings.SetSupportZoom(true);
-		webView.Settings.DefaultTextEncodingName= ("utf-8");
-		webView.SetWebChromeClient(new WebChromeClient());
-		webView.SetWebViewClient(new WebViewClient());
+	//protected override PlatformMap CreatePlatformView()
+	//{
+	//	WebView.SetWebContentsDebuggingEnabled(true);
+	//	var webView = new MauiWebView(this, Context);
 
-		return webView;
-	}
+	//	webView.Settings.JavaScriptEnabled = true;
+	//	webView.Settings.DomStorageEnabled = true;
+	//	webView.Settings.AllowContentAccess = true;
+	//	webView.Settings.BlockNetworkImage = false;
+	//	webView.Settings.BlockNetworkLoads = false;
+	//	webView.Settings.DatabaseEnabled = true;
+	//	webView.Settings.JavaScriptCanOpenWindowsAutomatically = true;
+	//	webView.Settings.LoadsImagesAutomatically = true;
+	//	webView.Settings.SafeBrowsingEnabled = false;
+	//	webView.Settings.SetGeolocationEnabled(true);
+	//	webView.Settings.AllowFileAccess = true;
+	//	webView.Settings.AllowFileAccessFromFileURLs = true;
+	//	webView.Settings.AllowUniversalAccessFromFileURLs = true;
+
+	//	webView.SetWebChromeClient(new WebChromeClient());
+	//	webView.SetWebViewClient(new WebViewClient());
+
+	//	return webView;
+	//}
 
 	protected override void ConnectHandler(PlatformMap platformView)
 	{
 		base.ConnectHandler(platformView);
 		javaScriptInterface = new WebViewJavaScriptInterface(this);
 		VirtualView.Pins.CollectionChanged += Pins_CollectionChanged;
-		var mapPage = GetWebPage();
 		platformView.AddJavascriptInterface(javaScriptInterface, "worldExplorerMap");
-		((IWebViewDelegate)platformView).LoadHtml(mapPage, null);
 	}
 
 	protected override void DisconnectHandler(PlatformMap platformView)
@@ -57,8 +61,8 @@ public partial class WorldExplorerMapHandler
 	private sealed class WebViewJavaScriptInterface(WorldExplorerMapHandler handler) : Java.Lang.Object
 	{
 		[JavascriptInterface]
-		[Export("sendMessage")]
-		public void SendMessage(string message)
+		[Export("postMessage")]
+		public void PostMessage(string message)
 		{
 			handler.WebViewWebMessageReceived(message);
 		}
