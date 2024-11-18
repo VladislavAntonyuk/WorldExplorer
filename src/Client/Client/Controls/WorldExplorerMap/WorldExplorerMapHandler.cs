@@ -1,5 +1,5 @@
 ﻿#if ANDROID
-using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
+using PlatformMap = Android.Webkit.WebView;
 #elif IOS || MACCATALYST
 using PlatformMap = Microsoft.Maui.Platform.MauiWKWebView;
 #elif WINDOWS
@@ -12,22 +12,43 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text.Json;
 using Microsoft.Maui.Handlers;
+#if __IOS__ || MACCATALYST
+using PlatformView = WebKit.WKWebView;
+#elif ANDROID
+using PlatformView = Android.Webkit.WebView;
+#elif WINDOWS
+using PlatformView = Microsoft.UI.Xaml.Controls.WebView2;
+#elif TIZEN
+using PlatformView = Microsoft.Maui.Platform.MauiWebView;
+#elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
+using PlatformView = System.Object;
+#endif
+
+	public partial interface IMapWebViewHandler : IWebViewHandler
+	{
+		new IWorldExplorerMap VirtualView { get; }
+		new PlatformView PlatformView { get; }
+	}
 
 public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMapper? commandMapper)
-	: ViewHandler<IWorldExplorerMap, PlatformMap>(mapper ?? WorldExplorerMapPropertyMapper, commandMapper ?? ViewCommandMapper)
+	: WebViewHandler(mapper ?? WorldExplorerMapPropertyMapper, commandMapper ?? WebViewHandler.CommandMapper), IMapWebViewHandler
 {
+	public new IWorldExplorerMap VirtualView => (IWorldExplorerMap)base.VirtualView;
+	
+	PlatformView IMapWebViewHandler.PlatformView => PlatformView;
+
 	readonly JsonSerializerOptions jsonSerializerOptions = new()
 	{
 		PropertyNameCaseInsensitive = true
 	};
 
-	public static readonly IPropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler> WorldExplorerMapPropertyMapper = new PropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler>(ViewMapper)
+	public static readonly IPropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler> WorldExplorerMapPropertyMapper = new PropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler>(WebViewHandler.Mapper)
 	{
 		[nameof(IWorldExplorerMap.UserLocation)] = MapUserLocation,
 		[nameof(IWorldExplorerMap.Pins)] = MapPins
 	};
 
-	public WorldExplorerMapHandler() : this(WorldExplorerMapPropertyMapper, ViewCommandMapper)
+	public WorldExplorerMapHandler() : this(WorldExplorerMapPropertyMapper, WebViewHandler.CommandMapper)
 	{
 
 	}

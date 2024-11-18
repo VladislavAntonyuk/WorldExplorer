@@ -87,7 +87,24 @@ public static class MauiProgram
 		builder.Services.AddTransientWithShellRoute<ArPage, ArViewModel>($"//home/{nameof(ArPage)}");
 		builder.Services.AddTransientWithShellRoute<CameraPage, CameraViewModel>($"//home/{nameof(CameraPage)}");
 		builder.Services.AddSingleton<MainViewModel>();
-
+		Microsoft.Maui.Handlers.WebViewHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
+		{
+#if ANDROID
+			handler.PlatformView.Settings.JavaScriptEnabled = true;
+			handler.PlatformView.Settings.DomStorageEnabled = true;
+			handler.PlatformView.Settings.AllowContentAccess = true;
+			handler.PlatformView.Settings.BlockNetworkImage = false;
+			handler.PlatformView.Settings.BlockNetworkLoads = false;
+			handler.PlatformView.Settings.DatabaseEnabled = true;
+			handler.PlatformView.Settings.JavaScriptCanOpenWindowsAutomatically = true;
+			handler.PlatformView.Settings.LoadsImagesAutomatically = true;
+			handler.PlatformView.Settings.SafeBrowsingEnabled = false;
+			handler.PlatformView.Settings.SetGeolocationEnabled(true);
+			handler.PlatformView.Settings.AllowFileAccess = true;
+			handler.PlatformView.Settings.AllowFileAccessFromFileURLs = true;
+			handler.PlatformView.Settings.AllowUniversalAccessFromFileURLs = true;
+#endif
+		});
 		return builder.Build();
 	}
 
