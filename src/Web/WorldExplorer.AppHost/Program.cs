@@ -1,19 +1,14 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache")
+                   .WithRedisCommander()
                    .WithDataVolume("world-explorer-cache");
 
 var sqlServer = builder.AddSqlServer("sqlserver")
                        .WithDataVolume("world-explorer-database");
-if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-{
-	sqlServer.WithImage("azure-sql-edge")
-	         .WithImageRegistry("mcr.microsoft.com");
-}
 
 var database = sqlServer.AddDatabase("database", "worldexplorer");
 
