@@ -2,7 +2,7 @@
 
 using System.Collections.ObjectModel;
 
-public interface IWorldExplorerMap : IWebView
+public interface IWorldExplorerMap : IView
 {
 	ObservableCollection<WorldExplorerPin> Pins { get; }
 	Location? UserLocation { get; }
