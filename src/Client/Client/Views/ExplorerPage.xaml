@@ -15,11 +15,6 @@
 		<Thickness x:Key="EmptyPadding">0</Thickness>
 		<Thickness x:Key="Padding">10</Thickness>
 		<toolkit:IsEqualConverter x:Key="IsEqualConverter"/>
-		<toolkit:MultiConverter x:Key="PaddingConverter">
-			<toolkit:IsStringNullOrEmptyConverter />
-			<toolkit:BoolToObjectConverter TrueObject="{StaticResource EmptyPadding}" 
-			                               FalseObject="{StaticResource Padding}"/>
-		</toolkit:MultiConverter>
 	</framework:BaseContentPage.Resources>
 
 	<framework:BaseContentPage.MenuBarItems>
@@ -51,7 +46,6 @@
 
 	<Grid>
 		<worldExplorerMap:WorldExplorerMap
-			Source="wwwroot/map.html"
 			Pins="{Binding Pins}"
 			UserLocation="{Binding CurrentLocation}"
 			MapReadyCommand="{Binding MapReadyCommand}"/>
@@ -59,11 +53,12 @@
 		<HorizontalStackLayout
 			BackgroundColor="{StaticResource White}"
 			HorizontalOptions="Start"
-			VerticalOptions="End">
+			VerticalOptions="End"
+			IsVisible="{Binding Status, Converter={StaticResource IsStringNotNullOrEmptyConverter}}">
 			<Label
 				Text="{Binding Status}"
 				TextColor="{StaticResource Black}"
-				Padding="{Binding Status, Converter={StaticResource PaddingConverter}}"/>
+				Padding="10"/>
 
 			<Button
 				BackgroundColor="{StaticResource White}"

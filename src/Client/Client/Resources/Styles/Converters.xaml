@@ -7,6 +7,7 @@
                     xmlns:converters="clr-namespace:Client.Converters">
 
 	<toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+	<toolkit:IsStringNotNullOrEmptyConverter x:Key="IsStringNotNullOrEmptyConverter" />
 	<toolkit:IsListNotNullOrEmptyConverter x:Key="IsListNotNullOrEmptyConverter" />
 	<converters:ErrorCodeToImageSourceConverter x:Key="ErrorCodeToImagePathConverter" />
 </ResourceDictionary>

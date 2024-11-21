@@ -2,10 +2,7 @@
 
 namespace Client.Controls.WorldExplorerMap;
 
-using CoreGraphics;
 using Foundation;
-using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
 using WebKit;
 
 public partial class WorldExplorerMapHandler
@@ -13,7 +10,7 @@ public partial class WorldExplorerMapHandler
 	protected override void ConnectHandler(PlatformMap platformView)
 	{
 		base.ConnectHandler(platformView);
-		platformView.Configuration.UserContentController.AddScriptMessageHandler(new WebViewScriptMessageHandler(WebViewWebMessageReceived), "worldExplorerMap");
+		platformView.Configuration.UserContentController.AddScriptMessageHandler(new WebViewScriptMessageHandler(this), "worldExplorerMap");
 		VirtualView.Pins.CollectionChanged += Pins_CollectionChanged;
 	}
 
@@ -31,12 +28,12 @@ public partial class WorldExplorerMapHandler
 		platformWebView.EvaluateJavaScript(script, (result, error) => { });
 	}
 
-	private sealed class WebViewScriptMessageHandler(Action<string> messageReceivedAction)
+	private sealed class WebViewScriptMessageHandler(WorldExplorerMapHandler handler)
 		: NSObject, IWKScriptMessageHandler
 	{
 		public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
 		{
-			messageReceivedAction(((NSString)message.Body).ToString());
+			handler.WebViewWebMessageReceived(((NSString)message.Body).ToString());
 		}
 	}
 }

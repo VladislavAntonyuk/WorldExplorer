@@ -3,6 +3,8 @@
 https://world-explorer.azurewebsites.net/
 
 ## Conference
+
+### .NET Conf 2023 - Ukraine
 [![YouTube Video Link](https://img.youtube.com/vi/sHVlg8Y6qlU/0.jpg)](https://www.youtube.com/watch?v=sHVlg8Y6qlU)
 
 ## Description
@@ -30,10 +32,10 @@ dotnet build -t:Run -c Release -f net9.0-maccatalyst -r maccatalyst-arm64
 
 ### iOS
 
-Run on Emulator iPhone 15 Pro Max
+Run on Emulator iPhone 16 Pro Max (iOS 18.1)
 
 ```bash
-dotnet build -t:Run -c Release -f net9.0-ios -p:_DeviceName=:v2:udid=7D850AFF-242B-41BC-A9A7-A0818D4CEF30
+dotnet build -t:Run -c Release -f net9.0-ios -p:_DeviceName=:v2:udid=86E951D8-DF6E-4CEF-9595-07D4E2D01367
 ```
 
 Run on Device
