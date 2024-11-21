@@ -55,7 +55,7 @@ public static class MauiProgram
 			x.SetShouldSuppressExceptionsInAnimations(true);
 #endif
 		});
-		
+
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 
 #if IOS || MACCATALYST
@@ -114,7 +114,9 @@ public static class MauiProgram
 		builder.AddConfiguration("Client.appsettings.json");
 #if DEBUG
 		builder.AddConfiguration("Client.appsettings.Development.json");
+#if WINDOWS
 		builder.AddInMemoryCollection(AspireAppSettings.Settings);
+#endif
 #endif
 		return builder.Build();
 	}
