@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Windows.Input;
 
-public class WorldExplorerMap : HybridWebView
+public sealed class WorldExplorerMap : HybridWebView, IDisposable
 {
 	private sealed record Payload(Guid PlaceId);
 
@@ -81,10 +81,21 @@ public class WorldExplorerMap : HybridWebView
 	public static readonly BindableProperty UserLocationProperty = BindableProperty.Create(nameof(UserLocation), typeof(Location), typeof(WorldExplorerMap), propertyChanged: UserLocationChanged);
 	public static readonly BindableProperty PinsProperty = BindableProperty.Create(nameof(Pins), typeof(ObservableCollection<WorldExplorerPin>), typeof(WorldExplorerMap), propertyChanged: PinsChanged);
 
-	private static void PinsChanged(BindableObject bindable, object oldvalue, object newvalue)
+	private static void PinsChanged(BindableObject bindable, object? oldvalue, object? newvalue)
 	{
 		var control = (WorldExplorerMap)bindable;
-		control.Pins.CollectionChanged += control.PinsOnCollectionChanged;
+		var oldPins = (ObservableCollection<WorldExplorerPin>?)oldvalue;
+		var newPins = (ObservableCollection<WorldExplorerPin>?)newvalue;
+
+		if (oldPins is not null)
+		{
+			oldPins.CollectionChanged -= control.PinsOnCollectionChanged;
+		}
+
+		if (newPins is not null)
+		{
+			newPins.CollectionChanged += control.PinsOnCollectionChanged;
+		}
 	}
 
 	private static void UserLocationChanged(BindableObject bindable, object oldvalue, object newvalue)
@@ -112,5 +123,10 @@ public class WorldExplorerMap : HybridWebView
 	{
 		get => (ICommand?)GetValue(MapReadyCommandProperty);
 		set => SetValue(MapReadyCommandProperty, value);
+	}
+
+	public void Dispose()
+	{
+		RawMessageReceived -= OnRawMessageReceived;
 	}
 }
