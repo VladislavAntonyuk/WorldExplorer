@@ -1,9 +1,6 @@
 ﻿namespace WorldExplorer.Common.Infrastructure.Authorization;
 
-public class AdministratorAuthorizationRequirement : RoleAuthorizationRequirement
+public class AdministratorAuthorizationRequirement : IRoleAuthorizationRequirement
 {
-	public override List<string> RequiredRoles => new()
-	{
-		"Administrator"
-	};
+	public List<string> RequiredRoles => ["Administrator"];
 }

@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 
-public abstract class RoleAuthorizationHandler<T> : AuthorizationHandler<T> where T : RoleAuthorizationRequirement
+public abstract class RoleAuthorizationHandler<T> : AuthorizationHandler<T> where T : IRoleAuthorizationRequirement
 {
 	protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, T requirement)
 	{

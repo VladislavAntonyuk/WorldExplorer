@@ -19,7 +19,7 @@ internal sealed class DeletePlaces : IEndpoint
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })
-		   .RequireAuthorization(Constants.AdministratorPolicy)
+		   .RequireAuthorization(PolicyConstants.AdministratorPolicy)
 		   .WithTags(Tags.Places);
 
 		app.MapDelete("places", async (ISender sender) =>
@@ -28,7 +28,7 @@ internal sealed class DeletePlaces : IEndpoint
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })
-		   .RequireAuthorization(Constants.AdministratorPolicy)
+		   .RequireAuthorization(PolicyConstants.AdministratorPolicy)
 		   .WithTags(Tags.Places);
 	}
 }

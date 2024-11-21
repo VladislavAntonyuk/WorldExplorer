@@ -35,12 +35,12 @@ public class ObjectRenderer
 
 	// Note: the last component must be zero to avoid applying the translational part of the matrix.
 	private static readonly float[] LightDirection =
-	{
+	[
 		0.0f,
 		1.0f,
 		0.0f,
 		0.0f
-	};
+	];
 
 	private static readonly ByteOrder? ByteOrder = ByteOrder.NativeOrder();
 

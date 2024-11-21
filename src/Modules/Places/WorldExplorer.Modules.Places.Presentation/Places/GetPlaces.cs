@@ -19,7 +19,7 @@ internal sealed class GetPlaces : IEndpoint
 
 			   return result.Match(Results.Ok, ApiResults.Problem);
 		   })
-		   .RequireAuthorization(Constants.AdministratorPolicy)
+		   .RequireAuthorization(PolicyConstants.AdministratorPolicy)
 		   .WithTags(Tags.Places);
 	}
 }

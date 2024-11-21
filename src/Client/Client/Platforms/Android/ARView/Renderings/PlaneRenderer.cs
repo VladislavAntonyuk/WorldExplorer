@@ -40,15 +40,15 @@ public class PlaneRenderer
 	// lineFadeShrink:  lines will fade in between alpha = 1-(1/lineFadeShrink) and 1.0
 	// occlusionShrink: occluded planes will fade out between alpha = 0 and 1/occlusionShrink
 	private static readonly float[] GridControl =
-	{
+	[
 		0.2f,
 		0.4f,
 		2.0f,
 		1.5f
-	};
+	];
 
 	private static readonly int[] PlaneColorsRgba =
-	{
+	[
 		//0xFFFFFFFF,
 		//0xF44336FF,
 		//0xE91E63FF,
@@ -65,7 +65,7 @@ public class PlaneRenderer
 		//0xFFEB3BFF,
 		//0xFFC107FF,
 		//0xFF9800FF,
-	};
+	];
 
 	private static readonly ByteOrder ByteOrder =
 		ByteOrder.NativeOrder() ?? throw new Exception("ByteOrder NativeOrder is null");
