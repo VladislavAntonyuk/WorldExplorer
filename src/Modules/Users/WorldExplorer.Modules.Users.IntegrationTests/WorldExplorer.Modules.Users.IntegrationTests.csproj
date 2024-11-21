@@ -17,7 +17,7 @@
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="Testcontainers.Redis" Version="4.1.0-beta.11746011829" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0-pre.49">

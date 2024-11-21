@@ -20,7 +20,7 @@ internal sealed class UpdatePlaces : IEndpoint
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })
-		   .RequireAuthorization(Constants.AdministratorPolicy)
+		   .RequireAuthorization(PolicyConstants.AdministratorPolicy)
 		   .WithTags(Tags.Places);
 	}
 }

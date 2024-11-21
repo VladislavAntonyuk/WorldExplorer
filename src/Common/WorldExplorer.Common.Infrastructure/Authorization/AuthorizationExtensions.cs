@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-public static class Constants
+public static class PolicyConstants
 {
 	public const string AdministratorPolicy = "IsAdministrator";
 }
@@ -19,7 +19,7 @@ internal static class AuthorizationExtensions
 		{
 			var administratorOrHigherPolicyBuilder = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
 			administratorOrHigherPolicyBuilder.Requirements.Add(new AdministratorAuthorizationRequirement());
-			options.AddPolicy(Constants.AdministratorPolicy, administratorOrHigherPolicyBuilder.Build());
+			options.AddPolicy(PolicyConstants.AdministratorPolicy, administratorOrHigherPolicyBuilder.Build());
 		});
 
 		return services;
@@ -32,7 +32,7 @@ internal static class AuthorizationExtensions
 		{
 			var administratorOrHigherPolicyBuilder = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme);
 			administratorOrHigherPolicyBuilder.Requirements.Add(new AdministratorAuthorizationRequirement());
-			options.AddPolicy(Constants.AdministratorPolicy, administratorOrHigherPolicyBuilder.Build());
+			options.AddPolicy(PolicyConstants.AdministratorPolicy, administratorOrHigherPolicyBuilder.Build());
 		});
 
 		return services;

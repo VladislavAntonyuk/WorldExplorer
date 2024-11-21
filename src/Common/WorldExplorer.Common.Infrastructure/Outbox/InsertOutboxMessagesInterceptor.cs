@@ -32,7 +32,7 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 
 			                            return domainEvents;
 		                            })
-		                            .Select(domainEvent => new OutboxMessage
+		                            .Select(static domainEvent => new OutboxMessage
 		                            {
 			                            Id = domainEvent.Id,
 			                            Type = domainEvent.GetType().FullName,

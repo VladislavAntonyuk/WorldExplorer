@@ -14,11 +14,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0-p.13" />
-		<PackageReference Include="HotChocolate.Data" Version="15.0.0-p.13" />
-		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.0.0-p.13" />
+		<PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0-p.14" />
+		<PackageReference Include="HotChocolate.Data" Version="15.0.0-p.14" />
+		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.0.0-p.14" />
 		<PackageReference Include="HotChocolate.Data.EntityFramework.Helpers" Version="14.0.0-p.100" />
-		<PackageReference Include="HotChocolate.Types.Analyzers" Version="15.0.0-p.13">
+		<PackageReference Include="HotChocolate.Types.Analyzers" Version="15.0.0-p.14">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>

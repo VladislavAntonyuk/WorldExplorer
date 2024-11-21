@@ -16,7 +16,7 @@ public class BackgroundRenderer
 	private static readonly ByteOrder? ByteOrder = ByteOrder.NativeOrder();
 
 	private static readonly float[] QuadCoords =
-	{
+	[
 		-1.0f,
 		-1.0f,
 		0.0f,
@@ -29,10 +29,10 @@ public class BackgroundRenderer
 		+1.0f,
 		+1.0f,
 		0.0f
-	};
+	];
 
 	private static readonly float[] QuadTexcoords =
-	{
+	[
 		0.0f,
 		1.0f,
 		0.0f,
@@ -41,7 +41,7 @@ public class BackgroundRenderer
 		1.0f,
 		1.0f,
 		0.0f
-	};
+	];
 
 	private readonly int mTextureTarget = GLES11Ext.GlTextureExternalOes;
 

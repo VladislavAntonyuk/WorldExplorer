@@ -30,7 +30,7 @@ internal sealed class DeleteUserProfile : IEndpoint
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })
-		   .RequireAuthorization(Constants.AdministratorPolicy)
+		   .RequireAuthorization(PolicyConstants.AdministratorPolicy)
 		   .WithTags(Tags.Users);
 	}
 }
