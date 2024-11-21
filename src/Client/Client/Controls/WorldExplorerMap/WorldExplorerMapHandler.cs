@@ -3,7 +3,7 @@ using PlatformMap = Android.Webkit.WebView;
 #elif IOS || MACCATALYST
 using PlatformMap = Microsoft.Maui.Platform.MauiWKWebView;
 #elif WINDOWS
-using PlatformMap = Microsoft.Maui.Platform.MauiWebView;
+using PlatformMap = Microsoft.UI.Xaml.Controls.WebView2;
 #endif
 
 namespace Client.Controls.WorldExplorerMap;
@@ -12,43 +12,40 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text.Json;
 using Microsoft.Maui.Handlers;
-#if __IOS__ || MACCATALYST
-using PlatformView = WebKit.WKWebView;
-#elif ANDROID
-using PlatformView = Android.Webkit.WebView;
-#elif WINDOWS
-using PlatformView = Microsoft.UI.Xaml.Controls.WebView2;
-#elif TIZEN
-using PlatformView = Microsoft.Maui.Platform.MauiWebView;
-#elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
-using PlatformView = System.Object;
-#endif
-
-	public partial interface IMapWebViewHandler : IWebViewHandler
-	{
-		new IWorldExplorerMap VirtualView { get; }
-		new PlatformView PlatformView { get; }
-	}
 
 public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMapper? commandMapper)
-	: WebViewHandler(mapper ?? WorldExplorerMapPropertyMapper, commandMapper ?? WebViewHandler.CommandMapper), IMapWebViewHandler
+	: ViewHandler<IWorldExplorerMap, PlatformMap>(mapper ?? WorldExplorerMapPropertyMapper, commandMapper ?? ViewCommandMapper)
+	//, HybridWebViewHandler(mapper ?? WorldExplorerMapPropertyMapper, commandMapper ?? WebViewHandler.CommandMapper), IMapWebViewHandler
 {
-	public new IWorldExplorerMap VirtualView => (IWorldExplorerMap)base.VirtualView;
-	
-	PlatformView IMapWebViewHandler.PlatformView => PlatformView;
+	private static readonly string AppHostAddress = "0.0.0.1";
+
+	private static readonly string AppHostScheme =
+#if IOS || MACCATALYST
+			"app";
+#else
+		"https";
+#endif
+
+	/// <summary>
+	/// Gets the application's base URI. Defaults to <c>https://0.0.0.1/</c> on Windows and Android,
+	/// and <c>app://0.0.0.1/</c> on iOS and MacCatalyst (because <c>https</c> is reserved).
+	/// </summary>
+	internal static readonly string AppOrigin = $"{AppHostScheme}://{AppHostAddress}/";
+
+	internal static readonly Uri AppOriginUri = new(AppOrigin);
 
 	readonly JsonSerializerOptions jsonSerializerOptions = new()
 	{
 		PropertyNameCaseInsensitive = true
 	};
 
-	public static readonly IPropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler> WorldExplorerMapPropertyMapper = new PropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler>(WebViewHandler.Mapper)
+	public static readonly IPropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler> WorldExplorerMapPropertyMapper = new PropertyMapper<IWorldExplorerMap, WorldExplorerMapHandler>(ViewMapper)
 	{
 		[nameof(IWorldExplorerMap.UserLocation)] = MapUserLocation,
 		[nameof(IWorldExplorerMap.Pins)] = MapPins
 	};
 
-	public WorldExplorerMapHandler() : this(WorldExplorerMapPropertyMapper, WebViewHandler.CommandMapper)
+	public WorldExplorerMapHandler() : this(WorldExplorerMapPropertyMapper, ViewHandler.ViewCommandMapper)
 	{
 
 	}
@@ -80,14 +77,12 @@ public partial class WorldExplorerMapHandler(IPropertyMapper? mapper, CommandMap
 			CallJsMethod(handler.PlatformView, script);
 		}
 	}
-
 	static string GetWebPage()
 	{
 		using var stream = FileSystem.OpenAppPackageFileAsync("wwwroot/map.html").GetAwaiter().GetResult();
 		using var reader = new StreamReader(stream);
 		return reader.ReadToEnd();
 	}
-
 
 	void WebViewWebMessageReceived(string webMessageAsJson)
 	{
