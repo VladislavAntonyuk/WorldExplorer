@@ -2,8 +2,8 @@
 
 using System.Reflection;
 using CommunityToolkit.Maui;
-using Controls.WorldExplorerMap;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Maui.Handlers;
 using Services;
 using Services.API;
 using Services.Auth;
@@ -28,23 +28,49 @@ public static class MauiProgram
 		ArgumentNullException.ThrowIfNull(apiSettings);
 
 		builder.UseMauiApp<App>()
-		       .ConfigureSyncfusionToolkit()
+			   .ConfigureSyncfusionToolkit()
 			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
 			   .UseSimpleRatingControl()
+#if ANDROID || IOS
+			   .ConfigureMauiHandlers(handlers =>
+			   {
+				   handlers.AddHandler<Shell, CustomShellHandler>();
+				   handlers.AddHandler<Controls.ArView, ArViewHandler>();
+			   })
+#endif
 			   .ConfigureFonts(fonts =>
 			   {
 				   fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
 				   fonts.AddFont("Font Awesome 6 Brands-Regular-400.otf", "FABrands");
 				   fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
-			   })
-			   .ConfigureMauiHandlers(handlers =>
-			   {
-#if ANDROID || IOS
-				   handlers.AddHandler<Shell, CustomShellHandler>();
-				   handlers.AddHandler<Controls.ArView, ArViewHandler>();
-#endif
 			   });
+
+		HybridWebViewHandler.Mapper.AppendToMapping("WorldExplorerMap", static async (handler, _) =>
+		{
+#if ANDROID
+			handler.PlatformView.SetWebViewClient(new WorldExplorerMapWebViewClient((HybridWebViewHandler)handler));
+#elif IOS || MACCATALYST
+			handler.PlatformView.AllowsBackForwardNavigationGestures = false;
+			handler.PlatformView.AllowsLinkPreview = false;
+#elif WINDOWS
+			handler.PlatformView.CanGoBack = false;
+			handler.PlatformView.CanGoForward = false;
+			handler.PlatformView.IsRightTapEnabled = false;
+			handler.PlatformView.AllowDrop = false;
+			handler.PlatformView.CanDrag = false;
+			handler.PlatformView.IsDoubleTapEnabled = false;
+			handler.PlatformView.IsHoldingEnabled = false;
+			await handler.PlatformView.EnsureCoreWebView2Async();
+			handler.PlatformView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+			handler.PlatformView.CoreWebView2.Settings.AreDevToolsEnabled = false;
+			handler.PlatformView.CoreWebView2.Settings.IsSwipeNavigationEnabled = false;
+			handler.PlatformView.NavigationStarting += (_, e) =>
+			{
+				e.Cancel = e.IsUserInitiated && e.Uri != "https://0.0.0.1/";
+			};
+#endif
+		});
 
 		builder.UseMauiCommunityToolkit(x =>
 		{
