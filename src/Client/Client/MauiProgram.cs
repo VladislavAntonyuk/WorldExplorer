@@ -32,13 +32,17 @@ public static class MauiProgram
 			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
 			   .UseSimpleRatingControl()
-#if ANDROID || IOS
 			   .ConfigureMauiHandlers(handlers =>
 			   {
+#if ANDROID || IOS
 				   handlers.AddHandler<Shell, CustomShellHandler>();
 				   handlers.AddHandler<Controls.ArView, ArViewHandler>();
-			   })
 #endif
+#if IOS || MACCATALYST
+				   handlers.AddHandler<CollectionView, Microsoft.Maui.Controls.Handlers.Items2.CollectionViewHandler2>();
+				   handlers.AddHandler<CarouselView, Microsoft.Maui.Controls.Handlers.Items2.CarouselViewHandler2>();
+#endif
+			   })
 			   .ConfigureFonts(fonts =>
 			   {
 				   fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");

@@ -21,7 +21,7 @@ public record Location(double Latitude, double Longitude)
 		return new Location(location.Y, location.X);
 	}
 
-	public double CalculateDistanceTo(Location placeLocation)
+	public double CalculateDistanceInMetersTo(Location placeLocation)
 	{
 		var point1 = placeLocation.ToPoint();
 		var point2 = ToPoint();

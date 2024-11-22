@@ -58,4 +58,10 @@ public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticated
 	{
 		Application.Current?.OpenWindow(new Window(new AboutPage(new AboutViewModel())));
 	}
+
+	[RelayCommand]
+	private void Search(string? text)
+	{
+		
+	}
 }

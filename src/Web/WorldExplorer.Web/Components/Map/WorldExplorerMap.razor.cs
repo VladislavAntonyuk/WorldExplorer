@@ -83,7 +83,7 @@ public sealed partial class WorldExplorerMap(
 	[JSInvokable]
 	public async Task UpdatePosition(Location location)
 	{
-		if (currentLocation is null || currentLocation.CalculateDistanceTo(location) > placeOptions.Value.LocationDistance)
+		if (currentLocation is null || currentLocation.CalculateDistanceInMetersTo(location) > placeOptions.Value.LocationDistance)
 		{
 			currentLocation = location;
 			isLoading = false;
@@ -116,7 +116,7 @@ public sealed partial class WorldExplorerMap(
 
 	private async Task<Marker> CreateMarker(PlaceResponse place)
 	{
-		var distanceToPlace = currentLocation?.CalculateDistanceTo(place.Location);
+		var distanceToPlace = currentLocation?.CalculateDistanceInMetersTo(place.Location);
 		var title = distanceToPlace.HasValue ? $"{place.Name} ({distanceToPlace} {Translation.Meters})" : place.Name;
 		const string defaultIcon = "/assets/default-location-pin.png";
 		var marker = new Marker(place.Location, title, place.MainImage ?? defaultIcon);
