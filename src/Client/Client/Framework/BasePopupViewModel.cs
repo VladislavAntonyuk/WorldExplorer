@@ -1,8 +1,9 @@
 ﻿namespace Client.Framework;
 
 using CommunityToolkit.Mvvm.Input;
+using Services.Navigation;
 
-public abstract partial class BasePopupViewModel : BaseViewModel, IQueryAttributable
+public abstract partial class BasePopupViewModel(INavigationService navigationService) : BaseViewModel, IQueryAttributable
 {
 	public const string TaskCompletionSourceKey = "taskCompletionSource";
 
@@ -16,7 +17,7 @@ public abstract partial class BasePopupViewModel : BaseViewModel, IQueryAttribut
 	[RelayCommand]
 	public async Task ClosePopup()
 	{
-		await Shell.Current.GoToAsync("..");
+		await navigationService.NavigateBackAsync();
 		taskCompletionSource?.SetResult();
 	}
 

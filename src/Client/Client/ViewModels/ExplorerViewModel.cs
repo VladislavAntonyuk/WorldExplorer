@@ -90,7 +90,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		}
 
 		var taskCompletionSource = new TaskCompletionSource();
-		await navigationService.NavigateAsync<PlaceDetailsViewModel, ErrorViewModel>(new Dictionary<string, object?>
+		await navigationService.NavigateAsync<PlaceDetailsViewModel, ErrorViewModel>(new Dictionary<string, object>
 		{
 			{
 				"place", pin.PlaceId

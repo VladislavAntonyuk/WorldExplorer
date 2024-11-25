@@ -21,5 +21,5 @@ public sealed class WorldExplorerImageSourceConverter : BaseConverterOneWay<stri
 		return DefaultConvertReturnValue;
 	}
 
-	public override ImageSource DefaultConvertReturnValue { get; set; } = ImageSource.FromUri(new Uri("https://placehold.co/300?text=Loading..."));
+	public override ImageSource DefaultConvertReturnValue { get; set; } = ImageSource.FromFile("loading.png");
 }

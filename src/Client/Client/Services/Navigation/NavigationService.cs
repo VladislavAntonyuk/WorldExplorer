@@ -7,7 +7,7 @@ using ViewModels;
 internal sealed class NavigationService : INavigationService, IDisposable
 {
 	private readonly IConnectivity connectivity;
-	private ShellNavigationState? currentState;
+	private NavigationState? currentState;
 
 	public NavigationService(IConnectivity connectivity)
 	{
@@ -20,39 +20,48 @@ internal sealed class NavigationService : INavigationService, IDisposable
 		connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
 	}
 
-	public Task NavigateAsync<TViewModel, TErrorViewModel>(IDictionary<string, object?>? parameters = null)
+	public async Task NavigateAsync<TViewModel, TErrorViewModel>(IDictionary<string, object>? parameters = null)
 		where TViewModel : BaseViewModel where TErrorViewModel : BaseViewModel
 	{
 		if (connectivity.NetworkAccess != NetworkAccess.Internet)
 		{
-			return Shell.Current.GoToAsync(BuildRoot<TErrorViewModel>(), true, new Dictionary<string, object>
+			await Shell.Current.GoToAsync(BuildRoot<TErrorViewModel>(), true, new Dictionary<string, object>
 			{
 				{
 					"errorCode", ErrorCode.NoInternet
 				}
 			});
+			return;
 		}
 
-		return parameters is null
-			? Shell.Current.GoToAsync(BuildRoot<TViewModel>(), true)
-			: Shell.Current.GoToAsync(BuildRoot<TViewModel>(), true, parameters);
-	}
+		parameters ??= new Dictionary<string, object>();
 
-	public Task NavigateBackAsync()
+		var state = BuildRoot<TViewModel>();
+		await Shell.Current.GoToAsync(state, true, parameters);
+
+		currentState = new NavigationState(state, parameters);
+	}
+	
+	public async Task NavigateBackAsync()
 	{
-		return Shell.Current.GoToAsync("..", true);
+		await Shell.Current.GoToAsync("..", true);
+		currentState = new NavigationState(Shell.Current.CurrentState.Location, new Dictionary<string, object>());
 	}
 
 	private async void Connectivity_ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
 	{
 		if (e.NetworkAccess == NetworkAccess.Internet)
 		{
-			await Shell.Current.GoToAsync(currentState ?? BuildRoot<LoadingViewModel>(), true);
-			return;
+			if (currentState is null)
+			{
+				await Shell.Current.GoToAsync(BuildRoot<LoadingViewModel>(), true);
+			}
+			else
+			{
+				await Shell.Current.GoToAsync(currentState.State, true, currentState.Parameters);
+			}
 		}
-
-		currentState = Shell.Current.CurrentState;
-		if (e.NetworkAccess != NetworkAccess.Internet)
+		else
 		{
 			await Shell.Current.GoToAsync(BuildRoot<ErrorViewModel>(), true, new Dictionary<string, object>
 			{
@@ -63,19 +72,14 @@ internal sealed class NavigationService : INavigationService, IDisposable
 		}
 	}
 
-	private static string BuildRoot<TViewModel>()
+	private static Uri BuildRoot<TViewModel>()
 	{
-		var uri = new UriBuilder("", GetPagePathForViewModel(typeof(TViewModel)));
-		return uri.Uri.OriginalString;
-	}
-
-	private static string GetPagePathForViewModel(Type viewModelType)
-	{
+		var viewModelType = typeof(TViewModel);
 		if (!ViewModelLocator.Mappings.TryGetValue(viewModelType, out var value))
 		{
 			throw new KeyNotFoundException($"No map for ${viewModelType} was found on navigation mappings");
 		}
 
-		return value;
+		return new Uri(value, UriKind.RelativeOrAbsolute);
 	}
 }

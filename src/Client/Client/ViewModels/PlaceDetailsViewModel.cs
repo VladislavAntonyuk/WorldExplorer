@@ -14,7 +14,7 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 	IShare share,
 	IArService arService,
 	IDialogService dialogService,
-	INavigationService navigationService) : BasePopupViewModel
+	INavigationService navigationService) : BasePopupViewModel(navigationService)
 {
 	private Guid? placeId;
 
@@ -83,7 +83,7 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 	{
 		await dialogService.ToastAsync("Opening AR...");
 		await ClosePopup();
-		await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object?>
+		await navigationService.NavigateAsync<ArViewModel, ErrorViewModel>(new Dictionary<string, object>
 		{
 			{
 				"images", Place.Images

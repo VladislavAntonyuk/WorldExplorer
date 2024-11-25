@@ -13,12 +13,13 @@
 	x:DataType="viewModels:ErrorViewModel">
 
 	<VerticalStackLayout>
-		<!--<controls:SKLottieView
+		<controls:SKLottieView
 			Source="{Binding Code, Converter={StaticResource ErrorCodeToImagePathConverter}}"
 			RepeatCount="-1"
 			HeightRequest="200"
 			WidthRequest="200"
-			HorizontalOptions="Center" />-->
+			HorizontalOptions="Center" />
+
 		<Label
 			Text="{Binding Message}"
 			VerticalOptions="Center"
