@@ -69,18 +69,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		}
 	}
 
-	[RelayCommand]
-	private Task Help()
-	{
-		return launcher.TryOpenAsync("https://world-explorer.azurewebsites.net/about");
-	}
-
-	[RelayCommand]
-	private void About()
-	{
-		Application.Current?.OpenWindow(new Window(new AboutPage(new AboutViewModel())));
-	}
-
 	[RelayCommand(AllowConcurrentExecutions = false)]
 	private async Task MarkerClicked(WorldExplorerPin? pin)
 	{

@@ -17,33 +17,6 @@
 		<toolkit:IsEqualConverter x:Key="IsEqualConverter"/>
 	</framework:BaseContentPage.Resources>
 
-	<framework:BaseContentPage.MenuBarItems>
-		<MenuBarItem Text="Preferences">
-			<MenuFlyoutItem
-				Text="Toggle My Location"
-				Command="{Binding ToggleUserLocationCommand}">
-				<MenuFlyoutItem.KeyboardAccelerators>
-					<KeyboardAccelerator Modifiers="Ctrl" Key="u"></KeyboardAccelerator>
-				</MenuFlyoutItem.KeyboardAccelerators>
-			</MenuFlyoutItem>
-		</MenuBarItem>
-
-		<MenuBarItem Text="{x:Static localization:Localization.About}">
-			<MenuFlyoutItem
-				Text="{x:Static localization:Localization.Help}"
-				Command="{Binding HelpCommand}">
-				<MenuFlyoutItem.KeyboardAccelerators>
-					<KeyboardAccelerator Modifiers="Ctrl" Key="h"></KeyboardAccelerator>
-				</MenuFlyoutItem.KeyboardAccelerators>
-			</MenuFlyoutItem>
-
-			<MenuFlyoutItem
-				Text="{x:Static localization:Localization.About}"
-				Command="{Binding AboutCommand}"/>
-		</MenuBarItem>
-
-	</framework:BaseContentPage.MenuBarItems>
-
 	<Grid>
 		<worldExplorerMap:WorldExplorerMap
 			Pins="{Binding Pins}"

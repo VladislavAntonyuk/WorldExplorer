@@ -62,9 +62,7 @@
 			Title="{x:Static localization:Localization.Profile}">
 
 			<Tab.IsVisible>
-				<OnPlatform x:TypeArguments="system:Boolean" Default="True">
-					<On Platform="WinUI" Value="False" />
-				</OnPlatform>
+				<OnIdiom x:TypeArguments="system:Boolean" Desktop="False" Default="True"/>
 			</Tab.IsVisible>
 
 			<Tab.Icon>

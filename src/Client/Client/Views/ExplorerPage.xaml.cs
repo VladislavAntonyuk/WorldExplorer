@@ -9,13 +9,4 @@ public partial class ExplorerPage : BaseContentPage<ExplorerViewModel>
 	{
 		InitializeComponent();
 	}
-
-	protected override void OnAppearing()
-	{
-		base.OnAppearing();
-		if (DeviceInfo.Platform == DevicePlatform.WinUI)
-		{
-			MenuBarItems.Clear();
-		}
-	}
 }
