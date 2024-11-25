@@ -13,7 +13,7 @@ else
 {
 	<MudTextField T="string" @bind-Value="@place.Name" />
 	<MudTextField T="Location" @bind-Value="@place.Location" Converter="Convert" />
-	<MudTextField T="string" @bind-Value="@place.Description" />
+	<MudTextField T="string" @bind-Value="@place.Description" Lines="10" MaxLines="30" />
 
 	<MudTable Items="@place.Images" Breakpoint="Breakpoint.Sm">
 		<HeaderContent>

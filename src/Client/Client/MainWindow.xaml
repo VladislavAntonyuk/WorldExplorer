@@ -14,7 +14,7 @@
 		          IsVisible="True"
 		          HeightRequest="48">
 			<TitleBar.LeadingContent>
-
+				<Image Source="logo.png"/>
 			</TitleBar.LeadingContent>
 
 			<TitleBar.Content>
@@ -22,7 +22,7 @@
 					x:Name="SearchBar"
 					Placeholder="{x:Static localization:Localization.Search}"
 					MaximumWidthRequest="300"
-					HorizontalOptions="FillAndExpand"
+					HorizontalOptions="Fill"
 					VerticalOptions="Center"
 					SearchCommand="{Binding SearchCommand}">
 				</SearchBar>

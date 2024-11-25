@@ -1,11 +1,11 @@
-﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
+using Application.Abstractions;
+using Database;
+using Domain.LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using WorldExplorer.Modules.Places.Application.Abstractions;
-using WorldExplorer.Modules.Places.Domain.LocationInfo;
-using WorldExplorer.Modules.Places.Infrastructure.Database;
 
 [DisallowConcurrentExecution]
 internal sealed class PlacesLookupJob(
@@ -20,9 +20,9 @@ internal sealed class PlacesLookupJob(
 		logger.LogInformation("{Module} - Beginning to process locationInfoRequests messages", ModuleName);
 
 		var locationInfoRequests = await dbContext.LocationInfoRequests
-		                                          .Where(x => x.Status == LocationInfoRequestStatus.New)
-		                                          .OrderBy(x => x.CreationDate)
-		                                          .ToListAsync(context.CancellationToken);
+												  .Where(x => x.Status == LocationInfoRequestStatus.New)
+												  .OrderBy(x => x.CreationDate)
+												  .ToListAsync(context.CancellationToken);
 
 		if (locationInfoRequests.Count == 0)
 		{
@@ -47,7 +47,7 @@ internal sealed class PlacesLookupJob(
 			{
 				logger.LogError(ex, "Failed requesting places {Requests}", string.Join(',', locationInfoRequests));
 				await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
-				               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.New), context.CancellationToken);
+							   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.New), context.CancellationToken);
 
 			}
 		}
@@ -63,12 +63,13 @@ internal sealed class PlacesLookupJob(
 
 		var newPlaceNames = places.Select(x => x.Name);
 		var existingPlaceNames = await dbContext.Places.Where(x => newPlaceNames.Contains(x.Name))
-		                                        .Select(x => x.Name)
-		                                        .ToListAsync(cancellationToken);
+												.Select(x => x.Name)
+												.ToListAsync(cancellationToken);
 
 		var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name);
-
 		await dbContext.Places.AddRangeAsync(newPlaces, cancellationToken);
 		await dbContext.SaveChangesAsync(cancellationToken);
+
+
 	}
 }

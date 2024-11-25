@@ -19,7 +19,7 @@ internal class CustomShellBottomNavViewAppearanceTracker : ShellBottomNavViewApp
 	public override void SetAppearance(BottomNavigationView bottomView, IShellAppearanceElement appearance)
 	{
 		base.SetAppearance(bottomView, appearance);
-		if (Shell.GetTabBarIsVisible(shellContext.Shell.CurrentPage))
+		if (Shell.GetTabBarIsVisible(shellContext.Shell.CurrentItem))
 		{
 			var backgroundDrawable = new GradientDrawable();
 			backgroundDrawable.SetShape(ShapeType.Rectangle);

@@ -7,9 +7,13 @@
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
 	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:converters="using:Client.Converters"
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView">
 
+	<framework:BasePopup.Resources>
+		<converters:WorldExplorerImageSourceConverter x:Key="WorldExplorerImageSourceConverter"/>
+	</framework:BasePopup.Resources>
 	<Grid>
 		<Button
 			ZIndex="100"
@@ -36,7 +40,7 @@
 
 				<Image
 					Background="{DynamicResource Gray500}"
-					Source="{Binding Place.MainImage, FallbackValue='https://placehold.co/300?text=Loading...'}"
+					Source="{Binding Place.MainImage, Converter={StaticResource WorldExplorerImageSourceConverter}}"
 					WidthRequest="300"
 					HeightRequest="300"
 					Aspect="AspectFit" />
@@ -104,7 +108,7 @@
 							<VerticalStackLayout>
 								<Image
 									 Background="{DynamicResource Gray500}"
-									 Source="{Binding .}"
+									 Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
 									 WidthRequest="300"
 									 HeightRequest="300"
 									 Aspect="AspectFit" />

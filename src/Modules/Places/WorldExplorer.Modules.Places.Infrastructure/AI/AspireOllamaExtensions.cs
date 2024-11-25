@@ -1,9 +1,10 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.AI;
 
-using System.Data.Common;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 public static class AspireOllamaExtensions
 {
@@ -17,16 +18,18 @@ public static class AspireOllamaExtensions
 
 		var parts = connectionString.Split(';').ToDictionary(x => x.Split('=')[0], s => s.Split('=')[1]);
 
-		builder.Services.AddChatClient(chatClientBuilder =>
+		builder.Services.AddChatClient(sp =>
 		{
-			var chatClient = chatClientBuilder.UseLogging()
-			                                  .UseOpenTelemetry();
+			var chatClient = new ChatClientBuilder(new OllamaChatClient(parts["Endpoint"], parts["Model"]))
+			                 .UseLogging(sp.GetRequiredService<ILoggerFactory>())
+			                 .UseFunctionInvocation(sp.GetRequiredService<ILoggerFactory>(), client => client.DetailedErrors = true)
+							 .UseOpenTelemetry(sp.GetRequiredService<ILoggerFactory>(), "ollama");
 			if (!builder.Environment.IsDevelopment())
 			{
 				chatClient = chatClient.UseDistributedCache();
 			}
 
-			return chatClient.Use(new OllamaChatClient(parts["Endpoint"], parts["Model"]));
+			return chatClient.Build(sp);
 		});
 	}
 }

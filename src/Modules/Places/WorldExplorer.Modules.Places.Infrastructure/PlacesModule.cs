@@ -11,30 +11,17 @@ using Domain.Places;
 using Image;
 using LocationInfo;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.AI;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using OpenAI;
 using Places;
 using Presentation;
-using WorldExplorer.Common.Application.EventBus;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Modules.Users.Infrastructure.Inbox;
 
 public static class PlacesModule
 {
 	public static IHostApplicationBuilder AddPlacesModule(this IHostApplicationBuilder builder)
 	{
-		builder.Services.AddDomainEventHandlers();
-
-		builder.Services.AddIntegrationEventHandlers();
-
 		builder.AddInfrastructure();
-
 		builder.Services.AddEndpoints(AssemblyReference.Assembly);
-
 		return builder;
 	}
 
@@ -50,7 +37,6 @@ public static class PlacesModule
 		if (builder.Environment.IsDevelopment())
 		{
 			builder.AddOllamaApiClient("ai-llama3-2");
-			//builder.AddOllamaApiClient("ai-phi3-5");
 		}
 		else
 		{
@@ -62,57 +48,7 @@ public static class PlacesModule
 		builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
 		builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();
 
-
-		//services.Configure<OutboxOptions>(configuration.GetSection("Users:Outbox"));
-
-		//services.ConfigureOptions<ConfigureProcessOutboxJob>();
-
-		//builder.Services.Configure<InboxOptions>(configuration.GetSection("Users:Inbox"));
-
 		builder.Services.ConfigureOptions<ConfigurePlacesJob>();
 		builder.Services.Configure<PlacesSettings>(builder.Configuration);
-
-	}
-
-	private static void AddDomainEventHandlers(this IServiceCollection services)
-	{
-		var domainEventHandlers = Application.AssemblyReference.Assembly.GetTypes()
-											 .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
-											 .ToArray();
-
-		foreach (var domainEventHandler in domainEventHandlers)
-		{
-			services.TryAddScoped(domainEventHandler);
-
-			var domainEvent = domainEventHandler.GetInterfaces()
-												.Single(i => i.IsGenericType)
-												.GetGenericArguments()
-												.Single();
-
-			//var closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
-
-			//services.Decorate(domainEventHandler, closedIdempotentHandler);
-		}
-	}
-
-	private static void AddIntegrationEventHandlers(this IServiceCollection services)
-	{
-		var integrationEventHandlers = AssemblyReference.Assembly.GetTypes()
-														.Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
-														.ToArray();
-
-		foreach (var integrationEventHandler in integrationEventHandlers)
-		{
-			services.TryAddScoped(integrationEventHandler);
-
-			var integrationEvent = integrationEventHandler.GetInterfaces()
-														  .Single(i => i.IsGenericType)
-														  .GetGenericArguments()
-														  .Single();
-
-			//var closedIdempotentHandler = typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
-
-			//services.Decorate(integrationEventHandler, closedIdempotentHandler);
-		}
 	}
 }

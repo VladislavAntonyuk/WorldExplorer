@@ -42,19 +42,18 @@ internal class CustomShellItemRenderer(IShellContext context) : ShellItemRendere
 				tabBar.CenterViewCommand?.Execute(null);
 			};
 			middleView.SetPadding(0, 0, 0, 0);
-			if (tabBar.CenterViewBackgroundColor is not null)
+
+			var backgroundView = new View(Context)
 			{
-				var backgroundView = new View(Context)
-				{
-					LayoutParameters = middleViewLayoutParams
-				};
-				var backgroundDrawable = new GradientDrawable();
-				backgroundDrawable.SetShape(ShapeType.Rectangle);
-				backgroundDrawable.SetCornerRadius(middleViewSize / 2f);
-				backgroundDrawable.SetColor(tabBar.CenterViewBackgroundColor.ToPlatform(Colors.Transparent));
-				backgroundView.SetBackground(backgroundDrawable);
-				rootLayout.AddView(backgroundView);
-			}
+				LayoutParameters = middleViewLayoutParams
+			};
+			var backgroundDrawable = new GradientDrawable();
+			backgroundDrawable.SetShape(ShapeType.Rectangle);
+			backgroundDrawable.SetCornerRadius(middleViewSize / 2f);
+			backgroundDrawable.SetColor(tabBar.CenterViewBackgroundColor.ToPlatform(Colors.Transparent));
+			backgroundView.SetBackground(backgroundDrawable);
+			rootLayout.AddView(backgroundView);
+
 
 			var handler = Application.Current?.Windows.LastOrDefault()?.Page?.Handler ?? tabBar.Handler;
 			tabBar.CenterViewImageSource?.LoadImage(handler!.MauiContext!, result =>

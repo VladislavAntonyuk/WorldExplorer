@@ -67,8 +67,9 @@ app.MapGraphQL();
 
 await app.RunAsync();
 
-
-namespace WorldExplorer.ApiService
+public sealed partial class Program
 {
-	public class Program;
+	private Program()
+	{
+	}
 }

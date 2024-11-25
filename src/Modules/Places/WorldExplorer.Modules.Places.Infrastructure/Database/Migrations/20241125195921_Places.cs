@@ -99,13 +99,39 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<Point>(type: "geography", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Images = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Places", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "PlaceImage",
+                schema: "places",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlaceImage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlaceImage_Places_PlaceId",
+                        column: x => x.PlaceId,
+                        principalSchema: "places",
+                        principalTable: "Places",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlaceImage_PlaceId",
+                schema: "places",
+                table: "PlaceImage",
+                column: "PlaceId");
         }
 
         /// <inheritdoc />
@@ -129,6 +155,10 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "outbox_messages",
+                schema: "places");
+
+            migrationBuilder.DropTable(
+                name: "PlaceImage",
                 schema: "places");
 
             migrationBuilder.DropTable(

@@ -2,6 +2,7 @@
 @using WorldExplorer.Modules.Places.Application.Places.GetPlace
 @using WorldExplorer.Modules.Users.Application.Users.GetUser
 @inherits WorldExplorerAuthBaseComponent
+
 @page "/admin"
 @attribute [Authorize(Policy = "IsAdministrator")]
 @attribute [StreamRendering]
@@ -14,13 +15,13 @@
 			<MudTabPanel Text="Places">
 				<MudButton Color="Color.Error" OnClick="ClearPlaces">Clear places</MudButton>
 
-				<MudTable Items="@places" Breakpoint="Breakpoint.Sm" T="PlaceResponse">
+				<MudTable @ref="@placesTable" Breakpoint="Breakpoint.Sm" T="PlaceResponse" ServerData="GetPlaces">
 					<HeaderContent>
 						<MudTh>Id</MudTh>
 						<MudTh>Name</MudTh>
 						<MudTh>Location</MudTh>
 						<MudTh>Rating</MudTh>
-						<MudTh>Images count</MudTh>
+						<MudTh>Is Filled</MudTh>
 						<MudTh></MudTh>
 					</HeaderContent>
 					<RowTemplate Context="place">
@@ -33,7 +34,7 @@
 						<MudTd DataLabel="Name">@place.Name</MudTd>
 						<MudTd DataLabel="Location">@place.Location</MudTd>
 						<MudTd DataLabel="Rating">@place.Rating</MudTd>
-						<MudTd DataLabel="Images count">@place.Images.Count</MudTd>
+						<MudTd DataLabel="Is Filled">@(!string.IsNullOrEmpty(place.Description))</MudTd>
 						<MudTd DataLabel="">
 							<MudButton Color="Color.Error" OnClick="() => DeletePlace(place.Id)">Delete</MudButton>
 						</MudTd>
@@ -43,7 +44,7 @@
 			<MudTabPanel Text="Requests">
 				<MudButton Color="Color.Error" OnClick="ClearRequests">Clear requests</MudButton>
 
-				<MudTable Items="@requests" Breakpoint="Breakpoint.Sm" T="LocationInfoRequestResponse">
+				<MudTable @ref="@requestsTable" Breakpoint="Breakpoint.Sm" T="LocationInfoRequestResponse" ServerData="GetRequests">
 					<HeaderContent>
 						<MudTh>Id</MudTh>
 						<MudTh>Status</MudTh>
@@ -63,7 +64,7 @@
 				</MudTable>
 			</MudTabPanel>
 			<MudTabPanel Text="Users">
-				<MudTable Items="@users" Breakpoint="Breakpoint.Sm" T="UserResponse">
+				<MudTable @ref="@usersTable" Breakpoint="Breakpoint.Sm" T="UserResponse" ServerData="GetUsers">
 					<HeaderContent>
 						<MudTh>Id</MudTh>
 						<MudTh>Name</MudTh>

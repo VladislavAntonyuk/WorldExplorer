@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
 public class PlacesSettings
 {

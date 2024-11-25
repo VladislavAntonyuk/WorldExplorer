@@ -5,8 +5,13 @@ using NetTopologySuite.Geometries;
 
 public class Place : Entity
 {
-	private Place()
+	public Place(string name, Point location, string? description)
 	{
+		Id = Guid.CreateVersion7();
+		Name = name;
+		Location = location;
+		Description = description;
+		Raise(new PlaceCreatedDomainEvent(Id));
 	}
 
 	public Guid Id { get; private set; }
@@ -14,22 +19,7 @@ public class Place : Entity
 	public Point Location { get; private set; }
 	public string? Description { get; private set; }
 
-	public ICollection<Image> Images { get; private set; } = new List<Image>();
-
-	public static Place Create(string name, Point location, string? description)
-	{
-		var place = new Place
-		{
-			Id = Guid.CreateVersion7(),
-			Name = name,
-			Location = location,
-			Description = description
-		};
-
-		place.Raise(new PlaceCreatedDomainEvent(place.Id));
-
-		return place;
-	}
+	public ICollection<PlaceImage> Images { get; private set; } = new List<PlaceImage>();
 
 	public void Update(string name, Point location, string? description)
 	{

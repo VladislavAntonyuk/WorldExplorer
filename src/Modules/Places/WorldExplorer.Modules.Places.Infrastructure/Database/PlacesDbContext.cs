@@ -5,6 +5,7 @@ using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Outbox;
 using Domain.LocationInfo;
 using Domain.Places;
+using LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Places;

@@ -4,6 +4,9 @@ https://world-explorer.azurewebsites.net/
 
 ## Conference
 
+### .NET Conf 2024 - Ukraine
+[![YouTube Video Link](https://img.youtube.com/vi/sHVlg8Y6qlU/0.jpg)](https://www.youtube.com/watch?v=sHVlg8Y6qlU)
+
 ### .NET Conf 2023 - Ukraine
 [![YouTube Video Link](https://img.youtube.com/vi/sHVlg8Y6qlU/0.jpg)](https://www.youtube.com/watch?v=sHVlg8Y6qlU)
 

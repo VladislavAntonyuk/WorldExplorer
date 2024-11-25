@@ -37,7 +37,7 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 
 		var response = JsonSerializer.Deserialize<AIResponse>(result, SerializerSettings.Instance);
 		return response?.Places
-			.Select(x => Place.Create(x.Name,x.Location.ToPoint(), null))
+			.Select(x => new Place(x.Name, x.Location.ToPoint(), null))
 			.ToList() ?? [];
 	}
 
@@ -77,14 +77,10 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 		}
 	}
 
-	private sealed record AiPlaceResponse
-	{
-		public string Name { get; init; }
-		public Location Location { get; init; }
-	}
+	private sealed record AiPlaceResponse(string Name, Location Location);
 
 	private sealed class AIResponse
 	{
-		public AiPlaceResponse[] Places { get; set; } = [];
+		public AiPlaceResponse[] Places { get; init; } = [];
 	}
 }

@@ -19,37 +19,15 @@ public static class TravellersModule
 {
 	public static IHostApplicationBuilder AddTravellersModule(this IHostApplicationBuilder builder)
 	{
-		builder.Services.AddDomainEventHandlers();
 		builder.Services.AddIntegrationEventHandlers();
 
 		builder.AddInfrastructure();
 
 		
-		builder.Services.Configure<InboxOptions>(builder.Configuration.GetSection("Users:Inbox"));
+		builder.Services.Configure<InboxOptions>(builder.Configuration.GetSection("Travellers:Inbox"));
 
 		builder.Services.ConfigureOptions<ConfigureProcessInboxJob>();
 		return builder;
-	}
-
-	private static void AddDomainEventHandlers(this IServiceCollection services)
-	{
-		var domainEventHandlers = AssemblyReference.Assembly.GetTypes()
-											 .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
-											 .ToArray();
-
-		foreach (var domainEventHandler in domainEventHandlers)
-		{
-			services.TryAddScoped(domainEventHandler);
-
-			var domainEvent = domainEventHandler.GetInterfaces()
-												.Single(i => i.IsGenericType)
-												.GetGenericArguments()
-												.Single();
-
-			//var closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
-
-			//services.Decorate(domainEventHandler, closedIdempotentHandler);
-		}
 	}
 
 	private static void AddIntegrationEventHandlers(this IServiceCollection services)

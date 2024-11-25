@@ -13,7 +13,7 @@ using WorldExplorer.Modules.Places.Infrastructure.Database;
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PlacesDbContext))]
-    [Migration("20241112205132_Places")]
+    [Migration("20241125195921_Places")]
     partial class Places
     {
         /// <inheritdoc />
@@ -156,31 +156,37 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     b.ToTable("Places", "places");
                 });
 
+            modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.PlaceImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PlaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlaceId");
+
+                    b.ToTable("PlaceImage", "places");
+                });
+
+            modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.PlaceImage", b =>
+                {
+                    b.HasOne("WorldExplorer.Modules.Places.Domain.Places.Place", null)
+                        .WithMany("Images")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>
                 {
-                    b.OwnsMany("WorldExplorer.Modules.Places.Domain.Places.Image", "Images", b1 =>
-                        {
-                            b1.Property<Guid>("PlaceId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Source")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("PlaceId", "__synthesizedOrdinal");
-
-                            b1.ToTable("Places", "places");
-
-                            b1.ToJson("Images");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlaceId");
-                        });
-
                     b.Navigation("Images");
                 });
 #pragma warning restore 612, 618

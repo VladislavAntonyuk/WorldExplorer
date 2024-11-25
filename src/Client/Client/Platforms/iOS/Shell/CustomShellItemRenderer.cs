@@ -23,10 +23,10 @@ internal class CustomShellItemRenderer(IShellContext context) : ShellItemRendere
 			if (middleView is null)
 			{
 				var image = await tabbar.CenterViewImageSource.GetPlatformImageAsync(
-					Application.Current!.MainPage!.Handler!.MauiContext!);
-
+					Application.Current!.Windows[^1].Handler!.MauiContext!);
+				
 				middleView = new UIButton(UIButtonType.Custom);
-				middleView.BackgroundColor = tabbar.CenterViewBackgroundColor?.ToPlatform();
+				middleView.BackgroundColor = tabbar.CenterViewBackgroundColor.ToPlatform();
 				middleView.Frame = new CGRect(CGPoint.Empty, new CGSize(70, 70));
 				if (image is not null)
 				{

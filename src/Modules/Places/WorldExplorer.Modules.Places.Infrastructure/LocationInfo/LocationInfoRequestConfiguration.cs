@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
+﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
 
 using Domain.LocationInfo;
 using LocationInfo;

@@ -4,29 +4,32 @@ using Projects;
 var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache")
-                   .WithRedisCommander()
-                   .WithDataVolume("world-explorer-cache");
+				   .WithRedisInsight(s => s.WithLifetime(ContainerLifetime.Persistent))
+				   .WithLifetime(ContainerLifetime.Persistent)
+				   .WithDataVolume("world-explorer-cache");
 
 var sqlServer = builder.AddSqlServer("sqlserver")
-                       .WithDataVolume("world-explorer-database");
+					   .WithLifetime(ContainerLifetime.Persistent)
+					   .WithDataVolume("world-explorer-database");
 
 var database = sqlServer.AddDatabase("database", "worldexplorer");
 
 var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
-                        .WithReference(sqlServer)
-                        .WaitFor(database)
-                        .WithReference(cache)
-                        .WaitFor(cache);
+						.WithReference(sqlServer)
+						.WaitFor(database)
+						.WithReference(cache)
+						.WaitFor(cache);
 
 if (builder.Environment.IsDevelopment())
 {
 	var aiService = builder.AddOllama("ai")
-	                       .WithDataVolume("ollama")
-	                       .WithOpenWebUI()
-	                       .AddModel("llama3.2:latest");// phi3.5:latest // llama3.2:latest
+						   .WithLifetime(ContainerLifetime.Persistent)
+						   .WithDataVolume("ollama")
+						   .WithOpenWebUI(s => s.WithLifetime(ContainerLifetime.Persistent))
+						   .AddModel("llama3.2:latest");// phi3.5:latest // llama3.2:latest
 
 	apiService.WithReference(aiService)
-	          .WaitFor(aiService);
+			  .WaitFor(aiService);
 }
 else
 {
@@ -44,7 +47,9 @@ builder.AddProject<WorldExplorer_Web>("webfrontend")
 if (!builder.Environment.IsDevelopment())
 {
 	var serviceBus = builder.AddRabbitMQ("servicebus")
-	                        .WithDataVolume("world-explorer-servicebus");
+							.WithManagementPlugin()
+							.WithLifetime(ContainerLifetime.Persistent)
+							.WithDataVolume("world-explorer-servicebus");
 
 	apiService.WithReference(serviceBus);
 }

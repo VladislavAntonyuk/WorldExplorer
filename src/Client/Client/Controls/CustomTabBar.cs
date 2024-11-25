@@ -6,19 +6,18 @@ public class CustomTabBar : TabBar
 {
 	public static readonly BindableProperty CenterViewVisibleProperty = BindableProperty.Create(nameof(CenterViewVisible), typeof(bool), typeof(CustomTabBar), default(bool));
 	public static readonly BindableProperty CenterViewImageSourceProperty = BindableProperty.Create(nameof(CenterViewImageSource), typeof(ImageSource), typeof(CustomTabBar));
-	public static readonly BindableProperty CenterViewBackgroundColorProperty = BindableProperty.Create(nameof(CenterViewBackgroundColor), typeof(Color), typeof(CustomTabBar));
-
+	public static readonly BindableProperty CenterViewBackgroundColorProperty = BindableProperty.Create(nameof(CenterViewBackgroundColor), typeof(Color), typeof(CustomTabBar), Colors.Transparent);
 	public static readonly BindableProperty CenterViewCommandProperty = BindableProperty.Create(nameof(CenterViewCommand), typeof(ICommand), typeof(CustomTabBar));
 	
-	public ICommand CenterViewCommand
+	public ICommand? CenterViewCommand
 	{
-		get => (ICommand)GetValue(CenterViewCommandProperty);
+		get => (ICommand?)GetValue(CenterViewCommandProperty);
 		set => SetValue(CenterViewCommandProperty, value);
 	}
 
-	public Color? CenterViewBackgroundColor
+	public Color CenterViewBackgroundColor
 	{
-		get => (Color?)GetValue(CenterViewBackgroundColorProperty);
+		get => (Color)GetValue(CenterViewBackgroundColorProperty);
 		set => SetValue(CenterViewBackgroundColorProperty, value);
 	}
 

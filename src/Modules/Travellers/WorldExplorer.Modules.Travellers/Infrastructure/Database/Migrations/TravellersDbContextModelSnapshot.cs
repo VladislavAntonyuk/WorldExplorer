@@ -116,12 +116,6 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Travellers", "travellers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
-                        });
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Travellers.TravellerRoute", b =>

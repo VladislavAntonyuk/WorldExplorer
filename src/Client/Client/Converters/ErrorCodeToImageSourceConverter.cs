@@ -6,7 +6,7 @@ using Models.Enums;
 using SkiaSharp.Extended.UI.Controls;
 
 [AcceptEmptyServiceProvider]
-public partial class ErrorCodeToImageSourceConverter : BaseConverterOneWay<ErrorCode?, SKLottieImageSource>
+public sealed class ErrorCodeToImageSourceConverter : BaseConverterOneWay<ErrorCode?, SKLottieImageSource>
 {
 	public override SKLottieImageSource DefaultConvertReturnValue { get; set; } = new SKFileLottieImageSource
 	{

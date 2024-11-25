@@ -13,7 +13,7 @@ internal sealed class PlaceRepository(PlacesDbContext context, IOptions<PlacesSe
 {
 	public async Task<Place?> GetAsync(Guid id, CancellationToken cancellationToken = default)
 	{
-		return await context.Places.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+		return await context.Places.Include(x=>x.Images).FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 	}
 
 	public async Task<List<Place>> GetAsync(CancellationToken cancellationToken = default)

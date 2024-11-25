@@ -77,10 +77,15 @@ internal sealed class ProcessInboxJob(
 
 		           """;
 
-		IEnumerable<InboxMessageResponse> inboxMessages =
-			await dbConnectionFactory.Database.SqlQueryRaw<InboxMessageResponse>(sql).ToListAsync();
+		var inboxMessages =
+			await dbConnectionFactory.InboxMessages
+			                         .Where(x=>x.ProcessedOnUtc == null)
+			                         .Take(inboxOptions.Value.BatchSize)
+			                         .OrderBy(x=>x.OccurredOnUtc)
+			                         .Select(x=>new InboxMessageResponse(x.Id, x.Content))
+			                         .ToListAsync();
 
-		return inboxMessages.ToList();
+		return inboxMessages;
 	}
 
 	private async Task UpdateInboxMessageAsync(InboxMessageResponse inboxMessage, Exception? exception)

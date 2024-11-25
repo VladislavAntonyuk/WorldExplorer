@@ -162,12 +162,6 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.InsertData(
-                schema: "travellers",
-                table: "Travellers",
-                column: "Id",
-                value: new Guid("19d3b2c7-8714-4851-ac73-95aeecfba3a6"));
-
             migrationBuilder.CreateIndex(
                 name: "IX_TravellerRoute_TravellerId",
                 schema: "travellers",

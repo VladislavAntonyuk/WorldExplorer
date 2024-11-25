@@ -9,9 +9,9 @@ using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationI
 public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)
 	: WorldExplorerAuthBaseComponent
 {
-	private List<PlaceResponse> places = [];
-	private List<LocationInfoRequestResponse> requests = [];
-	private List<UserResponse> users = [];
+	private MudTable<UserResponse> usersTable;
+	private MudTable<PlaceResponse> placesTable;
+	private MudTable<LocationInfoRequestResponse> requestsTable;
 
 	private async Task ClearPlaces()
 	{
@@ -20,7 +20,7 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 		if (isConfirmed == true)
 		{
 			await apiClient.ClearPlaces(CancellationToken.None);
-			await GetPlaces();
+			await placesTable.ReloadServerData();
 		}
 	}
 
@@ -31,51 +31,55 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 		if (isConfirmed == true)
 		{
 			await apiClient.ClearLocationInfoRequests(CancellationToken.None);
-			await GetRequests();
+			await requestsTable.ReloadServerData();
 		}
 	}
 
-	private async Task GetUsers()
+	private async Task<TableData<UserResponse>> GetUsers(TableState tableState, CancellationToken cancellationToken)
 	{
-		users = await apiClient.GetUsers(CancellationToken.None);
-		StateHasChanged();
+		var users = await apiClient.GetUsers(cancellationToken);
+		return new TableData<UserResponse>()
+		{
+			Items = users,
+			TotalItems = users.Count
+		};
 	}
 
-	private async Task GetPlaces()
+	private async Task<TableData<PlaceResponse>> GetPlaces(TableState tableState, CancellationToken cancellationToken)
 	{
-		places = await apiClient.GetPlaces(CancellationToken.None);
-		StateHasChanged();
+		var places = await apiClient.GetPlaces(cancellationToken);
+		return new TableData<PlaceResponse>()
+		{
+			Items = places,
+			TotalItems = places.Count
+		};
 	}
 
-	private async Task GetRequests()
+	private async Task<TableData<LocationInfoRequestResponse>> GetRequests(TableState tableState, CancellationToken cancellationToken)
 	{
-		requests = await apiClient.GetLocationInfoRequests(CancellationToken.None);
-		StateHasChanged();
+		var requests = await apiClient.GetLocationInfoRequests(CancellationToken.None);
+		return new TableData<LocationInfoRequestResponse>()
+		{
+			Items = requests,
+			TotalItems = requests.Count
+		};
 	}
 
 	private async Task DeleteUser(Guid userId)
 	{
 		await apiClient.DeleteUser(userId, CancellationToken.None);
-		await GetUsers();
+		await usersTable.ReloadServerData();
 	}
 
 	private async Task DeletePlace(Guid placeId)
 	{
 		await apiClient.DeletePlace(placeId, CancellationToken.None);
-		await GetPlaces();
+		await placesTable.ReloadServerData();
 	}
 
 	private async Task DeleteRequest(int requestId)
 	{
 		await apiClient.DeleteLocationInfoRequest(requestId, CancellationToken.None);
-		await GetRequests();
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		await base.OnInitializedAsync();
-		await GetPlaces();
-		await GetUsers();
-		await GetRequests();
+		await requestsTable.ReloadServerData();
 	}
 }

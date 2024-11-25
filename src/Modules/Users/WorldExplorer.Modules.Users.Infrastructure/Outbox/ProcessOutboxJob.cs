@@ -1,12 +1,10 @@
 ﻿namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
 
-using System.Text.Json;
 using Application;
 using Common.Domain;
 using Common.Infrastructure.Outbox;
 using Common.Infrastructure.Serialization;
 using Database;
-using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,7 +27,7 @@ internal sealed class ProcessOutboxJob(
 		logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
 
 		var outboxMessages = await GetOutboxMessagesAsync();
-		//await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
+//		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
 
 		foreach (var outboxMessage in outboxMessages)
@@ -69,45 +67,24 @@ internal sealed class ProcessOutboxJob(
 
 	private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync()
 	{
-		//string sql =
-		//    $"""
-		//     SELECT TOP {outboxOptions.Value.BatchSize}
-		//        id AS {nameof(OutboxMessageResponse.Id)},
-		//        content AS {nameof(OutboxMessageResponse.Content)}
-		//     FROM users.outbox_messages WITH (UPDLOCK, ROWLOCK)
-		//     WHERE ProcessedOnUtc IS NULL
-		//     ORDER BY OccurredOnUtc;
-
-		//     """;
-
-		var sql = $"""
-		           SELECT TOP {outboxOptions.Value.BatchSize}
-		              id AS {nameof(OutboxMessageResponse.Id)},
-		              type AS {nameof(OutboxMessageResponse.Type)},
-		              content AS {nameof(OutboxMessageResponse.Content)}
-		           FROM users.outbox_messages
-		           WHERE ProcessedOnUtc IS NULL
-		           ORDER BY OccurredOnUtc
-		           """;
-
-		IEnumerable<OutboxMessageResponse> outboxMessages =
+		var outboxMessages =
 			await dbConnectionFactory.OutboxMessages
 									 .Where(x => x.ProcessedOnUtc == null)
 									 .Take(outboxOptions.Value.BatchSize)
 									 .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
 									 .ToListAsync();
 
-		return outboxMessages.ToList();
+		return outboxMessages;
 	}
 
 	private async Task UpdateOutboxMessageAsync(OutboxMessageResponse outboxMessage, Exception? exception)
 	{
 		var error = exception?.ToString();
-		await dbConnectionFactory.OutboxMessages.Where(x => x.Id == outboxMessage.Id)
-		                         .ExecuteUpdateAsync(m => m.SetProperty(p => p.Error, error)
-		                                                   .SetProperty(
-			                                                   p => p.ProcessedOnUtc,
-			                                                   dateTimeProvider.GetUtcNow().UtcDateTime));
+		await dbConnectionFactory.OutboxMessages
+		                         .Where(x => x.Id == outboxMessage.Id)
+		                         .ExecuteUpdateAsync(m => m
+		                                                  .SetProperty(p => p.Error, error)
+		                                                  .SetProperty(p => p.ProcessedOnUtc, dateTimeProvider.GetUtcNow().UtcDateTime));
 	}
 
 	internal sealed record OutboxMessageResponse(Guid Id, string Content, string Type);

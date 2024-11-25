@@ -9,89 +9,89 @@ using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationI
 
 public class WorldExplorerApiClient(HttpClient httpClient)
 {
-	public async Task ClearPlaces(CancellationToken none)
+	public async Task ClearPlaces(CancellationToken cancellationToken)
 	{
-		await httpClient.DeleteAsync("places", none);
+		await httpClient.DeleteAsync("places", cancellationToken);
 	}
 
-	public async Task ClearLocationInfoRequests(CancellationToken none)
+	public async Task ClearLocationInfoRequests(CancellationToken cancellationToken)
 	{
-		await httpClient.DeleteAsync("locationInfoRequests", none);
+		await httpClient.DeleteAsync("locationInfoRequests", cancellationToken);
 	}
 
-	public async Task<List<UserResponse>> GetUsers(CancellationToken none)
+	public async Task<List<UserResponse>> GetUsers(CancellationToken cancellationToken)
 	{
-		return await httpClient.GetFromJsonAsync<List<UserResponse>>("users", none) ?? [];
+		return await httpClient.GetFromJsonAsync<List<UserResponse>>("users", cancellationToken) ?? [];
 	}
 
-	public async Task<List<PlaceResponse>> GetPlaces(CancellationToken none)
+	public async Task<List<PlaceResponse>> GetPlaces(CancellationToken cancellationToken)
 	{
-		return await httpClient.GetFromJsonAsync<List<PlaceResponse>>("places", none) ?? [];
+		return await httpClient.GetFromJsonAsync<List<PlaceResponse>>("places", cancellationToken) ?? [];
 	}
 
-	public async Task<List<LocationInfoRequestResponse>> GetLocationInfoRequests(CancellationToken none)
+	public async Task<List<LocationInfoRequestResponse>> GetLocationInfoRequests(CancellationToken cancellationToken)
 	{
-		return await httpClient.GetFromJsonAsync<List<LocationInfoRequestResponse>>("locationInfoRequests", none) ?? [];
+		return await httpClient.GetFromJsonAsync<List<LocationInfoRequestResponse>>("locationInfoRequests", cancellationToken) ?? [];
 	}
 
-	public async Task DeleteUser(CancellationToken none)
+	public async Task DeleteUser(CancellationToken cancellationToken)
 	{
 		//self delete
-		await httpClient.DeleteAsync("users/profile", none);
+		await httpClient.DeleteAsync("users/profile", cancellationToken);
 	}
 
-	public async Task DeleteUser(Guid userId, CancellationToken none)
+	public async Task DeleteUser(Guid userId, CancellationToken cancellationToken)
 	{
 		// admin delete
-		await httpClient.DeleteAsync($"users/{userId}", none);
+		await httpClient.DeleteAsync($"users/{userId}", cancellationToken);
 	}
 
-	public async Task DeletePlace(Guid placeId, CancellationToken none)
+	public async Task DeletePlace(Guid placeId, CancellationToken cancellationToken)
 	{
 		// admin delete
-		await httpClient.DeleteAsync($"places/{placeId}", none);
+		await httpClient.DeleteAsync($"places/{placeId}", cancellationToken);
 	}
 
-	public async Task DeleteLocationInfoRequest(int requestId, CancellationToken none)
+	public async Task DeleteLocationInfoRequest(int requestId, CancellationToken cancellationToken)
 	{
 		// admin delete
-		await httpClient.DeleteAsync($"locationInfoRequests/{requestId}", none);
+		await httpClient.DeleteAsync($"locationInfoRequests/{requestId}", cancellationToken);
 	}
 
-	public async Task<PlaceResponse?> GetPlaceDetails(Guid placeId, CancellationToken none)
+	public async Task<PlaceResponse?> GetPlaceDetails(Guid placeId, CancellationToken cancellationToken)
 	{
-		return await httpClient.GetFromJsonAsync<PlaceResponse>($"places/{placeId}", none);
+		return await httpClient.GetFromJsonAsync<PlaceResponse>($"places/{placeId}", cancellationToken);
 	}
 
-	public async Task UpdatePlace(Guid id, PlaceRequest place, CancellationToken none)
+	public async Task UpdatePlace(Guid id, PlaceRequest place, CancellationToken cancellationToken)
 	{
-		await httpClient.PutAsJsonAsync($"places/{id}", place, none);
+		await httpClient.PutAsJsonAsync($"places/{id}", place, cancellationToken);
 	}
 
-	public Task<UserResponse?> GetUser(string providerId, CancellationToken none)
+	public Task<UserResponse?> GetUser(string providerId, CancellationToken cancellationToken)
 	{
 		//admin get
-		return httpClient.GetFromJsonAsync<UserResponse>($"users/{providerId}", none);
+		return httpClient.GetFromJsonAsync<UserResponse>($"users/{providerId}", cancellationToken);
 	}
 
-	public Task<UserResponse?> GetCurrentUser(CancellationToken none)
+	public Task<UserResponse?> GetCurrentUser(CancellationToken cancellationToken)
 	{
-		return httpClient.GetFromJsonAsync<UserResponse>("users/profile", none);
+		return httpClient.GetFromJsonAsync<UserResponse>("users/profile", cancellationToken);
 	}
 
-	public Task UpdateUser(bool trackUserLocation, CancellationToken none)
+	public Task UpdateUser(bool trackUserLocation, CancellationToken cancellationToken)
 	{
 		var request = new
 		{
 			TrackUserLocation = trackUserLocation
 		};
-		return httpClient.PutAsJsonAsync("users/profile", request, none);
+		return httpClient.PutAsJsonAsync("users/profile", request, cancellationToken);
 	}
 
-	public async Task<OperationResult<List<PlaceResponse>>> GetNearByPlaces(Location location, CancellationToken none)
+	public async Task<OperationResult<List<PlaceResponse>>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
 	{
 		var r = await httpClient.GetFromJsonAsync<OperationResult<List<PlaceResponse>>>(
-			$"places/recommendations?Latitude={location.Latitude}&Longitude={location.Longitude}", none);
+			$"places/recommendations?Latitude={location.Latitude}&Longitude={location.Longitude}", cancellationToken);
 		return r ??
 		       new OperationResult<List<PlaceResponse>>
 		       {

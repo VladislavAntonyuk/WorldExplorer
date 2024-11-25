@@ -12,9 +12,9 @@ public static class MigrationExtensions
 	{
 		using var scope = app.ApplicationServices.CreateScope();
 
-		await ApplyMigration<UsersDbContext>(scope);
-		await ApplyMigration<PlacesDbContext>(scope);
 		await ApplyMigration<TravellersDbContext>(scope);
+		await ApplyMigration<PlacesDbContext>(scope);
+		await ApplyMigration<UsersDbContext>(scope);
 	}
 
 	private static async Task ApplyMigration<TDbContext>(IServiceScope scope) where TDbContext : DbContext
