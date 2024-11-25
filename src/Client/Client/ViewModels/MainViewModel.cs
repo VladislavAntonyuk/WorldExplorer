@@ -1,5 +1,6 @@
 ﻿namespace Client.ViewModels;
 
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -60,8 +61,8 @@ public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticated
 	}
 
 	[RelayCommand]
-	private void Search(string? text)
+	private async Task Search(string? text)
 	{
-		
+		await Toast.Make("Work in progress").Show();
 	}
 }

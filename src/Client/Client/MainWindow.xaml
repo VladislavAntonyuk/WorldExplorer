@@ -24,7 +24,8 @@
 					MaximumWidthRequest="300"
 					HorizontalOptions="Fill"
 					VerticalOptions="Center"
-					SearchCommand="{Binding SearchCommand}">
+					SearchCommand="{Binding SearchCommand}"
+					SearchButtonPressed="SearchBar_OnSearchButtonPressed">
 				</SearchBar>
 			</TitleBar.Content>
 
@@ -34,6 +35,7 @@
 
 					<Button
 						Text="{x:Static localization:Localization.Help}"
+						Clicked="HelpClicked"
 						Command="{Binding HelpCommand}"/>
 
 					<Button

@@ -33,8 +33,18 @@ public partial class MainWindow : Window, IRecipient<UserAuthenticatedEvent>
 		Avatar.IsVisible = SearchBar.IsVisible = DeviceInfo.Platform == DevicePlatform.WinUI && user is not null;
 	}
 
+	private void HelpClicked(object? sender, EventArgs e)
+	{
+		mainViewModel.HelpCommand.Execute(null);
+	}
+
 	private void AboutClicked(object? sender, EventArgs e)
 	{
 		mainViewModel.AboutCommand.Execute(null);
+	}
+
+	private void SearchBar_OnSearchButtonPressed(object? sender, EventArgs e)
+	{
+		mainViewModel.SearchCommand.Execute(SearchBar.Text);
 	}
 }

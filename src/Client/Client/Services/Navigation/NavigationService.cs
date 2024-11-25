@@ -20,7 +20,13 @@ internal sealed class NavigationService : INavigationService, IDisposable
 		connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
 	}
 
-	public async Task NavigateAsync<TViewModel, TErrorViewModel>(IDictionary<string, object>? parameters = null)
+	public Task NavigateAsync<TViewModel, TErrorViewModel>()
+		where TViewModel : BaseViewModel where TErrorViewModel : BaseViewModel
+	{
+		return NavigateAsync<TViewModel, TErrorViewModel>(new Dictionary<string, object>());
+	}
+
+	public async Task NavigateAsync<TViewModel, TErrorViewModel>(IDictionary<string, object> parameters)
 		where TViewModel : BaseViewModel where TErrorViewModel : BaseViewModel
 	{
 		if (connectivity.NetworkAccess != NetworkAccess.Internet)
@@ -34,14 +40,12 @@ internal sealed class NavigationService : INavigationService, IDisposable
 			return;
 		}
 
-		parameters ??= new Dictionary<string, object>();
-
 		var state = BuildRoot<TViewModel>();
 		await Shell.Current.GoToAsync(state, true, parameters);
 
 		currentState = new NavigationState(state, parameters);
 	}
-	
+
 	public async Task NavigateBackAsync()
 	{
 		await Shell.Current.GoToAsync("..", true);
