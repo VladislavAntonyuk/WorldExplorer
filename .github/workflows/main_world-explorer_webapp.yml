@@ -71,17 +71,15 @@ jobs:
         
         - uses: cschleiden/replace-tokens@v1
           env:
-            GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
-            AI_APIKEY: ${{ secrets.AI_APIKEY }}
-            AI_PROVIDER: ${{ secrets.AI_PROVIDER }}
-            AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
-            AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
             AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME }}
             AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD }}
+            AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
+            AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
+            GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
           with:
             tokenPrefix: '#{'
             tokenSuffix: '}#'
-            files: '["**/appsettings.json"]'
+            files: '["**/appsettings.json", "**/modules.**.json"]'
         
         - name: Deploy to Azure Web App
           id: deploy-to-webapi
@@ -108,13 +106,8 @@ jobs:
   
           - uses: cschleiden/replace-tokens@v1
             env:
-              GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
-              AI_APIKEY: ${{ secrets.AI_APIKEY }}
-              AI_PROVIDER: ${{ secrets.AI_PROVIDER }}
               AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
-              AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
-              AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME }}
-              AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD }}
+              WORLD_EXPLORER_API_CLIENT_SCOPES: ${{ secrets.WORLD_EXPLORER_API_CLIENT_SCOPES }}
             with:
               tokenPrefix: '#{'
               tokenSuffix: '}#'
