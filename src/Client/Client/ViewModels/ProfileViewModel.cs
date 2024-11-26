@@ -10,6 +10,7 @@ using Services.API;
 using Services.Auth;
 using Services.Navigation;
 using Shared.Models;
+using StrawberryShake;
 
 public partial class ProfileViewModel : BaseViewModel
 {
@@ -17,6 +18,7 @@ public partial class ProfileViewModel : BaseViewModel
 	private readonly IDialogService dialogService;
 	private readonly INavigationService navigationService;
 	private readonly IUsersApi usersApi;
+	private readonly IWorldExplorerTravellersClient travellersClient;
 
 	[ObservableProperty]
 	private User? user;
@@ -24,13 +26,15 @@ public partial class ProfileViewModel : BaseViewModel
 	public ProfileViewModel(IAuthService authService,
 		INavigationService navigationService,
 		IDialogService dialogService,
-		IUsersApi usersApi)
+		IUsersApi usersApi,
+		IWorldExplorerTravellersClient travellersClient)
 	{
 		Title = Localization.Profile;
 		this.authService = authService;
 		this.navigationService = navigationService;
 		this.dialogService = dialogService;
 		this.usersApi = usersApi;
+		this.travellersClient = travellersClient;
 	}
 
 	[RelayCommand]
@@ -70,6 +74,15 @@ public partial class ProfileViewModel : BaseViewModel
 		if (getUserResult.IsSuccessful)
 		{
 			User = getUserResult.Content;
+			var traveller = await travellersClient.GetTravellerById.ExecuteAsync(User.Id);
+			if (traveller.IsSuccessResult())
+			{
+				User.Activities.AddRange(traveller.Data?.ById?.Visits.GroupBy(x=>x.VisitDate).Select(x => new UserActivity()
+				{
+					Date = x.Key.LocalDateTime,
+					ReviewedPlacesCount = x.Count()
+				}));
+			}
 		}
 		else
 		{

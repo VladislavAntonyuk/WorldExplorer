@@ -11,6 +11,6 @@ public sealed class GetTravellersHandler(TravellersDbContext context)
 	[UseSorting]
 	public IQueryable<Traveller> GetTravellers(CancellationToken ct = default)
 	{
-		return context.Travellers.AsNoTracking().OrderBy(t => t.Id).ThenBy(t => t.Id);
+		return context.Travellers.AsNoTracking().OrderBy(t => t.Id);
 	}
 }

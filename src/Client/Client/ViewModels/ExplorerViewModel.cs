@@ -18,7 +18,6 @@ using BaseViewModel = Framework.BaseViewModel;
 using Location = Location;
 
 public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
-	ILauncher launcher,
 	IGeolocation geoLocation,
 	IDialogService dialogService,
 	IDispatcher dispatcher,

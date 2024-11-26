@@ -2,18 +2,16 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WorldExplorer.Modules.Travellers.Application.Visits;
 
 public class PlacesConfiguration : IEntityTypeConfiguration<Place>
 {
 	public void Configure(EntityTypeBuilder<Place> builder)
 	{
 		builder.HasKey(e => e.Id);
-
-		builder.HasMany(x => x.Visits).WithOne();
-
-
-		//builder.HasMany(x => x.Reviews)
-		//	   .WithOne().HasForeignKey(d => d.PlaceId)
-		//	   .OnDelete(DeleteBehavior.Cascade);
+		builder.HasMany(p => p.Visits)
+		      .WithOne()
+		      .HasForeignKey(v => v.PlaceId)
+		      .OnDelete(DeleteBehavior.Cascade);
 	}
 }

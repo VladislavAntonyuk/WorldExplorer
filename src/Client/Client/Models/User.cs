@@ -2,7 +2,7 @@
 
 public class User
 {
-	public required string Id { get; set; }
+	public required Guid Id { get; set; }
 
 	public ICollection<Visit> Visits { get; set; } = new List<Visit>();
 	public List<UserActivity> Activities { get; set; } = [];

@@ -1,8 +1,8 @@
 ﻿namespace Client;
 
 using ARKit;
+using AsyncAwaitBestPractices;
 using Controls;
-using Extensions;
 using Foundation;
 using Microsoft.Maui.Handlers;
 using SceneKit;
@@ -100,10 +100,9 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 						handler.imagePlaneNodes[currentIndex].UpdateImage(data);
 					}
 				})
-				.AndForget(false, _ =>
+				.SafeFireAndForget(_ =>
 				{
 					Interlocked.Decrement(ref i);
-					return Task.CompletedTask;
 				});
 		}
 	}

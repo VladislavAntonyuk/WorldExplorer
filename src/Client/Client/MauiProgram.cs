@@ -19,9 +19,6 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
-#if DEBUG && WINDOWS
-		builder.AddAppDefaults();
-#endif
 		var config = GetConfiguration();
 		builder.Configuration.AddConfiguration(config);
 		var apiSettings = builder.Configuration.GetRequiredSection("API").Get<ApiSettings>();
@@ -105,6 +102,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
 		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
 		builder.Services.AddApi<IUsersApi>(apiSettings.Users);
+		builder.Services.AddWorldExplorerTravellersClient()
+		        .ConfigureHttpClient(client => client.BaseAddress = new Uri(apiSettings.Travellers));
 
 		builder.Services.AddSingleton<AboutPage, AboutViewModel>();
 		builder.Services.AddSingletonWithShellRoute<LoginPage, LoginViewModel>($"//{nameof(LoginPage)}");
@@ -125,9 +124,6 @@ public static class MauiProgram
 		builder.AddConfiguration("Client.appsettings.json");
 #if DEBUG
 		builder.AddConfiguration("Client.appsettings.Development.json");
-#if WINDOWS
-		builder.AddInMemoryCollection(AspireAppSettings.Settings);
-#endif
 #endif
 		return builder.Build();
 	}

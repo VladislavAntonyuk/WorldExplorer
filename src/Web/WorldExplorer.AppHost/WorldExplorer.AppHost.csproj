@@ -10,7 +10,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Client\Client.ClientStub\Client.ClientStub.csproj" />
 		<ProjectReference Include="..\WorldExplorer.ApiService\WorldExplorer.ApiService.csproj" />
 		<ProjectReference Include="..\WorldExplorer.Web\WorldExplorer.Web.csproj" />
 	</ItemGroup>

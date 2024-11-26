@@ -11,5 +11,6 @@
 	},
 	"GoogleSearch": {
 		"ApiKey": "321"
-	}
+	},
+	"MinImagesCount": 70
 }

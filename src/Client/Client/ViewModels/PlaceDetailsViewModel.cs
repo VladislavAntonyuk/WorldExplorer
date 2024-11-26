@@ -8,8 +8,11 @@ using Services;
 using Services.API;
 using Services.Navigation;
 using Shared.Models;
+using StrawberryShake;
 
-public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
+public sealed partial class PlaceDetailsViewModel(
+	IPlacesApi placesApi,
+	IWorldExplorerTravellersClient travellersClient,
 	ILauncher launcher,
 	IShare share,
 	IArService arService,
@@ -57,6 +60,16 @@ public sealed partial class PlaceDetailsViewModel(IPlacesApi placesApi,
 				if (Place.Images.Count > 0 && arService.IsSupported())
 				{
 					IsLiveViewEnabled = true;
+				}
+				var placeReviews = await travellersClient.GetVisitsByPlaceId.ExecuteAsync(Place.Id);
+				if (placeReviews.IsSuccessResult())
+				{
+					Place.Reviews.AddRange(placeReviews.Data?.VisitsByPlaceId?.Items?.Select(x => new Review
+					{
+						Comment = x.Review?.Comment,
+						Rating = x.Review?.Rating ?? 0,
+						ReviewDate = x.VisitDate
+					}));
 				}
 			}
 			else

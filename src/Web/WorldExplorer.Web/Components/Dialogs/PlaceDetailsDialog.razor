@@ -37,7 +37,7 @@
 			}
 
 			<div class="d-flex flex-column align-center">
-				<MudRating ReadOnly="true" SelectedValue="@((int)place.Rating)"></MudRating>
+				<MudRating ReadOnly="true" SelectedValue="@Rating"></MudRating>
 			</div>
 
 			<MudContainer Class="mt-4" Style="max-height: 300px; overflow-y: scroll">
@@ -49,7 +49,7 @@
 			<MudList T="string">
 				@foreach (var review in reviews)
 				{
-					<MudListItem Text="@review.Id.ToString()" SecondaryText="@review.Id.ToString()"/>
+					<MudListItem Text="@review.ReviewDate.ToString()" SecondaryText="@review.Comment"/>
 					<MudDivider/>
 				}
 			</MudList>

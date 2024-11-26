@@ -6,6 +6,7 @@ using Domain.Places;
 using Image;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Quartz;
 
 [DisallowConcurrentExecution]
@@ -13,10 +14,10 @@ internal sealed class PlaceDetailsJob(
 	PlacesDbContext dbContext,
 	IAiService aiService,
 	IImageSearchService imageSearchService,
+	IOptions<PlacesSettings> placeOptions,
 	ILogger<PlaceDetailsJob> logger) : IJob
 {
 	private const string ModuleName = "Places";
-	private const int MinImagesCount = 70;
 
 	public async Task Execute(IJobExecutionContext context)
 	{
@@ -25,7 +26,7 @@ internal sealed class PlaceDetailsJob(
 		var notFilledPlaces = await dbContext.Places
 											 .AsTracking()
 											 .Include(x => x.Images)
-											 .Where(x => x.Images.Count < MinImagesCount || string.IsNullOrEmpty(x.Description))
+											 .Where(x => x.Images.Count < placeOptions.Value.MinImagesCount || string.IsNullOrEmpty(x.Description))
 											 .OrderBy(x => x.Images.Count)
 											 .ToListAsync(context.CancellationToken);
 
@@ -60,7 +61,7 @@ internal sealed class PlaceDetailsJob(
 				place.Update(place.Name, place.Location, placeDescription);
 			}
 
-			if (place.Images.Count < MinImagesCount)
+			if (place.Images.Count < placeOptions.Value.MinImagesCount)
 			{
 				var image = await imageSearchService.GenerateImage(place.Name, Location.FromPoint(place.Location), cancellationToken);
 				if (!string.IsNullOrWhiteSpace(image))
@@ -73,7 +74,7 @@ internal sealed class PlaceDetailsJob(
 			}
 		}
 
-		if (place.Images.Count >= MinImagesCount)
+		if (place.Images.Count >= placeOptions.Value.MinImagesCount)
 		{
 			return;
 		}

@@ -12,5 +12,6 @@
 	"GoogleSearch": {
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"
 	},
-	"LocationRequestNearbyDistance": "3000"
+	"LocationRequestNearbyDistance": "3000",
+	"MinImagesCount": 70
 }

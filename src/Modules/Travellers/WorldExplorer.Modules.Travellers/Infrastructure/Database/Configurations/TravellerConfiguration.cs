@@ -10,10 +10,9 @@ public class TravellerConfiguration : IEntityTypeConfiguration<Traveller>
 	{
 		builder.HasKey(e => e.Id);
 
-		builder.HasMany(x => x.Routes).WithOne();
-
-		//builder.HasMany(x => x.Reviews)
-		//	   .WithOne().HasForeignKey(d => d.PlaceId)
-		//	   .OnDelete(DeleteBehavior.Cascade);
+		builder.HasMany(t => t.Visits)
+		      .WithOne()
+		      .HasForeignKey(v => v.TravellerId)
+		      .OnDelete(DeleteBehavior.Cascade);
 	}
 }

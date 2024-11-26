@@ -118,23 +118,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.ToTable("Travellers", "travellers");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Travellers.TravellerRoute", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TravellerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TravellerId");
-
-                    b.ToTable("TravellerRoute", "travellers");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Place", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Place", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -145,7 +129,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.ToTable("Places", "travellers");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Review", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Review", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,24 +141,24 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReviewDate")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("VisitId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("VisitId")
+                        .IsUnique();
 
                     b.ToTable("Review", "travellers");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Visit", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Visit", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PlaceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ReviewId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TravellerId")
@@ -187,68 +171,49 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
                     b.HasIndex("PlaceId");
 
-                    b.HasIndex("ReviewId");
+                    b.HasIndex("TravellerId", "PlaceId")
+                        .IsUnique();
 
                     b.ToTable("Visits", "travellers");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Travellers.TravellerRoute", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Review", b =>
                 {
-                    b.HasOne("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", null)
-                        .WithMany("Routes")
-                        .HasForeignKey("TravellerId");
-
-                    b.OwnsMany("WorldExplorer.Modules.Travellers.Application.Travellers.Location", "Locations", b1 =>
-                        {
-                            b1.Property<Guid>("TravellerRouteId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("float");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("float");
-
-                            b1.HasKey("TravellerRouteId", "__synthesizedOrdinal");
-
-                            b1.ToTable("TravellerRoute", "travellers");
-
-                            b1.ToJson("Locations");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TravellerRouteId");
-                        });
-
-                    b.Navigation("Locations");
+                    b.HasOne("WorldExplorer.Modules.Travellers.Application.Visits.Visit", null)
+                        .WithOne("Review")
+                        .HasForeignKey("WorldExplorer.Modules.Travellers.Application.Visits.Review", "VisitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Visit", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Visit", b =>
                 {
-                    b.HasOne("WorldExplorer.Modules.Travellers.Place", null)
+                    b.HasOne("WorldExplorer.Modules.Travellers.Application.Visits.Place", null)
                         .WithMany("Visits")
                         .HasForeignKey("PlaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorldExplorer.Modules.Travellers.Review", "Review")
-                        .WithMany()
-                        .HasForeignKey("ReviewId");
-
-                    b.Navigation("Review");
+                    b.HasOne("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", null)
+                        .WithMany("Visits")
+                        .HasForeignKey("TravellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", b =>
                 {
-                    b.Navigation("Routes");
+                    b.Navigation("Visits");
                 });
 
-            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Place", b =>
+            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Place", b =>
                 {
                     b.Navigation("Visits");
+                });
+
+            modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Visit", b =>
+                {
+                    b.Navigation("Review");
                 });
 #pragma warning restore 612, 618
         }

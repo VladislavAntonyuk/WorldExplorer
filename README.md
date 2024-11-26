@@ -59,3 +59,11 @@ Sign aab
 ```bash
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore world-explorer.jks com.vladislavantonyuk.worldexplorer.aab world-explorer  -storepass YOUR_PASSWORD
 ```
+
+
+## Graph QL
+
+```bash
+dotnet tool install StrawberryShake.Tools -g --prerelease
+dotnet graphql init https://localhost:5002/graphql/ -n Travellers -p ./TravellersGraghQL
+```

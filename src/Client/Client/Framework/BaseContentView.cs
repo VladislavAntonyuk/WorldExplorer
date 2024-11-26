@@ -1,6 +1,6 @@
 ﻿namespace Client.Framework;
 
-using Extensions;
+using AsyncAwaitBestPractices;
 
 public abstract class BaseContentView<T> : ContentView where T : BaseViewModel
 {
@@ -9,11 +9,11 @@ public abstract class BaseContentView<T> : ContentView where T : BaseViewModel
 		BindingContext = ViewModel = viewModel;
 		Loaded += delegate
 		{
-			InitializeAsync().AndForget(true);
+			InitializeAsync().SafeFireAndForget();
 		};
 		Unloaded += delegate
 		{
-			UnInitializeAsync().AndForget(true);
+			UnInitializeAsync().SafeFireAndForget();
 		};
 	}
 
@@ -27,7 +27,7 @@ public abstract class BaseContentView<T> : ContentView where T : BaseViewModel
 
 	protected virtual Task UnInitializeAsync()
 	{
-		ViewModel.UnInitializeAsync().AndForget();
+		ViewModel.UnInitializeAsync();
 		return Task.CompletedTask;
 	}
 }

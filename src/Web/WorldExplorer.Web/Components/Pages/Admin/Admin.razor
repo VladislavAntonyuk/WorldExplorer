@@ -20,7 +20,6 @@
 						<MudTh>Id</MudTh>
 						<MudTh>Name</MudTh>
 						<MudTh>Location</MudTh>
-						<MudTh>Rating</MudTh>
 						<MudTh>Is Filled</MudTh>
 						<MudTh></MudTh>
 					</HeaderContent>
@@ -33,7 +32,6 @@
 						</MudTd>
 						<MudTd DataLabel="Name">@place.Name</MudTd>
 						<MudTd DataLabel="Location">@place.Location</MudTd>
-						<MudTd DataLabel="Rating">@place.Rating</MudTd>
 						<MudTd DataLabel="Is Filled">@(!string.IsNullOrEmpty(place.Description))</MudTd>
 						<MudTd DataLabel="">
 							<MudButton Color="Color.Error" OnClick="() => DeletePlace(place.Id)">Delete</MudButton>

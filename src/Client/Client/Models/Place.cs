@@ -10,7 +10,7 @@ public class Place
 
 	public required Location Location { get; set; }
 	public double Rating => Reviews.Count > 0 ? Reviews.Average(x => x.Rating) : 0;
-	public ICollection<Review> Reviews { get; set; } = new List<Review>();
+	public List<Review> Reviews { get; set; } = [];
 	public string? MainImage => Images.FirstOrDefault();
 	public static readonly Place Default = new()
 	{
@@ -24,7 +24,6 @@ public sealed record PlaceResponse(
 	string Name,
 	string? Description,
 	Location Location,
-	double Rating,
 	ICollection<string> Images)
 {
 	public string? MainImage => Images.FirstOrDefault();
@@ -32,5 +31,7 @@ public sealed record PlaceResponse(
 
 public class Review
 {
+	public DateTimeOffset ReviewDate { get; set; }
+	public string? Comment { get; set; }
 	public double Rating { get; set; }
 }

@@ -34,8 +34,7 @@ public partial class PlaceDetails(WorldExplorerApiClient apiClient, ISnackbar sn
 			Description = placeResponse.Description,
 			Location = placeResponse.Location,
 			Name = placeResponse.Name,
-			Images = placeResponse.Images,
-			Rating = placeResponse.Rating
+			Images = placeResponse.Images
 		};
 	}
 

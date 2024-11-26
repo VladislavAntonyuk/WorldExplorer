@@ -1,5 +1,4 @@
-﻿namespace WorldExplorer.Modules.Travellers;
-
+﻿namespace WorldExplorer.Modules.Travellers.Application.Visits;
 public class Place
 {
 	public Guid Id { get; set; }

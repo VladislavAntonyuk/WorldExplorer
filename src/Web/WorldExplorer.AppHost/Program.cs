@@ -54,8 +54,4 @@ if (!builder.Environment.IsDevelopment())
 	apiService.WithReference(serviceBus);
 }
 
-builder.AddMobileProject("mauiclient", "../../Client/Client", clientStubProjectPath: "../../Client/Client.ClientStub/Client.ClientStub.csproj")
-	   .WithReference(apiService)
-	   .WaitFor(apiService);
-
 await builder.Build().RunAsync();

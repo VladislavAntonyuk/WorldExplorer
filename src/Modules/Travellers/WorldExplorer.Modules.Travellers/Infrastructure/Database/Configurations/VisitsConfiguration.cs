@@ -1,7 +1,9 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Configurations;
 
+using Application.Travellers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WorldExplorer.Modules.Travellers.Application.Visits;
 
 public class VisitsConfiguration : IEntityTypeConfiguration<Visit>
 {
@@ -9,9 +11,6 @@ public class VisitsConfiguration : IEntityTypeConfiguration<Visit>
 	{
 		builder.HasKey(e => e.Id);
 
-
-		//builder.HasMany(x => x.Reviews)
-		//	   .WithOne().HasForeignKey(d => d.PlaceId)
-		//	   .OnDelete(DeleteBehavior.Cascade);
+		builder.HasIndex(v => new { v.TravellerId, v.PlaceId }).IsUnique();
 	}
 }

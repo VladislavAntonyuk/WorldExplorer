@@ -87,21 +87,6 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Review",
-                schema: "travellers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Review", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Travellers",
                 schema: "travellers",
                 columns: table => new
@@ -121,8 +106,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TravellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PlaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VisitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    VisitDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,38 +119,42 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Visits_Review_ReviewId",
-                        column: x => x.ReviewId,
+                        name: "FK_Visits_Travellers_TravellerId",
+                        column: x => x.TravellerId,
                         principalSchema: "travellers",
-                        principalTable: "Review",
-                        principalColumn: "Id");
+                        principalTable: "Travellers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TravellerRoute",
+                name: "Review",
                 schema: "travellers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TravellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Locations = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VisitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TravellerRoute", x => x.Id);
+                    table.PrimaryKey("PK_Review", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TravellerRoute_Travellers_TravellerId",
-                        column: x => x.TravellerId,
+                        name: "FK_Review_Visits_VisitId",
+                        column: x => x.VisitId,
                         principalSchema: "travellers",
-                        principalTable: "Travellers",
-                        principalColumn: "Id");
+                        principalTable: "Visits",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TravellerRoute_TravellerId",
+                name: "IX_Review_VisitId",
                 schema: "travellers",
-                table: "TravellerRoute",
-                column: "TravellerId");
+                table: "Review",
+                column: "VisitId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Visits_PlaceId",
@@ -175,10 +163,11 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                 column: "PlaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Visits_ReviewId",
+                name: "IX_Visits_TravellerId_PlaceId",
                 schema: "travellers",
                 table: "Visits",
-                column: "ReviewId");
+                columns: new[] { "TravellerId", "PlaceId" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -201,7 +190,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                 schema: "travellers");
 
             migrationBuilder.DropTable(
-                name: "TravellerRoute",
+                name: "Review",
                 schema: "travellers");
 
             migrationBuilder.DropTable(
@@ -209,15 +198,11 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                 schema: "travellers");
 
             migrationBuilder.DropTable(
-                name: "Travellers",
-                schema: "travellers");
-
-            migrationBuilder.DropTable(
                 name: "Places",
                 schema: "travellers");
 
             migrationBuilder.DropTable(
-                name: "Review",
+                name: "Travellers",
                 schema: "travellers");
         }
     }

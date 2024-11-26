@@ -8,29 +8,28 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/" />
-  <Folder Name="/src/Client/">
-    <Project Path="src/Client/Client.ClientStub/Client.ClientStub.csproj" />
+  <Folder Name="/src/Client/" Id="c5a3b5ea-be9f-76e5-e9b8-8a22b289b295">
     <Project Path="src/Client/Client/Client.csproj">
       <Deploy />
     </Project>
   </Folder>
-  <Folder Name="/src/Common/">
+  <Folder Name="/src/Common/" Id="bff2df6e-aa54-47c7-211f-79accbb4577c">
     <Project Path="src/Common/WorldExplorer.Common.Application/WorldExplorer.Common.Application.csproj" />
     <Project Path="src/Common/WorldExplorer.Common.Domain/WorldExplorer.Common.Domain.csproj" />
     <Project Path="src/Common/WorldExplorer.Common.Infrastructure/WorldExplorer.Common.Infrastructure.csproj" />
     <Project Path="src/Common/WorldExplorer.Common.Presentation/WorldExplorer.Common.Presentation.csproj" />
   </Folder>
-  <Folder Name="/src/Modules/" />
-  <Folder Name="/src/Modules/Places/">
+  <Folder Name="/src/Modules/" Id="ec447dcf-abfa-6e24-52a5-d7fd48a5c558" />
+  <Folder Name="/src/Modules/Places/" Id="099873af-e720-6d90-987a-e56777ad913c">
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Application/WorldExplorer.Modules.Places.Application.csproj" />
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Domain/WorldExplorer.Modules.Places.Domain.csproj" />
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Infrastructure/WorldExplorer.Modules.Places.Infrastructure.csproj" />
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Presentation/WorldExplorer.Modules.Places.Presentation.csproj" />
   </Folder>
-  <Folder Name="/src/Modules/Travellers/">
+  <Folder Name="/src/Modules/Travellers/" Id="188afd0a-93f8-39a7-24f3-4b69338911e8">
     <Project Path="src/Modules/Travellers/WorldExplorer.Modules.Travellers/WorldExplorer.Modules.Travellers.csproj" />
   </Folder>
-  <Folder Name="/src/Modules/Users/">
+  <Folder Name="/src/Modules/Users/" Id="a26f344d-182e-ce53-ad51-2154946ac6f3">
     <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.Application/WorldExplorer.Modules.Users.Application.csproj" />
     <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.ArchitectureTests/WorldExplorer.Modules.Users.ArchitectureTests.csproj" />
     <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.Domain/WorldExplorer.Modules.Users.Domain.csproj" />
@@ -40,7 +39,7 @@
     <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.Presentation/WorldExplorer.Modules.Users.Presentation.csproj" />
     <Project Path="src/Modules/Users/WorldExplorer.Modules.Users.UnitTests/WorldExplorer.Modules.Users.UnitTests.csproj" />
   </Folder>
-  <Folder Name="/src/Web/">
+  <Folder Name="/src/Web/" Id="03997797-e7f5-0643-168d-b8ea7178c2fe">
     <Project Path="src/Web/WorldExplorer.ApiService/WorldExplorer.ApiService.csproj" />
     <Project Path="src/Web/WorldExplorer.AppHost/WorldExplorer.AppHost.csproj" />
     <Project Path="src/Web/WorldExplorer.ServiceDefaults/WorldExplorer.ServiceDefaults.csproj" />

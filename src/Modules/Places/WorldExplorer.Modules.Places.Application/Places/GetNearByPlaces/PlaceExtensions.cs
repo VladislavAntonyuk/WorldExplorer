@@ -9,7 +9,7 @@ internal static class PlaceExtensions
 	public static PlaceResponse ToPlaceResponse(this Place place)
 	{
 		return new PlaceResponse(place.Id, place.Name, place.Description,
-								 Location.FromPoint(place.Location), 1,
+								 Location.FromPoint(place.Location),
 		                         place.Images.Select(x => x.Source).ToList());
 	}
 }

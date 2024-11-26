@@ -4,6 +4,7 @@ using Abstractions.Data;
 using Application;
 using Application.Travellers.GetById;
 using Application.Travellers.GetTravellers;
+using Application.Visits.GetVisits;
 using Common.Infrastructure;
 using Infrastructure.Database;
 using Infrastructure.Inbox;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Users.IntegrationEvents;
 using WorldExplorer.Common.Application.EventBus;
 using WorldExplorer.Common.Application.Messaging;
+using WorldExplorer.Modules.Travellers.Application.Travellers;
 
 public static class TravellersModule
 {
@@ -74,14 +76,15 @@ public static class TravellersModule
 
 		builder.Services.AddScoped<ITravellerRepository, TravellerRepository>();
 		builder.Services.AddScoped<GetTravellersHandler>();
-		builder.Services.AddScoped<GetTravellersHandler>();
 		builder.Services.AddScoped<GetTravellerByIdHandler>();
+		builder.Services.AddScoped<GetVisitsHandler>();
 
 		builder.Services.AddGraphQLServer()
 		       .RegisterDbContextFactory<TravellersDbContext>()
 		       .AddQueryType(d => d.Name("Travellers"))
 		       .AddType<GetTravellersHandler>()
 		       .AddType<GetTravellerByIdHandler>()
+		       .AddType<GetVisitsHandler>()
 		       .AddQueryConventions()
 		       .AddFiltering()
 		       .AddSorting();

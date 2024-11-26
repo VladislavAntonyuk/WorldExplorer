@@ -12,6 +12,7 @@ public partial class PlaceDetailsDialog(
 {
 	private PlaceResponse? place;
 	private IReadOnlyCollection<ReviewResponse> reviews = [];
+	private int Rating => reviews.Count > 0 ? (int)reviews.Average(x => x.Rating) : 0;
 
 	[Parameter]
 	public required Guid PlaceId { get; set; }
@@ -35,14 +36,15 @@ public partial class PlaceDetailsDialog(
 			}
 			else
 			{
-				var reviewResponse = await travellersClient.GetTravellers.ExecuteAsync();
+				var reviewResponse = await travellersClient.GetVisitsByPlaceId.ExecuteAsync(place.Id);
 				if (reviewResponse.IsSuccessResult())
 				{
-					reviews = reviewResponse.Data?.Travellers?.Items?.Select(x => new ReviewResponse
-					                        {
-						                        Id = x.Id
-					                        })
-					                        .ToList() ?? [];
+					reviews = reviewResponse.Data?.VisitsByPlaceId?.Items?.Select(x => new ReviewResponse()
+					{
+						Comment = x.Review?.Comment,
+						Rating = x.Review?.Rating ?? 0,
+						ReviewDate = x.VisitDate
+					}).ToList() ?? [];
 				}
 			}
 		} while (string.IsNullOrWhiteSpace(place?.Description));
@@ -51,5 +53,7 @@ public partial class PlaceDetailsDialog(
 
 internal class ReviewResponse
 {
-	public Guid Id { get; set; }
+	public DateTimeOffset ReviewDate { get; set; }
+	public string? Comment { get; set; }
+	public double Rating { get; set; }
 }
