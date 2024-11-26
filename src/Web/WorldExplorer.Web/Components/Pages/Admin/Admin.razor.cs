@@ -3,7 +3,6 @@
 using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
-using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequest;
 using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 
 public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)

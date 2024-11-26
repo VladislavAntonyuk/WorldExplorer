@@ -1,7 +1,5 @@
 ﻿namespace Client.ViewModels;
 
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Controls.WorldExplorerMap;
@@ -13,7 +11,6 @@ using Services;
 using Services.API;
 using Services.Navigation;
 using Shared.Models;
-using Views;
 using BaseViewModel = Framework.BaseViewModel;
 using Location = Location;
 

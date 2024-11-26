@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlaces;
 
-using Abstractions;
 using GetNearByPlaces;
 using GetPlace;
 using WorldExplorer.Common.Application.Messaging;

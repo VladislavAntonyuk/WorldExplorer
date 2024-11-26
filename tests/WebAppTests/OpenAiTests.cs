@@ -5,7 +5,6 @@ using FluentAssertions;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using OpenAI;
-using OpenAI.Chat;
 using Xunit.Abstractions;
 using ChatMessage = Microsoft.Extensions.AI.ChatMessage;
 

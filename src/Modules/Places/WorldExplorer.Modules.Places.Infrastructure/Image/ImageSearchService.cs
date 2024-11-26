@@ -1,13 +1,11 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Image;
 
-using System.Buffers.Text;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
 using Application.Abstractions;
 using Microsoft.Extensions.Configuration;
-using AI;
 using System.Threading;
 
 public class ImageSearchService(IHttpClientFactory httpClientFactory, IConfiguration configuration)

@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Users.Infrastructure.Inbox;
 
-using System.Text.Json;
 using Common.Application.EventBus;
 using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Serialization;

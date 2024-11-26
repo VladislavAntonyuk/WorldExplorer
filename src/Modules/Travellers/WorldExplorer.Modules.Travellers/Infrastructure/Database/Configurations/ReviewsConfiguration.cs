@@ -2,7 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WorldExplorer.Common.Domain;
 using WorldExplorer.Modules.Travellers.Application.Visits;
 
 public class ReviewsConfiguration : IEntityTypeConfiguration<Review>

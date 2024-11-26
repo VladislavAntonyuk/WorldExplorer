@@ -11,6 +11,7 @@ using Domain.Places;
 using Image;
 using LocationInfo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Places;
@@ -34,13 +35,14 @@ public static class PlacesModule
 		builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 		builder.Services.AddScoped<ILocationInfoRepository, LocationInfoRepository>();
 
-		if (builder.Environment.IsDevelopment())
+		if (builder.Configuration.GetValue<string>("Places:AIProvider") == "OpenAI")
 		{
-			builder.AddOllamaApiClient("ai-llama3-2");
+			builder.AddOpenAIClient("openai");
+			//builder.AddOpenAiClient("openai");
 		}
 		else
 		{
-			builder.AddOpenAIClient("openai");
+			builder.AddOllamaChatClient("ai-llama3-2");
 		}
 
 		builder.Services.AddScoped<IAiService, AiService>();

@@ -1,10 +1,8 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
 
 using Domain.LocationInfo;
-using LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NetTopologySuite.Geometries;
 
 public class LocationInfoRequestConfiguration : IEntityTypeConfiguration<LocationInfoRequest>
 {

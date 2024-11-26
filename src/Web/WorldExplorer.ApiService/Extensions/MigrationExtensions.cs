@@ -3,7 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 using Modules.Places.Infrastructure.Database;
 using Modules.Travellers.Infrastructure.Database;
-using Modules.Users.Domain.Users;
 using Modules.Users.Infrastructure.Database;
 
 public static class MigrationExtensions

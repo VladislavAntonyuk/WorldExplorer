@@ -2,7 +2,6 @@
 
 using Abstractions;
 using Domain.LocationInfo;
-using GetLocationInfoRequests;
 using WorldExplorer.Common.Application.Messaging;
 using WorldExplorer.Common.Domain;
 

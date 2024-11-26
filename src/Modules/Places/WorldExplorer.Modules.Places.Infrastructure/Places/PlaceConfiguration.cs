@@ -1,7 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
 using Domain.Places;
-using LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

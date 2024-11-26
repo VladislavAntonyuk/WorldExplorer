@@ -1,6 +1,5 @@
 ﻿namespace Client;
 
-using System.Collections.ObjectModel;
 using Android.Content;
 using Android.Graphics;
 using Android.Opengl;

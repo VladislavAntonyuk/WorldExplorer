@@ -1,13 +1,10 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
-using System.Diagnostics.Eventing.Reader;
-using System.Text.Json;
 using Common.Application.EventBus;
 using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Serialization;
 using Database;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbContext dbConnectionFactory)

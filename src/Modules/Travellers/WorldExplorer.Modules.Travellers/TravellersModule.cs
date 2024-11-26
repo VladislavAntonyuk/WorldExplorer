@@ -1,7 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Travellers;
 
 using Abstractions.Data;
-using Application;
 using Application.Travellers.GetById;
 using Application.Travellers.GetTravellers;
 using Application.Visits.GetVisits;
@@ -14,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Users.IntegrationEvents;
 using WorldExplorer.Common.Application.EventBus;
-using WorldExplorer.Common.Application.Messaging;
 using WorldExplorer.Modules.Travellers.Application.Travellers;
 
 public static class TravellersModule

@@ -1,7 +1,5 @@
 ﻿namespace WorldExplorer.Web;
 
-using Microsoft.Identity.Abstractions;
-using Microsoft.Identity.Web;
 using Modules.Places.Application.Abstractions;
 using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;

@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Users.Infrastructure.Inbox;
 
-using System.Data.Common;
 using Common.Application.EventBus;
 using Common.Infrastructure.Inbox;
 using Database;

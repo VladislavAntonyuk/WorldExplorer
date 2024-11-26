@@ -7,7 +7,8 @@
 		"Inbox": {
 			"IntervalInSeconds": 5,
 			"BatchSize": 50
-		}
+		},
+		"AIProvider": "OpenAI"
 	},
 	"GoogleSearch": {
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"

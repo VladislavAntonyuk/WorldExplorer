@@ -20,22 +20,18 @@ var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
 						.WithReference(cache)
 						.WaitFor(cache);
 
-if (builder.Environment.IsDevelopment())
-{
-	var aiService = builder.AddOllama("ai")
-						   .WithLifetime(ContainerLifetime.Persistent)
-						   .WithDataVolume("ollama")
-						   .WithOpenWebUI(s => s.WithLifetime(ContainerLifetime.Persistent))
-						   .AddModel("llama3.2:latest");// phi3.5:latest // llama3.2:latest
 
-	apiService.WithReference(aiService)
-			  .WaitFor(aiService);
-}
-else
-{
-	var openai = builder.AddConnectionString("openai");
-	apiService.WithReference(openai);
-}
+var ollama = builder.AddOllama("ai")
+					   .WithLifetime(ContainerLifetime.Persistent)
+					   .WithDataVolume("ollama")
+					   .WithOpenWebUI(s => s.WithLifetime(ContainerLifetime.Persistent))
+					   .AddModel("llama3.2:latest");// phi3.5:latest // llama3.2:latest
+
+var openai = builder.AddConnectionString("openai");
+
+apiService.WithReference(openai)
+          .WithReference(ollama)
+		  .WaitFor(ollama);
 
 builder.AddProject<WorldExplorer_Web>("webfrontend")
 	   .WithExternalHttpEndpoints()
