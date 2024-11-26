@@ -11,7 +11,12 @@ public sealed class GetVisitsHandler(TravellersDbContext context)
 	[UseSorting]
 	public IQueryable<Visit> GetVisitsByTravellerId(Guid travellerId, CancellationToken ct = default)
 	{
-		return context.Visits.AsNoTracking().Where(x=>x.TravellerId == travellerId).OrderBy(t => t.VisitDate).ThenBy(t => t.Id);
+		return context.Visits
+					  .AsNoTracking()
+					  .Include(x => x.Review)
+					  .Where(x => x.TravellerId == travellerId)
+					  .OrderBy(t => t.VisitDate)
+					  .ThenBy(t => t.Id);
 	}
 
 	[UseOffsetPaging]
@@ -19,6 +24,11 @@ public sealed class GetVisitsHandler(TravellersDbContext context)
 	[UseSorting]
 	public IQueryable<Visit> GetVisitsByPlaceId(Guid placeId, CancellationToken ct = default)
 	{
-		return context.Visits.AsNoTracking().Where(x=>x.PlaceId == placeId).OrderBy(t => t.VisitDate).ThenBy(t => t.Id);
+		return context.Visits
+					  .AsNoTracking()
+					  .Include(x => x.Review)
+					  .Where(x => x.PlaceId == placeId)
+					  .OrderBy(t => t.VisitDate)
+					  .ThenBy(t => t.Id);
 	}
 }
