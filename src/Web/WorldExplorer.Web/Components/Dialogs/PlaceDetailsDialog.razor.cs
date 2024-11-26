@@ -56,4 +56,5 @@ internal class ReviewResponse
 	public DateTimeOffset ReviewDate { get; set; }
 	public string? Comment { get; set; }
 	public double Rating { get; set; }
+	public string Traveller { get; set; }
 }
