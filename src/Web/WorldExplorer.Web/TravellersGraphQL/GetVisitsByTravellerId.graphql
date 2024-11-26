@@ -1,0 +1,16 @@
+query GetVisitsByTravellerId($id:UUID!) {
+  visitsByTravellerId(travellerId: $id) {
+    items {
+      id
+      placeId
+      travellerId
+      visitDate
+      review {
+        comment
+        id
+        rating
+        visitId
+      }
+    }
+  }
+}

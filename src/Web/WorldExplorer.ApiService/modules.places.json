@@ -1,0 +1,17 @@
+﻿{
+	"Places": {
+		"Outbox": {
+			"IntervalInSeconds": 5,
+			"BatchSize": 50
+		},
+		"Inbox": {
+			"IntervalInSeconds": 5,
+			"BatchSize": 50
+		}
+	},
+	"GoogleSearch": {
+		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"
+	},
+	"LocationRequestNearbyDistance": "3000",
+	"MinImagesCount": 70
+}

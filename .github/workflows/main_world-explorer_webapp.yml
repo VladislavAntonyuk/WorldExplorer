@@ -4,12 +4,16 @@ on:
     push:
         branches: [ main ]
         paths:
-          - 'src/WebApp/**'
+          - 'src/Web/**'
+          - 'src/Common/**'
+          - 'src/Modules/**'
           - '.github/workflows/main_world-explorer_webapp.yml'
     pull_request:
         branches: [ main ]
         paths:
-          - 'src/WebApp/**'
+          - 'src/Web/**'
+          - 'src/Common/**'
+          - 'src/Modules/**'
           - '.github/workflows/main_world-explorer_webapp.yml'
 
 concurrency:
@@ -32,48 +36,103 @@ jobs:
                     dotnet-version: '9.x'
 
             -   name: Publish WebApp
-                run: dotnet publish src/WebApp/WebApp.csproj -o '${{env.DOTNET_ROOT}}/webapp' /p:Version="${{ env.VERSION }}"
+                run: dotnet publish src/Web/WorldExplorer.Web/WorldExplorer.Web.csproj -o '${{env.DOTNET_ROOT}}/webapp' /p:Version="${{ env.VERSION }}"
 
-            -   name: Upload artifact for deployment job
+            -   name: Publish WebApi
+                run: dotnet publish src/Web/WorldExplorer.ApiService/WorldExplorer.ApiService.csproj -o '${{env.DOTNET_ROOT}}/webapi' /p:Version="${{ env.VERSION }}"
+
+            -   name: Upload artifact for webapp job
                 uses: actions/upload-artifact@v4
                 with:
                     name: webapp
                     path: ${{env.DOTNET_ROOT}}/webapp
                     retention-days: 1
 
-    deployWebApp:
+            -   name: Upload artifact for webapi job
+                uses: actions/upload-artifact@v4
+                with:
+                    name: webapi
+                    path: ${{env.DOTNET_ROOT}}/webapi
+                    retention-days: 1
+
+    deployWebApi:
         runs-on: windows-latest
         needs: buildWebApp
         if: github.event_name != 'pull_request'
         environment:
             name: 'Production'
-            url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+            url: ${{ steps.deploy-to-webapi.outputs.webapp-url }}
+        permissions:
+            id-token: write #This is required for requesting the JWT
 
         steps:
-            -   name: Download artifact from build job
-                uses: actions/download-artifact@v4
-                with:
-                    name: webapp
+        - name: Download artifact from build job
+          uses: actions/download-artifact@v4
+          with:
+            name: webapi
+        
+        - uses: cschleiden/replace-tokens@v1
+          env:
+            GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
+            AI_APIKEY: ${{ secrets.AI_APIKEY }}
+            AI_PROVIDER: ${{ secrets.AI_PROVIDER }}
+            AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
+            AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
+            AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME }}
+            AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD }}
+          with:
+            tokenPrefix: '#{'
+            tokenSuffix: '}#'
+            files: '["**/appsettings.json"]'
+        
+        - name: Login to Azure
+          uses: azure/login@v2
+          with:
+            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B41014FE0812425484360E263A591BB9 }}
+            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6F9E8AEE7E5E449A82CB6A7AF7F4AC42 }}
+            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CB387DEDB2F0421DAB8A0F2C2612E4AC }}
+        
+        - name: Deploy to Azure Web App
+          id: deploy-to-webapi
+          uses: azure/webapps-deploy@v3
+          with:
+            app-name: 'world-explorer-api'
+            slot-name: 'Production'
+            package: .
 
-            -   uses: cschleiden/replace-tokens@v1
-                env:
-                    GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
-                    AI_APIKEY: ${{ secrets.AI_APIKEY }}
-                    AI_PROVIDER: ${{ secrets.AI_PROVIDER }}
-                    AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
-                    AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
-                    AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME }}
-                    AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD }}
-                with:
-                    tokenPrefix: '#{'
-                    tokenSuffix: '}#'
-                    files: '["**/appsettings.json"]'
+    deployWebApp:
+        runs-on: windows-latest
+        needs: deployWebApi
+        if: github.event_name != 'pull_request'
+        environment:
+          name: 'Production'
+          url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-            -   name: Deploy to Azure Web App
-                id: deploy-to-webapp
-                uses: azure/webapps-deploy@v3
-                with:
-                    app-name: 'world-explorer'
-                    slot-name: 'Production'
-                    publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_649309CDF7F74F7B9D0D75A9017C1111 }}
-                    package: .
+        steps:
+          - name: Download artifact from build job
+            uses: actions/download-artifact@v4
+            with:
+              name: webapp
+  
+          - uses: cschleiden/replace-tokens@v1
+            env:
+              GOOGLE_SEARCH_APIKEY: ${{ secrets.GOOGLE_SEARCH_APIKEY }}
+              AI_APIKEY: ${{ secrets.AI_APIKEY }}
+              AI_PROVIDER: ${{ secrets.AI_PROVIDER }}
+              AAD_B2C_CLIENT_SECRET: ${{ secrets.AAD_B2C_CLIENT_SECRET }}
+              AAD_B2C_GRAPH_CLIENT_SECRET: ${{ secrets.AAD_B2C_GRAPH_CLIENT_SECRET }}
+              AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_USERNAME }}
+              AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD: ${{ secrets.AAD_B2C_CLAIMS_BASIC_AUTH_PASSWORD }}
+            with:
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
+              files: '["**/appsettings.json"]'
+  
+          - name: Deploy to Azure Web App
+            id: deploy-to-webapp
+            uses: azure/webapps-deploy@v3
+            with:
+              app-name: 'world-explorer'
+              slot-name: 'Production'
+              publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_649309CDF7F74F7B9D0D75A9017C1111 }}
+              package: .

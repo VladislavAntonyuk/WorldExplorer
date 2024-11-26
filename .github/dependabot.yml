@@ -10,15 +10,30 @@ updates:
       - "VladislavAntonyuk"
   open-pull-requests-limit: 10
   groups:
+    Aspire:
+      patterns:
+      - "Aspire*"
+    HotChocolate:
+      patterns:
+      - "HotChocolate*"
     Microsoft:
       patterns:
       - "Microsoft*"
+    MassTransit:
+      patterns:
+      - "MassTransit*"
     Syncfusion:
       patterns:
       - "Syncfusion*"
     CommunityToolkit:
       patterns:
       - "CommunityToolkit*"
+    OpenTelementry:
+      patterns:
+      - "OpenTelementry*"
+    Testcontainers:
+      patterns:
+      - "Testcontainers*"
     xUnit:
       patterns:
       - "xunit*"

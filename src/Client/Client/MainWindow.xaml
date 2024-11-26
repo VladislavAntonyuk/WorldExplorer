@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Window xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:client="clr-namespace:Client"
+        xmlns:viewModels="clr-namespace:Client.ViewModels"
+        xmlns:controls="clr-namespace:AlohaKit.Controls;assembly=AlohaKit"
+        xmlns:localization="clr-namespace:Client.Resources.Localization"
+        x:Class="Client.MainWindow"
+        x:DataType="viewModels:MainViewModel">
+	<Window.TitleBar>
+		<TitleBar Title="{Binding Title}"
+		          Subtitle="{x:Static viewModels:AboutViewModel.Version}"
+		          IsVisible="True"
+		          HeightRequest="48">
+			<TitleBar.LeadingContent>
+				<Image Source="logo.png"/>
+			</TitleBar.LeadingContent>
+
+			<TitleBar.Content>
+				<SearchBar
+					x:Name="SearchBar"
+					Placeholder="{x:Static localization:Localization.Search}"
+					MaximumWidthRequest="300"
+					HorizontalOptions="Fill"
+					VerticalOptions="Center"
+					SearchCommand="{Binding SearchCommand}"
+					SearchButtonPressed="SearchBar_OnSearchButtonPressed">
+				</SearchBar>
+			</TitleBar.Content>
+
+			<TitleBar.TrailingContent>
+				<HorizontalStackLayout
+					ZIndex="100">
+
+					<Button
+						Text="{x:Static localization:Localization.Help}"
+						Clicked="HelpClicked"
+						Command="{Binding HelpCommand}"/>
+
+					<Button
+						Text="{x:Static localization:Localization.About}"
+						Clicked="AboutClicked"
+						Command="{Binding AboutCommand}"/>
+
+					<controls:Avatar
+						x:Name="Avatar"
+						Name="{Binding User.Name}"
+						AvatarSize="Small">
+						<controls:Avatar.GestureRecognizers>
+							<TapGestureRecognizer
+								Tapped="OnProfileTapped"
+								Command="{Binding ProfileCommand}"/>
+						</controls:Avatar.GestureRecognizers>
+					</controls:Avatar>
+
+				</HorizontalStackLayout>
+			</TitleBar.TrailingContent>
+		</TitleBar>
+	</Window.TitleBar>
+	<Window.Page>
+		<client:AppShell />
+	</Window.Page>
+</Window>

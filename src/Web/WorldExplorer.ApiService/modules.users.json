@@ -1,0 +1,12 @@
+﻿{
+  "Users": {
+    "Outbox": {
+      "IntervalInSeconds": 50,
+      "BatchSize": 50
+    },
+    "Inbox": {
+      "IntervalInSeconds": 50,
+      "BatchSize": 50
+    }
+  }
+}

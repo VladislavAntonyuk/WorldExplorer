@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<Shell
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:views="clr-namespace:Client.Views"
+	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:controls="clr-namespace:Client.Controls"
+	x:Class="Client.AppShell"
+	FlyoutBehavior="Disabled"
+	x:DataType="viewModels:MainViewModel">
+
+	<ShellContent
+		Route="LoadingPage"
+		ContentTemplate="{DataTemplate views:LoadingPage}" />
+
+	<ShellContent
+		Route="LoginPage"
+		ContentTemplate="{DataTemplate views:LoginPage}" />
+
+	<ShellContent
+		Route="ErrorPage"
+		ContentTemplate="{DataTemplate views:ErrorPage}" />
+
+	<controls:CustomTabBar
+		Route="home"
+		CenterViewCommand="{Binding OpenCameraCommand}"
+		CenterViewBackgroundColor="#512BD4">
+
+		<controls:CustomTabBar.CenterViewVisible>
+			<OnPlatform x:TypeArguments="system:Boolean" Default="False">
+				<On Platform="Android,iOS" Value="true" />
+			</OnPlatform>
+		</controls:CustomTabBar.CenterViewVisible>
+
+		<controls:CustomTabBar.CenterViewImageSource>
+			<FontImageSource
+				FontFamily="FASolid"
+				Glyph="{x:Static fonts:FontAwesomeIcons.Camera}"
+				Size="40" />
+		</controls:CustomTabBar.CenterViewImageSource>
+
+		<Tab
+			Route="ExplorerPage"
+			Title="{x:Static localization:Localization.Explorer}">
+
+			<Tab.Icon>
+				<FontImageSource
+					Color="{StaticResource Gray500}"
+					FontFamily="FASolid"
+					Glyph="{x:Static fonts:FontAwesomeIcons.Globe}" />
+			</Tab.Icon>
+
+			<ShellContent ContentTemplate="{DataTemplate views:ExplorerPage}" />
+		</Tab>
+
+		<Tab
+			Route="ProfilePage"
+			Title="{x:Static localization:Localization.Profile}">
+
+			<Tab.IsVisible>
+				<OnIdiom x:TypeArguments="system:Boolean" Desktop="False" Default="True"/>
+			</Tab.IsVisible>
+
+			<Tab.Icon>
+				<FontImageSource
+					Color="{StaticResource Gray500}"
+					FontFamily="FASolid"
+					Glyph="{x:Static fonts:FontAwesomeIcons.User}" />
+			</Tab.Icon>
+
+			<ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
+		</Tab>
+
+	</controls:CustomTabBar>
+</Shell>

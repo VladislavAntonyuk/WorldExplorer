@@ -1,0 +1,122 @@
+<framework:BasePopup
+	x:TypeArguments="viewModels:PlaceDetailsViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:converters="using:Client.Converters"
+	x:DataType="viewModels:PlaceDetailsViewModel"
+	x:Class="Client.Views.PlaceDetailsView">
+
+	<framework:BasePopup.Resources>
+		<converters:WorldExplorerImageSourceConverter x:Key="WorldExplorerImageSourceConverter"/>
+	</framework:BasePopup.Resources>
+	<Grid>
+		<Button
+			ZIndex="100"
+			Margin="15"
+			HorizontalOptions="End"
+			VerticalOptions="Start"
+			Command="{Binding ClosePopupCommand}"
+			Text="X"/>
+
+		<VerticalStackLayout
+			IsVisible="{Binding IsPlacedLoaded, Converter={StaticResource InvertedBoolConverter}}">
+
+			<Label
+				Text="{x:Static localization:Localization.LoadingPlaceDetails}"
+				HorizontalOptions="Center"
+				FontSize="Large" />
+
+		</VerticalStackLayout>
+
+		<ScrollView
+			Margin="10"
+			IsVisible="{Binding IsPlacedLoaded}">
+			<VerticalStackLayout Spacing="10">
+
+				<Image
+					Background="{DynamicResource Gray500}"
+					Source="{Binding Place.MainImage, Converter={StaticResource WorldExplorerImageSourceConverter}}"
+					WidthRequest="300"
+					HeightRequest="300"
+					Aspect="AspectFit" />
+
+				<simpleRatingControlMaui:SimpleRatingControl
+					CurrentValue="{Binding Place.Rating}"
+					Amount="5"
+					FontSize="20"
+					BackgroundColor="Transparent"
+					RatingType="Star"
+					AccentColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
+
+				<ScrollView
+					Orientation="Horizontal">
+
+					<HorizontalStackLayout
+						HorizontalOptions="Center"
+						Spacing="10">
+
+						<Button
+							Background="{StaticResource Primary}"
+							Text="{x:Static localization:Localization.LearnMore}"
+							TextColor="{StaticResource White}"
+							Command="{Binding OpenUrlCommand}"/>
+
+						<Button
+							Background="{StaticResource Primary}"
+							Text="{x:Static localization:Localization.Share}"
+							TextColor="{StaticResource White}"
+							Command="{Binding SharePlaceCommand}"/>
+
+						<Button
+							Background="{StaticResource Primary}"
+							Text="{x:Static localization:Localization.BuildRoute}"
+							TextColor="{StaticResource White}"
+							Command="{Binding BuildRouteCommand}"/>
+
+						<Button
+							Background="{StaticResource Primary}"
+							IsVisible="{Binding IsLiveViewEnabled}"
+							Text="{x:Static localization:Localization.LiveView}"
+							TextColor="{StaticResource White}"
+							Command="{Binding ArCommand}"/>
+					</HorizontalStackLayout>
+				</ScrollView>
+
+				<Label
+					Padding="10"
+					Text="{Binding Place.Description}"
+					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"/>
+
+				<CollectionView
+					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
+					ItemsSource="{Binding Place.Images}"
+					HeightRequest="300">
+
+					<CollectionView.ItemsLayout>
+						<LinearItemsLayout
+							Orientation="Horizontal"
+							ItemSpacing="10" />
+					</CollectionView.ItemsLayout>
+
+					<CollectionView.ItemTemplate>
+						<DataTemplate x:DataType="system:String">
+							<VerticalStackLayout>
+								<Image
+									 Background="{DynamicResource Gray500}"
+									 Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
+									 WidthRequest="300"
+									 HeightRequest="300"
+									 Aspect="AspectFit" />
+							</VerticalStackLayout>
+						</DataTemplate>
+					</CollectionView.ItemTemplate>
+				</CollectionView>
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</framework:BasePopup>

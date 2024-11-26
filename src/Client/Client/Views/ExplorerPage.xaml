@@ -1,0 +1,44 @@
+<framework:BaseContentPage
+	x:TypeArguments="viewModels:ExplorerViewModel"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:framework="clr-namespace:Client.Framework"
+	xmlns:viewModels="clr-namespace:Client.ViewModels"
+	xmlns:localization="clr-namespace:Client.Resources.Localization"
+	xmlns:worldExplorerMap="clr-namespace:Client.Controls.WorldExplorerMap"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+	x:Class="Client.Views.ExplorerPage"
+	x:DataType="viewModels:ExplorerViewModel"
+	Shell.NavBarIsVisible="False">
+
+	<framework:BaseContentPage.Resources>
+		<Thickness x:Key="EmptyPadding">0</Thickness>
+		<Thickness x:Key="Padding">10</Thickness>
+		<toolkit:IsEqualConverter x:Key="IsEqualConverter"/>
+	</framework:BaseContentPage.Resources>
+
+	<Grid>
+		<worldExplorerMap:WorldExplorerMap
+			Pins="{Binding Pins}"
+			UserLocation="{Binding CurrentLocation}"
+			MapReadyCommand="{Binding MapReadyCommand}"/>
+
+		<HorizontalStackLayout
+			BackgroundColor="{StaticResource White}"
+			HorizontalOptions="Start"
+			VerticalOptions="End"
+			IsVisible="{Binding Status, Converter={StaticResource IsStringNotNullOrEmptyConverter}}">
+			<Label
+				Text="{Binding Status}"
+				TextColor="{StaticResource Black}"
+				Padding="10"/>
+
+			<Button
+				BackgroundColor="{StaticResource White}"
+				Text="{x:Static localization:Localization.Refresh}"
+				IsVisible="{Binding Status, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static localization:Localization.UnableToGetPlaceDetails}}"
+				Command="{Binding RefreshCommand}"/>
+
+		</HorizontalStackLayout>
+	</Grid>
+</framework:BaseContentPage>
