@@ -5,15 +5,11 @@ on:
         branches: [ main ]
         paths:
           - 'src/Client/**'
-          - 'src/Common/**'
-          - 'src/Modules/**'
           - '.github/workflows/main_world-explorer_client.yml'
     pull_request:
         branches: [ main ]
         paths:
           - 'src/Client/**'
-          - 'src/Common/**'
-          - 'src/Modules/**'
           - '.github/workflows/main_world-explorer_client.yml'
 
 concurrency:

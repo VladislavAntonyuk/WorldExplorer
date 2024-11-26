@@ -38,7 +38,7 @@ public static class PlacesModule
 		if (builder.Configuration.GetValue<string>("Places:AIProvider") == "OpenAI")
 		{
 			builder.AddOpenAIClient("openai");
-			//builder.AddOpenAiClient("openai");
+			builder.AddOpenAiClient("gpt-4o-mini");
 		}
 		else
 		{
