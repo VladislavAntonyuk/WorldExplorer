@@ -9,14 +9,10 @@ using Users.IntegrationEvents;
 internal sealed class UserDeletedIntegrationEventHandler(ISender sender)
 	: IntegrationEventHandler<UserDeletedIntegrationEvent>
 {
-	public override async Task Handle(
-		UserDeletedIntegrationEvent integrationEvent,
+	public override async Task Handle(UserDeletedIntegrationEvent integrationEvent,
 		CancellationToken cancellationToken = default)
 	{
-		var result = await sender.Send(
-			new DeleteTravellerCommand(
-				integrationEvent.UserId),
-			cancellationToken);
+		var result = await sender.Send(new DeleteTravellerCommand(integrationEvent.UserId), cancellationToken);
 
 		if (result.IsFailure)
 		{

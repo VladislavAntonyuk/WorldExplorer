@@ -5,5 +5,4 @@ using Common.Application.Messaging;
 using Domain.LocationInfo;
 using GetPlace;
 
-public sealed record GetNearByPlacesQuery(Location Location)
-	: IQuery<OperationResult<List<PlaceResponse>>>;
+public sealed record GetNearByPlacesQuery(Location Location) : IQuery<OperationResult<List<PlaceResponse>>>;

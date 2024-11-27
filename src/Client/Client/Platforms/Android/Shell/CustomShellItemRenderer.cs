@@ -25,9 +25,9 @@ internal class CustomShellItemRenderer(IShellContext context) : ShellItemRendere
 			rootLayout.AddView(view);
 			const int middleViewSize = 150;
 			var middleViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-																	  ViewGroup.LayoutParams.WrapContent,
-																	  GravityFlags.CenterHorizontal |
-																	  GravityFlags.Bottom)
+			                                                          ViewGroup.LayoutParams.WrapContent,
+			                                                          GravityFlags.CenterHorizontal |
+			                                                          GravityFlags.Bottom)
 			{
 				BottomMargin = 100,
 				Width = middleViewSize,

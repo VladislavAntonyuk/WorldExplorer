@@ -1,5 +1,6 @@
 ﻿namespace Client.Controls.WorldExplorerMap;
-class EventMessage
+
+internal class EventMessage
 {
 	public string Id { get; set; } = string.Empty;
 

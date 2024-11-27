@@ -1,9 +1,9 @@
 ﻿namespace WorldExplorer.Web;
 
 using Modules.Places.Application.Abstractions;
+using Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;
-using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 
 public class WorldExplorerApiClient(HttpClient httpClient)
 {

@@ -8,11 +8,47 @@ using System.Windows.Input;
 
 public sealed class WorldExplorerMap : HybridWebView, IDisposable
 {
-	private sealed record Payload(Guid PlaceId);
+	public static readonly BindableProperty MapReadyCommandProperty =
+		BindableProperty.Create(nameof(MapReadyCommand), typeof(ICommand), typeof(WorldExplorerMap));
+
+	public static readonly BindableProperty UserLocationProperty = BindableProperty.Create(
+		nameof(UserLocation), typeof(Location), typeof(WorldExplorerMap), propertyChanged: UserLocationChanged);
+
+	public static readonly BindableProperty PinsProperty = BindableProperty.Create(
+		nameof(Pins), typeof(ObservableCollection<WorldExplorerPin>), typeof(WorldExplorerMap),
+		propertyChanged: PinsChanged);
+
+	private readonly JsonSerializerOptions jsonSerializerOptions = new()
+	{
+		PropertyNameCaseInsensitive = true
+	};
 
 	public WorldExplorerMap()
 	{
 		RawMessageReceived += OnRawMessageReceived;
+	}
+
+	public ObservableCollection<WorldExplorerPin> Pins
+	{
+		get => (ObservableCollection<WorldExplorerPin>)GetValue(PinsProperty);
+		set => SetValue(PinsProperty, value);
+	}
+
+	public Location? UserLocation
+	{
+		get => (Location?)GetValue(UserLocationProperty);
+		set => SetValue(UserLocationProperty, value);
+	}
+
+	public ICommand? MapReadyCommand
+	{
+		get => (ICommand?)GetValue(MapReadyCommandProperty);
+		set => SetValue(MapReadyCommandProperty, value);
+	}
+
+	public void Dispose()
+	{
+		RawMessageReceived -= OnRawMessageReceived;
 	}
 
 	private async void PinsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -34,11 +70,6 @@ public sealed class WorldExplorerMap : HybridWebView, IDisposable
 			await EvaluateJavaScriptAsync(script);
 		}
 	}
-
-	readonly JsonSerializerOptions jsonSerializerOptions = new()
-	{
-		PropertyNameCaseInsensitive = true
-	};
 
 	private void OnRawMessageReceived(object? sender, HybridWebViewRawMessageReceivedEventArgs e)
 	{
@@ -77,10 +108,6 @@ public sealed class WorldExplorerMap : HybridWebView, IDisposable
 		}
 	}
 
-	public static readonly BindableProperty MapReadyCommandProperty = BindableProperty.Create(nameof(MapReadyCommand), typeof(ICommand), typeof(WorldExplorerMap));
-	public static readonly BindableProperty UserLocationProperty = BindableProperty.Create(nameof(UserLocation), typeof(Location), typeof(WorldExplorerMap), propertyChanged: UserLocationChanged);
-	public static readonly BindableProperty PinsProperty = BindableProperty.Create(nameof(Pins), typeof(ObservableCollection<WorldExplorerPin>), typeof(WorldExplorerMap), propertyChanged: PinsChanged);
-
 	private static void PinsChanged(BindableObject bindable, object? oldvalue, object? newvalue)
 	{
 		var control = (WorldExplorerMap)bindable;
@@ -101,32 +128,10 @@ public sealed class WorldExplorerMap : HybridWebView, IDisposable
 	private static void UserLocationChanged(BindableObject bindable, object oldvalue, object newvalue)
 	{
 		var control = (WorldExplorerMap)bindable;
-		control.EvaluateJavaScriptAsync(
-		             control.UserLocation is not null
-			             ? $"addLocationPin({control.UserLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{control.UserLocation.Longitude.ToString(CultureInfo.InvariantCulture)});"
-			             : "removeLocationPin();");
+		control.EvaluateJavaScriptAsync(control.UserLocation is not null
+			                                ? $"addLocationPin({control.UserLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{control.UserLocation.Longitude.ToString(CultureInfo.InvariantCulture)});"
+			                                : "removeLocationPin();");
 	}
 
-	public ObservableCollection<WorldExplorerPin> Pins
-	{
-		get => (ObservableCollection<WorldExplorerPin>)GetValue(PinsProperty);
-		set => SetValue(PinsProperty, value);
-	}
-
-	public Location? UserLocation
-	{
-		get => (Location?)GetValue(UserLocationProperty);
-		set => SetValue(UserLocationProperty, value);
-	}
-
-	public ICommand? MapReadyCommand
-	{
-		get => (ICommand?)GetValue(MapReadyCommandProperty);
-		set => SetValue(MapReadyCommandProperty, value);
-	}
-
-	public void Dispose()
-	{
-		RawMessageReceived -= OnRawMessageReceived;
-	}
+	private sealed record Payload(Guid PlaceId);
 }

@@ -1,11 +1,10 @@
-﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlaces;
+﻿namespace WorldExplorer.Modules.Places.Application.Places.DeletePlace;
 
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Places.Domain.Places;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.Places;
 
-internal sealed class DeletePlaceCommandHandler(IPlaceRepository placeRepository)
-	: ICommandHandler<DeletePlaceCommand>
+internal sealed class DeletePlaceCommandHandler(IPlaceRepository placeRepository) : ICommandHandler<DeletePlaceCommand>
 {
 	public async Task<Result> Handle(DeletePlaceCommand request, CancellationToken cancellationToken)
 	{

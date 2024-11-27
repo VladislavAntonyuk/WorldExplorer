@@ -27,9 +27,8 @@ builder.Services.AddOpenApi(options =>
 
 Assembly[] moduleApplicationAssemblies =
 [
-	AssemblyReference.Assembly,
-	WorldExplorer.Modules.Places.Application.AssemblyReference.Assembly,
-	WorldExplorer.Modules.Travellers.AssemblyReference.Assembly,
+	AssemblyReference.Assembly, WorldExplorer.Modules.Places.Application.AssemblyReference.Assembly,
+	WorldExplorer.Modules.Travellers.AssemblyReference.Assembly
 ];
 
 builder.Services.AddApplication(moduleApplicationAssemblies);

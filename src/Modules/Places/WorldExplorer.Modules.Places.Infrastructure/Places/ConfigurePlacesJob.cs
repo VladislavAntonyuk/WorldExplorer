@@ -10,19 +10,17 @@ internal sealed class ConfigurePlacesJob : IConfigureOptions<QuartzOptions>
 		var placeLookupJobName = typeof(PlacesLookupJob).FullName!;
 
 		options.AddJob<PlacesLookupJob>(configure => configure.WithIdentity(placeLookupJobName))
-			   .AddTrigger(configure =>
-							   configure.ForJob(placeLookupJobName)
-										.WithSimpleSchedule(schedule =>
-																schedule.WithIntervalInSeconds(15)
-																		.RepeatForever()));
+		       .AddTrigger(configure => configure.ForJob(placeLookupJobName)
+		                                         .WithSimpleSchedule(schedule =>
+			                                                             schedule.WithIntervalInSeconds(15)
+				                                                             .RepeatForever()));
 
 		var placeConfigurationJobName = typeof(PlaceDetailsJob).FullName!;
 
 		options.AddJob<PlaceDetailsJob>(configure => configure.WithIdentity(placeConfigurationJobName))
-			   .AddTrigger(configure =>
-							   configure.ForJob(placeConfigurationJobName)
-										.WithSimpleSchedule(schedule =>
-																schedule.WithIntervalInSeconds(15)
-																		.RepeatForever()));
+		       .AddTrigger(configure => configure.ForJob(placeConfigurationJobName)
+		                                         .WithSimpleSchedule(schedule =>
+			                                                             schedule.WithIntervalInSeconds(15)
+				                                                             .RepeatForever()));
 	}
 }

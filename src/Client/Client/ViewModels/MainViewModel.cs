@@ -17,8 +17,11 @@ public static class Constants
 
 public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticatedEvent>
 {
-	private readonly INavigationService navigationService;
 	private readonly ILauncher launcher;
+	private readonly INavigationService navigationService;
+
+	[ObservableProperty]
+	private User? user;
 
 	public MainViewModel(INavigationService navigationService, ILauncher launcher)
 	{
@@ -28,9 +31,6 @@ public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticated
 		Title = Constants.ProductName;
 	}
 
-	[ObservableProperty]
-	private User? user;
-	
 	public void Receive(UserAuthenticatedEvent message)
 	{
 		User = message.User;

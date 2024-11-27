@@ -1,7 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers;
 
+using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
-using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 
 public interface ITravellerRepository
 {

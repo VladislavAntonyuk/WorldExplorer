@@ -1,9 +1,9 @@
-﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlaces;
+﻿namespace WorldExplorer.Modules.Places.Application.Places.UpdatePlace;
 
 using Abstractions.Data;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Places.Domain.Places;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.Places;
 
 internal sealed class UpdatePlaceCommandHandler(IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
 	: ICommandHandler<UpdatePlaceCommand>
@@ -16,7 +16,8 @@ internal sealed class UpdatePlaceCommandHandler(IPlaceRepository placeRepository
 			return Result.Failure(PlaceErrors.NotFound(request.Id));
 		}
 
-		place.Update(request.PlaceRequest.Name, request.PlaceRequest.Location.ToPoint(), request.PlaceRequest.Description);
+		place.Update(request.PlaceRequest.Name, request.PlaceRequest.Location.ToPoint(),
+		             request.PlaceRequest.Description);
 		await unitOfWork.SaveChangesAsync(cancellationToken);
 		return Result.Success();
 	}

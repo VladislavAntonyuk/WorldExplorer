@@ -12,7 +12,8 @@ using Services.API;
 using Services.Auth;
 using Services.Navigation;
 
-public partial class LoginViewModel(INavigationService navigation,
+public partial class LoginViewModel(
+	INavigationService navigation,
 	IAuthService authService,
 	IUsersApi usersApi,
 	IDialogService dialogService) : BaseViewModel

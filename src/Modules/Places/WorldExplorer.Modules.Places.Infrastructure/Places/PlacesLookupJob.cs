@@ -20,9 +20,9 @@ internal sealed class PlacesLookupJob(
 		logger.LogInformation("{Module} - Beginning to process locationInfoRequests messages", ModuleName);
 
 		var locationInfoRequests = await dbContext.LocationInfoRequests
-												  .Where(x => x.Status == LocationInfoRequestStatus.New)
-												  .OrderBy(x => x.CreationDate)
-												  .ToListAsync(context.CancellationToken);
+		                                          .Where(x => x.Status == LocationInfoRequestStatus.New)
+		                                          .OrderBy(x => x.CreationDate)
+		                                          .ToListAsync(context.CancellationToken);
 
 		if (locationInfoRequests.Count == 0)
 		{
@@ -36,19 +36,22 @@ internal sealed class PlacesLookupJob(
 			try
 			{
 				await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
-							   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Pending), context.CancellationToken);
+				               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Pending),
+				                                   context.CancellationToken);
 
 				await GeneratePlaces(chunk, context.CancellationToken);
 
 				await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
-							   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Completed), context.CancellationToken);
+				               .ExecuteUpdateAsync(
+					               x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.Completed),
+					               context.CancellationToken);
 			}
 			catch (Exception ex)
 			{
 				logger.LogError(ex, "Failed requesting places {Requests}", string.Join(',', locationInfoRequests));
 				await dbContext.LocationInfoRequests.Where(x => locationInfoRequestIds.Contains(x.Id))
-							   .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.New), context.CancellationToken);
-
+				               .ExecuteUpdateAsync(x => x.SetProperty(y => y.Status, LocationInfoRequestStatus.New),
+				                                   context.CancellationToken);
 			}
 		}
 
@@ -63,13 +66,11 @@ internal sealed class PlacesLookupJob(
 
 		var newPlaceNames = places.Select(x => x.Name);
 		var existingPlaceNames = await dbContext.Places.Where(x => newPlaceNames.Contains(x.Name))
-												.Select(x => x.Name)
-												.ToListAsync(cancellationToken);
+		                                        .Select(x => x.Name)
+		                                        .ToListAsync(cancellationToken);
 
 		var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name);
 		await dbContext.Places.AddRangeAsync(newPlaces, cancellationToken);
 		await dbContext.SaveChangesAsync(cancellationToken);
-
-
 	}
 }

@@ -23,7 +23,7 @@
 			IsRunning="True"
 			IsVisible="True" />
 
-		<Label Text="{x:Static localization:Localization.Loading}" HorizontalTextAlignment="Center"/>
+		<Label Text="{x:Static localization:Localization.Loading}" HorizontalTextAlignment="Center" />
 	</VerticalStackLayout>
 
 </framework:BaseContentPage>

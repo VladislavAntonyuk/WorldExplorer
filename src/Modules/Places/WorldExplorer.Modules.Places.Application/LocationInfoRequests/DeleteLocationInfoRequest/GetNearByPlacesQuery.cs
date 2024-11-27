@@ -1,5 +1,5 @@
-﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlaces;
+﻿namespace WorldExplorer.Modules.Places.Application.LocationInfoRequests.DeleteLocationInfoRequest;
 
-using WorldExplorer.Common.Application.Messaging;
+using Common.Application.Messaging;
 
 public sealed record DeleteLocationInfoRequestCommand(int Id) : ICommand;

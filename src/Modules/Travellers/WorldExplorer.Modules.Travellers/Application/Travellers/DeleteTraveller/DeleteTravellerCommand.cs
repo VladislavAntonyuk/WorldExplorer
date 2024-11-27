@@ -2,5 +2,4 @@
 
 using Common.Application.Messaging;
 
-public sealed record DeleteTravellerCommand(Guid TravellerId)
-	: ICommand;
+public sealed record DeleteTravellerCommand(Guid TravellerId) : ICommand;

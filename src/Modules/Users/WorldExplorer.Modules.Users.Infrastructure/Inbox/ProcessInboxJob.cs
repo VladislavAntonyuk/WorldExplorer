@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Users.Infrastructure.Inbox;
 
+using Application;
 using Common.Application.EventBus;
 using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Serialization;
@@ -9,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Presentation;
 using Quartz;
 
 [DisallowConcurrentExecution]
@@ -52,7 +52,7 @@ internal sealed class ProcessInboxJob(
 			catch (Exception caughtException)
 			{
 				logger.LogError(caughtException, "{Module} - Exception while processing inbox message {MessageId}",
-								ModuleName, inboxMessage.Id);
+				                ModuleName, inboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -87,9 +87,9 @@ internal sealed class ProcessInboxJob(
 	{
 		var message = exception?.Message ?? null;
 		await dbConnectionFactory.InboxMessages.Where(x => x.Id == inboxMessage.Id)
-								 .ExecuteUpdateAsync(
-									 m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
-										   .SetProperty(p => p.Error, message));
+		                         .ExecuteUpdateAsync(
+			                         m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
+			                               .SetProperty(p => p.Error, message));
 	}
 
 	internal sealed record InboxMessageResponse(Guid Id, string Content);

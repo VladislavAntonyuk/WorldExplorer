@@ -11,7 +11,7 @@ public class ObjectRenderer
 {
 	/**
 	 * Blend mode.
-	 * 
+	 *
 	 * @see #setBlendMode(BlendMode)
 	 */
 	public enum BlendMode
@@ -34,13 +34,7 @@ public class ObjectRenderer
 	private const int CoordsPerVertex = 3;
 
 	// Note: the last component must be zero to avoid applying the translational part of the matrix.
-	private static readonly float[] LightDirection =
-	[
-		0.0f,
-		1.0f,
-		0.0f,
-		0.0f
-	];
+	private static readonly float[] LightDirection = [0.0f, 1.0f, 0.0f, 0.0f];
 
 	private static readonly ByteOrder? ByteOrder = ByteOrder.NativeOrder();
 
@@ -89,7 +83,7 @@ public class ObjectRenderer
 
 	/**
 	 * Creates and initializes OpenGL resources needed for rendering the model.
-	 * 
+	 *
 	 * @param context Context for loading the shader and below-named model and texture assets.
 	 * @param objAssetName  Name of the OBJ file containing the model geometry.
 	 * @param diffuseTextureAssetName  Name of the PNG file containing the diffuse texture map.
@@ -200,7 +194,7 @@ public class ObjectRenderer
 
 	/**
 	 * Selects the blending mode for rendering.
-	 * 
+	 *
 	 * @param blendMode The blending mode.  Null indicates no blending (opaque rendering).
 	 */
 	public void SetBlendMode(BlendMode blendMode)
@@ -210,7 +204,7 @@ public class ObjectRenderer
 
 	/**
 	 * Updates the object model matrix and applies scaling.
-	 * 
+	 *
 	 * @param modelMatrix A 4x4 model-to-world transformation matrix, stored in column-major order.
 	 * @param scaleFactor A separate scaling factor to apply before the {@code modelMatrix}.
 	 * @see android.opengl.Matrix
@@ -227,7 +221,7 @@ public class ObjectRenderer
 
 	/**
 	 * Sets the surface characteristics of the rendered model.
-	 * 
+	 *
 	 * @param ambient  Intensity of non-directional surface illumination.
 	 * @param diffuse  Diffuse (matte) surface reflectivity.
 	 * @param specular  Specular (shiny) surface reflectivity.
@@ -244,7 +238,7 @@ public class ObjectRenderer
 
 	/**
 	 * Draws the model.
-	 * 
+	 *
 	 * @param cameraView  A 4x4 view matrix, in column-major order.
 	 * @param cameraPerspective  A 4x4 projection matrix, in column-major order.
 	 * @param lightIntensity  Illumination intensity.  Combined with diffuse and specular material
@@ -269,7 +263,7 @@ public class ObjectRenderer
 		Matrix.MultiplyMV(mViewLightDirection, 0, mModelViewMatrix, 0, LightDirection, 0);
 		NormalizeVec3(mViewLightDirection);
 		GLES20.GlUniform4f(mLightingParametersUniform, mViewLightDirection[0], mViewLightDirection[1],
-						   mViewLightDirection[2], lightIntensity);
+		                   mViewLightDirection[2], lightIntensity);
 
 		// Set the object material properties.
 		GLES20.GlUniform4f(mMaterialParametersUniform, mAmbient, mDiffuse, mSpecular, mSpecularPower);
@@ -283,7 +277,7 @@ public class ObjectRenderer
 		GLES20.GlBindBuffer(GLES20.GlArrayBuffer, mVertexBufferId);
 
 		GLES20.GlVertexAttribPointer(mPositionAttribute, CoordsPerVertex, GLES20.GlFloat, false, 0,
-									 mVerticesBaseAddress);
+		                             mVerticesBaseAddress);
 		GLES20.GlVertexAttribPointer(mNormalAttribute, 3, GLES20.GlFloat, false, 0, mNormalsBaseAddress);
 		GLES20.GlVertexAttribPointer(mTexCoordAttribute, 2, GLES20.GlFloat, false, 0, mTexCoordsBaseAddress);
 

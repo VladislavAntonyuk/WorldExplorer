@@ -7,7 +7,8 @@ public interface IPlacesApi
 {
 	[Get("/recommendations")]
 	[Headers("Authorization: Bearer")]
-	internal Task<ApiResponse<OperationResult<List<PlaceResponse>>>> GetRecommendationsInternal([Query] Location location,
+	internal Task<ApiResponse<OperationResult<List<PlaceResponse>>>> GetRecommendationsInternal(
+		[Query] Location location,
 		CancellationToken cancellationToken);
 
 	async Task<ApiResponse<OperationResult<List<PlaceResponse>>>> GetRecommendations([Query] Location location,

@@ -47,6 +47,6 @@
 			IsVisible="{Binding IsCameraLoaded, Converter={StaticResource InvertedBoolConverter}}"
 			HorizontalOptions="Center"
 			VerticalOptions="Center"
-			ZIndex="2"/>
+			ZIndex="2" />
 	</Grid>
 </framework:BaseContentPage>

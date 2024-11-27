@@ -23,7 +23,9 @@
   <Folder Name="/src/Modules/Places/" Id="099873af-e720-6d90-987a-e56777ad913c">
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Application/WorldExplorer.Modules.Places.Application.csproj" />
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Domain/WorldExplorer.Modules.Places.Domain.csproj" />
+    <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Infrastructure.UnitTests/WorldExplorer.Modules.Places.Infrastructure.UnitTests.csproj" Id="bd2bdedf-6c17-432f-b274-2a1f6fec6a6f" />
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Infrastructure/WorldExplorer.Modules.Places.Infrastructure.csproj" />
+    <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.IntegrationEvents/WorldExplorer.Modules.Places.IntegrationEvents.csproj" Id="d322c1a1-48b9-4026-b1cd-9b92654e63c1" />
     <Project Path="src/Modules/Places/WorldExplorer.Modules.Places.Presentation/WorldExplorer.Modules.Places.Presentation.csproj" />
   </Folder>
   <Folder Name="/src/Modules/Travellers/" Id="188afd0a-93f8-39a7-24f3-4b69338911e8">

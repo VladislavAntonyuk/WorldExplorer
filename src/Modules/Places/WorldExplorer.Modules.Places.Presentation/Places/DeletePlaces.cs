@@ -1,6 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Presentation.Places;
 
-using Application.Places.GetPlaces;
+using Application.Places.DeletePlace;
 using Common.Infrastructure.Authorization;
 using Common.Presentation.Endpoints;
 using Common.Presentation.Results;

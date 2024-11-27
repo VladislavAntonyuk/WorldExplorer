@@ -18,10 +18,7 @@ public sealed class ImageNode : SCNNode
 		material.DoubleSided = true;
 
 		var geometry = SCNPlane.Create(width, height);
-		geometry.Materials =
-		[
-			material
-		];
+		geometry.Materials = [material];
 
 		return geometry;
 	}

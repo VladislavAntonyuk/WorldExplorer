@@ -3,8 +3,7 @@
 using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
 
-public partial class Profile(WorldExplorerApiClient apiClient, ISnackbar snackbar)
-	: WorldExplorerAuthBaseComponent
+public partial class Profile(WorldExplorerApiClient apiClient, ISnackbar snackbar) : WorldExplorerAuthBaseComponent
 {
 	private UserResponse? user;
 

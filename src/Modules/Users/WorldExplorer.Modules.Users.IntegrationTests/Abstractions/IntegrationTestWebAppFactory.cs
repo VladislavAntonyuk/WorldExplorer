@@ -2,13 +2,12 @@
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Testcontainers.MsSql;
 using Testcontainers.Redis;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-	private readonly Testcontainers.MsSql.MsSqlContainer dbContainer = new Testcontainers.MsSql.MsSqlBuilder()
-	                                                           .WithPassword("mssql-database")
-	                                                           .Build();
+	private readonly MsSqlContainer dbContainer = new MsSqlBuilder().WithPassword("mssql-database").Build();
 
 	private readonly RedisContainer redisContainer = new RedisBuilder().WithImage("redis:latest").Build();
 

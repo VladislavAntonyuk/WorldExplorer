@@ -12,7 +12,7 @@
 	x:Class="Client.Views.PlaceDetailsView">
 
 	<framework:BasePopup.Resources>
-		<converters:WorldExplorerImageSourceConverter x:Key="WorldExplorerImageSourceConverter"/>
+		<converters:WorldExplorerImageSourceConverter x:Key="WorldExplorerImageSourceConverter" />
 	</framework:BasePopup.Resources>
 	<Grid>
 		<Button
@@ -21,7 +21,7 @@
 			HorizontalOptions="End"
 			VerticalOptions="Start"
 			Command="{Binding ClosePopupCommand}"
-			Text="X"/>
+			Text="X" />
 
 		<VerticalStackLayout
 			IsVisible="{Binding IsPlacedLoaded, Converter={StaticResource InvertedBoolConverter}}">
@@ -51,7 +51,7 @@
 					FontSize="20"
 					BackgroundColor="Transparent"
 					RatingType="Star"
-					AccentColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"/>
+					AccentColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}" />
 
 				<ScrollView
 					Orientation="Horizontal">
@@ -64,33 +64,33 @@
 							Background="{StaticResource Primary}"
 							Text="{x:Static localization:Localization.LearnMore}"
 							TextColor="{StaticResource White}"
-							Command="{Binding OpenUrlCommand}"/>
+							Command="{Binding OpenUrlCommand}" />
 
 						<Button
 							Background="{StaticResource Primary}"
 							Text="{x:Static localization:Localization.Share}"
 							TextColor="{StaticResource White}"
-							Command="{Binding SharePlaceCommand}"/>
+							Command="{Binding SharePlaceCommand}" />
 
 						<Button
 							Background="{StaticResource Primary}"
 							Text="{x:Static localization:Localization.BuildRoute}"
 							TextColor="{StaticResource White}"
-							Command="{Binding BuildRouteCommand}"/>
+							Command="{Binding BuildRouteCommand}" />
 
 						<Button
 							Background="{StaticResource Primary}"
 							IsVisible="{Binding IsLiveViewEnabled}"
 							Text="{x:Static localization:Localization.LiveView}"
 							TextColor="{StaticResource White}"
-							Command="{Binding ArCommand}"/>
+							Command="{Binding ArCommand}" />
 					</HorizontalStackLayout>
 				</ScrollView>
 
 				<Label
 					Padding="10"
 					Text="{Binding Place.Description}"
-					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"/>
+					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}" />
 
 				<CollectionView
 					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
@@ -107,11 +107,11 @@
 						<DataTemplate x:DataType="system:String">
 							<VerticalStackLayout>
 								<Image
-									 Background="{DynamicResource Gray500}"
-									 Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
-									 WidthRequest="300"
-									 HeightRequest="300"
-									 Aspect="AspectFit" />
+									Background="{DynamicResource Gray500}"
+									Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
+									WidthRequest="300"
+									HeightRequest="300"
+									Aspect="AspectFit" />
 							</VerticalStackLayout>
 						</DataTemplate>
 					</CollectionView.ItemTemplate>

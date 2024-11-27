@@ -17,31 +17,10 @@ public class BackgroundRenderer
 
 	private static readonly float[] QuadCoords =
 	[
-		-1.0f,
-		-1.0f,
-		0.0f,
-		-1.0f,
-		+1.0f,
-		0.0f,
-		+1.0f,
-		-1.0f,
-		0.0f,
-		+1.0f,
-		+1.0f,
-		0.0f
+		-1.0f, -1.0f, 0.0f, -1.0f, +1.0f, 0.0f, +1.0f, -1.0f, 0.0f, +1.0f, +1.0f, 0.0f
 	];
 
-	private static readonly float[] QuadTexcoords =
-	[
-		0.0f,
-		1.0f,
-		0.0f,
-		0.0f,
-		1.0f,
-		1.0f,
-		1.0f,
-		0.0f
-	];
+	private static readonly float[] QuadTexcoords = [0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f];
 
 	private readonly int mTextureTarget = GLES11Ext.GlTextureExternalOes;
 
@@ -64,7 +43,7 @@ public class BackgroundRenderer
 	 * Allocates and initializes OpenGL resources needed by the background renderer.  Must be
 	 * called on the OpenGL thread, typically in
 	 * {@link GLSurfaceView.Renderer#onSurfaceCreated(GL10, EGLConfig)}.
-	 * 
+	 *
 	 * @param context Needed to access shader source.
 	 */
 	public void CreateOnGlThread(Context context)
@@ -127,7 +106,7 @@ public class BackgroundRenderer
 	 * static physical objects.  This must be called
 	 * <b>before</b>
 	 * drawing virtual content.
-	 * 
+	 *
 	 * @param frame The last {@code Frame} returned by {@link Session#update()}.
 	 */
 	public void Draw(Frame frame)
@@ -137,7 +116,7 @@ public class BackgroundRenderer
 		if (frame.HasDisplayGeometryChanged)
 		{
 			frame.TransformCoordinates2d(Coordinates2d.ViewNormalized, mQuadTexCoord, Coordinates2d.TextureNormalized,
-										 mQuadTexCoordTransformed);
+			                             mQuadTexCoordTransformed);
 		}
 
 		// No need to test or write depth, the screen quad has arbitrary depth, and is expected
@@ -154,7 +133,7 @@ public class BackgroundRenderer
 
 		// Set the texture coordinates.
 		GLES20.GlVertexAttribPointer(mQuadTexCoordParam, TexcoordsPerVertex, GLES20.GlFloat, false, 0,
-									 mQuadTexCoordTransformed);
+		                             mQuadTexCoordTransformed);
 
 		// Enable vertex arrays
 		GLES20.GlEnableVertexAttribArray(mQuadPositionParam);

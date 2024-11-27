@@ -21,9 +21,9 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		};
 
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
+	private readonly List<ImageNode> imagePlaneNodes = [];
 
 	private bool isReady;
-	private readonly List<ImageNode> imagePlaneNodes = [];
 
 	public ArViewHandler() : this(ArViewMapper, ArViewCommandMapper)
 	{
@@ -86,24 +86,24 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		foreach (var imageUrl in view.Images)
 		{
 			Task.Run(() =>
-				{
-					int currentIndex = Interlocked.Increment(ref i) - 1;
-					if (currentIndex < handler.imagePlaneNodes.Count)
-					{
-						var data = NSData.FromUrl(new NSUrl(imageUrl));
-						if (data.Length == 0)
-						{
-							Interlocked.Decrement(ref i);
-							return;
-						}
+			    {
+				    int currentIndex = Interlocked.Increment(ref i) - 1;
+				    if (currentIndex < handler.imagePlaneNodes.Count)
+				    {
+					    var data = NSData.FromUrl(new NSUrl(imageUrl));
+					    if (data.Length == 0)
+					    {
+						    Interlocked.Decrement(ref i);
+						    return;
+					    }
 
-						handler.imagePlaneNodes[currentIndex].UpdateImage(data);
-					}
-				})
-				.SafeFireAndForget(_ =>
-				{
-					Interlocked.Decrement(ref i);
-				});
+					    handler.imagePlaneNodes[currentIndex].UpdateImage(data);
+				    }
+			    })
+			    .SafeFireAndForget(_ =>
+			    {
+				    Interlocked.Decrement(ref i);
+			    });
 		}
 	}
 

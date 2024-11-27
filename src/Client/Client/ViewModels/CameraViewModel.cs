@@ -52,7 +52,9 @@ public partial class CameraViewModel(INavigationService navigationService,
 
 	private async Task SaveImage(Stream stream)
 	{
-		var savePermissionStatus = OperatingSystem.IsAndroidVersionAtLeast(33) ? PermissionStatus.Granted : await Permissions.RequestAsync<Permissions.StorageWrite>();
+		var savePermissionStatus = OperatingSystem.IsAndroidVersionAtLeast(33)
+			? PermissionStatus.Granted
+			: await Permissions.RequestAsync<Permissions.StorageWrite>();
 		if (savePermissionStatus == PermissionStatus.Granted)
 		{
 			await stream.SaveAsImage(async error =>

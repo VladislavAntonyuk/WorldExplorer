@@ -1,15 +1,16 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequest;
 
 using Abstractions;
+using Common.Application.Messaging;
+using Common.Domain;
 using Domain.LocationInfo;
 using GetLocationInfoRequests;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
 
 internal sealed class GePLocationInfoRequestsQueryHandler(ILocationInfoRepository placeRepository)
 	: IQueryHandler<GetLocationInfoRequestQuery, LocationInfoRequestResponse>
 {
-	public async Task<Result<LocationInfoRequestResponse>> Handle(GetLocationInfoRequestQuery request, CancellationToken cancellationToken)
+	public async Task<Result<LocationInfoRequestResponse>> Handle(GetLocationInfoRequestQuery request,
+		CancellationToken cancellationToken)
 	{
 		var places = await placeRepository.GetAsync(request.Id, cancellationToken);
 		if (places is null)

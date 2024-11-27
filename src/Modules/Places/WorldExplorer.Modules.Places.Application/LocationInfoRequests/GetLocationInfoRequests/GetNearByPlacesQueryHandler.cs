@@ -1,9 +1,9 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 
 using Abstractions;
+using Common.Application.Messaging;
+using Common.Domain;
 using Domain.LocationInfo;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
 
 internal sealed class GePLocationInfoRequestsQueryHandler(ILocationInfoRepository placeRepository)
 	: IQueryHandler<GetLocationInfoRequestsQuery, List<LocationInfoRequestResponse>>

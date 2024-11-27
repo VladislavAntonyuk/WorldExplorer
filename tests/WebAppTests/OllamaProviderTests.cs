@@ -19,8 +19,7 @@ public class OllamaProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 		                .WithReuse(true)
 		                .Build();
 
-		await container.StartAsync()
-		               .ConfigureAwait(false);
+		await container.StartAsync().ConfigureAwait(false);
 
 		var baseUri = new UriBuilder(Uri.UriSchemeHttp, container.Hostname, container.GetMappedPublicPort(11434), "api").Uri;
 		var ollamaApiClient = new OllamaChatClient(baseUri, "llama3.2");

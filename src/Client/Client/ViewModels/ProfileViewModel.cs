@@ -17,8 +17,8 @@ public partial class ProfileViewModel : BaseViewModel
 	private readonly IAuthService authService;
 	private readonly IDialogService dialogService;
 	private readonly INavigationService navigationService;
-	private readonly IUsersApi usersApi;
 	private readonly IWorldExplorerTravellersClient travellersClient;
+	private readonly IUsersApi usersApi;
 
 	[ObservableProperty]
 	private User? user;
@@ -41,8 +41,8 @@ public partial class ProfileViewModel : BaseViewModel
 	private async Task Delete(CancellationToken cancellationToken)
 	{
 		var confirmationResult = await dialogService.ConfirmAsync(Localization.DeleteProfile,
-																  Localization.DeleteProfileConfirmationText,
-																  Localization.Yes, Localization.No);
+		                                                          Localization.DeleteProfileConfirmationText,
+		                                                          Localization.Yes, Localization.No);
 		if (!confirmationResult)
 		{
 			return;
@@ -77,11 +77,12 @@ public partial class ProfileViewModel : BaseViewModel
 			var traveller = await travellersClient.GetTravellerById.ExecuteAsync(User.Id);
 			if (traveller.IsSuccessResult())
 			{
-				User.Activities.AddRange(traveller.Data?.ById?.Visits.GroupBy(x=>x.VisitDate).Select(x => new UserActivity()
-				{
-					Date = x.Key.LocalDateTime,
-					ReviewedPlacesCount = x.Count()
-				}));
+				User.Activities.AddRange(traveller.Data?.ById?.Visits.GroupBy(x => x.VisitDate)
+				                                  .Select(x => new UserActivity
+				                                  {
+					                                  Date = x.Key.LocalDateTime,
+					                                  ReviewedPlacesCount = x.Count()
+				                                  }));
 			}
 		}
 		else
@@ -94,6 +95,11 @@ public partial class ProfileViewModel : BaseViewModel
 	private Task SaveChanges(CancellationToken cancellationToken)
 	{
 		WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(User));
-		return User is null ? Task.CompletedTask : usersApi.UpdateCurrentUser(new IUsersApi.UpdateUserRequest(){TrackUserLocation = User.Settings.TrackUserLocation}, cancellationToken);
+		return User is null
+			? Task.CompletedTask
+			: usersApi.UpdateCurrentUser(new IUsersApi.UpdateUserRequest
+			{
+				TrackUserLocation = User.Settings.TrackUserLocation
+			}, cancellationToken);
 	}
 }

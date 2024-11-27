@@ -2,11 +2,11 @@
 
 using Abstractions.Data;
 using Application.Travellers;
+using Application.Visits;
 using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Outbox;
 using Configurations;
 using Microsoft.EntityFrameworkCore;
-using WorldExplorer.Modules.Travellers.Application.Visits;
 
 public sealed class TravellersDbContext(DbContextOptions<TravellersDbContext> options) : DbContext(options), IUnitOfWork
 {

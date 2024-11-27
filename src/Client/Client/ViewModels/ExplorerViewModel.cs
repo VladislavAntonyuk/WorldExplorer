@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Controls.WorldExplorerMap;
 using Framework;
-using Microsoft.Maui.Dispatching;
 using MvvmHelpers;
 using Resources.Localization;
 using Services;
@@ -14,7 +13,8 @@ using Shared.Models;
 using BaseViewModel = Framework.BaseViewModel;
 using Location = Location;
 
-public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
+public sealed partial class ExplorerViewModel(
+	IPlacesApi placesApi,
 	IGeolocation geoLocation,
 	IDialogService dialogService,
 	IDispatcher dispatcher,
@@ -28,6 +28,13 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 
 	[ObservableProperty]
 	private string? status;
+
+	public ObservableRangeCollection<WorldExplorerPin> Pins { get; } = [];
+
+	public void Dispose()
+	{
+		StopTracking();
+	}
 
 	private void GeoLocationOnLocationChanged(object? sender, GeolocationLocationChangedEventArgs e)
 	{
@@ -44,8 +51,6 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		CurrentLocation = location;
 	}
 
-	public ObservableRangeCollection<WorldExplorerPin> Pins { get; } = [];
-	
 	[RelayCommand]
 	private async Task MapReady()
 	{
@@ -123,7 +128,7 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 			return;
 		}
 
-		int attempts = 0;
+		var attempts = 0;
 		StatusCode statusCode;
 		do
 		{
@@ -202,13 +207,8 @@ public sealed partial class ExplorerViewModel(IPlacesApi placesApi,
 		if (closestPlace is not null)
 		{
 			await dialogService.ToastAsync(string.Format(Localization.YouAreNear, closestPlace.Label),
-										   CancellationToken.None);
+			                               CancellationToken.None);
 		}
-	}
-
-	public void Dispose()
-	{
-		StopTracking();
 	}
 
 	private void StopTracking()

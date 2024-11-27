@@ -65,5 +65,5 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore world-explorer.
 
 ```bash
 dotnet tool install StrawberryShake.Tools -g --prerelease
-dotnet graphql init https://localhost:5002/graphql/ -n Travellers -p ./TravellersGraghQL
+dotnet graphql init https://localhost:5002/graphql/ -n Travellers -p ./TravellersGraphQL
 ```

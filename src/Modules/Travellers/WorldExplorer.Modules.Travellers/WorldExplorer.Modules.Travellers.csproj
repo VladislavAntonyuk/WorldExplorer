@@ -10,6 +10,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Infrastructure\WorldExplorer.Common.Infrastructure.csproj" />
 		<ProjectReference Include="..\..\..\Common\WorldExplorer.Common.Presentation\WorldExplorer.Common.Presentation.csproj" />
+		<ProjectReference Include="..\..\Places\WorldExplorer.Modules.Places.IntegrationEvents\WorldExplorer.Modules.Places.IntegrationEvents.csproj" />
 		<ProjectReference Include="..\..\Users\WorldExplorer.Modules.Users.IntegrationEvents\WorldExplorer.Modules.Users.IntegrationEvents.csproj" />
 	</ItemGroup>
 

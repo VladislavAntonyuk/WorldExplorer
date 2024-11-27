@@ -14,7 +14,7 @@
 		          IsVisible="True"
 		          HeightRequest="48">
 			<TitleBar.LeadingContent>
-				<Image Source="logo.png"/>
+				<Image Source="logo.png" />
 			</TitleBar.LeadingContent>
 
 			<TitleBar.Content>
@@ -25,8 +25,7 @@
 					HorizontalOptions="Fill"
 					VerticalOptions="Center"
 					SearchCommand="{Binding SearchCommand}"
-					SearchButtonPressed="SearchBar_OnSearchButtonPressed">
-				</SearchBar>
+					SearchButtonPressed="SearchBar_OnSearchButtonPressed" />
 			</TitleBar.Content>
 
 			<TitleBar.TrailingContent>
@@ -36,12 +35,12 @@
 					<Button
 						Text="{x:Static localization:Localization.Help}"
 						Clicked="HelpClicked"
-						Command="{Binding HelpCommand}"/>
+						Command="{Binding HelpCommand}" />
 
 					<Button
 						Text="{x:Static localization:Localization.About}"
 						Clicked="AboutClicked"
-						Command="{Binding AboutCommand}"/>
+						Command="{Binding AboutCommand}" />
 
 					<controls:Avatar
 						x:Name="Avatar"
@@ -50,7 +49,7 @@
 						<controls:Avatar.GestureRecognizers>
 							<TapGestureRecognizer
 								Tapped="OnProfileTapped"
-								Command="{Binding ProfileCommand}"/>
+								Command="{Binding ProfileCommand}" />
 						</controls:Avatar.GestureRecognizers>
 					</controls:Avatar>
 

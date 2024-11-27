@@ -62,7 +62,7 @@
 			Title="{x:Static localization:Localization.Profile}">
 
 			<Tab.IsVisible>
-				<OnIdiom x:TypeArguments="system:Boolean" Desktop="False" Default="True"/>
+				<OnIdiom x:TypeArguments="system:Boolean" Desktop="False" Default="True" />
 			</Tab.IsVisible>
 
 			<Tab.Icon>

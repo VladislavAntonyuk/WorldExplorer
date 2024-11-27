@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Abstractions;
 
-using Infrastructure.LocationInfo;
 using NetTopologySuite.Geometries;
 
 //latitude = y and longitude = x

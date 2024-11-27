@@ -25,13 +25,12 @@ public static class AspireAiExtensions
 		builder.AddChatClient(_ => new OllamaChatClient(parts["Endpoint"], parts["Model"]));
 	}
 
-	public static void AddChatClient(this IHostApplicationBuilder builder, Func<IServiceProvider, IChatClient> innerClient)
+	public static void AddChatClient(this IHostApplicationBuilder builder,
+		Func<IServiceProvider, IChatClient> innerClient)
 	{
 		builder.Services.AddChatClient(sp =>
 		{
-			var chatClientBuilder = new ChatClientBuilder(innerClient)
-							 .UseLogging()
-							 .UseOpenTelemetry();
+			var chatClientBuilder = new ChatClientBuilder(innerClient).UseLogging().UseOpenTelemetry();
 			if (!builder.Environment.IsDevelopment())
 			{
 				chatClientBuilder = chatClientBuilder.UseDistributedCache();

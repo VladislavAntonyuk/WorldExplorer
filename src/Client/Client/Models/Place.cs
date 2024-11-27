@@ -2,6 +2,12 @@
 
 public class Place
 {
+	public static readonly Place Default = new()
+	{
+		Name = string.Empty,
+		Location = new Location(0, 0)
+	};
+
 	public Guid Id { get; set; }
 	public required string Name { get; set; }
 	public string? Description { get; set; }
@@ -12,11 +18,6 @@ public class Place
 	public double Rating => Reviews.Count > 0 ? Reviews.Average(x => x.Rating) : 0;
 	public List<Review> Reviews { get; set; } = [];
 	public string? MainImage => Images.FirstOrDefault();
-	public static readonly Place Default = new()
-	{
-		Name = string.Empty,
-		Location = new Location(0, 0)
-	};
 }
 
 public sealed record PlaceResponse(

@@ -39,12 +39,13 @@ public partial class PlaceDetailsDialog(
 				var reviewResponse = await travellersClient.GetVisitsByPlaceId.ExecuteAsync(place.Id);
 				if (reviewResponse.IsSuccessResult())
 				{
-					reviews = reviewResponse.Data?.VisitsByPlaceId?.Items?.Select(x => new ReviewResponse()
-					{
-						Comment = x.Review?.Comment,
-						Rating = x.Review?.Rating ?? 0,
-						ReviewDate = x.VisitDate
-					}).ToList() ?? [];
+					reviews = reviewResponse.Data?.VisitsByPlaceId?.Items?.Select(x => new ReviewResponse
+					                        {
+						                        Comment = x.Review?.Comment,
+						                        Rating = x.Review?.Rating ?? 0,
+						                        ReviewDate = x.VisitDate
+					                        })
+					                        .ToList() ?? [];
 				}
 			}
 		} while (string.IsNullOrWhiteSpace(place?.Description));

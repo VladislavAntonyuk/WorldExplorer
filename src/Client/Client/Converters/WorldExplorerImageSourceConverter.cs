@@ -6,6 +6,8 @@ using CommunityToolkit.Maui.Converters;
 [AcceptEmptyServiceProvider]
 public sealed class WorldExplorerImageSourceConverter : BaseConverterOneWay<string?, ImageSource>
 {
+	public override ImageSource DefaultConvertReturnValue { get; set; } = ImageSource.FromFile("loading.png");
+
 	public override ImageSource ConvertFrom(string? value, CultureInfo? culture)
 	{
 		if (value?.StartsWith("data:image;base64,") == true)
@@ -20,6 +22,4 @@ public sealed class WorldExplorerImageSourceConverter : BaseConverterOneWay<stri
 
 		return DefaultConvertReturnValue;
 	}
-
-	public override ImageSource DefaultConvertReturnValue { get; set; } = ImageSource.FromFile("loading.png");
 }

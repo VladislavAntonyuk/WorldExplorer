@@ -12,16 +12,14 @@
 	Shell.NavBarIsVisible="False">
 
 	<framework:BaseContentPage.Resources>
-		<Thickness x:Key="EmptyPadding">0</Thickness>
-		<Thickness x:Key="Padding">10</Thickness>
-		<toolkit:IsEqualConverter x:Key="IsEqualConverter"/>
+		<toolkit:IsEqualConverter x:Key="IsEqualConverter" />
 	</framework:BaseContentPage.Resources>
 
 	<Grid>
 		<worldExplorerMap:WorldExplorerMap
 			Pins="{Binding Pins}"
 			UserLocation="{Binding CurrentLocation}"
-			MapReadyCommand="{Binding MapReadyCommand}"/>
+			MapReadyCommand="{Binding MapReadyCommand}" />
 
 		<HorizontalStackLayout
 			BackgroundColor="{StaticResource White}"
@@ -31,13 +29,13 @@
 			<Label
 				Text="{Binding Status}"
 				TextColor="{StaticResource Black}"
-				Padding="10"/>
+				Padding="10" />
 
 			<Button
 				BackgroundColor="{StaticResource White}"
 				Text="{x:Static localization:Localization.Refresh}"
 				IsVisible="{Binding Status, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static localization:Localization.UnableToGetPlaceDetails}}"
-				Command="{Binding RefreshCommand}"/>
+				Command="{Binding RefreshCommand}" />
 
 		</HorizontalStackLayout>
 	</Grid>

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Components;
 using Modules.Places.Application.Abstractions;
 using Modules.Places.Application.Places.GetPlace;
 using MudBlazor;
-using WorldExplorer.Web.Components;
 
 public partial class PlaceDetails(WorldExplorerApiClient apiClient, ISnackbar snackbar) : WorldExplorerAuthBaseComponent
 {
@@ -29,7 +28,7 @@ public partial class PlaceDetails(WorldExplorerApiClient apiClient, ISnackbar sn
 			return;
 		}
 
-		place = new PlaceRequest()
+		place = new PlaceRequest
 		{
 			Description = placeResponse.Description,
 			Location = placeResponse.Location,
@@ -44,6 +43,7 @@ public partial class PlaceDetails(WorldExplorerApiClient apiClient, ISnackbar sn
 		{
 			return;
 		}
+
 		await apiClient.UpdatePlace(PlaceId, place, CancellationToken.None);
 		snackbar.Add("Saved", Severity.Success);
 	}

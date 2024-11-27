@@ -12,17 +12,17 @@ internal class AuthService : IAuthService
 	{
 		this.azureB2COptions = azureB2COptions;
 		authenticationClient = PublicClientApplicationBuilder.Create(azureB2COptions.Value.ClientId)
-															 .WithB2CAuthority(azureB2COptions.Value.AuthoritySignIn)
-															 .WithHttpClientFactory(new AuthHttpClientFactory())
+		                                                     .WithB2CAuthority(azureB2COptions.Value.AuthoritySignIn)
+		                                                     .WithHttpClientFactory(new AuthHttpClientFactory())
 #if WINDOWS
 															 .WithRedirectUri("http://localhost")
 #else
 															 .WithRedirectUri($"msal{azureB2COptions.Value.ClientId}://auth")
 #endif
 #if ANDROID
-															 .WithParentActivityOrWindow(() => Platform.CurrentActivity)
+		                                                     .WithParentActivityOrWindow(() => Platform.CurrentActivity)
 #endif
-															 .Build();
+		                                                     .Build();
 	}
 
 	public async Task<IOperationResult<string>> SignInInteractively(CancellationToken cancellationToken)
@@ -37,7 +37,7 @@ internal class AuthService : IAuthService
 #if WINDOWS
 				.WithUseEmbeddedWebView(authenticationClient.IsEmbeddedWebViewAvailable())
 #endif
-												   .ExecuteAsync(cancellationToken);
+			                                       .ExecuteAsync(cancellationToken);
 			return new OperationResult<string>
 			{
 				Value = result.AccessToken
@@ -69,7 +69,7 @@ internal class AuthService : IAuthService
 			}
 
 			var result = await authenticationClient.AcquireTokenSilent(azureB2COptions.Value.Scopes, firstAccount)
-												   .ExecuteAsync(cancellationToken);
+			                                       .ExecuteAsync(cancellationToken);
 			return new OperationResult<string>
 			{
 				Value = result.AccessToken

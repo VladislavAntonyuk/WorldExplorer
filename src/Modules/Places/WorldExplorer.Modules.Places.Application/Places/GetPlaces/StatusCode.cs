@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlace;
+﻿namespace WorldExplorer.Modules.Places.Application.Places.GetPlaces;
 
 public enum LocationInfoRequestResponseStatusCode
 {

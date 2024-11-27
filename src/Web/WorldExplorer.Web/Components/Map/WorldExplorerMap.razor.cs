@@ -14,18 +14,12 @@ public sealed partial class WorldExplorerMap(
 	ISnackbar snackbar,
 	IOptions<PlacesSettings> placeOptions) : WorldExplorerBaseComponent, IAsyncDisposable
 {
+	private CancellationTokenSource cancellationTokenSource = new();
 	private Location? currentLocation;
 	private string? errorMessage;
 	private bool isLoading = true;
-	private DotNetObjectReference<WorldExplorerMap>? mapRef;
 	private bool isRendered;
-	private CancellationTokenSource cancellationTokenSource = new();
-
-	protected override void OnInitialized()
-	{
-		cancellationTokenSource = new();
-		base.OnInitialized();
-	}
+	private DotNetObjectReference<WorldExplorerMap>? mapRef;
 
 	public async ValueTask DisposeAsync()
 	{
@@ -39,6 +33,12 @@ public sealed partial class WorldExplorerMap(
 		}
 	}
 
+	protected override void OnInitialized()
+	{
+		cancellationTokenSource = new CancellationTokenSource();
+		base.OnInitialized();
+	}
+
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		isRendered = true;
@@ -47,10 +47,11 @@ public sealed partial class WorldExplorerMap(
 		{
 			var user = await apiClient.GetCurrentUser(cancellationTokenSource.Token);
 			mapRef = DotNetObjectReference.Create(this);
-			await jsRuntime.InvokeVoidAsyncIgnoreErrors("leafletInterop.initMap", cancellationTokenSource.Token, mapRef, new MapOptions(null, 15)
-			{
-				TrackUserLocation = user?.Settings.TrackUserLocation == true
-			});
+			await jsRuntime.InvokeVoidAsyncIgnoreErrors("leafletInterop.initMap", cancellationTokenSource.Token, mapRef,
+			                                            new MapOptions(null, 15)
+			                                            {
+				                                            TrackUserLocation = user?.Settings.TrackUserLocation == true
+			                                            });
 		}
 	}
 
@@ -83,7 +84,8 @@ public sealed partial class WorldExplorerMap(
 	[JSInvokable]
 	public async Task UpdatePosition(Location location)
 	{
-		if (currentLocation is null || currentLocation.CalculateDistanceInMetersTo(location) > placeOptions.Value.LocationDistance)
+		if (currentLocation is null ||
+		    currentLocation.CalculateDistanceInMetersTo(location) > placeOptions.Value.LocationDistance)
 		{
 			currentLocation = location;
 			isLoading = false;

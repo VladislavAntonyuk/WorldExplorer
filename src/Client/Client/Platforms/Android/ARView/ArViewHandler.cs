@@ -6,9 +6,9 @@ using Controls;
 using Google.AR.Core;
 using Microsoft.Maui.Handlers;
 
-public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, GLSurfaceView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
+public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper)
+	: ViewHandler<IArView, GLSurfaceView>(mapper ?? ArViewMapper, commandMapper ?? ArViewCommandMapper)
 {
-	private ArRenderer? arRenderer;
 	public static readonly IPropertyMapper<IArView, ArViewHandler> ArViewMapper =
 		new PropertyMapper<IArView, ArViewHandler>(ViewMapper)
 		{
@@ -16,6 +16,7 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		};
 
 	public static readonly CommandMapper<IArView, ArViewHandler> ArViewCommandMapper = new(ViewCommandMapper);
+	private ArRenderer? arRenderer;
 
 	public ArViewHandler() : this(ArViewMapper, ArViewCommandMapper)
 	{
@@ -48,8 +49,8 @@ public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper
 		}
 
 		var result = ArCoreApk.Instance.RequestInstall(Platform.CurrentActivity, true,
-													   ArCoreApk.InstallBehavior.Required,
-													   ArCoreApk.UserMessageType.Application);
+		                                               ArCoreApk.InstallBehavior.Required,
+		                                               ArCoreApk.UserMessageType.Application);
 		if (result != ArCoreApk.InstallStatus.Installed)
 		{
 			Toast.MakeText(Context, "ARCore is not installed", ToastLength.Long)?.Show();

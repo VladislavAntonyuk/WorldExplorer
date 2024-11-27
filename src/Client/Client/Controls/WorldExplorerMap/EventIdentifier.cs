@@ -1,5 +1,6 @@
 ﻿namespace Client.Controls.WorldExplorerMap;
-enum EventIdentifier
+
+internal enum EventIdentifier
 {
 	MapInitialized,
 	MarkerClicked

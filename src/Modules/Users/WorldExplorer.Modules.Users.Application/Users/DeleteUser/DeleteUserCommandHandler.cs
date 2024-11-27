@@ -6,8 +6,10 @@ using Common.Application.Messaging;
 using Common.Domain;
 using Domain.Users;
 
-internal sealed class DeleteUserCommandHandler(IUserRepository userRepository, IGraphClientService graphClientService, IUnitOfWork unitOfWork)
-	: ICommandHandler<DeleteUserCommand>
+internal sealed class DeleteUserCommandHandler(
+	IUserRepository userRepository,
+	IGraphClientService graphClientService,
+	IUnitOfWork unitOfWork) : ICommandHandler<DeleteUserCommand>
 {
 	public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
 	{

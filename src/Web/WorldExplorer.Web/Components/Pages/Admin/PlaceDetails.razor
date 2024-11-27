@@ -7,13 +7,13 @@
 <MudButton OnClick="Back">Back</MudButton>
 @if (place is null)
 {
-	<LoadingControl />
+	<LoadingControl/>
 }
 else
 {
-	<MudTextField T="string" @bind-Value="@place.Name" />
-	<MudTextField T="Location" @bind-Value="@place.Location" Converter="Convert" />
-	<MudTextField T="string" @bind-Value="@place.Description" Lines="10" MaxLines="30" />
+	<MudTextField T="string" @bind-Value="@place.Name"/>
+	<MudTextField T="Location" @bind-Value="@place.Location" Converter="Convert"/>
+	<MudTextField T="string" @bind-Value="@place.Description" Lines="10" MaxLines="30"/>
 
 	<MudTable Items="@place.Images" Breakpoint="Breakpoint.Sm">
 		<HeaderContent>
@@ -22,9 +22,15 @@ else
 			<MudTh></MudTh>
 		</HeaderContent>
 		<RowTemplate Context="image">
-			<MudTd DataLabel="Url"><MudTextField T="string" @bind-Value="@image" /></MudTd>
-			<MudTd DataLabel="Image"><MudImage Src="@image" Width="100" Height="100" /></MudTd>
-			<MudTd DataLabel=""><MudButton Color="Color.Error" OnClick="()=>DeleteImage(image)">Delete</MudButton></MudTd>
+			<MudTd DataLabel="Url">
+				<MudTextField T="string" @bind-Value="@image"/>
+			</MudTd>
+			<MudTd DataLabel="Image">
+				<MudImage Src="@image" Width="100" Height="100"/>
+			</MudTd>
+			<MudTd DataLabel="">
+				<MudButton Color="Color.Error" OnClick="() => DeleteImage(image)">Delete</MudButton>
+			</MudTd>
 		</RowTemplate>
 	</MudTable>
 

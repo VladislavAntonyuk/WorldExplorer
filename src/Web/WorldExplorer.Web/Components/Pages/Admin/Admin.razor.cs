@@ -1,16 +1,16 @@
 ﻿namespace WorldExplorer.Web.Components.Pages.Admin;
 
+using Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
-using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 
 public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)
 	: WorldExplorerAuthBaseComponent
 {
-	private MudTable<UserResponse> usersTable;
 	private MudTable<PlaceResponse> placesTable;
 	private MudTable<LocationInfoRequestResponse> requestsTable;
+	private MudTable<UserResponse> usersTable;
 
 	private async Task ClearPlaces()
 	{
@@ -37,7 +37,7 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 	private async Task<TableData<UserResponse>> GetUsers(TableState tableState, CancellationToken cancellationToken)
 	{
 		var users = await apiClient.GetUsers(cancellationToken);
-		return new TableData<UserResponse>()
+		return new TableData<UserResponse>
 		{
 			Items = users,
 			TotalItems = users.Count
@@ -47,7 +47,7 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 	private async Task<TableData<PlaceResponse>> GetPlaces(TableState tableState, CancellationToken cancellationToken)
 	{
 		var places = await apiClient.GetPlaces(cancellationToken);
-		return new TableData<PlaceResponse>()
+		return new TableData<PlaceResponse>
 		{
 			Items = places,
 			TotalItems = places.Count
@@ -57,7 +57,7 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 	private async Task<TableData<LocationInfoRequestResponse>> GetRequests(TableState tableState, CancellationToken cancellationToken)
 	{
 		var requests = await apiClient.GetLocationInfoRequests(CancellationToken.None);
-		return new TableData<LocationInfoRequestResponse>()
+		return new TableData<LocationInfoRequestResponse>
 		{
 			Items = requests,
 			TotalItems = requests.Count

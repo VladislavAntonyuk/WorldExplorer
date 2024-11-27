@@ -51,7 +51,7 @@ internal sealed class ProcessInboxJob(
 			catch (Exception caughtException)
 			{
 				logger.LogError(caughtException, "{Module} - Exception while processing inbox message {MessageId}",
-								ModuleName, inboxMessage.Id);
+				                ModuleName, inboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -76,13 +76,12 @@ internal sealed class ProcessInboxJob(
 
 		           """;
 
-		var inboxMessages =
-			await dbConnectionFactory.InboxMessages
-			                         .Where(x=>x.ProcessedOnUtc == null)
-			                         .Take(inboxOptions.Value.BatchSize)
-			                         .OrderBy(x=>x.OccurredOnUtc)
-			                         .Select(x=>new InboxMessageResponse(x.Id, x.Content))
-			                         .ToListAsync();
+		var inboxMessages = await dbConnectionFactory.InboxMessages
+		                                             .Where(x => x.ProcessedOnUtc == null)
+		                                             .Take(inboxOptions.Value.BatchSize)
+		                                             .OrderBy(x => x.OccurredOnUtc)
+		                                             .Select(x => new InboxMessageResponse(x.Id, x.Content))
+		                                             .ToListAsync();
 
 		return inboxMessages;
 	}
@@ -91,9 +90,9 @@ internal sealed class ProcessInboxJob(
 	{
 		var message = exception?.Message ?? null;
 		await dbConnectionFactory.InboxMessages.Where(x => x.Id == inboxMessage.Id)
-								 .ExecuteUpdateAsync(
-									 m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
-										   .SetProperty(p => p.Error, message));
+		                         .ExecuteUpdateAsync(
+			                         m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
+			                               .SetProperty(p => p.Error, message));
 	}
 
 	internal sealed record InboxMessageResponse(Guid Id, string Content);

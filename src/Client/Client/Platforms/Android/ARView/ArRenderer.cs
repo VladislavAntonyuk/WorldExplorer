@@ -18,6 +18,7 @@ using Exception = Exception;
 public class ArRenderer : Object, GLSurfaceView.IRenderer
 {
 	private static readonly float[] MAnchorMatrix = new float[16];
+	private readonly Config config;
 	private readonly Context context;
 
 	private readonly List<Anchor> mAnchors = [];
@@ -28,7 +29,6 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 	private readonly ObjectRenderer mVirtualObject = new();
 	private readonly ObjectRenderer mVirtualObjectShadow = new();
 	private readonly Session session;
-	private readonly Config config;
 
 	private Snackbar? mLoadingMessageSnackbar;
 
@@ -44,33 +44,12 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 		MainThread.BeginInvokeOnMainThread(() =>
 		{
 			ArgumentNullException.ThrowIfNull(Platform.CurrentActivity?.Window?.DecorView);
-			mLoadingMessageSnackbar =
-				Snackbar.Make(
-					Platform.CurrentActivity.Window.DecorView, "Searching for surfaces...",
-					BaseTransientBottomBar.LengthIndefinite);
+			mLoadingMessageSnackbar = Snackbar.Make(Platform.CurrentActivity.Window.DecorView,
+			                                        "Searching for surfaces...",
+			                                        BaseTransientBottomBar.LengthIndefinite);
 			mLoadingMessageSnackbar.View.SetBackgroundColor(Color.DarkGray);
 			mLoadingMessageSnackbar.Show();
 		});
-	}
-
-	public void AddImages(ICollection<string> viewImages)
-	{
-		var imageDatabase = new AugmentedImageDatabase(session);
-
-		foreach (var image in viewImages)
-		{
-			var bitmap = BitmapFactory.DecodeFile(image);
-			imageDatabase.AddImage(image, bitmap);
-		}
-
-		config.SetAugmentedImageDatabase(imageDatabase);
-		session.Configure(config);
-	}
-
-	protected override void Dispose(bool disposing)
-	{
-		HideLoadingMessage();
-		base.Dispose(disposing);
 	}
 
 	public void OnDrawFrame(IGL10? gl)
@@ -159,7 +138,7 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 				foreach (var plane in planes)
 				{
 					if (plane.GetType() == Plane.Type.HorizontalUpwardFacing &&
-						plane.TrackingState == TrackingState.Tracking)
+					    plane.TrackingState == TrackingState.Tracking)
 					{
 						HideLoadingMessage();
 						break;
@@ -242,6 +221,26 @@ public class ArRenderer : Object, GLSurfaceView.IRenderer
 		}
 
 		mPointCloud.CreateOnGlThread(context);
+	}
+
+	public void AddImages(ICollection<string> viewImages)
+	{
+		var imageDatabase = new AugmentedImageDatabase(session);
+
+		foreach (var image in viewImages)
+		{
+			var bitmap = BitmapFactory.DecodeFile(image);
+			imageDatabase.AddImage(image, bitmap);
+		}
+
+		config.SetAugmentedImageDatabase(imageDatabase);
+		session.Configure(config);
+	}
+
+	protected override void Dispose(bool disposing)
+	{
+		HideLoadingMessage();
+		base.Dispose(disposing);
 	}
 
 	private void HideLoadingMessage()

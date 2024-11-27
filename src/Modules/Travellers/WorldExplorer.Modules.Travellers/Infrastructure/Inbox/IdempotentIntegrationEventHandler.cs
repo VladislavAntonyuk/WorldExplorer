@@ -28,7 +28,8 @@ internal sealed class IdempotentIntegrationEventHandler<TIntegrationEvent>(
 
 	private async Task<bool> InboxConsumerExistsAsync(InboxMessageConsumer inboxMessageConsumer)
 	{
-		return await dbConnectionFactory.InboxMessagesConsumers.AnyAsync(x=>x.Name == inboxMessageConsumer.Name && x.InboxMessageId == inboxMessageConsumer.InboxMessageId);
+		return await dbConnectionFactory.InboxMessagesConsumers.AnyAsync(
+			x => x.Name == inboxMessageConsumer.Name && x.InboxMessageId == inboxMessageConsumer.InboxMessageId);
 	}
 
 	private async Task InsertInboxConsumerAsync(InboxMessageConsumer inboxMessageConsumer)

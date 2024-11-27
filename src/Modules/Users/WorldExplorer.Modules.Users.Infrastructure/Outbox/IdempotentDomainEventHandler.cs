@@ -26,8 +26,8 @@ internal sealed class IdempotentDomainEventHandler<TDomainEvent>(
 
 	private async Task<bool> OutboxConsumerExistsAsync(OutboxMessageConsumer outboxMessageConsumer)
 	{
-		return await dbConnectionFactory.OutboxMessagesConsumers
-		                                .AnyAsync(x=>x.Name == outboxMessageConsumer.Name && x.OutboxMessageId == outboxMessageConsumer.OutboxMessageId);
+		return await dbConnectionFactory.OutboxMessagesConsumers.AnyAsync(
+			x => x.Name == outboxMessageConsumer.Name && x.OutboxMessageId == outboxMessageConsumer.OutboxMessageId);
 	}
 
 	private async Task InsertOutboxConsumerAsync(OutboxMessageConsumer outboxMessageConsumer)

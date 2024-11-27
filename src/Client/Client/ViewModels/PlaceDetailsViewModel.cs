@@ -19,16 +19,16 @@ public sealed partial class PlaceDetailsViewModel(
 	IDialogService dialogService,
 	INavigationService navigationService) : BasePopupViewModel(navigationService)
 {
-	private Guid? placeId;
+	[ObservableProperty]
+	private bool isLiveViewEnabled;
 
 	[ObservableProperty]
 	private bool isPlacedLoaded;
 
 	[ObservableProperty]
-	private bool isLiveViewEnabled;
-
-	[ObservableProperty]
 	private Place place = Place.Default;
+
+	private Guid? placeId;
 
 	public override void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
@@ -61,6 +61,7 @@ public sealed partial class PlaceDetailsViewModel(
 				{
 					IsLiveViewEnabled = true;
 				}
+
 				var placeReviews = await travellersClient.GetVisitsByPlaceId.ExecuteAsync(Place.Id);
 				if (placeReviews.IsSuccessResult())
 				{
@@ -129,7 +130,8 @@ public sealed partial class PlaceDetailsViewModel(
 			return;
 		}
 
-		if (DeviceInfo.Current.Platform == DevicePlatform.iOS || DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+		if (DeviceInfo.Current.Platform == DevicePlatform.iOS ||
+		    DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
 		{
 			// https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
 			await Launcher.OpenAsync($"http://maps.apple.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.Latitude},{Place.Location.Longitude}");

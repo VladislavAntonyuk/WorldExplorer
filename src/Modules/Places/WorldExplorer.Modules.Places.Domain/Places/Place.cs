@@ -34,4 +34,9 @@ public class Place : Entity
 
 		Raise(new PlaceUpdatedDomainEvent(Id, Name, Location, Description));
 	}
+
+	public void Delete()
+	{
+		Raise(new PlaceDeletedDomainEvent(Id));
+	}
 }

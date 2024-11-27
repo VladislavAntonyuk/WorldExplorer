@@ -9,6 +9,11 @@ public abstract partial class BasePopupViewModel(INavigationService navigationSe
 
 	private TaskCompletionSource? taskCompletionSource;
 
+	public virtual void ApplyQueryAttributes(IDictionary<string, object> query)
+	{
+		taskCompletionSource = query[TaskCompletionSourceKey] as TaskCompletionSource;
+	}
+
 	public virtual Task ResetState()
 	{
 		return Task.CompletedTask;
@@ -19,10 +24,5 @@ public abstract partial class BasePopupViewModel(INavigationService navigationSe
 	{
 		await navigationService.NavigateBackAsync();
 		taskCompletionSource?.SetResult();
-	}
-
-	public virtual void ApplyQueryAttributes(IDictionary<string, object> query)
-	{
-		taskCompletionSource = query[TaskCompletionSourceKey] as TaskCompletionSource;
 	}
 }

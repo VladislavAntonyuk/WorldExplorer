@@ -10,9 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 public abstract class BaseIntegrationTest : IDisposable
 {
 	protected static readonly Fixture Faker = new();
-	private readonly IServiceScope scope;
 	protected readonly UsersDbContext DbContext;
 	protected readonly HttpClient HttpClient;
+	private readonly IServiceScope scope;
 	protected readonly ISender Sender;
 
 	protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)

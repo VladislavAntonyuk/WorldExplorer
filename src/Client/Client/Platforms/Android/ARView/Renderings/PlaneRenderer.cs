@@ -26,9 +26,9 @@ public class PlaneRenderer
 		BytesPerFloat * CoordsPerVertex * VertsPerBoundaryVert * InitialBufferBoundaryVerts;
 
 	private const int InitialIndexBufferSizeBytes = BytesPerShort *
-													IndicesPerBoundaryVert *
-													IndicesPerBoundaryVert *
-													InitialBufferBoundaryVerts;
+	                                                IndicesPerBoundaryVert *
+	                                                IndicesPerBoundaryVert *
+	                                                InitialBufferBoundaryVerts;
 
 	private const float FadeRadiusM = 0.25f;
 	private const float DotsPerMeter = 10.0f;
@@ -39,13 +39,7 @@ public class PlaneRenderer
 	// dotThreshold/lineThreshold: red/green intensity above which dots/lines are present
 	// lineFadeShrink:  lines will fade in between alpha = 1-(1/lineFadeShrink) and 1.0
 	// occlusionShrink: occluded planes will fade out between alpha = 0 and 1/occlusionShrink
-	private static readonly float[] GridControl =
-	[
-		0.2f,
-		0.4f,
-		2.0f,
-		1.5f
-	];
+	private static readonly float[] GridControl = [0.2f, 0.4f, 2.0f, 1.5f];
 
 	private static readonly int[] PlaneColorsRgba =
 	[
@@ -53,13 +47,7 @@ public class PlaneRenderer
 		//0xF44336FF,
 		//0xE91E63FF,
 		//0x9C27B0FF,
-		0x673AB7FF,
-		0x3F51B5FF,
-		0x2196F3FF,
-		0x03A9F4FF,
-		0x00BCD4FF,
-		0x009688FF,
-		0x4CAF50FF
+		0x673AB7FF, 0x3F51B5FF, 0x2196F3FF, 0x03A9F4FF, 0x00BCD4FF, 0x009688FF, 0x4CAF50FF
 		//0x8BC34AFF,
 		//0xCDDC39FF,
 		//0xFFEB3BFF,
@@ -84,8 +72,8 @@ public class PlaneRenderer
 	private int mGridControlUniform;
 
 	private ShortBuffer mIndexBuffer = ByteBuffer.AllocateDirect(InitialIndexBufferSizeBytes)
-												 .Order(ByteOrder)
-												 .AsShortBuffer();
+	                                             .Order(ByteOrder)
+	                                             .AsShortBuffer();
 
 	private int mLineColorUniform;
 
@@ -99,14 +87,14 @@ public class PlaneRenderer
 	private int mTextureUniform;
 
 	private FloatBuffer mVertexBuffer = ByteBuffer.AllocateDirect(InitialVertexBufferSizeBytes)
-												  .Order(ByteOrder)
-												  .AsFloatBuffer();
+	                                              .Order(ByteOrder)
+	                                              .AsFloatBuffer();
 
 	/**
 	 * Allocates and initializes OpenGL resources needed by the plane renderer.  Must be
 	 * called on the OpenGL thread, typically in
 	 * {@link GLSurfaceView.Renderer#onSurfaceCreated(GL10, EGLConfig)}.
-	 * 
+	 *
 	 * @param context Needed to access shader source and texture PNG.
 	 * @param gridDistanceTextureName  Name of the PNG file containing the grid texture.
 	 */
@@ -261,7 +249,7 @@ public class PlaneRenderer
 		// Set the position of the plane
 		mVertexBuffer.Rewind();
 		GLES20.GlVertexAttribPointer(mPlaneXzPositionAlphaAttribute, CoordsPerVertex, GLES20.GlFloat, false,
-									 BytesPerFloat * CoordsPerVertex, mVertexBuffer);
+		                             BytesPerFloat * CoordsPerVertex, mVertexBuffer);
 
 		// Set the Model and ModelViewProjection matrices in the shader.
 		GLES20.GlUniformMatrix4fv(mPlaneModelUniform, 1, false, mModelMatrix, 0);
@@ -274,7 +262,7 @@ public class PlaneRenderer
 
 	/**
 	 * Draws the collection of tracked planes, with closer planes hiding more distant ones.
-	 * 
+	 *
 	 * @param allPlanes The collection of planes to draw.
 	 * @param cameraPose The pose of the camera, as returned by {@link Frame#getPose()}
 	 * @param cameraPerspective The projection matrix, as returned by
@@ -301,8 +289,8 @@ public class PlaneRenderer
 			center.GetTransformedAxis(1, 1.0f, normal, 0);
 			// Compute dot product of plane's normal with vector from camera to plane center.
 			var distance = ((cameraX - center.Tx()) * normal[0]) +
-						   ((cameraY - center.Ty()) * normal[1]) +
-						   ((cameraZ - center.Tz()) * normal[2]);
+			               ((cameraY - center.Ty()) * normal[1]) +
+			               ((cameraZ - center.Tz()) * normal[2]);
 			if (distance < 0)
 			{
 				// Plane is back-facing.
@@ -332,7 +320,7 @@ public class PlaneRenderer
 		// Additive blending, masked by alpha chanel, clearing alpha channel.
 		GLES20.GlEnable(GLES20.GlBlend);
 		GLES20.GlBlendFuncSeparate(GLES20.GlDstAlpha, GLES20.GlOne, // RGB (src, dest)
-								   GLES20.GlZero, GLES20.GlOneMinusSrcAlpha); // ALPHA (src, dest)
+		                           GLES20.GlZero, GLES20.GlOneMinusSrcAlpha); // ALPHA (src, dest)
 
 		// Set up the shader.
 		GLES20.GlUseProgram(mPlaneProgram);

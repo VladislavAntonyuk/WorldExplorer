@@ -1,13 +1,14 @@
 ﻿namespace WorldExplorer.Modules.Places.Presentation.LocationInfoRequests;
 
-using Application.Places.GetPlaces;
+using Application.LocationInfoRequests.DeleteLocationInfoRequest;
+using Application.LocationInfoRequests.DeleteLocationInfoRequests;
+using Common.Infrastructure.Authorization;
+using Common.Presentation.Endpoints;
+using Common.Presentation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using WorldExplorer.Common.Infrastructure.Authorization;
-using WorldExplorer.Common.Presentation.Endpoints;
-using WorldExplorer.Common.Presentation.Results;
 
 internal sealed class DeleteLocationInfoRequests : IEndpoint
 {

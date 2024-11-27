@@ -27,7 +27,7 @@ internal sealed class ProcessOutboxJob(
 		logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
 
 		var outboxMessages = await GetOutboxMessagesAsync();
-//		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
+		//		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
 
 
 		foreach (var outboxMessage in outboxMessages)
@@ -52,7 +52,7 @@ internal sealed class ProcessOutboxJob(
 			catch (Exception caughtException)
 			{
 				logger.LogError(caughtException, "{Module} - Exception while processing outbox message {MessageId}",
-								ModuleName, outboxMessage.Id);
+				                ModuleName, outboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -67,12 +67,10 @@ internal sealed class ProcessOutboxJob(
 
 	private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync()
 	{
-		var outboxMessages =
-			await dbConnectionFactory.OutboxMessages
-									 .Where(x => x.ProcessedOnUtc == null)
-									 .Take(outboxOptions.Value.BatchSize)
-									 .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
-									 .ToListAsync();
+		var outboxMessages = await dbConnectionFactory.OutboxMessages.Where(x => x.ProcessedOnUtc == null)
+		                                              .Take(outboxOptions.Value.BatchSize)
+		                                              .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
+		                                              .ToListAsync();
 
 		return outboxMessages;
 	}
@@ -80,11 +78,11 @@ internal sealed class ProcessOutboxJob(
 	private async Task UpdateOutboxMessageAsync(OutboxMessageResponse outboxMessage, Exception? exception)
 	{
 		var error = exception?.ToString();
-		await dbConnectionFactory.OutboxMessages
-		                         .Where(x => x.Id == outboxMessage.Id)
-		                         .ExecuteUpdateAsync(m => m
-		                                                  .SetProperty(p => p.Error, error)
-		                                                  .SetProperty(p => p.ProcessedOnUtc, dateTimeProvider.GetUtcNow().UtcDateTime));
+		await dbConnectionFactory.OutboxMessages.Where(x => x.Id == outboxMessage.Id)
+		                         .ExecuteUpdateAsync(m => m.SetProperty(p => p.Error, error)
+		                                                   .SetProperty(
+			                                                   p => p.ProcessedOnUtc,
+			                                                   dateTimeProvider.GetUtcNow().UtcDateTime));
 	}
 
 	internal sealed record OutboxMessageResponse(Guid Id, string Content, string Type);

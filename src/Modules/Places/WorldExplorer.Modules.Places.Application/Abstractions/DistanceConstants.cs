@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Places.Infrastructure.LocationInfo;
+﻿namespace WorldExplorer.Modules.Places.Application.Abstractions;
 
 public static class DistanceConstants
 {

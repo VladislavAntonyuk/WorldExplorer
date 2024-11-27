@@ -1,8 +1,8 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Configurations;
 
+using Application.Visits;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WorldExplorer.Modules.Travellers.Application.Visits;
 
 public class PlacesConfiguration : IEntityTypeConfiguration<Place>
 {

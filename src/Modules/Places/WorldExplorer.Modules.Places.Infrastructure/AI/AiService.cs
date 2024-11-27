@@ -36,9 +36,7 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 		}
 
 		var response = JsonSerializer.Deserialize<AIResponse>(result, SerializerSettings.Instance);
-		return response?.Places
-			.Select(x => new Place(x.Name, x.Location.ToPoint(), null))
-			.ToList() ?? [];
+		return response?.Places.Select(x => new Place(x.Name, x.Location.ToPoint(), null)).ToList() ?? [];
 	}
 
 	public Task<string?> GetPlaceDescription(string placeName, Location location)
@@ -54,7 +52,7 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 
 		return GetResponse(generalPrompt, AiOutputFormat.Text);
 	}
-	
+
 	private async Task<string?> GetResponse(string request, AiOutputFormat outputFormat)
 	{
 		try

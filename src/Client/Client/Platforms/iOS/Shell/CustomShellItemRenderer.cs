@@ -24,7 +24,7 @@ internal class CustomShellItemRenderer(IShellContext context) : ShellItemRendere
 			{
 				var image = await tabbar.CenterViewImageSource.GetPlatformImageAsync(
 					Application.Current!.Windows[^1].Handler!.MauiContext!);
-				
+
 				middleView = new UIButton(UIButtonType.Custom);
 				middleView.BackgroundColor = tabbar.CenterViewBackgroundColor.ToPlatform();
 				middleView.Frame = new CGRect(CGPoint.Empty, new CGSize(70, 70));
@@ -35,8 +35,8 @@ internal class CustomShellItemRenderer(IShellContext context) : ShellItemRendere
 				}
 
 				middleView.AutoresizingMask = UIViewAutoresizing.FlexibleRightMargin |
-											  UIViewAutoresizing.FlexibleLeftMargin |
-											  UIViewAutoresizing.FlexibleBottomMargin;
+				                              UIViewAutoresizing.FlexibleLeftMargin |
+				                              UIViewAutoresizing.FlexibleBottomMargin;
 				middleView.Layer.CornerRadius = middleView.Frame.Width / 2;
 				middleView.Layer.MasksToBounds = false;
 

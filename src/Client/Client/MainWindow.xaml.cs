@@ -17,14 +17,14 @@ public partial class MainWindow : Window, IRecipient<UserAuthenticatedEvent>
 		SetTitleBar(null);
 	}
 
-	private void OnProfileTapped(object? sender, TappedEventArgs e)
-	{
-		mainViewModel.ProfileCommand.Execute(null);
-	}
-
 	public void Receive(UserAuthenticatedEvent message)
 	{
 		SetTitleBar(message.User);
+	}
+
+	private void OnProfileTapped(object? sender, TappedEventArgs e)
+	{
+		mainViewModel.ProfileCommand.Execute(null);
 	}
 
 	private void SetTitleBar(User? user)

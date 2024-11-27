@@ -6,13 +6,16 @@ using System.Text.Json.Serialization;
 using System.Web;
 using Application.Abstractions;
 using Microsoft.Extensions.Configuration;
-using System.Threading;
 
 public class ImageSearchService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
 	: IImageSearchService
 {
 	private readonly string? apiKey = configuration.GetValue<string>("GoogleSearch:ApiKey");
-	private readonly JsonSerializerOptions jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
+
+	private readonly JsonSerializerOptions jsonSerializerOptions = new()
+	{
+		PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+	};
 
 	public async Task<List<string>> GetPlaceImages(string placeName, CancellationToken cancellationToken)
 	{

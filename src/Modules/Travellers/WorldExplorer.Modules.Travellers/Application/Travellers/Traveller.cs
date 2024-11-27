@@ -1,6 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers;
 
-using WorldExplorer.Modules.Travellers.Application.Visits;
+using Visits;
 
 public class Traveller
 {
@@ -9,7 +9,7 @@ public class Traveller
 
 	public static Traveller Create(Guid travellerId, ICollection<Visit> visits)
 	{
-		return new Traveller()
+		return new Traveller
 		{
 			Id = travellerId,
 			Visits = visits

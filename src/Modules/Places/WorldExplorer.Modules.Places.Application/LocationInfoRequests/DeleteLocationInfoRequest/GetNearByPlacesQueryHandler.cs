@@ -1,9 +1,8 @@
-﻿namespace WorldExplorer.Modules.Places.Application.LocationInfoRequests.DeletePlace;
+﻿namespace WorldExplorer.Modules.Places.Application.LocationInfoRequests.DeleteLocationInfoRequest;
 
-using Places.GetPlaces;
-using WorldExplorer.Common.Application.Messaging;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Places.Domain.LocationInfo;
+using Common.Application.Messaging;
+using Common.Domain;
+using Domain.LocationInfo;
 
 internal sealed class DeleteLocationInfoRequestCommandHandler(ILocationInfoRepository placeRepository)
 	: ICommandHandler<DeleteLocationInfoRequestCommand>

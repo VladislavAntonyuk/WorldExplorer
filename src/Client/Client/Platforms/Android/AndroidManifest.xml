@@ -21,7 +21,7 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<!-- Limits app visibility in the Google Play Store to ARCore supported devices (https://developers.google.com/ar/devices). -->
-	<uses-feature android:name="android.hardware.camera.ar" android:required="false"/>
+	<uses-feature android:name="android.hardware.camera.ar" android:required="false" />
 	<uses-feature android:glEsVersion="0x00020000" android:required="false" />
 	<uses-feature android:name="android.hardware.location" android:required="true" />
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />

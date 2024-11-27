@@ -1,7 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers.CreateTraveller;
 
 using Abstractions.Data;
-using Application.Travellers;
 using Common.Application.Messaging;
 using Common.Domain;
 

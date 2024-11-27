@@ -3,8 +3,7 @@
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 
-public abstract class BasePopup<T> : BaseContentPage<T>
-	where T : BasePopupViewModel
+public abstract class BasePopup<T> : BaseContentPage<T> where T : BasePopupViewModel
 {
 	private readonly T basePopupViewModel;
 
