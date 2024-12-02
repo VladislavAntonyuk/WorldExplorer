@@ -12,8 +12,6 @@ internal sealed class IdempotentIntegrationEventHandler<TIntegrationEvent>(
 {
 	public override async Task Handle(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
 	{
-		await using var connection = dbConnectionFactory.Database.GetDbConnection();
-
 		var inboxMessageConsumer = new InboxMessageConsumer(integrationEvent.Id, decorated.GetType().Name);
 
 		if (await InboxConsumerExistsAsync(inboxMessageConsumer))

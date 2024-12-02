@@ -5,7 +5,6 @@ using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Serialization;
 using Database;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 internal sealed class IntegrationEventConsumer<TIntegrationEvent>(UsersDbContext dbConnectionFactory)
@@ -13,8 +12,6 @@ internal sealed class IntegrationEventConsumer<TIntegrationEvent>(UsersDbContext
 {
 	public async Task Consume(ConsumeContext<TIntegrationEvent> context)
 	{
-		await using var connection = dbConnectionFactory.Database.GetDbConnection();
-
 		var integrationEvent = context.Message;
 
 		var inboxMessage = new InboxMessage
