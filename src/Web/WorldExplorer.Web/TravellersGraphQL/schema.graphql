@@ -1,5 +1,6 @@
 schema {
   query: Travellers
+  mutation: CreateVisitHandler
 }
 
 type Travellers {
@@ -7,6 +8,10 @@ type Travellers {
   byId(id: UUID!): Traveller
   visitsByTravellerId(skip: Int take: Int travellerId: UUID! where: VisitFilterInput order: [VisitSortInput!]): VisitsByTravellerIdCollectionSegment
   visitsByPlaceId(skip: Int take: Int placeId: UUID! where: VisitFilterInput order: [VisitSortInput!]): VisitsByPlaceIdCollectionSegment
+}
+
+type CreateVisitHandler {
+  createVisit(request: VisitRequestInput!): Visit!
 }
 
 input TravellerFilterInput {
@@ -161,6 +166,13 @@ input StringOperationFilterInput {
   nstartsWith: String
   endsWith: String
   nendsWith: String
+}
+
+input VisitRequestInput {
+  travellerId: UUID!
+  placeId: UUID!
+  rating: Int!
+  comment: String
 }
 
 type Visit {

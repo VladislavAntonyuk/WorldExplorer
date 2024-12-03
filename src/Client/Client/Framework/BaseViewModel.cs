@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 public abstract partial class BaseViewModel : ObservableObject
 {
 	[ObservableProperty]
-	private string title = string.Empty;
+	public partial string Title { get; protected set; } = string.Empty;
 
 	public virtual Task InitializeAsync()
 	{

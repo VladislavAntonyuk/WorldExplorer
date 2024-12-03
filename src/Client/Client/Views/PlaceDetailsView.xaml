@@ -8,6 +8,7 @@
 	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	xmlns:converters="using:Client.Converters"
+	xmlns:models="clr-namespace:Shared.Models"
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView">
 
@@ -39,12 +40,30 @@
 			IsVisible="{Binding IsPlacedLoaded}">
 			<VerticalStackLayout Spacing="10">
 
-				<Image
-					Background="{DynamicResource Gray500}"
-					Source="{Binding Place.MainImage, Converter={StaticResource WorldExplorerImageSourceConverter}}"
-					WidthRequest="300"
-					HeightRequest="300"
-					Aspect="AspectFit" />
+				<CollectionView
+					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
+					ItemsSource="{Binding Place.Images}"
+					HeightRequest="300">
+
+					<CollectionView.ItemsLayout>
+						<LinearItemsLayout
+							Orientation="Horizontal"
+							ItemSpacing="10" />
+					</CollectionView.ItemsLayout>
+
+					<CollectionView.ItemTemplate>
+						<DataTemplate x:DataType="system:String">
+							<VerticalStackLayout>
+								<Image
+									Background="{DynamicResource Gray500}"
+									Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
+									WidthRequest="300"
+									HeightRequest="300"
+									Aspect="AspectFit" />
+							</VerticalStackLayout>
+						</DataTemplate>
+					</CollectionView.ItemTemplate>
+				</CollectionView>
 
 				<simpleRatingControlMaui:SimpleRatingControl
 					CurrentValue="{Binding Place.Rating}"
@@ -94,27 +113,67 @@
 					Text="{Binding Place.Description}"
 					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}" />
 
+				<VerticalStackLayout
+					IsVisible="{Binding IsReviewEnabled}">
+
+					<Editor
+						Text="{Binding Comment}"/>
+
+					<Button
+						Background="{StaticResource Primary}"
+						Text="{x:Static localization:Localization.LiveView}"
+						TextColor="{StaticResource White}"
+						Command="{Binding CreateVisitCommand}" />
+				</VerticalStackLayout>
+
 				<CollectionView
-					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
-					ItemsSource="{Binding Place.Images}"
+					ItemsSource="{Binding Place.Reviews}"
 					HeightRequest="300">
 
 					<CollectionView.ItemsLayout>
 						<LinearItemsLayout
-							Orientation="Horizontal"
+							Orientation="Vertical"
 							ItemSpacing="10" />
 					</CollectionView.ItemsLayout>
 
 					<CollectionView.ItemTemplate>
-						<DataTemplate x:DataType="system:String">
-							<VerticalStackLayout>
-								<Image
-									Background="{DynamicResource Gray500}"
-									Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
-									WidthRequest="300"
-									HeightRequest="300"
-									Aspect="AspectFit" />
-							</VerticalStackLayout>
+						<DataTemplate x:DataType="models:Review">
+							<Grid
+								HorizontalOptions="Center"
+								ColumnDefinitions="0.2*,*"
+								RowDefinitions="*,*,*"
+								ColumnSpacing="15">
+
+								<Label
+									Grid.Column="0"
+									Grid.Row="0"
+									HorizontalTextAlignment="End"
+									Text="{Binding ReviewDate}" />
+
+								<Label
+									Grid.Column="0"
+									Grid.Row="1"
+									HorizontalTextAlignment="End"
+									Text="{Binding Traveller.DisplayName}" />
+
+								<simpleRatingControlMaui:SimpleRatingControl
+									Grid.Column="0"
+									Grid.Row="2"
+									HorizontalOptions="End"
+									CurrentValue="{Binding Rating}"
+									Amount="5"
+									FontSize="20"
+									BackgroundColor="Transparent"
+									RatingType="Star"
+									AccentColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}" />
+
+								<Label
+									Grid.Column="1"
+									Grid.Row="0"
+									Grid.RowSpan="3"
+									HorizontalOptions="Start"
+									Text="{Binding Comment}" />
+							</Grid>
 						</DataTemplate>
 					</CollectionView.ItemTemplate>
 				</CollectionView>

@@ -19,7 +19,7 @@ public partial class LoginViewModel(
 	IDialogService dialogService) : BaseViewModel
 {
 	[ObservableProperty]
-	private int position;
+	public partial int Position { get; set; }
 
 	private Timer? timer;
 

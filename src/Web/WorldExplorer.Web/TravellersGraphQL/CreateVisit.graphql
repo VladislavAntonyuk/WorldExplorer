@@ -1,0 +1,12 @@
+mutation CreateVisit($placeId: UUID!, $travellerId: UUID!, $rating: Int!, $comment: String) {
+  createVisit(
+    request: {
+      comment: $comment
+      placeId: $placeId
+      rating: $rating
+      travellerId: $travellerId
+    }
+  ) {
+    id
+  }
+}

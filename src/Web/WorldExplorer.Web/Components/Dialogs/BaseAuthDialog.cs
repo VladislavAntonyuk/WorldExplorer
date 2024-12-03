@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-public abstract class BaseDialog : WorldExplorerBaseComponent
+public abstract class BaseAuthDialog : WorldExplorerAuthBaseComponent
 {
 	[CascadingParameter]
 	protected IMudDialogInstance? MudDialog { get; set; }

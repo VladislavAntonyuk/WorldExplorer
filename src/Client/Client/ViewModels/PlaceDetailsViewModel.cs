@@ -6,11 +6,13 @@ using Framework;
 using Resources.Localization;
 using Services;
 using Services.API;
+using Services.Auth;
 using Services.Navigation;
 using Shared.Models;
 using StrawberryShake;
 
 public sealed partial class PlaceDetailsViewModel(
+	ICurrentUserService currentUserService,
 	IPlacesApi placesApi,
 	IWorldExplorerTravellersClient travellersClient,
 	ILauncher launcher,
@@ -20,13 +22,22 @@ public sealed partial class PlaceDetailsViewModel(
 	INavigationService navigationService) : BasePopupViewModel(navigationService)
 {
 	[ObservableProperty]
-	private bool isLiveViewEnabled;
+	public partial bool IsLiveViewEnabled { get; private set; }
 
 	[ObservableProperty]
-	private bool isPlacedLoaded;
+	public partial int Rating { get; set; }
 
 	[ObservableProperty]
-	private Place place = Place.Default;
+	public partial string Comment { get; set; } = string.Empty;
+
+	[ObservableProperty]
+	public partial bool IsPlacedLoaded { get; private set; }
+
+	[ObservableProperty]
+	public partial Place Place { get; private set; } = Place.Default;
+
+	[ObservableProperty]
+	public partial bool IsReviewEnabled { get; private set; }
 
 	private Guid? placeId;
 
@@ -49,28 +60,33 @@ public sealed partial class PlaceDetailsViewModel(
 			var getDetailsResult = await placesApi.GetDetails(placeId.Value, CancellationToken.None);
 			if (getDetailsResult.IsSuccessful)
 			{
+				var placeReviews = await travellersClient.GetVisitsByPlaceId.ExecuteAsync(placeId.Value);
+				var reviews = new List<Review>();
+				if (placeReviews.IsSuccessResult())
+				{
+					reviews.AddRange(placeReviews.Data?.VisitsByPlaceId?.Items?.Select(x => new Review
+					{
+						Comment = x.Review?.Comment,
+						Rating = x.Review?.Rating ?? 0,
+						ReviewDate = x.VisitDate,
+						Traveller = new TravellerResponse(x.TravellerId, "User")
+					}));
+					var travellerId = currentUserService.GetCurrentUser().Id;
+					IsReviewEnabled = reviews.All(x => x.Traveller.Id != travellerId);
+				}
+
 				Place = new Place
 				{
 					Id = getDetailsResult.Content.Id,
 					Name = getDetailsResult.Content.Name,
 					Location = getDetailsResult.Content.Location,
 					Description = getDetailsResult.Content.Description,
-					Images = getDetailsResult.Content.Images
+					Images = getDetailsResult.Content.Images,
+					Reviews = reviews
 				};
 				if (Place.Images.Count > 0 && arService.IsSupported())
 				{
 					IsLiveViewEnabled = true;
-				}
-
-				var placeReviews = await travellersClient.GetVisitsByPlaceId.ExecuteAsync(Place.Id);
-				if (placeReviews.IsSuccessResult())
-				{
-					Place.Reviews.AddRange(placeReviews.Data?.VisitsByPlaceId?.Items?.Select(x => new Review
-					{
-						Comment = x.Review?.Comment,
-						Rating = x.Review?.Rating ?? 0,
-						ReviewDate = x.VisitDate
-					}));
 				}
 			}
 			else
@@ -144,6 +160,21 @@ public sealed partial class PlaceDetailsViewModel(
 		else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
 		{
 			await Launcher.OpenAsync($"bingmaps:?rtp=adr.{myLocation.Latitude},{myLocation.Longitude}~adr.{Place.Location.Latitude},{Place.Location.Longitude}");
+		}
+	}
+
+	[RelayCommand]
+	private async Task CreateVisit()
+	{
+		var user = currentUserService.GetCurrentUser();
+		var result = await travellersClient.CreateVisit.ExecuteAsync(Place.Id, user.Id, Rating, Comment);
+		if (result.IsSuccessResult())
+		{
+			await dialogService.ToastAsync("Translation.AddReviewSuccess");
+		}
+		else
+		{
+			await dialogService.ToastAsync("Translation.AddReviewError");
 		}
 	}
 }

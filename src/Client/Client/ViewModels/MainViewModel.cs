@@ -21,7 +21,7 @@ public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticated
 	private readonly INavigationService navigationService;
 
 	[ObservableProperty]
-	private User? user;
+	public partial User? User { get; private set; }
 
 	public MainViewModel(INavigationService navigationService, ILauncher launcher)
 	{

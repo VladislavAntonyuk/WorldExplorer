@@ -191,6 +191,7 @@
 							VerticalOptions="Center"
 							Style="{StaticResource TitleStyle}"
 							Margin="0, 10" />
+
 						<Image
 							Grid.Column="1"
 							VerticalOptions="Center"

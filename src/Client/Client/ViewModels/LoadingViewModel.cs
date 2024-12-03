@@ -6,19 +6,24 @@ using Services.API;
 using Services.Auth;
 using Services.Navigation;
 
-public class LoadingViewModel(INavigationService navigation, IUsersApi usersApi) : BaseViewModel
+public class LoadingViewModel(INavigationService navigation, IUsersApi usersApi, ICurrentUserService currentUserService) : BaseViewModel
 {
 	public override async Task InitializeAsync()
 	{
-		var user = await usersApi.GetCurrentUser(CancellationToken.None);
-		if (user.IsSuccessful)
+		var currentUser = currentUserService.GetCurrentUser();
+		if (currentUser is null)
 		{
-			WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(user.Content));
-			await navigation.NavigateAsync<ExplorerViewModel, ErrorViewModel>();
+			var user = await usersApi.GetCurrentUser(CancellationToken.None);
+			if (!user.IsSuccessful)
+			{
+				await navigation.NavigateAsync<LoginViewModel, ErrorViewModel>();
+				return;
+			}
+
+			currentUser = user.Content;
 		}
-		else
-		{
-			await navigation.NavigateAsync<LoginViewModel, ErrorViewModel>();
-		}
+
+		WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(currentUser));
+		await navigation.NavigateAsync<ExplorerViewModel, ErrorViewModel>();
 	}
 }

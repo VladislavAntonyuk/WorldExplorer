@@ -21,13 +21,14 @@ public sealed partial class ExplorerViewModel(
 	IDeviceDisplay deviceDisplay,
 	INavigationService navigationService) : BaseViewModel, IDisposable
 {
-	private const string DefaultPinImage = "https://ik.imagekit.io/VladislavAntonyuk/projects/world-explorer/default-location-pin.png";
+	private const string DefaultPinImage =
+		"https://ik.imagekit.io/VladislavAntonyuk/projects/world-explorer/default-location-pin.png";
 
 	[ObservableProperty]
-	private Location? currentLocation;
+	public partial Location? CurrentLocation { get; private set; }
 
 	[ObservableProperty]
-	private string? status;
+	public partial string? Status { get; private set; }
 
 	public ObservableRangeCollection<WorldExplorerPin> Pins { get; } = [];
 

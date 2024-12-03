@@ -11,7 +11,7 @@ public partial class CameraViewModel(INavigationService navigationService,
 	IDeviceDisplay deviceDisplay) : BaseViewModel
 {
 	[ObservableProperty]
-	private bool isCameraLoaded;
+	public partial bool IsCameraLoaded { get; private set; }
 
 	public override async Task InitializeAsync()
 	{

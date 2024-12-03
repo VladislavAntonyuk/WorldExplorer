@@ -8,9 +8,10 @@ using StrawberryShake;
 public partial class PlaceDetailsDialog(
 	WorldExplorerApiClient apiClient,
 	IWorldExplorerTravellersClient travellersClient,
-	ISnackbar snackbar) : BaseDialog
+	ISnackbar snackbar) : BaseAuthDialog
 {
 	private PlaceResponse? place;
+	private readonly ReviewRequest reviewRequest = new();
 	private IReadOnlyCollection<ReviewResponse> reviews = [];
 	private int Rating => reviews.Count > 0 ? (int)reviews.Average(x => x.Rating) : 0;
 
@@ -43,19 +44,37 @@ public partial class PlaceDetailsDialog(
 					                        {
 						                        Comment = x.Review?.Comment,
 						                        Rating = x.Review?.Rating ?? 0,
-						                        ReviewDate = x.VisitDate
+						                        ReviewDate = x.VisitDate,
+												Traveller = new TravellerResponse(x.TravellerId, "User")
 					                        })
 					                        .ToList() ?? [];
 				}
 			}
 		} while (string.IsNullOrWhiteSpace(place?.Description));
 	}
+
+	private async Task CreateVisit()
+	{
+		var result = await travellersClient.CreateVisit.ExecuteAsync(PlaceId, Guid.Parse(CurrentUser.ProviderId), reviewRequest.Rating, reviewRequest.Comment);
+		if (result.IsSuccessResult())
+		{
+			snackbar.Add(Translation.AddReviewSuccess, Severity.Success);
+		}
+	}
+}
+
+internal class ReviewRequest
+{
+	public string? Comment { get; set; }
+	public int Rating { get; set; }
 }
 
 internal class ReviewResponse
 {
-	public DateTimeOffset ReviewDate { get; set; }
-	public string? Comment { get; set; }
-	public double Rating { get; set; }
-	public string Traveller { get; set; }
+	public DateTimeOffset ReviewDate { get; init; }
+	public string? Comment { get; init; }
+	public double Rating { get; init; }
+	public TravellerResponse Traveller { get; init; }
 }
+
+internal record TravellerResponse(Guid Id, string DisplayName);

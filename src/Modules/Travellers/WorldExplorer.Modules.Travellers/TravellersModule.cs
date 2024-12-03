@@ -5,6 +5,7 @@ using Application.Travellers;
 using Application.Travellers.GetById;
 using Application.Travellers.GetTravellers;
 using Application.Visits;
+using Application.Visits.CreateVisit;
 using Application.Visits.GetVisits;
 using Common.Application.EventBus;
 using Common.Infrastructure;
@@ -80,6 +81,7 @@ public static class TravellersModule
 		builder.Services.AddScoped<GetTravellersHandler>();
 		builder.Services.AddScoped<GetTravellerByIdHandler>();
 		builder.Services.AddScoped<GetVisitsHandler>();
+		builder.Services.AddScoped<CreateVisitHandler>();
 
 		builder.Services.AddGraphQLServer()
 		       .RegisterDbContextFactory<TravellersDbContext>()
@@ -89,6 +91,7 @@ public static class TravellersModule
 		       .AddType<GetVisitsHandler>()
 		       .AddQueryConventions()
 		       .AddFiltering()
-		       .AddSorting();
+		       .AddSorting()
+		       .AddMutationType<CreateVisitHandler>();
 	}
 }

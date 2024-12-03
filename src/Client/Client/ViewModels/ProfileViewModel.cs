@@ -21,7 +21,7 @@ public partial class ProfileViewModel : BaseViewModel
 	private readonly IUsersApi usersApi;
 
 	[ObservableProperty]
-	private User? user;
+	public partial User? User { get; set; }
 
 	public ProfileViewModel(IAuthService authService,
 		INavigationService navigationService,

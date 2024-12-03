@@ -10,10 +10,10 @@ public partial class ErrorViewModel : BaseViewModel, IQueryAttributable
 	private readonly Dictionary<ErrorCode, string> errors = [];
 
 	[ObservableProperty]
-	private ErrorCode? code;
+	public partial ErrorCode? Code { get; private set; }
 
 	[ObservableProperty]
-	private string? message;
+	public partial string? Message { get; private set; }
 
 	public ErrorViewModel()
 	{

@@ -1,12 +1,12 @@
 ﻿@using System.Globalization
-@inherits BaseDialog
+@inherits BaseAuthDialog
 
 <MudDialog>
 	<DialogContent>
 		@if (place is null || string.IsNullOrWhiteSpace(place.Description))
 		{
 			<div class="d-flex flex-column align-center">
-				<MudProgressCircular Color="Color.Primary" Style="height: 70px; width: 70px;" Indeterminate="true"/>
+				<MudProgressCircular Color="Color.Primary" Style="height: 70px; width: 70px;" Indeterminate="true" />
 				<MudText Align="Align.Justify">
 					@Translation.LoadingDetails
 				</MudText>
@@ -20,19 +20,19 @@
 					<PreviousButtonTemplate>
 						<div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
 							<span class="mud-icon-button-label">
-								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipPrevious" Color="@Color.Inherit"/>
+								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipPrevious" Color="@Color.Inherit" />
 							</span>
 						</div>
 					</PreviousButtonTemplate>
 					<NextButtonTemplate>
 						<div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
 							<span class="mud-icon-button-label">
-								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipNext" Color="@Color.Inherit"/>
+								<MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipNext" Color="@Color.Inherit" />
 							</span>
 						</div>
 					</NextButtonTemplate>
 					<ItemTemplate>
-						<MudImage Src="@context" Alt="@place.Name" Height="400" ObjectFit="@ObjectFit.Contain" ObjectPosition="@ObjectPosition.Center" Class="rounded-lg"/>
+						<MudImage Src="@context" Alt="@place.Name" Height="400" ObjectFit="@ObjectFit.Contain" ObjectPosition="@ObjectPosition.Center" Class="rounded-lg" />
 					</ItemTemplate>
 				</MudCarousel>
 			}
@@ -47,12 +47,21 @@
 				</MudText>
 			</MudContainer>
 
+			@if (reviews.All(x => x.Traveller.Id.ToString() != CurrentUser.ProviderId))
+			{
+				<div class="d-flex flex-column align-center">
+					<MudTextField T="string" @bind-Value="@reviewRequest.Comment" AutoGrow="true" MaxLines="5" FullWidth="true" MaxLength="3000"></MudTextField>
+					<MudRating MaxValue="5" @bind-SelectedValue="@reviewRequest.Rating" ReadOnly="false"></MudRating>
+					<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@CreateVisit">@Translation.AddReview</MudButton>
+				</div>
+			}
+
 			<MudTimeline>
 				@foreach (var review in reviews.OrderByDescending(x => x.ReviewDate).Take(10))
 				{
 					<MudTimelineItem Elevation="25">
 						<ItemOpposite>
-							<MudText Typo="Typo.h6" GutterBottom="true">@review.Traveller</MudText>
+							<MudText Typo="Typo.h6" GutterBottom="true">@review.Traveller.DisplayName</MudText>
 							<MudText Typo="Typo.h6">@review.ReviewDate.ToString("D", CultureInfo.CurrentCulture)</MudText>
 							<MudRating ReadOnly="true" SelectedValue="@((int)review.Rating)"></MudRating>
 						</ItemOpposite>
