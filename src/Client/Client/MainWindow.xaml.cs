@@ -1,8 +1,8 @@
 ﻿namespace Client;
 
 using CommunityToolkit.Mvvm.Messaging;
+using Models;
 using Services.Auth;
-using Shared.Models;
 using ViewModels;
 
 public partial class MainWindow : Window, IRecipient<UserAuthenticatedEvent>

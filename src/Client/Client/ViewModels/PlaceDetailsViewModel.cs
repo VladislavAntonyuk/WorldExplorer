@@ -3,12 +3,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Framework;
+using Models;
 using Resources.Localization;
 using Services;
 using Services.API;
 using Services.Auth;
 using Services.Navigation;
-using Shared.Models;
 using StrawberryShake;
 
 public sealed partial class PlaceDetailsViewModel(

@@ -1,5 +1,5 @@
-﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers.CreateTraveller;
+﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers.DeleteTraveller;
 
-using Common.Application.Messaging;
+using WorldExplorer.Common.Application.Messaging;
 
 public sealed record DeleteTravellerCommand(Guid TravellerId) : ICommand;

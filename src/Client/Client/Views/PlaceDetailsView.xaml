@@ -8,7 +8,7 @@
 	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	xmlns:converters="using:Client.Converters"
-	xmlns:models="clr-namespace:Shared.Models"
+	xmlns:models="clr-namespace:Client.Models"
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView">
 

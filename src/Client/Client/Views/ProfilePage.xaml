@@ -8,8 +8,8 @@
 	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
 	xmlns:fonts="clr-namespace:Client.Resources.Fonts"
 	xmlns:controls="clr-namespace:AlohaKit.Controls;assembly=AlohaKit"
-	xmlns:models="clr-namespace:Shared.Models"
 	xmlns:charts="http://schemas.syncfusion.com/maui/toolkit"
+	xmlns:models="clr-namespace:Client.Models"
 	x:DataType="viewModels:ProfileViewModel"
 	x:Class="Client.Views.ProfilePage"
 	Shell.NavBarIsVisible="False">

@@ -1,7 +1,7 @@
 ﻿namespace Client.Services.API;
 
+using Models;
 using Refit;
-using Shared.Models;
 
 public interface IUsersApi
 {

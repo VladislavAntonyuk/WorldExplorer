@@ -3,7 +3,6 @@
 using Abstractions.Data;
 using Common.Application.Messaging;
 using Common.Domain;
-using CreatePlace;
 
 internal sealed class DeletePlaceCommandHandler(IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
 	: ICommandHandler<DeletePlaceCommand>

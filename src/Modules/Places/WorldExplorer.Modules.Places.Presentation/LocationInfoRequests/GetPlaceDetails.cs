@@ -1,13 +1,13 @@
-﻿namespace WorldExplorer.Modules.Places.Presentation.Places;
+﻿namespace WorldExplorer.Modules.Places.Presentation.LocationInfoRequests;
 
-using Application.LocationInfoRequests.GetLocationInfoRequest;
-using Common.Infrastructure.Authorization;
-using Common.Presentation.Endpoints;
-using Common.Presentation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using WorldExplorer.Common.Infrastructure.Authorization;
+using WorldExplorer.Common.Presentation.Endpoints;
+using WorldExplorer.Common.Presentation.Results;
+using WorldExplorer.Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequest;
 
 internal sealed class GetLocationInfoRequest : IEndpoint
 {

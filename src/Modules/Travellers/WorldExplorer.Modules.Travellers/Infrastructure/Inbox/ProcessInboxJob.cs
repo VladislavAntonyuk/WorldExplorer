@@ -26,9 +26,6 @@ internal sealed class ProcessInboxJob(
 		logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
 
 		var inboxMessages = await GetInboxMessagesAsync();
-		//await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
-
-
 		foreach (var inboxMessage in inboxMessages)
 		{
 			Exception? exception = null;
@@ -59,23 +56,11 @@ internal sealed class ProcessInboxJob(
 			await UpdateInboxMessageAsync(inboxMessage, exception);
 		}
 
-		//await transaction.CommitAsync();
-
 		logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
 	}
 
 	private async Task<IReadOnlyList<InboxMessageResponse>> GetInboxMessagesAsync()
 	{
-		var sql = $"""
-		           SELECT TOP {inboxOptions.Value.BatchSize}
-		              id AS {nameof(InboxMessageResponse.Id)},
-		              content AS {nameof(InboxMessageResponse.Content)}
-		           FROM travellers.inbox_messages WITH (UPDLOCK, ROWLOCK)
-		           WHERE ProcessedOnUtc IS NULL
-		           ORDER BY OccurredOnUtc;
-
-		           """;
-
 		var inboxMessages = await dbConnectionFactory.InboxMessages
 		                                             .Where(x => x.ProcessedOnUtc == null)
 		                                             .Take(inboxOptions.Value.BatchSize)

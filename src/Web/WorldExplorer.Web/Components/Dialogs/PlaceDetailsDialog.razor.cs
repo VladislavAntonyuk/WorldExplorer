@@ -55,6 +55,11 @@ public partial class PlaceDetailsDialog(
 
 	private async Task CreateVisit()
 	{
+		if (string.IsNullOrEmpty(CurrentUser.ProviderId))
+		{
+			return;
+		}
+
 		var result = await travellersClient.CreateVisit.ExecuteAsync(PlaceId, Guid.Parse(CurrentUser.ProviderId), reviewRequest.Rating, reviewRequest.Comment);
 		if (result.IsSuccessResult())
 		{
@@ -88,7 +93,7 @@ internal class ReviewResponse
 	public DateTimeOffset ReviewDate { get; init; }
 	public string? Comment { get; init; }
 	public double Rating { get; init; }
-	public TravellerResponse Traveller { get; init; }
+	public required TravellerResponse Traveller { get; init; }
 }
 
 internal record TravellerResponse(Guid Id, string DisplayName);

@@ -6,9 +6,9 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Framework;
 using Microsoft.Extensions.Options;
+using Models;
 using Services.Auth;
 using Services.Navigation;
-using Shared.Models;
 using Views;
 
 public static class Constants

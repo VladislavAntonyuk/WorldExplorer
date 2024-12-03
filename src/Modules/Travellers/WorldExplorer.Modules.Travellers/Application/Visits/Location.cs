@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers;
+﻿namespace WorldExplorer.Modules.Travellers.Application.Visits;
 
 public record Location(double Latitude, double Longitude)
 {

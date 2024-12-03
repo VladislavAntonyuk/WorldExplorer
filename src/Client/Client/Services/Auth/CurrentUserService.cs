@@ -1,7 +1,7 @@
 ﻿namespace Client.Services.Auth;
 
 using CommunityToolkit.Mvvm.Messaging;
-using Shared.Models;
+using Models;
 
 internal class CurrentUserService : ICurrentUserService, IRecipient<UserAuthenticatedEvent>
 {

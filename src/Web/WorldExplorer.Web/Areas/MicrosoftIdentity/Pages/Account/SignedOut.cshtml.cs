@@ -1,4 +1,4 @@
-﻿namespace WebApp.Areas.MicrosoftIdentity.Pages.Account;
+﻿namespace WorldExplorer.Web.Areas.MicrosoftIdentity.Pages.Account;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

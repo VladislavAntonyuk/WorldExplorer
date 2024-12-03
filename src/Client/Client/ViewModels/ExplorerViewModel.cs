@@ -4,12 +4,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Controls.WorldExplorerMap;
 using Framework;
+using Models;
 using MvvmHelpers;
 using Resources.Localization;
 using Services;
 using Services.API;
 using Services.Navigation;
-using Shared.Models;
 using BaseViewModel = Framework.BaseViewModel;
 using Location = Location;
 

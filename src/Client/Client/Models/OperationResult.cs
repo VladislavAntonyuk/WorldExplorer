@@ -1,4 +1,4 @@
-﻿namespace Shared.Models;
+﻿namespace Client.Models;
 
 public class OperationResult<T> where T : new()
 {

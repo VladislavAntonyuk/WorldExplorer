@@ -1,8 +1,8 @@
-﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers.CreateTraveller;
+﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers.DeleteTraveller;
 
-using Abstractions.Data;
-using Common.Application.Messaging;
-using Common.Domain;
+using WorldExplorer.Common.Application.Messaging;
+using WorldExplorer.Common.Domain;
+using WorldExplorer.Modules.Travellers.Abstractions.Data;
 
 internal sealed class DeleteTravellerCommandHandler(ITravellerRepository travellerRepository, IUnitOfWork unitOfWork)
 	: ICommandHandler<DeleteTravellerCommand>

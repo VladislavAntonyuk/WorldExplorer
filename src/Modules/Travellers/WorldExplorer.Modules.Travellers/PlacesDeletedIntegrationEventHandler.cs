@@ -1,6 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Travellers;
 
-using Application.Travellers.CreateTraveller;
+using Application.Travellers.DeleteTraveller;
 using Application.Visits.DeletePlaces;
 using Common.Application.EventBus;
 using Common.Application.Exceptions;
