@@ -79,7 +79,7 @@ public sealed partial class ExplorerViewModel(
 		}
 
 		var taskCompletionSource = new TaskCompletionSource();
-		await navigationService.NavigateAsync<PlaceDetailsViewModel, ErrorViewModel>(new Dictionary<string, object>
+		await dispatcher.DispatchAsync(() => navigationService.NavigateAsync<PlaceDetailsViewModel, ErrorViewModel>(new Dictionary<string, object>
 		{
 			{
 				"place", pin.PlaceId
@@ -87,7 +87,7 @@ public sealed partial class ExplorerViewModel(
 			{
 				BasePopupViewModel.TaskCompletionSourceKey, taskCompletionSource
 			}
-		});
+		}));
 		await taskCompletionSource.Task;
 	}
 
@@ -164,17 +164,17 @@ public sealed partial class ExplorerViewModel(
 
 				Status = string.Format(Localization.FoundPlaces, placesResponse.Content.Result.Count);
 				Pins.AddRange(placesResponse.Content.Result
-				                            .Where(x => Pins.All(pin => pin.PlaceId != x.Id))
-				                            .Select(place => new WorldExplorerPin
-				                            {
-					                            PlaceId = place.Id,
-					                            Location = place.Location,
-					                            Label = place.Name,
-					                            Image = string.IsNullOrEmpty(place.MainImage)
-						                            ? DefaultPinImage
-						                            : place.MainImage,
-					                            MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
-				                            }));
+											.Where(x => Pins.All(pin => pin.PlaceId != x.Id))
+											.Select(place => new WorldExplorerPin
+											{
+												PlaceId = place.Id,
+												Location = place.Location,
+												Label = place.Name,
+												Image = string.IsNullOrEmpty(place.MainImage)
+													? DefaultPinImage
+													: place.MainImage,
+												MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
+											}));
 
 				await CheckLocation(location);
 				break;
@@ -207,7 +207,7 @@ public sealed partial class ExplorerViewModel(
 		if (closestPlace is not null)
 		{
 			await dialogService.ToastAsync(string.Format(Localization.YouAreNear, closestPlace.Label),
-			                               CancellationToken.None);
+										   CancellationToken.None);
 		}
 	}
 
