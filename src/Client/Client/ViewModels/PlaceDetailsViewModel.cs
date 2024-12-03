@@ -21,6 +21,8 @@ public sealed partial class PlaceDetailsViewModel(
 	IDialogService dialogService,
 	INavigationService navigationService) : BasePopupViewModel(navigationService)
 {
+	private readonly INavigationService navigationService = navigationService;
+
 	[ObservableProperty]
 	public partial bool IsLiveViewEnabled { get; private set; }
 
@@ -70,8 +72,8 @@ public sealed partial class PlaceDetailsViewModel(
 						Rating = x.Review?.Rating ?? 0,
 						ReviewDate = x.VisitDate,
 						Traveller = new TravellerResponse(x.TravellerId, "User")
-					}));
-					var travellerId = currentUserService.GetCurrentUser().Id;
+					}) ?? []);
+					var travellerId = currentUserService.GetCurrentUser()?.Id;
 					IsReviewEnabled = reviews.All(x => x.Traveller.Id != travellerId);
 				}
 
@@ -167,6 +169,11 @@ public sealed partial class PlaceDetailsViewModel(
 	private async Task CreateVisit()
 	{
 		var user = currentUserService.GetCurrentUser();
+		if (user is null)
+		{
+			return;
+		}
+
 		var result = await travellersClient.CreateVisit.ExecuteAsync(Place.Id, user.Id, Rating, Comment);
 		if (result.IsSuccessResult())
 		{

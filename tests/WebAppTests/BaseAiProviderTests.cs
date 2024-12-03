@@ -1,11 +1,10 @@
 ﻿namespace WebAppTests;
 
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using FluentAssertions;
-using NetTopologySuite.Geometries;
 using WorldExplorer.Common.Infrastructure.Serialization;
 using WorldExplorer.Modules.Places.Application.Abstractions;
+using WorldExplorer.Modules.Places.Infrastructure;
 using Xunit.Abstractions;
 using Location = WorldExplorer.Modules.Places.Application.Abstractions.Location;
 
@@ -14,6 +13,7 @@ public abstract class BaseAiProviderTests(ITestOutputHelper testOutputHelper)
 	[Fact]
 	public async Task GetNearbyPlacesShouldReturnTenPlaces()
 	{
+		SerializerSettings.ConfigureJsonSerializerOptionsInstance([new PointJsonConverter()]);
 		var aiService = await GetAiService();
 		var places = await aiService.GetNearByPlaces(new Location(48.455833330000026, 35.06388889000002));
 		places.Count.Should().Be(10);

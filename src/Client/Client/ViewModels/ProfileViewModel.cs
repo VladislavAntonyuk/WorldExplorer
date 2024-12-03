@@ -82,7 +82,7 @@ public partial class ProfileViewModel : BaseViewModel
 				                                  {
 					                                  Date = x.Key.LocalDateTime,
 					                                  ReviewedPlacesCount = x.Count()
-				                                  }));
+				                                  }) ?? []);
 			}
 		}
 		else

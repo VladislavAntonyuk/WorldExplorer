@@ -4,6 +4,7 @@ using System.Reflection;
 using CommunityToolkit.Maui;
 using Controls;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.Maui.Handlers;
 using Services;
 using Services.API;
@@ -22,31 +23,31 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		var config = GetConfiguration();
 		builder.Configuration.AddConfiguration(config);
-		var apiSettings = builder.Configuration.GetRequiredSection("API").Get<ApiSettings>();
-		ArgumentNullException.ThrowIfNull(apiSettings);
+		var urlsSettingsSection = builder.Configuration.GetRequiredSection("Urls");
+		builder.Services.Configure<UrlsSettings>(urlsSettingsSection);
 
 		builder.UseMauiApp<App>()
-		       .ConfigureSyncfusionToolkit()
-		       .UseMauiCommunityToolkitCamera()
-		       .UseSkiaSharp()
-		       .UseSimpleRatingControl()
-		       .ConfigureMauiHandlers(handlers =>
-		       {
+			   .ConfigureSyncfusionToolkit()
+			   .UseMauiCommunityToolkitCamera()
+			   .UseSkiaSharp()
+			   .UseSimpleRatingControl()
+			   .ConfigureMauiHandlers(handlers =>
+			   {
 #if ANDROID || IOS
-			       handlers.AddHandler<Shell, CustomShellHandler>();
-			       handlers.AddHandler<ArView, ArViewHandler>();
+				   handlers.AddHandler<Shell, CustomShellHandler>();
+				   handlers.AddHandler<ArView, ArViewHandler>();
 #endif
 #if IOS || MACCATALYST
 				   handlers.AddHandler<CollectionView, Microsoft.Maui.Controls.Handlers.Items2.CollectionViewHandler2>();
 				   handlers.AddHandler<CarouselView, Microsoft.Maui.Controls.Handlers.Items2.CarouselViewHandler2>();
 #endif
-		       })
-		       .ConfigureFonts(fonts =>
-		       {
-			       fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
-			       fonts.AddFont("Font Awesome 6 Brands-Regular-400.otf", "FABrands");
-			       fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
-		       });
+			   })
+			   .ConfigureFonts(fonts =>
+			   {
+				   fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
+				   fonts.AddFont("Font Awesome 6 Brands-Regular-400.otf", "FABrands");
+				   fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
+			   });
 
 		HybridWebViewHandler.Mapper.AppendToMapping("WorldExplorerMap", static async (handler, _) =>
 		{
@@ -101,10 +102,22 @@ public static class MauiProgram
 		builder.Services.AddSingleton(Launcher.Default);
 		builder.Services.AddSingleton(Geolocation.Default);
 		builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
-		builder.Services.AddApi<IPlacesApi>(apiSettings.Places);
-		builder.Services.AddApi<IUsersApi>(apiSettings.Users);
+		builder.Services.AddApi<IPlacesApi>(s =>
+		{
+			var urlsSettings = s.GetRequiredService<IOptions<UrlsSettings>>().Value;
+			return $"{urlsSettings.Api}/places";
+		});
+		builder.Services.AddApi<IUsersApi>(s =>
+		{
+			var urlsSettings = s.GetRequiredService<IOptions<UrlsSettings>>().Value;
+			return $"{urlsSettings.Api}/users";
+		});
 		builder.Services.AddWorldExplorerTravellersClient()
-		       .ConfigureHttpClient(client => client.BaseAddress = new Uri(apiSettings.Travellers));
+			   .ConfigureHttpClient((serviceProvider, client) =>
+			   {
+				   var urlsSettings = serviceProvider.GetRequiredService<IOptions<UrlsSettings>>().Value;
+				   client.BaseAddress = new Uri($"{urlsSettings.Api}/graphql");
+			   });
 
 		builder.Services.AddSingleton<AboutPage, AboutViewModel>();
 		builder.Services.AddSingletonWithShellRoute<LoginPage, LoginViewModel>($"//{nameof(LoginPage)}");

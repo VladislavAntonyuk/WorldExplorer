@@ -6,7 +6,7 @@ using Refit;
 
 public static class ApiExtensions
 {
-	public static void AddApi<T>(this IServiceCollection services, string baseAddress) where T : class
+	public static void AddApi<T>(this IServiceCollection services, Func<IServiceProvider, string> baseAddress) where T : class
 	{
 		services.AddRefitClient<T>(serviceProvider => new RefitSettings
 		        {
@@ -17,9 +17,9 @@ public static class ApiExtensions
 				        return tokenResult.IsSuccessful ? tokenResult.Value : string.Empty;
 			        }
 		        })
-		        .ConfigureHttpClient(c =>
+		        .ConfigureHttpClient((s,c) =>
 		        {
-			        c.BaseAddress = new Uri(baseAddress);
+			        c.BaseAddress = new Uri(baseAddress(s));
 		        });
 	}
 

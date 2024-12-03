@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Framework;
+using Microsoft.Extensions.Options;
 using Services.Auth;
 using Services.Navigation;
 using Shared.Models;
@@ -18,15 +19,17 @@ public static class Constants
 public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticatedEvent>
 {
 	private readonly ILauncher launcher;
+	private readonly IOptions<UrlsSettings> apiSettings;
 	private readonly INavigationService navigationService;
 
 	[ObservableProperty]
 	public partial User? User { get; private set; }
 
-	public MainViewModel(INavigationService navigationService, ILauncher launcher)
+	public MainViewModel(INavigationService navigationService, ILauncher launcher, IOptions<UrlsSettings> apiSettings)
 	{
 		this.navigationService = navigationService;
 		this.launcher = launcher;
+		this.apiSettings = apiSettings;
 		WeakReferenceMessenger.Default.Register(this);
 		Title = Constants.ProductName;
 	}
@@ -51,7 +54,7 @@ public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticated
 	[RelayCommand]
 	private Task Help()
 	{
-		return launcher.TryOpenAsync("https://world-explorer.azurewebsites.net/about");
+		return launcher.TryOpenAsync($"{apiSettings.Value.Frontend}/about");
 	}
 
 	[RelayCommand]
@@ -63,6 +66,6 @@ public partial class MainViewModel : BaseViewModel, IRecipient<UserAuthenticated
 	[RelayCommand]
 	private async Task Search(string? text)
 	{
-		await Toast.Make("Work in progress").Show();
+		await Toast.Make("Not implemented yet").Show();
 	}
 }

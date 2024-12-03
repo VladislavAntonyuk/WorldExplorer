@@ -35,7 +35,7 @@ public class Review
 	public DateTimeOffset ReviewDate { get; init; }
 	public string? Comment { get; init; }
 	public double Rating { get; init; }
-	public TravellerResponse Traveller { get; init; }
+	public required TravellerResponse Traveller { get; init; }
 }
 
 public record TravellerResponse(Guid Id, string DisplayName);
