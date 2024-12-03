@@ -70,6 +70,24 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add review.
+        /// </summary>
+        internal static string AddReview {
+            get {
+                return ResourceManager.GetString("AddReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Review is saved. Thank you!.
+        /// </summary>
+        internal static string AddReviewSuccess {
+            get {
+                return ResourceManager.GetString("AddReviewSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Build route.
         /// </summary>
         internal static string BuildRoute {

@@ -68,6 +68,7 @@ public static class TravellersModule
 		registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserDeletedIntegrationEvent>>();
 		registrationConfigurator.AddConsumer<IntegrationEventConsumer<PlaceCreatedIntegrationEvent>>();
 		registrationConfigurator.AddConsumer<IntegrationEventConsumer<PlaceDeletedIntegrationEvent>>();
+		registrationConfigurator.AddConsumer<IntegrationEventConsumer<PlacesDeletedIntegrationEvent>>();
 	}
 
 	private static void AddInfrastructure(this IHostApplicationBuilder builder)

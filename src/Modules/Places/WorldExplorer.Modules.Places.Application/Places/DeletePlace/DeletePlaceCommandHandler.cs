@@ -1,10 +1,11 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.DeletePlace;
 
+using Abstractions.Data;
 using Common.Application.Messaging;
 using Common.Domain;
 using Domain.Places;
 
-internal sealed class DeletePlaceCommandHandler(IPlaceRepository placeRepository) : ICommandHandler<DeletePlaceCommand>
+internal sealed class DeletePlaceCommandHandler(IPlaceRepository placeRepository, IUnitOfWork unitOfWork) : ICommandHandler<DeletePlaceCommand>
 {
 	public async Task<Result> Handle(DeletePlaceCommand request, CancellationToken cancellationToken)
 	{
@@ -14,7 +15,9 @@ internal sealed class DeletePlaceCommandHandler(IPlaceRepository placeRepository
 			return Result.Failure(PlaceErrors.NotFound(request.Id));
 		}
 
-		await placeRepository.Delete(request.Id, cancellationToken);
+		place.Delete();
+		placeRepository.Delete(place);
+		await unitOfWork.SaveChangesAsync(cancellationToken);
 		return Result.Success();
 	}
 }

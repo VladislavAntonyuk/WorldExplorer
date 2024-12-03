@@ -258,4 +258,10 @@
   <data name="Refresh" xml:space="preserve">
     <value>Оновити</value>
   </data>
+  <data name="AddReview" xml:space="preserve">
+    <value>Додати відгук</value>
+  </data>
+  <data name="AddReviewSuccess" xml:space="preserve">
+    <value>Відгук збережено. Дякуємо!</value>
+  </data>
 </root>

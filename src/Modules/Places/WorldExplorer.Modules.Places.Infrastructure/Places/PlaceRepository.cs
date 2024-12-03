@@ -30,9 +30,9 @@ internal sealed class PlaceRepository(PlacesDbContext context, IOptions<PlacesSe
 							.ToListAsync(cancellationToken);
 	}
 
-	public async Task Delete(Guid placeRequestId, CancellationToken cancellationToken)
+	public void Delete(Place place)
 	{
-		await context.Places.Where(x => x.Id == placeRequestId).ExecuteDeleteAsync(cancellationToken);
+		context.Places.Remove(place);
 	}
 
 	public async Task Clear(CancellationToken cancellationToken)

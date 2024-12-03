@@ -147,7 +147,7 @@ public sealed partial class PlaceDetailsViewModel(
 		}
 
 		if (DeviceInfo.Current.Platform == DevicePlatform.iOS ||
-		    DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+			DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
 		{
 			// https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
 			await Launcher.OpenAsync($"http://maps.apple.com/?daddr={myLocation.Latitude},{myLocation.Longitude}&saddr={Place.Location.Latitude},{Place.Location.Longitude}");
@@ -170,11 +170,12 @@ public sealed partial class PlaceDetailsViewModel(
 		var result = await travellersClient.CreateVisit.ExecuteAsync(Place.Id, user.Id, Rating, Comment);
 		if (result.IsSuccessResult())
 		{
-			await dialogService.ToastAsync("Translation.AddReviewSuccess");
+			await dialogService.ToastAsync(Localization.AddReviewSuccess);
+			IsReviewEnabled = false;
 		}
 		else
 		{
-			await dialogService.ToastAsync("Translation.AddReviewError");
+			await dialogService.ToastAsync(result.Errors.Select(x => x.Message));
 		}
 	}
 }

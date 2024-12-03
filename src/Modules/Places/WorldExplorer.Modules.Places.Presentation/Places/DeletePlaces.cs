@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Places.Presentation.Places;
 
 using Application.Places.DeletePlace;
+using Application.Places.DeletePlaces;
 using Common.Infrastructure.Authorization;
 using Common.Presentation.Endpoints;
 using Common.Presentation.Results;
@@ -24,7 +25,7 @@ internal sealed class DeletePlaces : IEndpoint
 
 		app.MapDelete("places", async (ISender sender) =>
 		   {
-			   var result = await sender.Send(new DeletePlaceCommand(Guid.Empty));
+			   var result = await sender.Send(new DeletePlacesCommand());
 
 			   return result.Match(Results.NoContent, ApiResults.Problem);
 		   })

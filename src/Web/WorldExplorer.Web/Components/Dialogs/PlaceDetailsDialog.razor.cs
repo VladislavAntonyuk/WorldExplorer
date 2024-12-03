@@ -12,7 +12,7 @@ public partial class PlaceDetailsDialog(
 {
 	private PlaceResponse? place;
 	private readonly ReviewRequest reviewRequest = new();
-	private IReadOnlyCollection<ReviewResponse> reviews = [];
+	private ICollection<ReviewResponse> reviews = [];
 	private int Rating => reviews.Count > 0 ? (int)reviews.Average(x => x.Rating) : 0;
 
 	[Parameter]
@@ -41,13 +41,13 @@ public partial class PlaceDetailsDialog(
 				if (reviewResponse.IsSuccessResult())
 				{
 					reviews = reviewResponse.Data?.VisitsByPlaceId?.Items?.Select(x => new ReviewResponse
-					                        {
-						                        Comment = x.Review?.Comment,
-						                        Rating = x.Review?.Rating ?? 0,
-						                        ReviewDate = x.VisitDate,
-												Traveller = new TravellerResponse(x.TravellerId, "User")
-					                        })
-					                        .ToList() ?? [];
+					{
+						Comment = x.Review?.Comment,
+						Rating = x.Review?.Rating ?? 0,
+						ReviewDate = x.VisitDate,
+						Traveller = new TravellerResponse(x.TravellerId, "User")
+					})
+											.ToList() ?? [];
 				}
 			}
 		} while (string.IsNullOrWhiteSpace(place?.Description));
@@ -59,6 +59,20 @@ public partial class PlaceDetailsDialog(
 		if (result.IsSuccessResult())
 		{
 			snackbar.Add(Translation.AddReviewSuccess, Severity.Success);
+			reviews.Add(new ReviewResponse
+			{
+				Comment = reviewRequest.Comment,
+				Rating = reviewRequest.Rating,
+				ReviewDate = DateTimeOffset.UtcNow,
+				Traveller = new TravellerResponse(Guid.Parse(CurrentUser.ProviderId), "User")
+			});
+		}
+		else
+		{
+			foreach (var error in result.Errors.Select(x => x.Message))
+			{
+				snackbar.Add(error, Severity.Error);
+			}
 		}
 	}
 }

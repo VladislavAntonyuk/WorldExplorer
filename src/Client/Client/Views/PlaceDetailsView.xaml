@@ -117,11 +117,12 @@
 					IsVisible="{Binding IsReviewEnabled}">
 
 					<Editor
-						Text="{Binding Comment}"/>
+						Text="{Binding Comment}"
+						MaxLength="3000"/>
 
 					<Button
 						Background="{StaticResource Primary}"
-						Text="{x:Static localization:Localization.LiveView}"
+						Text="{x:Static localization:Localization.AddReview}"
 						TextColor="{StaticResource White}"
 						Command="{Binding CreateVisitCommand}" />
 				</VerticalStackLayout>

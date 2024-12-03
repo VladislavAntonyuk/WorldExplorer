@@ -258,4 +258,10 @@
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="AddReview" xml:space="preserve">
+    <value>Add review</value>
+  </data>
+  <data name="AddReviewSuccess" xml:space="preserve">
+    <value>Review is saved. Thank you!</value>
+  </data>
 </root>

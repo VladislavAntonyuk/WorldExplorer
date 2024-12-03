@@ -8,6 +8,6 @@ public interface IPlaceRepository
 	Task<List<Place>> GetAsync(CancellationToken cancellationToken = default);
 	void Insert(Place place);
 	Task<List<Place>> GetNearestPlacesAsync(Point userLocation, CancellationToken cancellationToken);
-	Task Delete(Guid placeRequestId, CancellationToken cancellationToken);
+	void Delete(Place place);
 	Task Clear(CancellationToken cancellationToken);
 }
