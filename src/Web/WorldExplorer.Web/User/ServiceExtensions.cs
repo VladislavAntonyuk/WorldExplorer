@@ -26,8 +26,8 @@ public static class ServiceExtensions
 	{
 		var scopes = configuration.GetRequiredSection("WorldExplorerApiClient:Scopes").Get<string>()?.Split(' ');
 		services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
-		        .EnableTokenAcquisitionToCallDownstreamApi(scopes)
-		        .AddDistributedTokenCaches();
+				.EnableTokenAcquisitionToCallDownstreamApi(scopes)
+				.AddDistributedTokenCaches();
 
 		services.AddCascadingAuthenticationState();
 		services.AddAuthZ();
@@ -43,19 +43,18 @@ public static class ServiceExtensions
 	{
 		var baseUrl = configuration.GetRequiredSection("WorldExplorerApiClient:BaseUrl").Get<Uri>();
 		services.AddOptions<MicrosoftIdentityAuthenticationMessageHandlerOptions>()
-		        .Bind(configuration.GetSection("WorldExplorerApiClient"));
+				.Bind(configuration.GetSection("WorldExplorerApiClient"));
 		services.AddTransient<Web.MicrosoftIdentityUserAuthenticationMessageHandler>();
-		services.AddHttpClient<WorldExplorerApiClient>(s =>
-		        {
-			        s.BaseAddress = baseUrl;
-		        })
+		services.AddHttpClient<WorldExplorerApiClient>(httpClient =>
+				{
+					httpClient.BaseAddress = baseUrl;
+				})
 				.AddHttpMessageHandler<Web.MicrosoftIdentityUserAuthenticationMessageHandler>();
 
 		services.AddWorldExplorerTravellersClient()
-		        .ConfigureHttpClient(client =>
-		        {
-			        client.BaseAddress = new Uri($"{baseUrl}graphql");
-		        });
+				.ConfigureHttpClient(
+					client => client.BaseAddress = new Uri($"{baseUrl}graphql"),
+					builder => builder.AddHttpMessageHandler<Web.MicrosoftIdentityUserAuthenticationMessageHandler>());
 	}
 
 	private static void AddTranslations(this IServiceCollection services)

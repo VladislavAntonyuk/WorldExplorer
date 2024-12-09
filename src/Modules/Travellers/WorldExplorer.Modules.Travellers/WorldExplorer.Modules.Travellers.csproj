@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0-p.16" />
+		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.0.0-p.16" />
 		<PackageReference Include="HotChocolate.Data" Version="15.0.0-p.16" />
 		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.0.0-p.16" />
 		<PackageReference Include="HotChocolate.Data.EntityFramework.Helpers" Version="14.0.0-p.100" />

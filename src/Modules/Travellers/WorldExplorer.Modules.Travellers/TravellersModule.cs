@@ -85,6 +85,7 @@ public static class TravellersModule
 		builder.Services.AddScoped<CreateVisitHandler>();
 
 		builder.Services.AddGraphQLServer()
+		       .AddAuthorization()
 		       .RegisterDbContextFactory<TravellersDbContext>()
 		       .AddQueryType(d => d.Name("Travellers"))
 		       .AddType<GetTravellersHandler>()

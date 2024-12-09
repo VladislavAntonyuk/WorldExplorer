@@ -62,7 +62,7 @@ app.UseAuthorization();
 
 app.MapEndpoints();
 app.MapDefaultEndpoints();
-app.MapGraphQL();
+app.MapGraphQL().RequireAuthorization();
 
 await app.RunAsync();
 

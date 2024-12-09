@@ -112,13 +112,19 @@ public static class MauiProgram
 			var urlsSettings = s.GetRequiredService<IOptions<UrlsSettings>>().Value;
 			return $"{urlsSettings.Api}/users";
 		});
+		builder.Services.AddTransient<MicrosoftIdentityUserAuthenticationMessageHandler>();
 		builder.Services.AddWorldExplorerTravellersClient()
-			   .ConfigureHttpClient((serviceProvider, client) =>
-			   {
-				   var urlsSettings = serviceProvider.GetRequiredService<IOptions<UrlsSettings>>().Value;
-				   client.BaseAddress = new Uri($"{urlsSettings.Api}/graphql");
-			   });
-
+		        .ConfigureHttpClient(
+					(serviceProvider, client) =>
+					{
+						var urlsSettings = serviceProvider.GetRequiredService<IOptions<UrlsSettings>>().Value;
+						client.BaseAddress = new Uri($"{urlsSettings.Api}/graphql");
+					},
+					clientBuilder =>
+					{
+						clientBuilder.AddHttpMessageHandler<MicrosoftIdentityUserAuthenticationMessageHandler>();
+					});
+		
 		builder.Services.AddSingleton<AboutPage, AboutViewModel>();
 		builder.Services.AddSingletonWithShellRoute<LoginPage, LoginViewModel>($"//{nameof(LoginPage)}");
 		builder.Services.AddSingletonWithShellRoute<ProfilePage, ProfileViewModel>($"//home/{nameof(ProfilePage)}");
