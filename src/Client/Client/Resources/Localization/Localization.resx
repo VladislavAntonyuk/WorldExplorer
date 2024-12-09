@@ -264,4 +264,10 @@
   <data name="AddReviewSuccess" xml:space="preserve">
     <value>Review is saved. Thank you!</value>
   </data>
+  <data name="RatingValidation" xml:space="preserve">
+    <value>Rating is required</value>
+  </data>
+  <data name="CommentValidation" xml:space="preserve">
+    <value>Comment is required</value>
+  </data>
 </root>

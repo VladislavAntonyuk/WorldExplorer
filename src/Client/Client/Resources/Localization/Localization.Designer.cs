@@ -115,6 +115,15 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment is required.
+        /// </summary>
+        internal static string CommentValidation {
+            get {
+                return ResourceManager.GetString("CommentValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created by Vladislav Antonyuk.
         /// </summary>
         internal static string CreatedBy {
@@ -372,6 +381,15 @@ namespace Client.Resources.Localization {
         internal static string PromoTitle5 {
             get {
                 return ResourceManager.GetString("PromoTitle5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rating is required.
+        /// </summary>
+        internal static string RatingValidation {
+            get {
+                return ResourceManager.GetString("RatingValidation", resourceCulture);
             }
         }
         

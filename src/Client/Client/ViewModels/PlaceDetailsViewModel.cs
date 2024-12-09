@@ -27,7 +27,7 @@ public sealed partial class PlaceDetailsViewModel(
 	public partial bool IsLiveViewEnabled { get; private set; }
 
 	[ObservableProperty]
-	public partial int Rating { get; set; }
+	public partial double Rating { get; set; }
 
 	[ObservableProperty]
 	public partial string Comment { get; set; } = string.Empty;
@@ -174,7 +174,19 @@ public sealed partial class PlaceDetailsViewModel(
 			return;
 		}
 
-		var result = await travellersClient.CreateVisit.ExecuteAsync(Place.Id, user.Id, Rating, Comment);
+		if (Rating is < 1 or > 5)
+		{
+			await dialogService.ToastAsync(Localization.RatingValidation);
+			return;
+		}
+
+		if (string.IsNullOrWhiteSpace(Comment))
+		{
+			await dialogService.ToastAsync(Localization.CommentValidation);
+			return;
+		}
+
+		var result = await travellersClient.CreateVisit.ExecuteAsync(Place.Id, user.Id, (int)Rating, Comment);
 		if (result.IsSuccessResult())
 		{
 			await dialogService.ToastAsync(Localization.AddReviewSuccess);

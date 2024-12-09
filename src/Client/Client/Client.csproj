@@ -60,7 +60,6 @@
 		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.66.2" />
 		<PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-		<PackageReference Include="SimpleRatingControl.MAUI" Version="0.2.0" />
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="3.0.0-preview.13" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.12" />
 		<PackageReference Include="StrawberryShake.Maui" Version="15.0.0-p.16" />

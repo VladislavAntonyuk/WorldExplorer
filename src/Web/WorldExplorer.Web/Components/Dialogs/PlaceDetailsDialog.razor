@@ -50,9 +50,25 @@
 			@if (reviews.All(x => x.Traveller.Id.ToString() != CurrentUser.ProviderId))
 			{
 				<div class="d-flex flex-column align-center">
-					<MudTextField T="string" @bind-Value="@reviewRequest.Comment" AutoGrow="true" MaxLines="5" FullWidth="true" MaxLength="3000"></MudTextField>
-					<MudRating MaxValue="5" @bind-SelectedValue="@reviewRequest.Rating" ReadOnly="false"></MudRating>
-					<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@CreateVisit">@Translation.AddReview</MudButton>
+					<MudTextField
+						T="string"
+						@bind-Value="@reviewRequest.Comment"
+						AutoGrow="true"
+						MaxLines="5"
+						FullWidth="true"
+						MaxLength="3000"
+						Placeholder="@Translation.LeaveComment"
+						Required="true"></MudTextField>
+
+					<MudRating
+						@bind-SelectedValue="@reviewRequest.Rating"
+						MaxValue="5"
+						ReadOnly="false"></MudRating>
+
+					<MudButton
+						Variant="Variant.Filled"
+						Color="Color.Primary"
+						OnClick="@CreateVisit">@Translation.AddReview</MudButton>
 				</div>
 			}
 

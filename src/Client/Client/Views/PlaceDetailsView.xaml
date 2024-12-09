@@ -5,10 +5,10 @@
 	xmlns:framework="clr-namespace:Client.Framework"
 	xmlns:viewModels="clr-namespace:Client.ViewModels"
 	xmlns:localization="clr-namespace:Client.Resources.Localization"
-	xmlns:simpleRatingControlMaui="http://www.tsjdev-apps.de/maui/controls"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	xmlns:converters="using:Client.Converters"
 	xmlns:models="clr-namespace:Client.Models"
+	xmlns:controls="clr-namespace:Client.Controls"
 	x:DataType="viewModels:PlaceDetailsViewModel"
 	x:Class="Client.Views.PlaceDetailsView">
 
@@ -65,13 +65,9 @@
 					</CollectionView.ItemTemplate>
 				</CollectionView>
 
-				<simpleRatingControlMaui:SimpleRatingControl
-					CurrentValue="{Binding Place.Rating}"
-					Amount="5"
-					FontSize="20"
-					BackgroundColor="Transparent"
-					RatingType="Star"
-					AccentColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}" />
+				<controls:RatingControl
+					Value="{Binding Place.Rating}"
+					AllowRating="False" />
 
 				<ScrollView
 					Orientation="Horizontal"
@@ -118,7 +114,13 @@
 
 					<Editor
 						Text="{Binding Comment}"
+						Placeholder="{x:Static localization:Localization.CommentValidation}"
+						PlaceholderColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}"
 						MaxLength="3000"/>
+
+					<controls:RatingControl
+						Value="{Binding Rating}"
+						AllowRating="True"/>
 
 					<Button
 						Background="{StaticResource Primary}"
@@ -157,16 +159,12 @@
 									HorizontalTextAlignment="End"
 									Text="{Binding Traveller.DisplayName}" />
 
-								<simpleRatingControlMaui:SimpleRatingControl
+								<controls:RatingControl
 									Grid.Column="0"
 									Grid.Row="2"
 									HorizontalOptions="End"
-									CurrentValue="{Binding Rating}"
-									Amount="5"
-									FontSize="20"
-									BackgroundColor="Transparent"
-									RatingType="Star"
-									AccentColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Black}}" />
+									Value="{Binding Rating}"
+									AllowRating="False" />
 
 								<Label
 									Grid.Column="1"

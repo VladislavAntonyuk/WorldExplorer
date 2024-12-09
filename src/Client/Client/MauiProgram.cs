@@ -2,7 +2,6 @@
 
 using System.Reflection;
 using CommunityToolkit.Maui;
-using Controls;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Maui.Handlers;
@@ -10,7 +9,6 @@ using Services;
 using Services.API;
 using Services.Auth;
 using Services.Navigation;
-using SimpleRatingControlMaui;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using ViewModels;
@@ -30,12 +28,11 @@ public static class MauiProgram
 			   .ConfigureSyncfusionToolkit()
 			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
-			   .UseSimpleRatingControl()
 			   .ConfigureMauiHandlers(handlers =>
 			   {
 #if ANDROID || IOS
 				   handlers.AddHandler<Shell, CustomShellHandler>();
-				   handlers.AddHandler<ArView, ArViewHandler>();
+				   handlers.AddHandler<Controls.ArView, ArViewHandler>();
 #endif
 #if IOS || MACCATALYST
 				   handlers.AddHandler<CollectionView, Microsoft.Maui.Controls.Handlers.Items2.CollectionViewHandler2>();

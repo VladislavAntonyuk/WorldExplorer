@@ -264,4 +264,10 @@
   <data name="AddReviewSuccess" xml:space="preserve">
     <value>Відгук збережено. Дякуємо!</value>
   </data>
+  <data name="RatingValidation" xml:space="preserve">
+    <value>Вкажіть рейтинг</value>
+  </data>
+  <data name="CommentValidation" xml:space="preserve">
+    <value>Заповніть коментар</value>
+  </data>
 </root>
