@@ -1,5 +1,7 @@
 ﻿{
 	"AddReview": "Додати відгук",
+	"AddReviewCommentValidation": "Заповніть коментар",
+	"AddReviewRatingValidation": "Вкажіть рейтинг",
 	"AddReviewSuccess": "Відгук збережено. Дякуємо!",
 	"DangerZone": "Небезпечна зона",
 	"DeleteAccount": "Видалити аккаунт",

@@ -1,5 +1,7 @@
 ﻿{
 	"AddReview": "Add review",
+	"AddReviewCommentValidation": "Comment is required",
+	"AddReviewRatingValidation": "Rating is required",
 	"AddReviewSuccess": "Review is saved. Thank you!",
 	"DangerZone": "Danger Zone",
 	"DeleteAccount": "Delete Account",

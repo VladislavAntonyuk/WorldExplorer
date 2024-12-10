@@ -61,6 +61,18 @@ public partial class PlaceDetailsDialog(
 			return;
 		}
 
+		if (reviewRequest.Rating is < 1 or > 5)
+		{
+			snackbar.Add(Translation.AddReviewRatingValidation, Severity.Error);
+			return;
+		}
+
+		if (string.IsNullOrWhiteSpace(reviewRequest.Comment))
+		{
+			snackbar.Add(Translation.AddReviewCommentValidation, Severity.Error);
+			return;
+		}
+
 		var result = await travellersClient.CreateVisit.ExecuteAsync(PlaceId, Guid.Parse(CurrentUser.ProviderId), reviewRequest.Rating, reviewRequest.Comment);
 		if (result.IsSuccessResult())
 		{

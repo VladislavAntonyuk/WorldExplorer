@@ -17,7 +17,7 @@ concurrency:
     cancel-in-progress: true
 
 env:  
-  VERSION: 1.1.${{github.run_number}}.0
+  VERSION: 2.0.${{github.run_number}}.0
 
 jobs:
     buildClient:
