@@ -1,13 +1,14 @@
-﻿namespace WorldExplorer.Web.User;
+﻿namespace WorldExplorer.Web.Services;
 
 using Common.Infrastructure;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Modules.Users.Application.Abstractions.Identity;
 using MudBlazor.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Toolbelt.Blazor.I18nText;
+using User;
+using Modules.Users.Application.Abstractions.Identity;
 using Constants = Microsoft.Identity.Web.Constants;
 
 public static class ServiceExtensions

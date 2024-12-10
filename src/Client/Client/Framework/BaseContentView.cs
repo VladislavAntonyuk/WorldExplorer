@@ -1,6 +1,6 @@
 ﻿namespace Client.Framework;
 
-using AsyncAwaitBestPractices;
+using MvvmHelpers;
 
 public abstract class BaseContentView<T> : ContentView where T : BaseViewModel
 {

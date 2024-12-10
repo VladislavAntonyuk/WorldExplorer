@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Components;
 using Modules.Places.Application.Places.GetPlace;
 using MudBlazor;
+using Services;
 using StrawberryShake;
 
 public partial class PlaceDetailsDialog(

@@ -60,6 +60,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.Map("/", () => "World Explorer API");
 app.MapEndpoints();
 app.MapDefaultEndpoints();
 app.MapGraphQL().RequireAuthorization();

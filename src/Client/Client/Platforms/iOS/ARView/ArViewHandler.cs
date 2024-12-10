@@ -1,10 +1,10 @@
 ﻿namespace Client;
 
 using ARKit;
-using AsyncAwaitBestPractices;
 using Controls;
 using Foundation;
 using Microsoft.Maui.Handlers;
+using MvvmHelpers;
 using SceneKit;
 
 public class ArViewHandler(IPropertyMapper? mapper, CommandMapper? commandMapper) : ViewHandler<IArView, ARSCNView>(

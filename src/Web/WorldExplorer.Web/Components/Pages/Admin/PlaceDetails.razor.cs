@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Modules.Places.Application.Abstractions;
 using Modules.Places.Application.Places.GetPlace;
 using MudBlazor;
+using Services;
 
 public partial class PlaceDetails(WorldExplorerApiClient apiClient, ISnackbar snackbar) : WorldExplorerAuthBaseComponent
 {

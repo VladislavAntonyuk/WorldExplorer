@@ -6,6 +6,7 @@ using Microsoft.JSInterop;
 using Modules.Places.Application.Abstractions;
 using Modules.Places.Application.Places.GetPlace;
 using MudBlazor;
+using Services;
 
 public sealed partial class WorldExplorerMap(
 	IJSRuntime jsRuntime,

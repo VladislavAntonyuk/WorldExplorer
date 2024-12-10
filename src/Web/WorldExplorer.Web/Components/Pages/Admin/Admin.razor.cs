@@ -4,6 +4,7 @@ using Modules.Places.Application.LocationInfoRequests.GetLocationInfoRequests;
 using Modules.Places.Application.Places.GetPlace;
 using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
+using Services;
 
 public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)
 	: WorldExplorerAuthBaseComponent

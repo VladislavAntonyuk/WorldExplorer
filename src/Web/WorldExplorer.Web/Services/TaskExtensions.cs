@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Common.Infrastructure;
+﻿namespace WorldExplorer.Web.Services;
 
 public static class TaskExtensions
 {
@@ -12,6 +12,18 @@ public static class TaskExtensions
 		{
 			onError(e);
 			return defaultValue;
+		}
+	}
+
+	public static async Task Safe(this Task task, Action<Exception> onError)
+	{
+		try
+		{
+			await task;
+		}
+		catch (Exception e)
+		{
+			onError(e);
 		}
 	}
 }

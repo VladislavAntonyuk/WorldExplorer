@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Web.User;
+﻿namespace WorldExplorer.Web.Services.User;
 
 using Modules.Users.Application.Abstractions.Identity;
 

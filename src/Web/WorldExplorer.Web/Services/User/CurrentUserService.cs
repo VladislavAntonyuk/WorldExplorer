@@ -1,4 +1,4 @@
-﻿namespace WorldExplorer.Web.User;
+﻿namespace WorldExplorer.Web.Services.User;
 
 using System.Security.Claims;
 using Microsoft.Identity.Web;

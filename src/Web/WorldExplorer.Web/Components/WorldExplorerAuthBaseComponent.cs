@@ -2,7 +2,7 @@
 
 using Common.Infrastructure;
 using Microsoft.AspNetCore.Components;
-using User;
+using Services.User;
 
 public abstract class WorldExplorerAuthBaseComponent : WorldExplorerBaseComponent
 {

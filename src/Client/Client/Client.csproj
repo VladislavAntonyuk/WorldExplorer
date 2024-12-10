@@ -51,7 +51,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="AlohaKit" Version="1.0.100" />
-		<PackageReference Include="AsyncAwaitBestPractices" Version="9.0.0" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
 		<PackageReference Include="CommunityToolkit.Maui.Camera" Version="1.0.5" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0-preview3" />

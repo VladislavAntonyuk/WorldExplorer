@@ -2,6 +2,7 @@
 
 using Modules.Users.Application.Users.GetUser;
 using MudBlazor;
+using Services;
 
 public partial class Profile(WorldExplorerApiClient apiClient, ISnackbar snackbar) : WorldExplorerAuthBaseComponent
 {

@@ -19,15 +19,6 @@ internal sealed class RegisterUserCommandHandler(
 			return Result.Failure<UserResponse>(UserErrors.NotFound(request.ProviderId));
 		}
 
-		//Result<string> result = await identityProviderService.RegisterUserAsync(
-		//    new UserModel(request.Email, request.Password, request.Name, request.LastName),
-		//    cancellationToken);
-
-		//if (result.IsFailure)
-		//{
-		//    return Result.Failure<Guid>(result.Error);
-		//}
-
 		var user = await userRepository.GetAsync(request.ProviderId, cancellationToken);
 		if (user is null)
 		{
