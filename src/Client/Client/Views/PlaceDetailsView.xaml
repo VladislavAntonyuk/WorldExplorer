@@ -40,32 +40,47 @@
 			IsVisible="{Binding IsPlacedLoaded}">
 			<VerticalStackLayout Spacing="10">
 
-				<CollectionView
+				<CarouselView
 					IsVisible="{Binding Place.Images, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
 					ItemsSource="{Binding Place.Images}"
-					HeightRequest="300">
-
-					<CollectionView.ItemsLayout>
+					Loop="False"
+					HeightRequest="{OnIdiom Phone=300, Default=400}"
+					IsBounceEnabled="True"
+					PeekAreaInsets="30">
+					
+					<CarouselView.ItemsLayout>
 						<LinearItemsLayout
 							Orientation="Horizontal"
-							ItemSpacing="10" />
-					</CollectionView.ItemsLayout>
+							ItemSpacing="10"
+							SnapPointsType="Mandatory"
+							SnapPointsAlignment="Center"/>
+					</CarouselView.ItemsLayout>
 
-					<CollectionView.ItemTemplate>
+					<CarouselView.ItemTemplate>
 						<DataTemplate x:DataType="system:String">
-							<VerticalStackLayout>
+							<Grid>
 								<Image
-									Background="{DynamicResource Gray500}"
+									x:Name="MainImage"
+									Background="Transparent"
 									Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
-									WidthRequest="300"
-									HeightRequest="300"
+									WidthRequest="{OnIdiom Phone=300, Default=400}"
+									HeightRequest="{OnIdiom Phone=300, Default=400}"
 									Aspect="AspectFit" />
-							</VerticalStackLayout>
+
+								<ActivityIndicator
+									HeightRequest="32"
+									WidthRequest="32"
+									VerticalOptions="Center"
+									HorizontalOptions="Center"
+									IsRunning="{Binding IsLoading, Source={x:Reference MainImage}}"
+									IsVisible="{Binding IsLoading, Source={x:Reference MainImage}}"/>
+							</Grid>
 						</DataTemplate>
-					</CollectionView.ItemTemplate>
-				</CollectionView>
+					</CarouselView.ItemTemplate>
+				</CarouselView>
 
 				<controls:RatingControl
+					FillColor="Yellow"
 					Value="{Binding Place.Rating}"
 					AllowRating="False" />
 
@@ -106,6 +121,14 @@
 
 				<Label
 					Padding="10"
+					LineBreakMode="WordWrap"
+					FontSize="Large"
+					HorizontalTextAlignment="Center"
+					Text="{Binding Place.Name}"
+					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}" />
+
+				<Label
+					Padding="10"
 					Text="{Binding Place.Description}"
 					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}" />
 
@@ -119,6 +142,7 @@
 						MaxLength="3000"/>
 
 					<controls:RatingControl
+						FillColor="Yellow"
 						Value="{Binding Rating}"
 						AllowRating="True"/>
 
@@ -130,6 +154,8 @@
 				</VerticalStackLayout>
 
 				<CollectionView
+					IsVisible="{Binding Place.Reviews, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
+					Background="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"
 					ItemsSource="{Binding Place.Reviews}"
 					HeightRequest="300">
 
@@ -142,35 +168,34 @@
 					<CollectionView.ItemTemplate>
 						<DataTemplate x:DataType="models:Review">
 							<Grid
-								HorizontalOptions="Center"
-								ColumnDefinitions="0.2*,*"
-								RowDefinitions="*,*,*"
-								ColumnSpacing="15">
+								ColumnDefinitions="*, Auto"
+								RowDefinitions="Auto, Auto, *">
 
 								<Label
 									Grid.Column="0"
 									Grid.Row="0"
-									HorizontalTextAlignment="End"
-									Text="{Binding ReviewDate}" />
+									Text="{Binding Traveller.DisplayName}" />
 
 								<Label
 									Grid.Column="0"
 									Grid.Row="1"
-									HorizontalTextAlignment="End"
-									Text="{Binding Traveller.DisplayName}" />
+									Text="{Binding ReviewDate, StringFormat='{0:f}'}" />
 
 								<controls:RatingControl
-									Grid.Column="0"
-									Grid.Row="2"
+									Grid.Column="1"
+									Grid.Row="0"
+									Grid.RowSpan="2"
 									HorizontalOptions="End"
+									VerticalOptions="Center"
+									FillColor="Orange"
 									Value="{Binding Rating}"
 									AllowRating="False" />
 
 								<Label
-									Grid.Column="1"
-									Grid.Row="0"
-									Grid.RowSpan="3"
-									HorizontalOptions="Start"
+									Grid.Column="0"
+									Grid.Row="2"
+									Grid.ColumnSpan="2"
+									HorizontalOptions="Fill"
 									Text="{Binding Comment}" />
 							</Grid>
 						</DataTemplate>

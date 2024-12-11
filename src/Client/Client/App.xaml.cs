@@ -26,6 +26,6 @@ public partial class App : Application
 	{
 		base.OnStart();
 		// Run AppService if it is stopped
-		await launcher.TryOpenAsync(urlOptions.Value.Api);
+		//await launcher.TryOpenAsync(urlOptions.Value.Api);
 	}
 }

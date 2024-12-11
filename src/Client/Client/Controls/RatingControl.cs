@@ -4,6 +4,7 @@ using Resources.Fonts;
 
 public class RatingControl : HorizontalStackLayout
 {
+
 	internal enum State
 	{
 		Empty,
@@ -12,6 +13,7 @@ public class RatingControl : HorizontalStackLayout
 	}
 
 	public static readonly BindableProperty AllowRatingProperty = BindableProperty.Create(nameof(AllowRating), typeof(bool), typeof(RatingControl), propertyChanged: UpdateLayout);
+	public static readonly BindableProperty FillColorProperty = BindableProperty.Create(nameof(FillColor), typeof(Color), typeof(RatingControl), Colors.Yellow, propertyChanged: UpdateLayout);
 	public static readonly BindableProperty ValueProperty = BindableProperty.Create(nameof(Value), typeof(double), typeof(RatingControl), defaultBindingMode: BindingMode.TwoWay, propertyChanged: UpdateLayout);
 
 	private static void UpdateLayout(BindableObject bindable, object oldvalue, object newvalue)
@@ -29,6 +31,12 @@ public class RatingControl : HorizontalStackLayout
 	{
 		get => (bool)GetValue(AllowRatingProperty);
 		set => SetValue(AllowRatingProperty, value);
+	}
+
+	public Color FillColor
+	{
+		get => (Color)GetValue(FillColorProperty);
+		set => SetValue(FillColorProperty, value);
 	}
 
 	public RatingControl()
@@ -83,7 +91,7 @@ public class RatingControl : HorizontalStackLayout
 		{
 			FontSize = 20,
 			FontFamily = state == State.Empty ? "FARegular" : "FASolid",
-			TextColor = state == State.Empty ? Colors.White : Colors.Yellow,
+			TextColor = state == State.Empty ? Colors.White : FillColor,
 			Text = state switch
 			{
 				State.Empty => FontAwesomeIcons.Star,
