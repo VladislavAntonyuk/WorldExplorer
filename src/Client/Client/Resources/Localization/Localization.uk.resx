@@ -270,4 +270,7 @@
   <data name="CommentValidation" xml:space="preserve">
     <value>Заповніть коментар</value>
   </data>
+  <data name="MaintenanceMode" xml:space="preserve">
+    <value>Maintenance Mode</value>
+  </data>
 </root>

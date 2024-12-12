@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using Framework;
+using Models.Enums;
 using Services.API;
 using Services.Auth;
 using Services.Navigation;
@@ -16,6 +17,15 @@ public class LoadingViewModel(INavigationService navigation, IUsersApi usersApi,
 			var user = await usersApi.GetCurrentUser(CancellationToken.None);
 			if (!user.IsSuccessful)
 			{
+				if (user.Error.ReasonPhrase == "Site Disabled")
+				{
+					await navigation.NavigateAsync<ErrorViewModel, ErrorViewModel>(new Dictionary<string, object>
+					{
+						{"errorCode", ErrorCode.SiteDisabled}
+					});
+					return;
+				}
+
 				await navigation.NavigateAsync<LoginViewModel, ErrorViewModel>();
 				return;
 			}

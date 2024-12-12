@@ -18,6 +18,7 @@ public partial class ErrorViewModel : BaseViewModel, IQueryAttributable
 	public ErrorViewModel()
 	{
 		errors.Add(ErrorCode.NoInternet, Localization.NoInternet);
+		errors.Add(ErrorCode.SiteDisabled, Localization.MaintenanceMode);
 	}
 
 	public void ApplyQueryAttributes(IDictionary<string, object> query)

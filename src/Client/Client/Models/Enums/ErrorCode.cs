@@ -2,5 +2,6 @@
 
 public enum ErrorCode
 {
-	NoInternet
+	NoInternet,
+	SiteDisabled
 }
