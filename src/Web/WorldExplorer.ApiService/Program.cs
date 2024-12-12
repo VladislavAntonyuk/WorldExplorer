@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add service defaults & Aspire components.
 builder.AddServiceDefaults();
 
-// Add services to the container.
 builder.Services.AddProblemDetails();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -34,9 +33,7 @@ Assembly[] moduleApplicationAssemblies =
 builder.Services.AddApplication(moduleApplicationAssemblies);
 
 builder.AddInfrastructure([
-	//EventsModule.ConfigureConsumers(redisConnectionString),
 	TravellersModule.ConfigureConsumers
-	//AttendanceModule.ConfigureConsumers
 ]);
 
 builder.Configuration.AddModuleConfiguration(["users", "places", "traveller"]);
@@ -60,7 +57,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.Map("/", () => "World Explorer API");
+app.Map("/", () => "World Explorer API. Created by Vladislav Antonyuk.");
 app.MapEndpoints();
 app.MapDefaultEndpoints();
 app.MapGraphQL().RequireAuthorization();

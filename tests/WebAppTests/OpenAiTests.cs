@@ -22,7 +22,7 @@ public class OpenAiTests(ITestOutputHelper testOutputHelper)
 		                    .AddJsonFile("settings.Development.json", true)
 		                    .Build();
 
-		var client = new OpenAIChatClient(new OpenAIClient(new ApiKeyCredential(configuration[key]), new OpenAIClientOptions
+		var client = new OpenAIChatClient(new OpenAIClient(new ApiKeyCredential($"{configuration[key]}"), new OpenAIClientOptions
 		{
 			Endpoint = new Uri(url)
 		}), model);

@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.ApiService.Infrastructure;
 
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 
@@ -12,14 +13,14 @@ internal sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvi
 		CancellationToken cancellationToken)
 	{
 		var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
-		if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
+		if (authenticationSchemes.Any(authScheme => authScheme.Name == JwtBearerDefaults.AuthenticationScheme))
 		{
 			var requirements = new Dictionary<string, OpenApiSecurityScheme>
 			{
-				["Bearer"] = new()
+				[JwtBearerDefaults.AuthenticationScheme] = new()
 				{
 					Type = SecuritySchemeType.Http,
-					Scheme = "bearer", // "bearer" refers to the header name here
+					Scheme = JwtBearerDefaults.AuthenticationScheme,
 					In = ParameterLocation.Header,
 					BearerFormat = "Json Web Token"
 				}

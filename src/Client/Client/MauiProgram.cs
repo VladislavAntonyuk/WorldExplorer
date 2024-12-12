@@ -46,7 +46,11 @@ public static class MauiProgram
 				   fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
 			   });
 
-		HybridWebViewHandler.Mapper.AppendToMapping("WorldExplorerMap", static async (handler, _) =>
+		HybridWebViewHandler.Mapper.AppendToMapping("WorldExplorerMap", static
+#if WINDOWS
+														async
+#endif
+			                                            (handler, _) =>
 		{
 #if ANDROID
 			handler.PlatformView.SetWebViewClient(new WorldExplorerMapWebViewClient((HybridWebViewHandler)handler));

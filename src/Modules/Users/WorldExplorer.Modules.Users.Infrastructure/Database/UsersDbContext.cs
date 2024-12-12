@@ -26,7 +26,6 @@ public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : D
 		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
 		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
 
-
 		modelBuilder.ApplyConfiguration(new UserConfiguration());
 	}
 }

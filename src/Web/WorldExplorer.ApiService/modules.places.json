@@ -1,16 +1,17 @@
 ﻿{
 	"Places": {
 		"Outbox": {
-			"IntervalInSeconds": 5,
+			"IntervalInSeconds": 60,
 			"BatchSize": 50
 		},
 		"Inbox": {
-			"IntervalInSeconds": 5,
+			"IntervalInSeconds": 60,
 			"BatchSize": 50
 		},
 		"AIProvider": "OpenAI"
 	},
-	"GoogleSearch": {
+	"ImageSearch": {
+		"BaseAddress": "https://serpapi.com",
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"
 	},
 	"LocationRequestNearbyDistance": "3000",

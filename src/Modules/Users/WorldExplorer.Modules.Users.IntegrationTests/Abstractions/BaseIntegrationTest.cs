@@ -14,6 +14,7 @@ public abstract class BaseIntegrationTest : IDisposable
 	protected readonly HttpClient HttpClient;
 	private readonly IServiceScope scope;
 	protected readonly ISender Sender;
+	private bool disposedValue;
 
 	protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
 	{
@@ -21,11 +22,6 @@ public abstract class BaseIntegrationTest : IDisposable
 		HttpClient = factory.CreateClient();
 		Sender = scope.ServiceProvider.GetRequiredService<ISender>();
 		DbContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-	}
-
-	public void Dispose()
-	{
-		scope.Dispose();
 	}
 
 	protected async Task CleanDatabaseAsync()
@@ -37,5 +33,31 @@ public abstract class BaseIntegrationTest : IDisposable
 		                                            DELETE FROM users.outbox_messages;
 		                                            DELETE FROM users.users;
 		                                            """);
+	}
+
+	protected async Task<string> GetAccessTokenAsync()
+	{
+		HttpClient.BaseAddress = new Uri("https://localhost:5002");
+		await Task.Delay(1);
+		return string.Empty;
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!disposedValue)
+		{
+			if (disposing)
+			{
+				scope.Dispose();
+			}
+
+			disposedValue = true;
+		}
+	}
+
+	public void Dispose()
+	{
+		Dispose(disposing: true);
+		GC.SuppressFinalize(this);
 	}
 }

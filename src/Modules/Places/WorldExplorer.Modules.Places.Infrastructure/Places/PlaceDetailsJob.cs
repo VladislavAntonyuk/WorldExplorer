@@ -68,6 +68,7 @@ internal sealed class PlaceDetailsJob(
 				{
 					place.Images.Add(new PlaceImage
 					{
+						Id = Guid.CreateVersion7(),
 						Source = $"data:image;base64,{image}"
 					});
 				}
@@ -85,6 +86,7 @@ internal sealed class PlaceDetailsJob(
 		{
 			place.Images.Add(new PlaceImage
 			{
+				Id = Guid.CreateVersion7(),
 				Source = image
 			});
 		}

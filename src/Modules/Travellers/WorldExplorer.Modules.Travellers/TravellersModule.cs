@@ -37,6 +37,7 @@ public static class TravellersModule
 	{
 		var integrationEventHandlers = AssemblyReference.Assembly.GetTypes()
 		                                                .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
+		                                                .Except([typeof(IdempotentIntegrationEventHandler<>)])
 		                                                .ToArray();
 
 		foreach (var integrationEventHandler in integrationEventHandlers)
@@ -50,15 +51,7 @@ public static class TravellersModule
 
 			var closedIdempotentHandler = typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
 
-			try
-			{
-				services.Decorate(integrationEventHandler, closedIdempotentHandler);
-			}
-			catch (Exception e)
-			{
-				// todo fix
-				Console.WriteLine(e);
-			}
+			services.Decorate(integrationEventHandler, closedIdempotentHandler);
 		}
 	}
 

@@ -17,9 +17,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Outbox;
 using Places;
 using Presentation;
-using WorldExplorer.Modules.Places.Infrastructure.Outbox;
 
 public static class PlacesModule
 {
@@ -53,7 +53,8 @@ public static class PlacesModule
 
 		builder.Services.AddScoped<IAiService, AiService>();
 
-		builder.Services.AddHttpClient("GoogleImages", client => client.BaseAddress = new Uri("https://serpapi.com"));
+		builder.Services.Configure<ImageSearchSettings>(builder.Configuration.GetSection("ImageSearch"));
+		builder.Services.AddHttpClient("ImageSearch");
 		builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();
 
 		builder.Services.ConfigureOptions<ConfigurePlacesJob>();

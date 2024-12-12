@@ -17,9 +17,9 @@ public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 		                    .AddJsonFile("settings.json", false)
 		                    .AddJsonFile("settings.Development.json", true)
 		                    .Build();
-		var client = new OpenAIClient(new ApiKeyCredential(configuration["OpenAiKey"]), new OpenAIClientOptions
+		var client = new OpenAIClient(new ApiKeyCredential($"{configuration["OpenAiKey"]}"), new OpenAIClientOptions
 		{
-			Endpoint = new Uri(configuration["OpenAiEndpoint"])
+			Endpoint = new Uri($"{configuration["OpenAiEndpoint"]}")
 		});
 		return Task.FromResult<IAiService>(new AiService(new OpenAIChatClient(client, "gpt-4o-mini"), new NullLogger<AiService>()));
 	}

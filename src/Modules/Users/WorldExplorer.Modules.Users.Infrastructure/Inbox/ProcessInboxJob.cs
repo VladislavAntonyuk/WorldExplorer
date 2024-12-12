@@ -27,8 +27,6 @@ internal sealed class ProcessInboxJob(
 		logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
 
 		var inboxMessages = await GetInboxMessagesAsync();
-		//await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
-
 
 		foreach (var inboxMessage in inboxMessages)
 		{
@@ -52,7 +50,7 @@ internal sealed class ProcessInboxJob(
 			catch (Exception caughtException)
 			{
 				logger.LogError(caughtException, "{Module} - Exception while processing inbox message {MessageId}",
-				                ModuleName, inboxMessage.Id);
+								ModuleName, inboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -60,36 +58,28 @@ internal sealed class ProcessInboxJob(
 			await UpdateInboxMessageAsync(inboxMessage, exception);
 		}
 
-		//await transaction.CommitAsync();
-
 		logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
 	}
 
 	private async Task<IReadOnlyList<InboxMessageResponse>> GetInboxMessagesAsync()
 	{
-		var sql = $"""
-		           SELECT TOP {inboxOptions.Value.BatchSize}
-		              id AS {nameof(InboxMessageResponse.Id)},
-		              content AS {nameof(InboxMessageResponse.Content)}
-		           FROM users.inbox_messages WITH (UPDLOCK, ROWLOCK)
-		           WHERE ProcessedOnUtc IS NULL
-		           ORDER BY OccurredOnUtc;
+		var inboxMessages =
+			await dbConnectionFactory.InboxMessages.Where(x => x.ProcessedOnUtc == null)
+									 .Take(inboxOptions.Value.BatchSize)
+									 .OrderBy(x => x.OccurredOnUtc)
+									 .Select(x => new InboxMessageResponse(x.Id, x.Content))
+									 .ToListAsync();
 
-		           """;
-
-		IEnumerable<InboxMessageResponse> inboxMessages =
-			await dbConnectionFactory.Database.SqlQueryRaw<InboxMessageResponse>(sql).ToListAsync();
-
-		return inboxMessages.ToList();
+		return inboxMessages;
 	}
 
 	private async Task UpdateInboxMessageAsync(InboxMessageResponse inboxMessage, Exception? exception)
 	{
 		var message = exception?.Message ?? null;
 		await dbConnectionFactory.InboxMessages.Where(x => x.Id == inboxMessage.Id)
-		                         .ExecuteUpdateAsync(
-			                         m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
-			                               .SetProperty(p => p.Error, message));
+								 .ExecuteUpdateAsync(
+									 m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
+										   .SetProperty(p => p.Error, message));
 	}
 
 	internal sealed record InboxMessageResponse(Guid Id, string Content);

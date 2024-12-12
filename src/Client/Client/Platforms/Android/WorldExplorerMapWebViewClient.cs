@@ -8,7 +8,7 @@ public class WorldExplorerMapWebViewClient(HybridWebViewHandler handler) : MauiH
 {
 	public override bool ShouldOverrideUrlLoading(WebView? view, IWebResourceRequest? request)
 	{
-		if (request?.Url?.Host == "0.0.0.1")
+		if (request?.Url?.Host == "0.0.0.1" && OperatingSystem.IsAndroidVersionAtLeast(24))
 		{
 			return base.ShouldOverrideUrlLoading(view, request);
 		}

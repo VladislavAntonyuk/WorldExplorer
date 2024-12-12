@@ -10,12 +10,13 @@ public abstract class BaseContentPage<T> : ContentPage where T : BaseViewModel
 		BindingContext = ViewModel = viewModel;
 		Title = viewModel.Title;
 		On<iOS>().SetUseSafeArea(true);
-#if ANDROID || IOS
-		Behaviors.Add(new CommunityToolkit.Maui.Behaviors.StatusBarBehavior
+		if (OperatingSystem.IsAndroid() || OperatingSystem.IsOSPlatformVersionAtLeast("iOS", 15))
 		{
-			StatusBarColor = BackgroundColor
-		});
-#endif
+			Behaviors.Add(new CommunityToolkit.Maui.Behaviors.StatusBarBehavior
+			{
+				StatusBarColor = BackgroundColor
+			});
+		}
 	}
 
 	protected T ViewModel { get; }

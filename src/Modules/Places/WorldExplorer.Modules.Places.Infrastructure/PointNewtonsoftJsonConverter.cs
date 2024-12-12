@@ -17,9 +17,9 @@ public class PointNewtonsoftJsonConverter : JsonConverter<Point>
 		pointObject.TryGetValue("y", StringComparison.OrdinalIgnoreCase, out var latitude);
 		pointObject.TryGetValue("x", StringComparison.OrdinalIgnoreCase, out var longitude);
 		pointObject.TryGetValue("SRID", StringComparison.OrdinalIgnoreCase, out var srid);
-		return new Point(longitude.Value<double>(), latitude.Value<double>())
+		return new Point(longitude?.Value<double>() ?? 0, latitude?.Value<double>() ?? 0)
 		{
-			SRID = srid.Value<int>()
+			SRID = srid?.Value<int>() ?? 0
 		};
 	}
 
@@ -27,11 +27,11 @@ public class PointNewtonsoftJsonConverter : JsonConverter<Point>
 	{
 		writer.WriteStartObject();
 		writer.WritePropertyName("y");
-		writer.WriteValue(value.Y);
+		writer.WriteValue(value?.Y);
 		writer.WritePropertyName("x");
-		writer.WriteValue(value.X);
+		writer.WriteValue(value?.X);
 		writer.WritePropertyName("SRID");
-		writer.WriteValue(value.SRID);
+		writer.WriteValue(value?.SRID);
 		writer.WriteEndObject();
 	}
 }

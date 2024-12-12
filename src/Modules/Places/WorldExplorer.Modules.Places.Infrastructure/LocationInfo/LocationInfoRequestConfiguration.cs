@@ -9,10 +9,5 @@ public class LocationInfoRequestConfiguration : IEntityTypeConfiguration<Locatio
 	public void Configure(EntityTypeBuilder<LocationInfoRequest> builder)
 	{
 		builder.HasKey(e => e.Id);
-
-		//.HasColumnType(Geometry.TypeNamePoint);
-		//builder.HasMany(x => x.Reviews)
-		//	   .WithOne().HasForeignKey(d => d.PlaceId)
-		//	   .OnDelete(DeleteBehavior.Cascade);
 	}
 }

@@ -57,9 +57,10 @@
 					</CarouselView.ItemsLayout>
 
 					<CarouselView.ItemTemplate>
-						<DataTemplate x:DataType="system:String">
+						<DataTemplate>
 							<Grid>
 								<Image
+									x:DataType="system:String"
 									x:Name="MainImage"
 									Background="Transparent"
 									Source="{Binding ., Converter={StaticResource WorldExplorerImageSourceConverter}}"
@@ -68,12 +69,13 @@
 									Aspect="AspectFit" />
 
 								<ActivityIndicator
+									x:DataType="Image"
 									HeightRequest="32"
 									WidthRequest="32"
 									VerticalOptions="Center"
 									HorizontalOptions="Center"
-									IsRunning="{Binding IsLoading, Source={x:Reference MainImage}}"
-									IsVisible="{Binding IsLoading, Source={x:Reference MainImage}}"/>
+									IsRunning="{Binding Path=IsLoading, Source={x:Reference MainImage}}"
+									IsVisible="{Binding Path=IsLoading, Source={x:Reference MainImage}}"/>
 							</Grid>
 						</DataTemplate>
 					</CarouselView.ItemTemplate>

@@ -4,7 +4,7 @@ using Common.Domain;
 
 public class PlaceImage : Entity
 {
-	public Guid Id { get; private set; }
+	public required Guid Id { get; set; }
 
 	public required string Source { get; set; }
 

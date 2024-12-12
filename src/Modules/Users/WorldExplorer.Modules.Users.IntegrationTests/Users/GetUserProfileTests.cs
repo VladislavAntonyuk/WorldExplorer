@@ -9,16 +9,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
 
-using AutoFixture;
-
-public class GetUserProfileTests : BaseIntegrationTest
+public class GetUserProfileTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
-    public GetUserProfileTests(IntegrationTestWebAppFactory factory)
-        : base(factory)
-    {
-    }
-
-    [Fact]
+	[Fact]
     public async Task Should_ReturnUnauthorized_WhenAccessTokenNotProvided()
     {
         // Act
@@ -32,7 +25,7 @@ public class GetUserProfileTests : BaseIntegrationTest
     public async Task Should_ReturnOk_WhenUserExists()
     {
         // Arrange
-        string accessToken = await RegisterUserAndGetAccessTokenAsync("exists@test.com", Faker.Create<string>());
+        string accessToken = await RegisterUserAndGetAccessTokenAsync();
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             JwtBearerDefaults.AuthenticationScheme,
             accessToken);
@@ -47,19 +40,17 @@ public class GetUserProfileTests : BaseIntegrationTest
         user.Should().NotBeNull();
     }
 
-    private async Task<string> RegisterUserAndGetAccessTokenAsync(string email, string password)
+    private async Task<string> RegisterUserAndGetAccessTokenAsync()
     {
         var request = new RegisterUser.Request
         {
-            Email = email,
-            Password = password,
-            FirstName = Faker.Create<string>(),
-            LastName = Faker.Create<string>()
-        };
+	        ClientId = "3c3bdb4b-327b-49a9-a13e-0b565526b8a1",
+	        ObjectId = Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
+		};
 
         await HttpClient.PostAsJsonAsync("users/register", request);
 
-        string accessToken = await GetAccessTokenAsync(request.Email, request.Password);
+        string accessToken = string.Empty;
 
         return accessToken;
     }

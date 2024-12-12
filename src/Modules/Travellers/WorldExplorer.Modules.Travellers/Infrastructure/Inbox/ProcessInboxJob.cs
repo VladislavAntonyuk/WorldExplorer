@@ -63,8 +63,8 @@ internal sealed class ProcessInboxJob(
 	{
 		var inboxMessages = await dbConnectionFactory.InboxMessages
 		                                             .Where(x => x.ProcessedOnUtc == null)
-		                                             .Take(inboxOptions.Value.BatchSize)
 		                                             .OrderBy(x => x.OccurredOnUtc)
+		                                             .Take(inboxOptions.Value.BatchSize)
 		                                             .Select(x => new InboxMessageResponse(x.Id, x.Content))
 		                                             .ToListAsync();
 

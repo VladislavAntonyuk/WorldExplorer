@@ -9,9 +9,9 @@ using Services;
 public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dialogService)
 	: WorldExplorerAuthBaseComponent
 {
-	private MudTable<PlaceResponse> placesTable;
-	private MudTable<LocationInfoRequestResponse> requestsTable;
-	private MudTable<UserResponse> usersTable;
+	private MudTable<PlaceResponse>? placesTable;
+	private MudTable<LocationInfoRequestResponse>? requestsTable;
+	private MudTable<UserResponse>? usersTable;
 
 	private async Task ClearPlaces()
 	{
@@ -20,7 +20,10 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 		if (isConfirmed == true)
 		{
 			await apiClient.ClearPlaces(CancellationToken.None);
-			await placesTable.ReloadServerData();
+			if (placesTable != null)
+			{
+				await placesTable.ReloadServerData();
+			}
 		}
 	}
 
@@ -31,7 +34,10 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 		if (isConfirmed == true)
 		{
 			await apiClient.ClearLocationInfoRequests(CancellationToken.None);
-			await requestsTable.ReloadServerData();
+			if (requestsTable != null)
+			{
+				await requestsTable.ReloadServerData();
+			}
 		}
 	}
 
@@ -68,18 +74,27 @@ public partial class Admin(WorldExplorerApiClient apiClient, IDialogService dial
 	private async Task DeleteUser(Guid userId)
 	{
 		await apiClient.DeleteUser(userId, CancellationToken.None);
-		await usersTable.ReloadServerData();
+		if (usersTable != null)
+		{
+			await usersTable.ReloadServerData();
+		}
 	}
 
 	private async Task DeletePlace(Guid placeId)
 	{
 		await apiClient.DeletePlace(placeId, CancellationToken.None);
-		await placesTable.ReloadServerData();
+		if (placesTable != null)
+		{
+			await placesTable.ReloadServerData();
+		}
 	}
 
 	private async Task DeleteRequest(int requestId)
 	{
 		await apiClient.DeleteLocationInfoRequest(requestId, CancellationToken.None);
-		await requestsTable.ReloadServerData();
+		if (requestsTable != null)
+		{
+			await requestsTable.ReloadServerData();
+		}
 	}
 }

@@ -8,19 +8,13 @@ using AutoFixture;
 
 namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
 
-public class UpdateUserTests : BaseIntegrationTest
+public class UpdateUserTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
-    public UpdateUserTests(IntegrationTestWebAppFactory factory)
-        : base(factory)
-    {
-    }
-
-    public static readonly TheoryData<UpdateUserCommand> InvalidCommands = new()
-    {
-        new UpdateUserCommand(Guid.Empty, Faker.Create<string>(), Faker.Create<string>()),
-        new UpdateUserCommand(Guid.NewGuid(), "", Faker.Create<string>()),
-        new UpdateUserCommand(Guid.NewGuid(), Faker.Create<string>(), "")
-    };
+	public static readonly TheoryData<UpdateUserCommand> InvalidCommands =
+	[
+		new UpdateUserCommand(Guid.Empty, Faker.Create<bool>()),
+		new UpdateUserCommand(Guid.NewGuid(), Faker.Create<bool>())
+	];
 
     [Theory]
     [MemberData(nameof(InvalidCommands))]
@@ -42,7 +36,7 @@ public class UpdateUserTests : BaseIntegrationTest
 
         // Act
         Result updateResult = await Sender.Send(
-            new UpdateUserCommand(userId, Faker.Create<string>(), Faker.Create<string>()));
+            new UpdateUserCommand(userId, Faker.Create<bool>()));
 
         // Assert
         updateResult.Error.Should().Be(UserErrors.NotFound(userId));
@@ -52,17 +46,13 @@ public class UpdateUserTests : BaseIntegrationTest
     public async Task Should_ReturnSuccess_WhenUserExists()
     {
         // Arrange
-        Result<Guid> result = await Sender.Send(new RegisterUserCommand(
-            Faker.Create<string>(),
-            Faker.Create<string>(),
-            Faker.Create<string>(),
-            Faker.Create<string>()));
+        var result = await Sender.Send(new RegisterUserCommand(Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6")));
 
-        Guid userId = result.Value;
+        Guid userId = result.Value.Id;
 
         // Act
         Result updateResult = await Sender.Send(
-            new UpdateUserCommand(userId, Faker.Create<string>(), Faker.Create<string>()));
+            new UpdateUserCommand(userId, Faker.Create<bool>()));
 
         // Assert
         updateResult.IsSuccess.Should().BeTrue();

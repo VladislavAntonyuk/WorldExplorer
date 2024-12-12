@@ -1,7 +1,7 @@
 ﻿namespace WorldExplorer.Web;
 
-using System.Net;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 
@@ -21,7 +21,7 @@ public class MicrosoftIdentityUserAuthenticationMessageHandler(
 							   .GetAccessTokenForUserAsync(namedMessageHandlerOptions.CurrentValue.GetScopes())
 							   .ConfigureAwait(false);
 
-		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult);
+		request.Headers.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authResult);
 
 		return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 	}

@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "WorldExplorer",
+    "Projects": [
+      {
+        "Path": "src\\Web\\WorldExplorer.AppHost\\WorldExplorer.AppHost.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "src\\Client\\Client\\Client.csproj",
+        "Action": "Start",
+        "DebugTarget": "Windows Machine"
+      }
+    ]
+  }
+]

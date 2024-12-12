@@ -7,39 +7,27 @@ using AutoFixture;
 
 namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
 
-public class RegisterUserTests : BaseIntegrationTest
+public class RegisterUserTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
-    public RegisterUserTests(IntegrationTestWebAppFactory factory)
-        : base(factory)
+	public static readonly TheoryData<string, string> InvalidRequests = new()
     {
-    }
-
-    public static readonly TheoryData<string, string, string, string> InvalidRequests = new()
-    {
-        { "", Faker.Create<string>(), Faker.Create<string>(), Faker.Create<string>() },
-        { Faker.Create<string>(), "", Faker.Create<string>(), Faker.Create<string>() },
-        { Faker.Create<string>(), "12345", Faker.Create<string>(), Faker.Create<string>() },
-        { Faker.Create<string>(), Faker.Create<string>(), "", Faker.Create<string>() },
-        { Faker.Create<string>(), Faker.Create<string>(), Faker.Create<string>(), "" }
-    };
+	    {"3c3bdb4b-327b-49a9-a13e-0b565526b8a1", ""},
+	    {"", "19d3b2c7-8714-4851-ac73-95aeecfba3a6"}
+	};
 
 
     [Theory]
     [MemberData(nameof(InvalidRequests))]
     public async Task Should_ReturnBadRequest_WhenRequestIsNotValid(
-        string email,
-        string password,
-        string firstName,
-        string lastName)
+        string clientId,
+        string objectId)
     {
         // Arrange
         var request = new RegisterUser.Request
         {
-            Email = email,
-            Password = password,
-            FirstName = firstName,
-            LastName = lastName
-        };
+	        ClientId = clientId,
+	        ObjectId = Guid.Parse(objectId)
+		};
 
         // Act
         HttpResponseMessage response = await HttpClient.PostAsJsonAsync("users/register", request);
@@ -54,10 +42,8 @@ public class RegisterUserTests : BaseIntegrationTest
         // Arrange
         var request = new RegisterUser.Request
         {
-            Email = "create@test.com",
-            Password = Faker.Create<string>(),
-            FirstName = Faker.Create<string>(),
-            LastName = Faker.Create<string>()
+	        ClientId = "3c3bdb4b-327b-49a9-a13e-0b565526b8a1",
+	        ObjectId = Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
         };
 
         // Act
@@ -73,16 +59,14 @@ public class RegisterUserTests : BaseIntegrationTest
         // Arrange
         var request = new RegisterUser.Request
         {
-            Email = "token@test.com",
-            Password = Faker.Create<string>(),
-            FirstName = Faker.Create<string>(),
-            LastName = Faker.Create<string>()
-        };
+			ClientId = "3c3bdb4b-327b-49a9-a13e-0b565526b8a1",
+			ObjectId = Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
+		};
 
         await HttpClient.PostAsJsonAsync("users/register", request);
 
         // Act
-        string accessToken = await GetAccessTokenAsync(request.Email, request.Password);
+        string accessToken = await GetAccessTokenAsync();
 
         // Assert
         accessToken.Should().NotBeEmpty();

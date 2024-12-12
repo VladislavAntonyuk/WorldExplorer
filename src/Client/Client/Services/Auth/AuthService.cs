@@ -1,5 +1,6 @@
 ﻿namespace Client.Services.Auth;
 
+using System.Net;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 
@@ -15,7 +16,7 @@ internal class AuthService : IAuthService
 		                                                     .WithB2CAuthority(azureB2COptions.Value.AuthoritySignIn)
 		                                                     .WithHttpClientFactory(new AuthHttpClientFactory())
 #if WINDOWS
-															 .WithRedirectUri("http://localhost")
+															 .WithRedirectUri($"{Uri.UriSchemeHttp}{Uri.SchemeDelimiter}{IPAddress.Loopback.ToString()}")
 #else
 															 .WithRedirectUri($"msal{azureB2COptions.Value.ClientId}://auth")
 #endif

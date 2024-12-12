@@ -1,16 +1,16 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Outbox;
 
 using Application;
+using Common.Domain;
+using Common.Infrastructure.Outbox;
+using Common.Infrastructure.Serialization;
+using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
-using WorldExplorer.Common.Domain;
-using WorldExplorer.Common.Infrastructure.Outbox;
-using WorldExplorer.Common.Infrastructure.Serialization;
-using WorldExplorer.Modules.Places.Infrastructure.Database;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessOutboxJob(
@@ -27,8 +27,6 @@ internal sealed class ProcessOutboxJob(
 		logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
 
 		var outboxMessages = await GetOutboxMessagesAsync();
-		//		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
-
 
 		foreach (var outboxMessage in outboxMessages)
 		{
@@ -52,7 +50,7 @@ internal sealed class ProcessOutboxJob(
 			catch (Exception caughtException)
 			{
 				logger.LogError(caughtException, "{Module} - Exception while processing outbox message {MessageId}",
-				                ModuleName, outboxMessage.Id);
+								ModuleName, outboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -60,17 +58,17 @@ internal sealed class ProcessOutboxJob(
 			await UpdateOutboxMessageAsync(outboxMessage, exception);
 		}
 
-		//await transaction.CommitAsync();
-
 		logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
 	}
 
 	private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync()
 	{
-		var outboxMessages = await dbConnectionFactory.OutboxMessages.Where(x => x.ProcessedOnUtc == null)
-		                                              .Take(outboxOptions.Value.BatchSize)
-		                                              .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
-		                                              .ToListAsync();
+		var outboxMessages = await dbConnectionFactory.OutboxMessages
+		                                              .Where(x => x.ProcessedOnUtc == null)
+													  .OrderBy(x => x.OccurredOnUtc)
+													  .Take(outboxOptions.Value.BatchSize)
+													  .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
+													  .ToListAsync();
 
 		return outboxMessages;
 	}
@@ -79,10 +77,10 @@ internal sealed class ProcessOutboxJob(
 	{
 		var error = exception?.ToString();
 		await dbConnectionFactory.OutboxMessages.Where(x => x.Id == outboxMessage.Id)
-		                         .ExecuteUpdateAsync(m => m.SetProperty(p => p.Error, error)
-		                                                   .SetProperty(
-			                                                   p => p.ProcessedOnUtc,
-			                                                   dateTimeProvider.GetUtcNow().UtcDateTime));
+								 .ExecuteUpdateAsync(m => m.SetProperty(p => p.Error, error)
+														   .SetProperty(
+															   p => p.ProcessedOnUtc,
+															   dateTimeProvider.GetUtcNow().UtcDateTime));
 	}
 
 	internal sealed record OutboxMessageResponse(Guid Id, string Content, string Type);

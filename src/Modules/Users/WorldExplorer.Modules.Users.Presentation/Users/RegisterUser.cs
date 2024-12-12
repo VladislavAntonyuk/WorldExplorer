@@ -8,27 +8,27 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 internal sealed class RegisterUser : IEndpoint
 {
 	public void MapEndpoint(IEndpointRouteBuilder app)
 	{
-		app.MapPost("users/register", async (Request? request, ISender sender) =>
+		app.MapPost("users/register", async (Request? request, ISender sender, IConfiguration configuration, ILogger<RegisterUser> logger) =>
 		   {
-			   // If input data is null, show block page
 			   if (request is null)
 			   {
 				   return Results.BadRequest(
 					   new ResponseContent("ShowBlockPage", "There was a problem with your request."));
 			   }
 
-			   // TODO Require Auth
-			   // var clientIds = configuration.GetRequiredSection("ClientIds").Get<string[]>();
-			   // if (clientIds is null || !clientIds.Contains(requestConnector.ClientId))
-			   // {
-			   //  logger.LogWarning("HTTP clientId is not authorized.");
-			   //  return Unauthorized();
-			   // }
+			   var clientIds = configuration.GetRequiredSection("ClientIds").Get<string[]>();
+			   if (clientIds is null || !clientIds.Contains(request.ClientId))
+			   {
+				   logger.LogWarning("HTTP clientId is not authorized.");
+				   return Results.Unauthorized();
+			   }
 
 			   var result = await sender.Send(new RegisterUserCommand(request.ObjectId));
 			   if (result.IsSuccess)

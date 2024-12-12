@@ -27,8 +27,6 @@ internal sealed class ProcessOutboxJob(
 		logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
 
 		var outboxMessages = await GetOutboxMessagesAsync();
-		//		await using var transaction = await dbConnectionFactory.Database.BeginTransactionAsync();
-
 
 		foreach (var outboxMessage in outboxMessages)
 		{
@@ -60,15 +58,15 @@ internal sealed class ProcessOutboxJob(
 			await UpdateOutboxMessageAsync(outboxMessage, exception);
 		}
 
-		//await transaction.CommitAsync();
-
 		logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
 	}
 
 	private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync()
 	{
-		var outboxMessages = await dbConnectionFactory.OutboxMessages.Where(x => x.ProcessedOnUtc == null)
-		                                              .Take(outboxOptions.Value.BatchSize)
+		var outboxMessages = await dbConnectionFactory.OutboxMessages
+		                                              .Where(x => x.ProcessedOnUtc == null)
+		                                              .OrderBy(x => x.OccurredOnUtc)
+													  .Take(outboxOptions.Value.BatchSize)
 		                                              .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
 		                                              .ToListAsync();
 
