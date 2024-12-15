@@ -73,17 +73,19 @@ public partial class ProfileViewModel : BaseViewModel
 		var getUserResult = await usersApi.GetCurrentUser(CancellationToken.None);
 		if (getUserResult.IsSuccessful)
 		{
-			User = getUserResult.Content;
-			var traveller = await travellersClient.GetTravellerById.ExecuteAsync(User.Id);
+			var user = getUserResult.Content;
+			var traveller = await travellersClient.GetTravellerById.ExecuteAsync(user.Id);
 			if (traveller.IsSuccessResult())
 			{
-				User.Activities.AddRange(traveller.Data?.ById?.Visits.GroupBy(x => x.VisitDate)
+				user.Activities.AddRange(traveller.Data?.ById?.Visits.GroupBy(x => x.VisitDate.LocalDateTime.Date)
 				                                  .Select(x => new UserActivity
 				                                  {
-					                                  Date = x.Key.LocalDateTime,
+					                                  Date = x.Key,
 					                                  ReviewedPlacesCount = x.Count()
 				                                  }) ?? []);
 			}
+
+			User = user;
 		}
 		else
 		{

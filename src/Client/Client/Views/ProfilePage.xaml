@@ -156,7 +156,7 @@
 
 						<charts:DateTimeAxis.Title>
 							<charts:ChartAxisTitle
-								Text="{x:Static localization:Localization.Steps}"
+								Text="{x:Static localization:Localization.VisitedPlaces}"
 								TextColor="Gray" />
 						</charts:DateTimeAxis.Title>
 
@@ -169,7 +169,7 @@
 				<charts:ColumnSeries
 					ItemsSource="{Binding User.Activities}"
 					XBindingPath="Date"
-					YBindingPath="Steps"
+					YBindingPath="ReviewedPlacesCount"
 					EnableTooltip="True"
 					ShowDataLabels="True">
 

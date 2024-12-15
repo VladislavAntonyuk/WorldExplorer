@@ -466,15 +466,6 @@ namespace Client.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Steps.
-        /// </summary>
-        internal static string Steps {
-            get {
-                return ResourceManager.GetString("Steps", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Track user location.
         /// </summary>
         internal static string TrackUserLocation {

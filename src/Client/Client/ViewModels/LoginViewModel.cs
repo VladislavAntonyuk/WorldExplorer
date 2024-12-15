@@ -64,9 +64,12 @@ public partial class LoginViewModel(
 			if (getUserResponse.IsSuccessful)
 			{
 				WeakReferenceMessenger.Default.Send(new UserAuthenticatedEvent(getUserResponse.Content));
+				await navigation.NavigateAsync<ExplorerViewModel, ErrorViewModel>();
 			}
-
-			await navigation.NavigateAsync<ExplorerViewModel, ErrorViewModel>();
+			else
+			{
+				await dialogService.ToastAsync(getUserResponse.Error.InnerException?.Message ?? getUserResponse.Error.Message, CancellationToken.None);
+			}
 		}
 		else
 		{

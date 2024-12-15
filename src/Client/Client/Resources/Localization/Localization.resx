@@ -222,9 +222,6 @@
   <data name="Statistics" xml:space="preserve">
     <value>Statistics</value>
   </data>
-  <data name="Steps" xml:space="preserve">
-    <value>Steps</value>
-  </data>
   <data name="VisitedPlaces" xml:space="preserve">
     <value>Visited places</value>
   </data>

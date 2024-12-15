@@ -222,9 +222,6 @@
   <data name="Statistics" xml:space="preserve">
     <value>Статистика</value>
   </data>
-  <data name="Steps" xml:space="preserve">
-    <value>Кроки</value>
-  </data>
   <data name="VisitedPlaces" xml:space="preserve">
     <value>Відвідані місця</value>
   </data>
