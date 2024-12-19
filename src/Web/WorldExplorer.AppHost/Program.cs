@@ -20,7 +20,6 @@ var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
                         .WithReference(cache)
                         .WaitFor(cache);
 
-
 var ollama = builder.AddOllama("ai")
                     .WithLifetime(ContainerLifetime.Persistent)
                     .WithDataVolume("ollama")

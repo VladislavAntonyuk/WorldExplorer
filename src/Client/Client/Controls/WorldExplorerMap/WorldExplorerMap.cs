@@ -2,6 +2,7 @@
 
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
 using System.Windows.Input;
@@ -53,22 +54,15 @@ public sealed class WorldExplorerMap : HybridWebView, IDisposable
 
 	private async void PinsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
-		await EvaluateJavaScriptAsync("removeAllPins();");
+		await EvaluateJavaScriptAsync("removeAllMarkers();");
 
-		foreach (var pins in Pins.Chunk(50))
+		foreach (var pin in Pins)
 		{
-			var pinsArray = JsonSerializer.Serialize(pins.Select(p => new
-			{
-				p.Location.Latitude,
-				p.Location.Longitude,
-				p.Label,
-				p.Image,
-				p.PlaceId
-			}));
-
-			var script = $"addMarkers({pinsArray});";
+			var script = $"addMarker('{pin.Location.Latitude}','{pin.Location.Longitude}','{pin.Label}','{pin.Image}','{pin.PlaceId}');";
 			await EvaluateJavaScriptAsync(script);
 		}
+
+		Debug.Assert(await EvaluateJavaScriptAsync("markers.length") == Pins.Count.ToString());
 	}
 
 	private void OnRawMessageReceived(object? sender, HybridWebViewRawMessageReceivedEventArgs e)
@@ -129,8 +123,8 @@ public sealed class WorldExplorerMap : HybridWebView, IDisposable
 	{
 		var control = (WorldExplorerMap)bindable;
 		control.EvaluateJavaScriptAsync(control.UserLocation is not null
-			                                ? $"addLocationPin({control.UserLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{control.UserLocation.Longitude.ToString(CultureInfo.InvariantCulture)});"
-			                                : "removeLocationPin();");
+											? $"addUserLocationMarker({control.UserLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{control.UserLocation.Longitude.ToString(CultureInfo.InvariantCulture)});"
+											: "removeUserLocationMarker();");
 	}
 
 	private sealed record Payload(Guid PlaceId);

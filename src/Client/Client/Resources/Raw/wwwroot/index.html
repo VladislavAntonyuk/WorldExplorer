@@ -85,7 +85,8 @@
 			markers.push(marker);
 		}
 
-		function addLocationPin(latitude, longitude) {
+		function addUserLocationMarker(latitude, longitude) {
+			removeUserLocationMarker();
 			userMarker = createMarker({
 				icon: "https://ik.imagekit.io/VladislavAntonyuk/projects/world-explorer/user-location-pin.png",
 				iconSize: [38, 53],
@@ -98,14 +99,14 @@
 			map.setView(L.latLng(latitude, longitude), 15, null);
 		}
 
-		function removeLocationPin() {
+		function removeUserLocationMarker() {
 			if (userMarker) {
 				userMarker.remove();
 				userMarker = undefined;
 			}
 		}
 
-		function removeAllPins() {
+		function removeAllMarkers() {
 			markers.forEach(marker => marker.remove());
 			markers = [];
 		}

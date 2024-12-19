@@ -163,19 +163,19 @@ public sealed partial class ExplorerViewModel(
 					break;
 				}
 
-				Status = string.Format(Localization.FoundPlaces, placesResponse.Content.Result.Count);
-				Pins.AddRange(placesResponse.Content.Result
-											.Where(x => Pins.All(pin => pin.PlaceId != x.Id))
-											.Select(place => new WorldExplorerPin
-											{
-												PlaceId = place.Id,
-												Location = place.Location,
-												Label = place.Name,
-												Image = string.IsNullOrEmpty(place.MainImage)
-													? DefaultPinImage
-													: place.MainImage,
-												MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
-											}));
+				var newPlaces = placesResponse.Content.Result.Where(x => Pins.All(pin => pin.PlaceId != x.Id))
+				                             .Select(place => new WorldExplorerPin
+				                             {
+					                             PlaceId = place.Id,
+					                             Location = place.Location,
+					                             Label = place.Name,
+					                             Image = string.IsNullOrEmpty(place.MainImage)
+						                             ? DefaultPinImage
+						                             : place.MainImage,
+					                             MarkerClicked = new AsyncRelayCommand<WorldExplorerPin>(MarkerClicked)
+				                             }).ToList();
+				Pins.AddRange(newPlaces);
+				Status = string.Format(Localization.FoundPlaces, newPlaces.Count);
 
 				await CheckLocation(location);
 				break;
