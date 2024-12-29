@@ -2,4 +2,4 @@
 
 using Common.Application.Messaging;
 
-public sealed record CreateTravellerCommand(Guid TravellerId) : ICommand;
+public sealed record CreateTravellerCommand(Guid TravellerId, string Name) : ICommand;

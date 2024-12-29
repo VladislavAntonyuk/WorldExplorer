@@ -1,13 +1,13 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
+using System.Text.Json;
 using Common.Application.EventBus;
 using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Serialization;
 using Database;
 using MassTransit;
-using Newtonsoft.Json;
 
-internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbContext dbConnectionFactory)
+internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbContext dbContext)
 	: IConsumer<TIntegrationEvent> where TIntegrationEvent : IntegrationEvent
 {
 	public async Task Consume(ConsumeContext<TIntegrationEvent> context)
@@ -17,12 +17,11 @@ internal sealed class IntegrationEventConsumer<TIntegrationEvent>(TravellersDbCo
 		var inboxMessage = new InboxMessage
 		{
 			Id = integrationEvent.Id,
-			Type = integrationEvent.GetType().Name,
-			Content = JsonConvert.SerializeObject(integrationEvent, SerializerSettings.JsonSerializerSettingsInstance),
+			Content = JsonSerializer.Serialize<IIntegrationEvent>(integrationEvent, SerializerSettings.Instance),
 			OccurredOnUtc = integrationEvent.OccurredOnUtc
 		};
 
-		dbConnectionFactory.InboxMessages.Add(inboxMessage);
-		await dbConnectionFactory.SaveChangesAsync();
+		dbContext.InboxMessages.Add(inboxMessage);
+		await dbContext.SaveChangesAsync();
 	}
 }

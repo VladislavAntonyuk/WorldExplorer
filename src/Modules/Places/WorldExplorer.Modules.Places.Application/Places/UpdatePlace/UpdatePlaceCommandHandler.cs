@@ -16,8 +16,11 @@ internal sealed class UpdatePlaceCommandHandler(IPlaceRepository placeRepository
 			return Result.Failure(PlaceErrors.NotFound(request.Id));
 		}
 
-		place.Update(request.PlaceRequest.Name, request.PlaceRequest.Location.ToPoint(),
-		             request.PlaceRequest.Description);
+		place.Update(
+			request.PlaceRequest.Name,
+			request.PlaceRequest.Location.ToPoint(),
+			request.PlaceRequest.Description,
+			place.Images);
 		await unitOfWork.SaveChangesAsync(cancellationToken);
 		return Result.Success();
 	}

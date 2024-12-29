@@ -1,9 +1,5 @@
 ﻿{
   "Travellers": {
-    "Outbox": {
-      "IntervalInSeconds": 60,
-      "BatchSize": 50
-    },
     "Inbox": {
       "IntervalInSeconds": 60,
       "BatchSize": 50

@@ -3,16 +3,13 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Identity;
 using Azure.Identity;
-using Common.Application.EventBus;
 using Common.Application.Messaging;
 using Common.Infrastructure;
 using Common.Presentation.Endpoints;
 using Database;
 using Domain.Users;
-using Inbox;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Graph.Beta;
 using Outbox;
@@ -24,8 +21,6 @@ public static class UsersModule
 	public static IHostApplicationBuilder AddUsersModule(this IHostApplicationBuilder builder)
 	{
 		builder.Services.AddDomainEventHandlers();
-
-		builder.Services.AddIntegrationEventHandlers();
 
 		builder.AddInfrastructure();
 
@@ -41,7 +36,7 @@ public static class UsersModule
 		builder.Services.AddSingleton<IGraphClientService>(_ =>
 		{
 			var config = builder.Configuration.GetRequiredSection(AzureAdB2CGraphClientConfiguration.ConfigurationName)
-			                    .Get<AzureAdB2CGraphClientConfiguration>();
+								.Get<AzureAdB2CGraphClientConfiguration>();
 			ArgumentNullException.ThrowIfNull(config);
 			var clientSecretCredential =
 				new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret);
@@ -71,51 +66,22 @@ public static class UsersModule
 		builder.Services.Configure<OutboxOptions>(builder.Configuration.GetSection("Users:Outbox"));
 
 		builder.Services.ConfigureOptions<ConfigureProcessOutboxJob>();
-
-		builder.Services.Configure<InboxOptions>(builder.Configuration.GetSection("Users:Inbox"));
-
-		builder.Services.ConfigureOptions<ConfigureProcessInboxJob>();
 	}
 
 	private static void AddDomainEventHandlers(this IServiceCollection services)
 	{
 		var domainEventHandlers = Application.AssemblyReference.Assembly.GetTypes()
-		                                     .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
-		                                     .ToArray();
+											 .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)));
 
 		foreach (var domainEventHandler in domainEventHandlers)
 		{
-			services.TryAddScoped(domainEventHandler);
-
-			var domainEvent = domainEventHandler.GetInterfaces()
-			                                    .Single(i => i.IsGenericType)
-			                                    .GetGenericArguments()
-			                                    .Single();
-
-			var closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
-
-			services.Decorate(domainEventHandler, closedIdempotentHandler);
+			services.AddKeyedScoped(typeof(IDomainEventHandler), GetKey(domainEventHandler), domainEventHandler);
 		}
-	}
-
-	private static void AddIntegrationEventHandlers(this IServiceCollection services)
-	{
-		var integrationEventHandlers = AssemblyReference.Assembly.GetTypes()
-		                                                .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
-		                                                .ToArray();
-
-		foreach (var integrationEventHandler in integrationEventHandlers)
+		
+		static string GetKey(Type type)
 		{
-			services.TryAddScoped(integrationEventHandler);
-
-			var integrationEvent = integrationEventHandler.GetInterfaces()
-			                                              .Single(i => i.IsGenericType)
-			                                              .GetGenericArguments()
-			                                              .Single();
-
-			var closedIdempotentHandler = typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
-
-			services.Decorate(integrationEventHandler, closedIdempotentHandler);
+			const int handlerNameSuffixLength = 7;
+			return type.Name.AsSpan(..^handlerNameSuffixLength).ToString();
 		}
 	}
 }

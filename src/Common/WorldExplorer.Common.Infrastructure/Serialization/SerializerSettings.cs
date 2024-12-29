@@ -2,31 +2,18 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
-using JsonConverter = Newtonsoft.Json.JsonConverter;
+using Application.EventBus;
+using Domain;
 
 public static class SerializerSettings
 {
-	public static readonly JsonSerializerSettings JsonSerializerSettingsInstance = new()
-	{
-		TypeNameHandling = TypeNameHandling.All,
-		MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
-		ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-	};
-
 	public static readonly JsonSerializerOptions Instance = new(JsonSerializerDefaults.Web)
 	{
-		AllowOutOfOrderMetadataProperties = true,
-		ReferenceHandler = ReferenceHandler.Preserve,
-		NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+		NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
+		Converters = { new InterfaceConverter<IDomainEvent>(), new InterfaceConverter<IIntegrationEvent>() }
 	};
 
-	public static void ConfigureJsonSerializerSettingsInstance(IList<JsonConverter> converters) 
-	{
-		JsonSerializerSettingsInstance.Converters = converters;
-	}
-
-	public static void ConfigureJsonSerializerOptionsInstance(IList<System.Text.Json.Serialization.JsonConverter> converters) 
+	public static void ConfigureJsonSerializerOptionsInstance(IList<JsonConverter> converters)
 	{
 		foreach (var converter in converters)
 		{

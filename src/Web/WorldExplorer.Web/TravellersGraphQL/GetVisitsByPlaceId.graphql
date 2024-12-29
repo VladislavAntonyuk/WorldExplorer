@@ -3,7 +3,10 @@ query GetVisitsByPlaceId($id:UUID!) {
     items {
       id
       placeId
-      travellerId
+      traveller {
+		id
+		name
+	  }
       visitDate
       review {
         comment

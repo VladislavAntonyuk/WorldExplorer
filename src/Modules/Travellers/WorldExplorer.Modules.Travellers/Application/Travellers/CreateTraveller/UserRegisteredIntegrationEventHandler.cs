@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Travellers.CreateTraveller;
 
-using Application.Travellers.CreateTraveller;
 using Common.Application.EventBus;
 using Common.Application.Exceptions;
 using MediatR;
@@ -12,7 +11,7 @@ internal sealed class UserRegisteredIntegrationEventHandler(ISender sender)
 	public override async Task Handle(UserRegisteredIntegrationEvent integrationEvent,
 		CancellationToken cancellationToken = default)
 	{
-		var result = await sender.Send(new CreateTravellerCommand(integrationEvent.UserId), cancellationToken);
+		var result = await sender.Send(new CreateTravellerCommand(integrationEvent.UserId, integrationEvent.Name), cancellationToken);
 
 		if (result.IsFailure)
 		{

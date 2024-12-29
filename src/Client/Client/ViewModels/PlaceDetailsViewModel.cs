@@ -71,7 +71,7 @@ public sealed partial class PlaceDetailsViewModel(
 						Comment = x.Review?.Comment,
 						Rating = x.Review?.Rating ?? 0,
 						ReviewDate = x.VisitDate,
-						Traveller = new TravellerResponse(x.TravellerId, "User")
+						Traveller = new TravellerResponse(x.Traveller!.Id, x.Traveller.Name)
 					}) ?? []);
 					var travellerId = currentUserService.GetCurrentUser()?.Id;
 					IsReviewEnabled = reviews.All(x => x.Traveller.Id != travellerId);
@@ -191,6 +191,14 @@ public sealed partial class PlaceDetailsViewModel(
 		{
 			await dialogService.ToastAsync(Localization.AddReviewSuccess);
 			IsReviewEnabled = false;
+			Place.Reviews.Add(new Review
+			{
+				Comment = Comment,
+				Rating = Rating,
+				ReviewDate = DateTime.UtcNow,
+				Traveller = new TravellerResponse(user.Id, user.Name)
+			});
+			OnPropertyChanged(nameof(Place));
 		}
 		else
 		{

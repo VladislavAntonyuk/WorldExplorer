@@ -10,7 +10,7 @@ using Location = Application.Abstractions.Location;
 
 public class AiService(IChatClient client, ILogger<AiService> logger) : IAiService
 {
-	public async Task<List<Place>> GetNearByPlaces(Location location)
+	public async Task<List<Place>> GetNearByPlaces(Location location, CancellationToken cancellationToken)
 	{
 		var generalPrompt = $$"""
 		                      Tell me about all places near the following location: Latitude='{{location.Latitude}}', Longitude='{{location.Longitude}}'.
@@ -29,17 +29,21 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 		                      }
 		                      """;
 
-		var result = await GetResponse(generalPrompt, AiOutputFormat.Json);
+		var options = new ChatOptions()
+		{
+			ResponseFormat = ChatResponseFormat.Json
+		};
+		var result = await GetResponse(generalPrompt, options, cancellationToken);
 		if (string.IsNullOrWhiteSpace(result))
 		{
 			return [];
 		}
 
 		var response = JsonSerializer.Deserialize<AIResponse>(result, SerializerSettings.Instance);
-		return response?.Places.Select(x => new Place(x.Name, x.Location.ToPoint(), null)).ToList() ?? [];
+		return response?.Places.Select(place => Place.Create(place.Name, place.Location.ToPoint())).ToList() ?? [];
 	}
 
-	public Task<string?> GetPlaceDescription(string placeName, Location location)
+	public Task<string?> GetPlaceDescription(string placeName, Location location, CancellationToken cancellationToken)
 	{
 		var generalPrompt = $"""
 		                     Tell me about place named '{placeName}' near the following location: Latitude='{location.Latitude}', Longitude='{location.Longitude}'.
@@ -50,10 +54,12 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 		                     Dmytro Yavornytsky National Historical Museum of Dnipro is a museum, established in Dnipro (Ukraine) in 1848 by Andriy Fabr, local governor. Its permanent collection consists of 283 thousand objects from ancient Paleolithic implements to display units of World War II. Among its notable objects are the Kurgan stelae, Kernosivsky idol and vast collection of cossack's antiquities.
 		                     """;
 
-		return GetResponse(generalPrompt, AiOutputFormat.Text);
+		return GetResponse(generalPrompt, new ChatOptions() { ResponseFormat = ChatResponseFormat.Text }, cancellationToken);
 	}
 
-	private async Task<string?> GetResponse(string request, AiOutputFormat outputFormat)
+	private async Task<string?> GetResponse(string request,
+		ChatOptions options,
+		CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -61,10 +67,7 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 			[
 				new ChatMessage(ChatRole.System, "You are a tour guide with a great knowledge of history."),
 				new ChatMessage(ChatRole.User, request)
-			], new ChatOptions
-			{
-				ResponseFormat = outputFormat == AiOutputFormat.Json ? ChatResponseFormat.Json : ChatResponseFormat.Text
-			});
+			], options, cancellationToken);
 
 			return result.Message.Text;
 		}

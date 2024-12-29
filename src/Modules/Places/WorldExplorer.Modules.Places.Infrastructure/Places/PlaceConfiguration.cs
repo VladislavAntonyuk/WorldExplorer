@@ -10,7 +10,7 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
 	{
 		builder.HasKey(e => e.Id);
 
-		builder.HasMany(post => post.Images)
+		builder.HasMany(place => place.Images)
 		       .WithOne()
 		       .HasForeignKey(x => x.PlaceId)
 		       .OnDelete(DeleteBehavior.Cascade);

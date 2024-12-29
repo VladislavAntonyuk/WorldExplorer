@@ -3,7 +3,6 @@ using System.Net.Http.Json;
 using WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
 using WorldExplorer.Modules.Users.Presentation.Users;
 using FluentAssertions;
-using AutoFixture;
 
 namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
 

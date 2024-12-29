@@ -4,7 +4,6 @@ using Abstractions.Data;
 using Application.Travellers;
 using Application.Visits;
 using Common.Infrastructure.Inbox;
-using Common.Infrastructure.Outbox;
 using Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,9 +14,6 @@ public sealed class TravellersDbContext(DbContextOptions<TravellersDbContext> op
 	internal DbSet<Place> Places => Set<Place>();
 
 	internal DbSet<InboxMessage> InboxMessages => Set<InboxMessage>();
-	internal DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
-	internal DbSet<InboxMessageConsumer> InboxMessagesConsumers => Set<InboxMessageConsumer>();
-	internal DbSet<OutboxMessageConsumer> OutboxMessagesConsumers => Set<OutboxMessageConsumer>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -28,9 +24,6 @@ public sealed class TravellersDbContext(DbContextOptions<TravellersDbContext> op
 		modelBuilder.ApplyConfiguration(new VisitsConfiguration());
 		modelBuilder.ApplyConfiguration(new ReviewsConfiguration());
 
-		modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-		modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
 		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
-		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
 	}
 }

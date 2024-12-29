@@ -15,7 +15,6 @@ using LocationInfo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Outbox;
 using Places;
@@ -43,7 +42,6 @@ public static class PlacesModule
 
 		if (builder.Configuration.GetValue<string>("Places:AIProvider") == "OpenAI")
 		{
-			builder.AddOpenAIClient("openai");
 			builder.AddOpenAiClient("gpt-4o-mini");
 		}
 		else
@@ -64,29 +62,23 @@ public static class PlacesModule
 
 		builder.Services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
-		SerializerSettings.ConfigureJsonSerializerSettingsInstance([new PointNewtonsoftJsonConverter()]);
 		SerializerSettings.ConfigureJsonSerializerOptionsInstance([new PointJsonConverter()]);
 	}
-
+	
 	private static void AddDomainEventHandlers(this IServiceCollection services)
 	{
 		var domainEventHandlers = Application.AssemblyReference.Assembly.GetTypes()
-		                                     .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
-		                                     .ToArray();
+		                                     .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)));
 
 		foreach (var domainEventHandler in domainEventHandlers)
 		{
-			services.TryAddScoped(domainEventHandler);
+			services.AddKeyedScoped(typeof(IDomainEventHandler), GetKey(domainEventHandler), domainEventHandler);
+		}
 
-			var domainEvent = domainEventHandler.GetInterfaces()
-			                                    .Single(i => i.IsGenericType)
-			                                    .GetGenericArguments()
-			                                    .Single();
-
-			var closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
-
-			services.Decorate(domainEventHandler, closedIdempotentHandler);
+		static string GetKey(Type type)
+		{
+			const int handlerNameSuffixLength = 7;
+			return type.Name.AsSpan(..^handlerNameSuffixLength).ToString();
 		}
 	}
-
 }

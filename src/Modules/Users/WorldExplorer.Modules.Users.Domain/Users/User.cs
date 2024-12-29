@@ -8,7 +8,7 @@ public sealed class User : Entity
 	{
 	}
 
-	public Guid Id { get; private set; }
+	public Guid Id { get; private init; }
 
 	public UserSettings Settings { get; private set; } = new();
 

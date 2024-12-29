@@ -42,69 +42,9 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.Property<DateTime?>("ProcessedOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("inbox_messages", "travellers");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Inbox.InboxMessageConsumer", b =>
-                {
-                    b.Property<Guid>("InboxMessageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("InboxMessageId", "Name");
-
-                    b.ToTable("inbox_message_consumers", "travellers");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Outbox.OutboxMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Error")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OccurredOnUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ProcessedOnUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("outbox_messages", "travellers");
-                });
-
-            modelBuilder.Entity("WorldExplorer.Common.Infrastructure.Outbox.OutboxMessageConsumer", b =>
-                {
-                    b.Property<Guid>("OutboxMessageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("OutboxMessageId", "Name");
-
-                    b.ToTable("outbox_message_consumers", "travellers");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", b =>
@@ -112,6 +52,10 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -194,11 +138,13 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", null)
+                    b.HasOne("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", "Traveller")
                         .WithMany("Visits")
                         .HasForeignKey("TravellerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Traveller");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", b =>

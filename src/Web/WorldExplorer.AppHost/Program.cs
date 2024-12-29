@@ -15,7 +15,7 @@ var sqlServer = builder.AddSqlServer("sqlserver")
 var database = sqlServer.AddDatabase("database", "worldexplorer");
 
 var apiService = builder.AddProject<WorldExplorer_ApiService>("apiservice")
-                        .WithReference(sqlServer)
+                        .WithReference(database)
                         .WaitFor(database)
                         .WithReference(cache)
                         .WaitFor(cache);

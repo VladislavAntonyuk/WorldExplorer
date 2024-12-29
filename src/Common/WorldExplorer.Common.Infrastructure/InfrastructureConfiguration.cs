@@ -85,10 +85,10 @@ public static class InfrastructureConfiguration
 		Action<DbContextOptionsBuilder>? dbContextConfigure = null,
 		Action<SqlServerDbContextOptionsBuilder>? sqlServerConfigure = null) where T : DbContext
 	{
-		builder.AddSqlServerDbContext<T>("sqlserver");
+		builder.AddSqlServerDbContext<T>("database");
 		builder.Services.AddDbContextPool<T>((sp, options) =>
 		{
-			options.UseSqlServer(builder.Configuration.GetConnectionString("sqlserver"), optionsBuilder =>
+			options.UseSqlServer(builder.Configuration.GetConnectionString("database"), optionsBuilder =>
 			       {
 				       optionsBuilder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schema);
 				       sqlServerConfigure?.Invoke(optionsBuilder);

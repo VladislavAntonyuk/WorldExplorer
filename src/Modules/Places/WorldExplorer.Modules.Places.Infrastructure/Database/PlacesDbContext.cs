@@ -1,7 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Database;
 
 using Application.Abstractions.Data;
-using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Outbox;
 using Domain.LocationInfo;
 using Domain.Places;
@@ -14,21 +13,16 @@ public sealed class PlacesDbContext(DbContextOptions<PlacesDbContext> options) :
 {
 	internal DbSet<Place> Places => Set<Place>();
 	internal DbSet<LocationInfoRequest> LocationInfoRequests => Set<LocationInfoRequest>();
-	internal DbSet<InboxMessage> InboxMessages => Set<InboxMessage>();
 	internal DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
-	internal DbSet<InboxMessageConsumer> InboxMessagesConsumers => Set<InboxMessageConsumer>();
-	internal DbSet<OutboxMessageConsumer> OutboxMessagesConsumers => Set<OutboxMessageConsumer>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.HasDefaultSchema(Schemas.Places);
 
 		modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-		modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
-		modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
-		modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
 
 		modelBuilder.ApplyConfiguration(new PlaceConfiguration());
+		modelBuilder.ApplyConfiguration(new PlaceImageConfiguration());
 		modelBuilder.ApplyConfiguration(new LocationInfoRequestConfiguration());
 	}
 }

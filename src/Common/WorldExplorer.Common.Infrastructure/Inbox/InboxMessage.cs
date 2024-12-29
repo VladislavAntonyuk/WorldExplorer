@@ -4,8 +4,6 @@ public sealed class InboxMessage
 {
 	public Guid Id { get; init; }
 
-	public required string Type { get; init; }
-
 	public required string Content { get; init; }
 
 	public DateTime OccurredOnUtc { get; init; }

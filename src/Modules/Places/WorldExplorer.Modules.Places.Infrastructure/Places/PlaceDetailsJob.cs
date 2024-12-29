@@ -1,20 +1,20 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
 using Application.Abstractions;
+using Application.Abstractions.Data;
 using Database;
 using Domain.Places;
 using Image;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Quartz;
 
 [DisallowConcurrentExecution]
 internal sealed class PlaceDetailsJob(
 	PlacesDbContext dbContext,
+	IUnitOfWork unitOfWork,
 	IAiService aiService,
 	IImageSearchService imageSearchService,
-	IOptions<PlacesSettings> placeOptions,
 	ILogger<PlaceDetailsJob> logger) : IJob
 {
 	private const string ModuleName = "Places";
@@ -26,7 +26,7 @@ internal sealed class PlaceDetailsJob(
 		var notFilledPlaces = await dbContext.Places
 											 .AsTracking()
 											 .Include(x => x.Images)
-											 .Where(x => x.Images.Count < placeOptions.Value.MinImagesCount || string.IsNullOrEmpty(x.Description))
+											 .Where(x => x.Images.Count == 0 || string.IsNullOrEmpty(x.Description))
 											 .OrderBy(x => x.Images.Count)
 											 .ToListAsync(context.CancellationToken);
 
@@ -36,59 +36,52 @@ internal sealed class PlaceDetailsJob(
 		}
 
 		var fillPlaceDetails = notFilledPlaces.Select(place => GeneratePlaceDetails(place, context.CancellationToken));
-		try
+		await foreach (var task in Task.WhenEach(fillPlaceDetails))
 		{
-			await foreach (var _ in Task.WhenEach(fillPlaceDetails))
+			var placeDetails = await task;
+			try
 			{
-				await dbContext.SaveChangesAsync(context.CancellationToken);
+				placeDetails.Place.Update(placeDetails.Place.Name, placeDetails.Place.Location, placeDetails.Description, placeDetails.Images);
+				await unitOfWork.SaveChangesAsync(context.CancellationToken);
 			}
-		}
-		catch (Exception e)
-		{
-			logger.LogError(e, "Error updating images for places");
+			catch (Exception e)
+			{
+				logger.LogError(e, "Error updating images for place {PlaceId}", placeDetails.Place.Id);
+			}
 		}
 
 		logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
 	}
 
-	private async Task GeneratePlaceDetails(Place place, CancellationToken cancellationToken)
+	private async Task<PlaceDetails> GeneratePlaceDetails(Place place, CancellationToken cancellationToken)
 	{
-		if (string.IsNullOrWhiteSpace(place.Description))
+		var placeDescription = place.Description;
+		var images = place.Images.ToList();
+		if (images.Count == 0)
 		{
-			var placeDescription = await aiService.GetPlaceDescription(place.Name, Location.FromPoint(place.Location));
-			if (!string.IsNullOrWhiteSpace(placeDescription))
+			var generatedImage = await imageSearchService.GenerateImage(place.Name, Location.FromPoint(place.Location), cancellationToken);
+			if (!string.IsNullOrWhiteSpace(generatedImage))
 			{
-				place.Update(place.Name, place.Location, placeDescription);
-			}
-
-			if (place.Images.Count < placeOptions.Value.MinImagesCount)
-			{
-				var image = await imageSearchService.GenerateImage(place.Name, Location.FromPoint(place.Location), cancellationToken);
-				if (!string.IsNullOrWhiteSpace(image))
+				images.Add(new PlaceImage
 				{
-					place.Images.Add(new PlaceImage
-					{
-						Id = Guid.CreateVersion7(),
-						Source = $"data:image;base64,{image}"
-					});
-				}
+					Source = $"data:image;base64,{generatedImage}"
+				});
 			}
-		}
 
-		if (place.Images.Count >= placeOptions.Value.MinImagesCount)
-		{
-			return;
-		}
-
-		var images = new List<string>();
-		images.AddRange(await imageSearchService.GetPlaceImages(place.Name, cancellationToken));
-		foreach (var image in images)
-		{
-			place.Images.Add(new PlaceImage
+			var placeImages = await imageSearchService.GetPlaceImages(place.Name, cancellationToken);
+			images.AddRange(placeImages.Select(image => new PlaceImage
 			{
-				Id = Guid.CreateVersion7(),
 				Source = image
-			});
+			}));
 		}
+
+		if (string.IsNullOrWhiteSpace(placeDescription))
+		{
+			placeDescription = await aiService.GetPlaceDescription(place.Name, Location.FromPoint(place.Location), cancellationToken);
+		}
+
+		return new PlaceDetails(place, placeDescription, images);
 	}
+
+	private sealed record PlaceDetails(Place Place, string? Description, ICollection<PlaceImage> Images);
 }

@@ -1,6 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Visits.CreatePlace;
 
-using Application.Visits.CreatePlace;
 using Common.Application.EventBus;
 using Common.Application.Exceptions;
 using MediatR;

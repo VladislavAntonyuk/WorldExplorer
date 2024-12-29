@@ -27,6 +27,7 @@ public sealed class GetVisitsHandler(TravellersDbContext context)
 		return context.Visits
 					  .AsNoTracking()
 					  .Include(x => x.Review)
+					  .Include(x => x.Traveller)
 					  .Where(x => x.PlaceId == placeId)
 					  .OrderBy(t => t.VisitDate)
 					  .ThenBy(t => t.Id);

@@ -13,7 +13,6 @@ using Infrastructure.Database;
 using Infrastructure.Inbox;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Places.IntegrationEvents;
 using Users.IntegrationEvents;
@@ -36,22 +35,17 @@ public static class TravellersModule
 	private static void AddIntegrationEventHandlers(this IServiceCollection services)
 	{
 		var integrationEventHandlers = AssemblyReference.Assembly.GetTypes()
-		                                                .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
-		                                                .Except([typeof(IdempotentIntegrationEventHandler<>)])
-		                                                .ToArray();
+		                                     .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)));
 
 		foreach (var integrationEventHandler in integrationEventHandlers)
 		{
-			services.TryAddScoped(integrationEventHandler);
+			services.AddKeyedScoped(typeof(IIntegrationEventHandler), GetKey(integrationEventHandler), integrationEventHandler);
+		}
 
-			var integrationEvent = integrationEventHandler.GetInterfaces()
-			                                              .Single(i => i.IsGenericType)
-			                                              .GetGenericArguments()
-			                                              .Single();
-
-			var closedIdempotentHandler = typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
-
-			services.Decorate(integrationEventHandler, closedIdempotentHandler);
+		static string GetKey(Type type)
+		{
+			const int handlerNameSuffixLength = 7;
+			return type.Name.AsSpan(..^handlerNameSuffixLength).ToString();
 		}
 	}
 

@@ -1,6 +1,5 @@
 ﻿namespace Client;
 
-using Microsoft.Extensions.Options;
 using ViewModels;
 
 public partial class App : Application

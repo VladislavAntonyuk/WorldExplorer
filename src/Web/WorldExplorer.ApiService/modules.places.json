@@ -4,16 +4,11 @@
 			"IntervalInSeconds": 60,
 			"BatchSize": 50
 		},
-		"Inbox": {
-			"IntervalInSeconds": 60,
-			"BatchSize": 50
-		},
 		"AIProvider": "OpenAI"
 	},
 	"ImageSearch": {
 		"BaseAddress": "https://serpapi.com",
 		"ApiKey": "#{GOOGLE_SEARCH_APIKEY}#"
 	},
-	"LocationRequestNearbyDistance": "3000",
-	"MinImagesCount": 70
+	"LocationRequestNearbyDistance": "3000"
 }

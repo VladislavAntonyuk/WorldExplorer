@@ -9,7 +9,7 @@ internal sealed class CreateTravellerCommandHandler(ITravellerRepository travell
 {
 	public async Task<Result> Handle(CreateTravellerCommand request, CancellationToken cancellationToken)
 	{
-		var traveller = Traveller.Create(request.TravellerId, []);
+		var traveller = Traveller.Create(request.TravellerId, request.Name, []);
 
 		travellerRepository.Insert(traveller);
 

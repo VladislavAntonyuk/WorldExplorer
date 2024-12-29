@@ -10,6 +10,16 @@ type Travellers {
   visitsByPlaceId(skip: Int take: Int placeId: UUID! where: VisitFilterInput order: [VisitSortInput!]): VisitsByPlaceIdCollectionSegment
 }
 
+"Defines when a policy shall be executed."
+enum ApplyPolicy {
+  "Before the resolver was executed."
+  BEFORE_RESOLVER
+  "After the resolver was executed."
+  AFTER_RESOLVER
+  "The policy is applied in the validation step before the execution."
+  VALIDATION
+}
+
 type CreateVisitHandler {
   createVisit(request: VisitRequestInput!): Visit!
 }
@@ -18,11 +28,13 @@ input TravellerFilterInput {
   and: [TravellerFilterInput!]
   or: [TravellerFilterInput!]
   id: UuidOperationFilterInput
+  name: StringOperationFilterInput
   visits: ListFilterInputTypeOfVisitFilterInput
 }
 
 input TravellerSortInput {
   id: SortEnumType
+  name: SortEnumType
 }
 
 "A segment of a collection."
@@ -38,6 +50,7 @@ input VisitFilterInput {
   or: [VisitFilterInput!]
   id: UuidOperationFilterInput
   travellerId: UuidOperationFilterInput
+  traveller: TravellerFilterInput
   placeId: UuidOperationFilterInput
   visitDate: DateTimeOperationFilterInput
   review: ReviewFilterInput
@@ -46,6 +59,7 @@ input VisitFilterInput {
 input VisitSortInput {
   id: SortEnumType
   travellerId: SortEnumType
+  traveller: TravellerSortInput
   placeId: SortEnumType
   visitDate: SortEnumType
   review: ReviewSortInput
@@ -80,6 +94,21 @@ input UuidOperationFilterInput {
   nlt: UUID
   lte: UUID
   nlte: UUID
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
 }
 
 input ListFilterInputTypeOfVisitFilterInput {
@@ -153,21 +182,6 @@ input IntOperationFilterInput {
   nlte: Int
 }
 
-input StringOperationFilterInput {
-  and: [StringOperationFilterInput!]
-  or: [StringOperationFilterInput!]
-  eq: String
-  neq: String
-  contains: String
-  ncontains: String
-  in: [String]
-  nin: [String]
-  startsWith: String
-  nstartsWith: String
-  endsWith: String
-  nendsWith: String
-}
-
 input VisitRequestInput {
   travellerId: UUID!
   placeId: UUID!
@@ -178,6 +192,7 @@ input VisitRequestInput {
 type Visit {
   id: UUID!
   travellerId: UUID!
+  traveller: Traveller
   placeId: UUID!
   visitDate: DateTime!
   review: Review
@@ -185,6 +200,7 @@ type Visit {
 
 type Traveller {
   id: UUID!
+  name: String!
   visits: [Visit!]!
 }
 
@@ -203,4 +219,4 @@ interface Error {
 directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
 
 "The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information."
-directive @listSize("The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field." assumedSize: Int "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments." slicingArguments: [String!] "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields." sizedFields: [String!] "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error." requireOneSlicingArgument: Boolean! = true) on FIELD_DEFINITION
+directive @listSize("The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field." assumedSize: Int "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments." slicingArguments: [String!] "The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query." slicingArgumentDefaultValue: Int "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields." sizedFields: [String!] "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error." requireOneSlicingArgument: Boolean! = true) on FIELD_DEFINITION

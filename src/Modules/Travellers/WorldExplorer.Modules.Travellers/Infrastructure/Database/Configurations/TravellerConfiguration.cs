@@ -11,8 +11,8 @@ public class TravellerConfiguration : IEntityTypeConfiguration<Traveller>
 		builder.HasKey(e => e.Id);
 
 		builder.HasMany(t => t.Visits)
-		      .WithOne()
-		      .HasForeignKey(v => v.TravellerId)
-		      .OnDelete(DeleteBehavior.Cascade);
+			  .WithOne(t => t.Traveller)
+			  .HasForeignKey(v => v.TravellerId)
+			  .OnDelete(DeleteBehavior.Cascade);
 	}
 }

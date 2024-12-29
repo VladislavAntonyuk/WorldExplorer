@@ -46,7 +46,7 @@ public partial class PlaceDetailsDialog(
 						Comment = x.Review?.Comment,
 						Rating = x.Review?.Rating ?? 0,
 						ReviewDate = x.VisitDate,
-						Traveller = new TravellerResponse(x.TravellerId, "User")
+						Traveller = new TravellerResponse(x.Traveller!.Id, x.Traveller.Name)
 					})
 											.ToList() ?? [];
 				}
@@ -82,7 +82,7 @@ public partial class PlaceDetailsDialog(
 				Comment = reviewRequest.Comment,
 				Rating = reviewRequest.Rating,
 				ReviewDate = DateTimeOffset.UtcNow,
-				Traveller = new TravellerResponse(Guid.Parse(CurrentUser.ProviderId), "User")
+				Traveller = new TravellerResponse(Guid.Parse(CurrentUser.ProviderId), CurrentUser.Name ?? "User")
 			});
 		}
 		else

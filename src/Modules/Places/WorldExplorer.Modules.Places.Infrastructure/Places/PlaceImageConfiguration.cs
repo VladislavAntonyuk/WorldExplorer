@@ -8,6 +8,8 @@ public class PlaceImageConfiguration : IEntityTypeConfiguration<PlaceImage>
 {
 	public void Configure(EntityTypeBuilder<PlaceImage> builder)
 	{
+		builder.ToTable("PlaceImages");
+
 		builder.HasKey(e => e.Id);
 	}
 }

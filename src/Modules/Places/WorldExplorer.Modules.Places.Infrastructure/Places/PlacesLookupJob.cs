@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.Places;
 
 using Application.Abstractions;
+using Application.Abstractions.Data;
 using Database;
 using Domain.LocationInfo;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Quartz;
 
 [DisallowConcurrentExecution]
 internal sealed class PlacesLookupJob(
+	IUnitOfWork unitOfWork,
 	PlacesDbContext dbContext,
 	IAiService aiService,
 	ILogger<PlacesLookupJob> logger) : IJob
@@ -60,7 +62,7 @@ internal sealed class PlacesLookupJob(
 
 	private async Task GeneratePlaces(LocationInfoRequest[] locationInfoRequests, CancellationToken cancellationToken)
 	{
-		var tasks = locationInfoRequests.Select(x => aiService.GetNearByPlaces(new Location(x.Location.Y, x.Location.X)));
+		var tasks = locationInfoRequests.Select(x => aiService.GetNearByPlaces(new Location(x.Location.Y, x.Location.X), cancellationToken));
 		var placeTasks = await Task.WhenAll(tasks);
 		var places = placeTasks.SelectMany(x => x).ToList();
 
@@ -71,6 +73,6 @@ internal sealed class PlacesLookupJob(
 
 		var newPlaces = places.ExceptBy(existingPlaceNames, x => x.Name);
 		await dbContext.Places.AddRangeAsync(newPlaces, cancellationToken);
-		await dbContext.SaveChangesAsync(cancellationToken);
+		await unitOfWork.SaveChangesAsync(cancellationToken);
 	}
 }

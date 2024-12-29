@@ -1,7 +1,5 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Application.Visits.DeletePlace;
 
-using Application.Travellers.DeleteTraveller;
-using Application.Visits.DeletePlace;
 using Common.Application.EventBus;
 using Common.Application.Exceptions;
 using MediatR;

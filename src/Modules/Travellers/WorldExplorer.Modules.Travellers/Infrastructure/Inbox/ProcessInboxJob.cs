@@ -1,5 +1,6 @@
 ﻿namespace WorldExplorer.Modules.Travellers.Infrastructure.Inbox;
 
+using System.Text.Json;
 using Common.Application.EventBus;
 using Common.Infrastructure.Inbox;
 using Common.Infrastructure.Serialization;
@@ -8,12 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Quartz;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessInboxJob(
-	TravellersDbContext dbConnectionFactory,
+	TravellersDbContext dbContext,
 	IServiceScopeFactory serviceScopeFactory,
 	TimeProvider timeProvider,
 	IOptions<InboxOptions> inboxOptions,
@@ -32,23 +32,18 @@ internal sealed class ProcessInboxJob(
 
 			try
 			{
-				var integrationEvent = JsonConvert.DeserializeObject<IIntegrationEvent>(
-					inboxMessage.Content, SerializerSettings.JsonSerializerSettingsInstance)!;
+				var integrationEvent = JsonSerializer.Deserialize<IIntegrationEvent>(inboxMessage.Content, SerializerSettings.Instance)!;
 
 				using var scope = serviceScopeFactory.CreateScope();
-
-				var handlers = IntegrationEventHandlersFactory.GetHandlers(
-					integrationEvent.GetType(), scope.ServiceProvider, AssemblyReference.Assembly);
-
-				foreach (var integrationEventHandler in handlers)
-				{
-					await integrationEventHandler.Handle(integrationEvent, context.CancellationToken);
-				}
+				var handler = scope.ServiceProvider.GetRequiredKeyedService<IIntegrationEventHandler>(integrationEvent.GetType().Name);
+				await handler.Handle(integrationEvent, context.CancellationToken);
 			}
 			catch (Exception caughtException)
 			{
-				logger.LogError(caughtException, "{Module} - Exception while processing inbox message {MessageId}",
-				                ModuleName, inboxMessage.Id);
+				logger.LogError(caughtException,
+				                "{Module} - Exception while processing inbox message {MessageId}",
+				                ModuleName,
+				                inboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -59,26 +54,23 @@ internal sealed class ProcessInboxJob(
 		logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
 	}
 
-	private async Task<IReadOnlyList<InboxMessageResponse>> GetInboxMessagesAsync()
+	private async Task<IReadOnlyList<InboxMessage>> GetInboxMessagesAsync()
 	{
-		var inboxMessages = await dbConnectionFactory.InboxMessages
+		var inboxMessages = await dbContext.InboxMessages
 		                                             .Where(x => x.ProcessedOnUtc == null)
 		                                             .OrderBy(x => x.OccurredOnUtc)
 		                                             .Take(inboxOptions.Value.BatchSize)
-		                                             .Select(x => new InboxMessageResponse(x.Id, x.Content))
 		                                             .ToListAsync();
 
 		return inboxMessages;
 	}
 
-	private async Task UpdateInboxMessageAsync(InboxMessageResponse inboxMessage, Exception? exception)
+	private async Task UpdateInboxMessageAsync(InboxMessage inboxMessage, Exception? exception)
 	{
 		var message = exception?.Message ?? null;
-		await dbConnectionFactory.InboxMessages.Where(x => x.Id == inboxMessage.Id)
+		await dbContext.InboxMessages.Where(x => x.Id == inboxMessage.Id)
 		                         .ExecuteUpdateAsync(
 			                         m => m.SetProperty(p => p.ProcessedOnUtc, timeProvider.GetUtcNow().UtcDateTime)
 			                               .SetProperty(p => p.Error, message));
 	}
-
-	internal sealed record InboxMessageResponse(Guid Id, string Content);
 }

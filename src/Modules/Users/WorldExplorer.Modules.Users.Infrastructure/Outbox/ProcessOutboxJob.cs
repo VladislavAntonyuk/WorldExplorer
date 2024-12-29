@@ -1,6 +1,7 @@
 ﻿namespace WorldExplorer.Modules.Users.Infrastructure.Outbox;
 
-using Application;
+using System.Text.Json;
+using Common.Application.Messaging;
 using Common.Domain;
 using Common.Infrastructure.Outbox;
 using Common.Infrastructure.Serialization;
@@ -9,12 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Quartz;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessOutboxJob(
-	UsersDbContext dbConnectionFactory,
+	UsersDbContext dbContext,
 	IServiceScopeFactory serviceScopeFactory,
 	TimeProvider dateTimeProvider,
 	IOptions<OutboxOptions> outboxOptions,
@@ -34,23 +34,21 @@ internal sealed class ProcessOutboxJob(
 
 			try
 			{
-				var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
-					outboxMessage.Content, SerializerSettings.JsonSerializerSettingsInstance)!;
+				var domainEvent = JsonSerializer.Deserialize<IDomainEvent>(outboxMessage.Content, SerializerSettings.Instance)!;
 
 				using var scope = serviceScopeFactory.CreateScope();
-
-				var handlers = DomainEventHandlersFactory.GetHandlers(
-					domainEvent.GetType(), scope.ServiceProvider, AssemblyReference.Assembly);
-
-				foreach (var domainEventHandler in handlers)
+				var handler = scope.ServiceProvider.GetKeyedService<IDomainEventHandler>(domainEvent.GetType().Name);
+				if (handler is not null)
 				{
-					await domainEventHandler.Handle(domainEvent, context.CancellationToken);
+					await handler.Handle(domainEvent, context.CancellationToken);
 				}
 			}
 			catch (Exception caughtException)
 			{
-				logger.LogError(caughtException, "{Module} - Exception while processing outbox message {MessageId}",
-				                ModuleName, outboxMessage.Id);
+				logger.LogError(caughtException,
+				                "{Module} - Exception while processing outbox message {MessageId}",
+				                ModuleName,
+				                outboxMessage.Id);
 
 				exception = caughtException;
 			}
@@ -61,27 +59,24 @@ internal sealed class ProcessOutboxJob(
 		logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
 	}
 
-	private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync()
+	private async Task<IReadOnlyList<OutboxMessage>> GetOutboxMessagesAsync()
 	{
-		var outboxMessages = await dbConnectionFactory.OutboxMessages
+		var outboxMessages = await dbContext.OutboxMessages
 		                                              .Where(x => x.ProcessedOnUtc == null)
 		                                              .OrderBy(x => x.OccurredOnUtc)
 													  .Take(outboxOptions.Value.BatchSize)
-		                                              .Select(x => new OutboxMessageResponse(x.Id, x.Content, x.Type))
 		                                              .ToListAsync();
 
 		return outboxMessages;
 	}
 
-	private async Task UpdateOutboxMessageAsync(OutboxMessageResponse outboxMessage, Exception? exception)
+	private async Task UpdateOutboxMessageAsync(OutboxMessage outboxMessage, Exception? exception)
 	{
 		var error = exception?.ToString();
-		await dbConnectionFactory.OutboxMessages.Where(x => x.Id == outboxMessage.Id)
+		await dbContext.OutboxMessages.Where(x => x.Id == outboxMessage.Id)
 		                         .ExecuteUpdateAsync(m => m.SetProperty(p => p.Error, error)
 		                                                   .SetProperty(
 			                                                   p => p.ProcessedOnUtc,
 			                                                   dateTimeProvider.GetUtcNow().UtcDateTime));
 	}
-
-	internal sealed record OutboxMessageResponse(Guid Id, string Content, string Type);
 }

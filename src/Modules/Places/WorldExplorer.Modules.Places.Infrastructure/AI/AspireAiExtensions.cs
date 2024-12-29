@@ -10,6 +10,7 @@ public static class AspireAiExtensions
 {
 	public static void AddOpenAiClient(this IHostApplicationBuilder builder, string model)
 	{
+		builder.AddOpenAIClient("openai");
 		builder.AddChatClient(sp => new OpenAIChatClient(sp.GetRequiredService<OpenAIClient>(), model));
 	}
 
@@ -30,7 +31,9 @@ public static class AspireAiExtensions
 	{
 		builder.Services.AddChatClient(sp =>
 		{
-			var chatClientBuilder = new ChatClientBuilder(innerClient).UseLogging().UseOpenTelemetry();
+			var chatClientBuilder = new ChatClientBuilder(innerClient)
+			                        .UseLogging()
+			                        .UseOpenTelemetry();
 			if (!builder.Environment.IsDevelopment())
 			{
 				chatClientBuilder = chatClientBuilder.UseDistributedCache();

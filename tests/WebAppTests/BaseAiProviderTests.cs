@@ -15,7 +15,7 @@ public abstract class BaseAiProviderTests(ITestOutputHelper testOutputHelper)
 	{
 		SerializerSettings.ConfigureJsonSerializerOptionsInstance([new PointJsonConverter()]);
 		var aiService = await GetAiService();
-		var places = await aiService.GetNearByPlaces(new Location(48.455833330000026, 35.06388889000002));
+		var places = await aiService.GetNearByPlaces(new Location(48.455833330000026, 35.06388889000002), CancellationToken.None);
 		places.Count.Should().Be(10);
 		testOutputHelper.WriteLine(JsonSerializer.Serialize(places, SerializerSettings.Instance));
 	}
@@ -24,7 +24,7 @@ public abstract class BaseAiProviderTests(ITestOutputHelper testOutputHelper)
 	public async Task GetPlaceDetailsShouldReturnDetailedDescription()
 	{
 		var aiService = await GetAiService();
-		var placeDescription = await aiService.GetPlaceDescription("Dnipro Circus", new Location(48.455833330000026, 35.06388889000002));
+		var placeDescription = await aiService.GetPlaceDescription("Dnipro Circus", new Location(48.455833330000026, 35.06388889000002), CancellationToken.None);
 		placeDescription?.Length.Should().BeGreaterThan(100);
 		testOutputHelper.WriteLine(placeDescription);
 	}
