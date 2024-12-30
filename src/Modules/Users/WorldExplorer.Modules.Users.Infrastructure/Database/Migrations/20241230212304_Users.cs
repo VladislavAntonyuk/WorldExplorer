@@ -12,11 +12,11 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "users");
+                name: "worldexplorer.users");
 
             migrationBuilder.CreateTable(
-                name: "outbox_messages",
-                schema: "users",
+                name: "OutboxMessages",
+                schema: "worldexplorer.users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -27,12 +27,12 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_outbox_messages", x => x.Id);
+                    table.PrimaryKey("PK_OutboxMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
-                schema: "users",
+                schema: "worldexplorer.users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -48,12 +48,12 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "outbox_messages",
-                schema: "users");
+                name: "OutboxMessages",
+                schema: "worldexplorer.users");
 
             migrationBuilder.DropTable(
                 name: "Users",
-                schema: "users");
+                schema: "worldexplorer.users");
         }
     }
 }

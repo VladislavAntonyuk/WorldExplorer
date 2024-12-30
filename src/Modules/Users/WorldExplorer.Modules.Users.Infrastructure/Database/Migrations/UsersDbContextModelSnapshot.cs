@@ -17,7 +17,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("users")
+                .HasDefaultSchema("worldexplorer.users")
                 .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -44,7 +44,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("outbox_messages", "users");
+                    b.ToTable("OutboxMessages", "worldexplorer.users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>
@@ -55,7 +55,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", "users");
+                    b.ToTable("Users", "worldexplorer.users");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Users.Domain.Users.User", b =>
@@ -70,7 +70,7 @@ namespace WorldExplorer.Modules.Users.Infrastructure.Database.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users", "users");
+                            b1.ToTable("Users", "worldexplorer.users");
 
                             b1.ToJson("Settings");
 

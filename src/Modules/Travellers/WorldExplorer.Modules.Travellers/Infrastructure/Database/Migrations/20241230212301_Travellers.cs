@@ -12,11 +12,11 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "travellers");
+                name: "worldexplorer.travellers");
 
             migrationBuilder.CreateTable(
-                name: "inbox_messages",
-                schema: "travellers",
+                name: "InboxMessages",
+                schema: "worldexplorer.travellers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -27,12 +27,12 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_inbox_messages", x => x.Id);
+                    table.PrimaryKey("PK_InboxMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Places",
-                schema: "travellers",
+                schema: "worldexplorer.travellers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -44,7 +44,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Travellers",
-                schema: "travellers",
+                schema: "worldexplorer.travellers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -57,7 +57,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Visits",
-                schema: "travellers",
+                schema: "worldexplorer.travellers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -71,14 +71,14 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     table.ForeignKey(
                         name: "FK_Visits_Places_PlaceId",
                         column: x => x.PlaceId,
-                        principalSchema: "travellers",
+                        principalSchema: "worldexplorer.travellers",
                         principalTable: "Places",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Visits_Travellers_TravellerId",
                         column: x => x.TravellerId,
-                        principalSchema: "travellers",
+                        principalSchema: "worldexplorer.travellers",
                         principalTable: "Travellers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -86,7 +86,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Review",
-                schema: "travellers",
+                schema: "worldexplorer.travellers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -100,7 +100,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     table.ForeignKey(
                         name: "FK_Review_Visits_VisitId",
                         column: x => x.VisitId,
-                        principalSchema: "travellers",
+                        principalSchema: "worldexplorer.travellers",
                         principalTable: "Visits",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -108,20 +108,20 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_VisitId",
-                schema: "travellers",
+                schema: "worldexplorer.travellers",
                 table: "Review",
                 column: "VisitId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Visits_PlaceId",
-                schema: "travellers",
+                schema: "worldexplorer.travellers",
                 table: "Visits",
                 column: "PlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Visits_TravellerId_PlaceId",
-                schema: "travellers",
+                schema: "worldexplorer.travellers",
                 table: "Visits",
                 columns: new[] { "TravellerId", "PlaceId" },
                 unique: true);
@@ -131,24 +131,24 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "inbox_messages",
-                schema: "travellers");
+                name: "InboxMessages",
+                schema: "worldexplorer.travellers");
 
             migrationBuilder.DropTable(
                 name: "Review",
-                schema: "travellers");
+                schema: "worldexplorer.travellers");
 
             migrationBuilder.DropTable(
                 name: "Visits",
-                schema: "travellers");
+                schema: "worldexplorer.travellers");
 
             migrationBuilder.DropTable(
                 name: "Places",
-                schema: "travellers");
+                schema: "worldexplorer.travellers");
 
             migrationBuilder.DropTable(
                 name: "Travellers",
-                schema: "travellers");
+                schema: "worldexplorer.travellers");
         }
     }
 }

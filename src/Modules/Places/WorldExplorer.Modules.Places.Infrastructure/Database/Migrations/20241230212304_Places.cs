@@ -13,11 +13,11 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "places");
+                name: "worldexplorer.places");
 
             migrationBuilder.CreateTable(
                 name: "LocationInfoRequests",
-                schema: "places",
+                schema: "worldexplorer.places",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -32,8 +32,8 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "outbox_messages",
-                schema: "places",
+                name: "OutboxMessages",
+                schema: "worldexplorer.places",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -44,12 +44,12 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_outbox_messages", x => x.Id);
+                    table.PrimaryKey("PK_OutboxMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Places",
-                schema: "places",
+                schema: "worldexplorer.places",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -65,7 +65,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "PlaceImages",
-                schema: "places",
+                schema: "worldexplorer.places",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -78,7 +78,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                     table.ForeignKey(
                         name: "FK_PlaceImages_Places_PlaceId",
                         column: x => x.PlaceId,
-                        principalSchema: "places",
+                        principalSchema: "worldexplorer.places",
                         principalTable: "Places",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -86,7 +86,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlaceImages_PlaceId",
-                schema: "places",
+                schema: "worldexplorer.places",
                 table: "PlaceImages",
                 column: "PlaceId");
         }
@@ -96,19 +96,19 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
         {
             migrationBuilder.DropTable(
                 name: "LocationInfoRequests",
-                schema: "places");
+                schema: "worldexplorer.places");
 
             migrationBuilder.DropTable(
-                name: "outbox_messages",
-                schema: "places");
+                name: "OutboxMessages",
+                schema: "worldexplorer.places");
 
             migrationBuilder.DropTable(
                 name: "PlaceImages",
-                schema: "places");
+                schema: "worldexplorer.places");
 
             migrationBuilder.DropTable(
                 name: "Places",
-                schema: "places");
+                schema: "worldexplorer.places");
         }
     }
 }

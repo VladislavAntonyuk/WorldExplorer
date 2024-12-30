@@ -13,7 +13,7 @@ using WorldExplorer.Modules.Places.Infrastructure.Database;
 namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PlacesDbContext))]
-    [Migration("20241230000644_Places")]
+    [Migration("20241230212304_Places")]
     partial class Places
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("places")
+                .HasDefaultSchema("worldexplorer.places")
                 .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -48,7 +48,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("outbox_messages", "places");
+                    b.ToTable("OutboxMessages", "worldexplorer.places");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.LocationInfo.LocationInfoRequest", b =>
@@ -71,7 +71,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LocationInfoRequests", "places");
+                    b.ToTable("LocationInfoRequests", "worldexplorer.places");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.Place", b =>
@@ -96,7 +96,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Places", "places");
+                    b.ToTable("Places", "worldexplorer.places");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.PlaceImage", b =>
@@ -116,7 +116,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
 
                     b.HasIndex("PlaceId");
 
-                    b.ToTable("PlaceImages", "places");
+                    b.ToTable("PlaceImages", "worldexplorer.places");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Places.Domain.Places.PlaceImage", b =>

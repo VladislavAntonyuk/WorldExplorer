@@ -12,7 +12,7 @@ using WorldExplorer.Modules.Travellers.Infrastructure.Database;
 namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(TravellersDbContext))]
-    [Migration("20241229210956_Travellers")]
+    [Migration("20241230212301_Travellers")]
     partial class Travellers
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("travellers")
+                .HasDefaultSchema("worldexplorer.travellers")
                 .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -47,7 +47,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("inbox_messages", "travellers");
+                    b.ToTable("InboxMessages", "worldexplorer.travellers");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Travellers.Traveller", b =>
@@ -62,7 +62,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Travellers", "travellers");
+                    b.ToTable("Travellers", "worldexplorer.travellers");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Place", b =>
@@ -73,7 +73,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Places", "travellers");
+                    b.ToTable("Places", "worldexplorer.travellers");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Review", b =>
@@ -96,7 +96,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.HasIndex("VisitId")
                         .IsUnique();
 
-                    b.ToTable("Review", "travellers");
+                    b.ToTable("Review", "worldexplorer.travellers");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Visit", b =>
@@ -121,7 +121,7 @@ namespace WorldExplorer.Modules.Travellers.Infrastructure.Database.Migrations
                     b.HasIndex("TravellerId", "PlaceId")
                         .IsUnique();
 
-                    b.ToTable("Visits", "travellers");
+                    b.ToTable("Visits", "worldexplorer.travellers");
                 });
 
             modelBuilder.Entity("WorldExplorer.Modules.Travellers.Application.Visits.Review", b =>
