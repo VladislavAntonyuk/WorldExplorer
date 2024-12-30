@@ -1,10 +1,12 @@
 ﻿namespace WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
 
 using AutoFixture;
+using Fixtures;
 using Infrastructure.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 [Collection(nameof(IntegrationTestCollection))]
 public abstract class BaseIntegrationTest : IDisposable
@@ -24,6 +26,13 @@ public abstract class BaseIntegrationTest : IDisposable
 		DbContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
 	}
 
+	protected void SetAuth(bool enableAuth, bool failPermission = false)
+	{
+		var testAuthHandlerOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<TestAuthHandlerOptions>>();
+		testAuthHandlerOptions.CurrentValue.FakeSuccessfulAuthentication = enableAuth;
+		testAuthHandlerOptions.CurrentValue.FailPermission = failPermission;
+	}
+
 	protected async Task CleanDatabaseAsync()
 	{
 		await DbContext.Database.ExecuteSqlRawAsync("""
@@ -33,13 +42,6 @@ public abstract class BaseIntegrationTest : IDisposable
 		                                            DELETE FROM users.outbox_messages;
 		                                            DELETE FROM users.users;
 		                                            """);
-	}
-
-	protected async Task<string> GetAccessTokenAsync()
-	{
-		HttpClient.BaseAddress = new Uri("https://localhost:5002");
-		await Task.Delay(1);
-		return string.Empty;
 	}
 
 	protected virtual void Dispose(bool disposing)

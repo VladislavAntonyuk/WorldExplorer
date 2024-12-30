@@ -71,7 +71,7 @@ public static class UsersModule
 	private static void AddDomainEventHandlers(this IServiceCollection services)
 	{
 		var domainEventHandlers = Application.AssemblyReference.Assembly.GetTypes()
-											 .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)));
+		                                     .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)));
 
 		foreach (var domainEventHandler in domainEventHandlers)
 		{

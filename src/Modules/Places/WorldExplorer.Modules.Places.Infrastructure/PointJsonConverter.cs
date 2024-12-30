@@ -1,9 +1,10 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure;
 
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using NetTopologySuite.Geometries;
 
-public class PointJsonConverter : System.Text.Json.Serialization.JsonConverter<Point>
+public class PointJsonConverter : JsonConverter<Point>
 {
 	public override Point Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{

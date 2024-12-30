@@ -4,12 +4,13 @@ using Common.Infrastructure;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Modules.Users.Application.Abstractions.Identity;
 using MudBlazor.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Toolbelt.Blazor.I18nText;
 using User;
-using Modules.Users.Application.Abstractions.Identity;
 using Constants = Microsoft.Identity.Web.Constants;
+using MicrosoftIdentityUserAuthenticationMessageHandler = MicrosoftIdentityUserAuthenticationMessageHandler;
 
 public static class ServiceExtensions
 {
@@ -45,17 +46,17 @@ public static class ServiceExtensions
 		var baseUrl = configuration.GetRequiredSection("WorldExplorerApiClient:BaseUrl").Get<Uri>();
 		services.AddOptions<MicrosoftIdentityAuthenticationMessageHandlerOptions>()
 				.Bind(configuration.GetSection("WorldExplorerApiClient"));
-		services.AddTransient<Web.MicrosoftIdentityUserAuthenticationMessageHandler>();
+		services.AddTransient<MicrosoftIdentityUserAuthenticationMessageHandler>();
 		services.AddHttpClient<WorldExplorerApiClient>(httpClient =>
 				{
 					httpClient.BaseAddress = baseUrl;
 				})
-				.AddHttpMessageHandler<Web.MicrosoftIdentityUserAuthenticationMessageHandler>();
+				.AddHttpMessageHandler<MicrosoftIdentityUserAuthenticationMessageHandler>();
 
 		services.AddWorldExplorerTravellersClient()
 				.ConfigureHttpClient(
 					client => client.BaseAddress = new Uri($"{baseUrl}graphql"),
-					builder => builder.AddHttpMessageHandler<Web.MicrosoftIdentityUserAuthenticationMessageHandler>());
+					builder => builder.AddHttpMessageHandler<MicrosoftIdentityUserAuthenticationMessageHandler>());
 	}
 
 	private static void AddTranslations(this IServiceCollection services)

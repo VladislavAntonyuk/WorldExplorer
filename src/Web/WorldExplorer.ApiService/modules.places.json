@@ -4,6 +4,10 @@
 			"IntervalInSeconds": 60,
 			"BatchSize": 50
 		},
+		"Jobs": {
+			"IntervalInSeconds": 60,
+			"BatchSize": 50
+		},
 		"AIProvider": "OpenAI"
 	},
 	"ImageSearch": {

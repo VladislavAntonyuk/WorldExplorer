@@ -102,7 +102,7 @@ public class RatingControl : HorizontalStackLayout
 
 		if (AllowRating)
 		{
-			label.GestureRecognizers.Add(new TapGestureRecognizer()
+			label.GestureRecognizers.Add(new TapGestureRecognizer
 			{
 				NumberOfTapsRequired = 1,
 				Command = new Command(() => Value = i)

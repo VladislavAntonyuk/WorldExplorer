@@ -55,11 +55,11 @@ public static class PlacesModule
 		builder.Services.AddHttpClient("ImageSearch");
 		builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();
 
-		builder.Services.ConfigureOptions<ConfigurePlacesJob>();
 		builder.Services.Configure<PlacesSettings>(builder.Configuration);
+		builder.Services.Configure<PlacesJobOptions>(builder.Configuration.GetSection("Places:Jobs"));
+		builder.Services.ConfigureOptions<ConfigurePlacesJob>();
 
 		builder.Services.Configure<OutboxOptions>(builder.Configuration.GetSection("Places:Outbox"));
-
 		builder.Services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
 		SerializerSettings.ConfigureJsonSerializerOptionsInstance([new PointJsonConverter()]);

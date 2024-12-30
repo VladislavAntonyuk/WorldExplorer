@@ -7,7 +7,7 @@ using Xunit;
 
 public class PointJsonConverterTests
 {
-	private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
+	private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
 	{
 		Converters =
 		{

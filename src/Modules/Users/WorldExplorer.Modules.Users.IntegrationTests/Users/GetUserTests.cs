@@ -1,10 +1,10 @@
-﻿using WorldExplorer.Modules.Users.Application.Users.GetUser;
-using WorldExplorer.Modules.Users.Application.Users.RegisterUser;
-using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
-using FluentAssertions;
+﻿namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
 
-namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
+using Abstractions;
+using Application.Users.GetUser;
+using Application.Users.RegisterUser;
+using Domain.Users;
+using FluentAssertions;
 
 public class GetUserTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {

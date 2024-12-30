@@ -7,6 +7,7 @@ using Domain.Places;
 using Image;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Quartz;
 
 [DisallowConcurrentExecution]
@@ -15,6 +16,7 @@ internal sealed class PlaceDetailsJob(
 	IUnitOfWork unitOfWork,
 	IAiService aiService,
 	IImageSearchService imageSearchService,
+	IOptions<PlacesJobOptions> placeJobOptions,
 	ILogger<PlaceDetailsJob> logger) : IJob
 {
 	private const string ModuleName = "Places";
@@ -27,7 +29,8 @@ internal sealed class PlaceDetailsJob(
 											 .AsTracking()
 											 .Include(x => x.Images)
 											 .Where(x => x.Images.Count == 0 || string.IsNullOrEmpty(x.Description))
-											 .OrderBy(x => x.Images.Count)
+											 .OrderBy(x => x.CreatedAt)
+											 .Take(placeJobOptions.Value.BatchSize)
 											 .ToListAsync(context.CancellationToken);
 
 		if (notFilledPlaces.Count == 0)

@@ -1,19 +1,21 @@
-﻿using System.Net;
+﻿namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
+
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using WorldExplorer.Modules.Users.Application.Users.GetUser;
-using WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
-using WorldExplorer.Modules.Users.Presentation.Users;
+using Abstractions;
+using Application.Users.GetUser;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
+using Presentation.Users;
 
 public class GetUserProfileTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
 	[Fact]
     public async Task Should_ReturnUnauthorized_WhenAccessTokenNotProvided()
     {
+		SetAuth(false);
+
         // Act
         HttpResponseMessage response = await HttpClient.GetAsync("users/profile");
 
@@ -24,7 +26,9 @@ public class GetUserProfileTests(IntegrationTestWebAppFactory factory) : BaseInt
     [Fact]
     public async Task Should_ReturnOk_WhenUserExists()
     {
-        // Arrange
+		SetAuth(true);
+
+		// Arrange
         string accessToken = await RegisterUserAndGetAccessTokenAsync();
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             JwtBearerDefaults.AuthenticationScheme,
@@ -48,7 +52,8 @@ public class GetUserProfileTests(IntegrationTestWebAppFactory factory) : BaseInt
 	        ObjectId = Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6")
 		};
 
-        await HttpClient.PostAsJsonAsync("users/register", request);
+        var response = await HttpClient.PostAsJsonAsync("users/register", request);
+        response.EnsureSuccessStatusCode();
 
         string accessToken = string.Empty;
 

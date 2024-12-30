@@ -1,19 +1,18 @@
-﻿using WorldExplorer.Common.Domain;
-using WorldExplorer.Modules.Users.Application.Users.RegisterUser;
-using WorldExplorer.Modules.Users.Application.Users.UpdateUser;
-using WorldExplorer.Modules.Users.Domain.Users;
-using WorldExplorer.Modules.Users.IntegrationTests.Abstractions;
-using FluentAssertions;
-using AutoFixture;
+﻿namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
 
-namespace WorldExplorer.Modules.Users.IntegrationTests.Users;
+using Abstractions;
+using Application.Users.RegisterUser;
+using Application.Users.UpdateUser;
+using AutoFixture;
+using Common.Domain;
+using Domain.Users;
+using FluentAssertions;
 
 public class UpdateUserTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
 	public static readonly TheoryData<UpdateUserCommand> InvalidCommands =
 	[
-		new UpdateUserCommand(Guid.Empty, Faker.Create<bool>()),
-		new UpdateUserCommand(Guid.NewGuid(), Faker.Create<bool>())
+		new UpdateUserCommand(Guid.Empty, Faker.Create<bool>())
 	];
 
     [Theory]

@@ -13,11 +13,12 @@ public class Place : Entity
 
 	public static Place Create(string name, Point location)
 	{
-		var place = new Place()
+		var place = new Place
 		{
 			Id = Guid.CreateVersion7(),
 			Name = name,
-			Location = location
+			Location = location,
+			CreatedAt = DateTimeOffset.UtcNow
 		};
 
 		place.Raise(new PlaceCreatedDomainEvent(place.Id));
@@ -25,6 +26,7 @@ public class Place : Entity
 	}
 
 	public Guid Id { get; private init; }
+	public DateTimeOffset CreatedAt { get; private init; }
 	public string Name { get; private set; }
 	public Point Location { get; private set; }
 	public string? Description { get; private set; }

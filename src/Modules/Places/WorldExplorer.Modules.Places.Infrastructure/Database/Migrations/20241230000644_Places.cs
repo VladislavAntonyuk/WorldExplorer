@@ -53,6 +53,7 @@ namespace WorldExplorer.Modules.Places.Infrastructure.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<Point>(type: "geography", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)

@@ -76,14 +76,16 @@ public static class MauiProgram
 #endif
 		});
 
-		builder.UseMauiCommunityToolkit(x =>
-		{
+		builder.UseMauiCommunityToolkit(
 #if !DEBUG
+			x =>
+		{
 			x.SetShouldSuppressExceptionsInConverters(true);
 			x.SetShouldSuppressExceptionsInBehaviors(true);
 			x.SetShouldSuppressExceptionsInAnimations(true);
+		}
 #endif
-		});
+			);
 
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 

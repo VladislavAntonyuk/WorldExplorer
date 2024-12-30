@@ -1,10 +1,10 @@
 ﻿namespace WorldExplorer.Modules.Places.Application.Places.DeletePlaces;
 
+using Common.Application.EventBus;
 using Common.Application.Messaging;
 using Common.Domain;
 using Domain.Places;
 using IntegrationEvents;
-using WorldExplorer.Common.Application.EventBus;
 
 internal sealed class DeletePlacesCommandHandler(IPlaceRepository placeRepository, IEventBus eventBus)
 	: ICommandHandler<DeletePlacesCommand>
