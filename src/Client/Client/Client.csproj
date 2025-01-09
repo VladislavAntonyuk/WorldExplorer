@@ -61,7 +61,7 @@
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="3.0.0-preview.13" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.21" />
-		<PackageReference Include="StrawberryShake.Maui" Version="15.0.0-p.19" />
+		<PackageReference Include="StrawberryShake.Maui" Version="15.0.0-p.20" />
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.3" />
 	</ItemGroup>
 
