@@ -36,9 +36,7 @@ public abstract class BaseIntegrationTest : IDisposable
 	protected async Task CleanDatabaseAsync()
 	{
 		await DbContext.Database.ExecuteSqlRawAsync("""
-		                                            DELETE FROM users.inbox_message_consumers;
 		                                            DELETE FROM users.inbox_messages;
-		                                            DELETE FROM users.outbox_message_consumers;
 		                                            DELETE FROM users.outbox_messages;
 		                                            DELETE FROM users.users;
 		                                            """);

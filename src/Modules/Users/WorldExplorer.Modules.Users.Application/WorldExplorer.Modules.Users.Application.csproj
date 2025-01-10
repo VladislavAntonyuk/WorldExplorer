@@ -10,8 +10,4 @@
 		<ProjectReference Include="..\WorldExplorer.Modules.Users.IntegrationEvents\WorldExplorer.Modules.Users.IntegrationEvents.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Users\UserService.cs" />
-	</ItemGroup>
-
 </Project>
