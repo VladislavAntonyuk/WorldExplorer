@@ -10,10 +10,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0-p.21" />
-		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.0.0-p.21" />
-		<PackageReference Include="HotChocolate.Data" Version="15.0.0-p.21" />
-		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.0.0-p.21" />
+		<PackageReference Include="HotChocolate.AspNetCore" Version="15.0.1" />
+		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.0.1" />
+		<PackageReference Include="HotChocolate.Data" Version="15.0.1" />
+		<PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.0.1" />
 		<PackageReference Include="HotChocolate.Data.EntityFramework.Helpers" Version="14.0.0-p.100" />
 		<PackageReference Include="HotChocolate.Types.Analyzers" Version="15.0.0-p.21">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
