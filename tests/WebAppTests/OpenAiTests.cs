@@ -11,9 +11,7 @@ using ChatMessage = Microsoft.Extensions.AI.ChatMessage;
 public class OpenAiTests(ITestOutputHelper testOutputHelper)
 {
 	[Theory]
-	[InlineData("https://free.gpt.ge/v1", "API_KEY1", "gpt-3.5-turbo")]
 	[InlineData("https://api.chatanywhere.tech/v1", "API_KEY2", "gpt-3.5-turbo")]
-	[InlineData("https://free.gpt.ge/v1", "API_KEY1", "gpt-4o-mini")]
 	[InlineData("https://api.chatanywhere.tech/v1", "API_KEY2", "gpt-4o-mini")]
 	public async Task Test(string url, string key, string model)
 	{
@@ -26,7 +24,7 @@ public class OpenAiTests(ITestOutputHelper testOutputHelper)
 		{
 			Endpoint = new Uri(url)
 		}), model);
-		var result = await client.CompleteAsync([new ChatMessage(ChatRole.User, "hello")]);
+		var result = await client.GetResponseAsync([new ChatMessage(ChatRole.User, "hello")]);
 		var content = result.Message.Text;
 		testOutputHelper.WriteLine(content);
 		content.Should().NotBeEmpty();

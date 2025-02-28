@@ -63,7 +63,7 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 	{
 		try
 		{
-			var result = await client.CompleteAsync(
+			var result = await client.GetResponseAsync(
 			[
 				new ChatMessage(ChatRole.System, "You are a tour guide with a great knowledge of history."),
 				new ChatMessage(ChatRole.User, request)
