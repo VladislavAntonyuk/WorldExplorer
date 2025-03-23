@@ -5,9 +5,10 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Abstractions;
 using Application.Users.GetUser;
-using FluentAssertions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Presentation.Users;
+using Shouldly;
+using Xunit;
 
 public class GetUserProfileTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
@@ -17,10 +18,10 @@ public class GetUserProfileTests(IntegrationTestWebAppFactory factory) : BaseInt
 		SetAuth(false);
 
         // Act
-        HttpResponseMessage response = await HttpClient.GetAsync("users/profile");
+        HttpResponseMessage response = await HttpClient.GetAsync("users/profile", TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
@@ -35,13 +36,13 @@ public class GetUserProfileTests(IntegrationTestWebAppFactory factory) : BaseInt
             accessToken);
 
         // Act
-        HttpResponseMessage response = await HttpClient.GetAsync("users/profile");
+        HttpResponseMessage response = await HttpClient.GetAsync("users/profile", TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        UserResponse? user = await response.Content.ReadFromJsonAsync<UserResponse>();
-        user.Should().NotBeNull();
+        UserResponse? user = await response.Content.ReadFromJsonAsync<UserResponse>(TestContext.Current.CancellationToken);
+        user.ShouldNotBeNull();
     }
 
     private async Task<string> RegisterUserAndGetAccessTokenAsync()

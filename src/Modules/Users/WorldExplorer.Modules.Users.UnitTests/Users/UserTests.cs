@@ -3,7 +3,8 @@
 using Abstractions;
 using AutoFixture;
 using Domain.Users;
-using FluentAssertions;
+using Shouldly;
+using Xunit;
 
 public class UserTests : BaseTest
 {
@@ -14,7 +15,7 @@ public class UserTests : BaseTest
 		var user = User.Create(Guid.NewGuid(), Faker.Create<UserSettings>());
 
 		// Assert
-		user.Should().NotBeNull();
+		user.ShouldNotBeNull();
 	}
 
 	[Fact]
@@ -26,7 +27,7 @@ public class UserTests : BaseTest
 		// Assert
 		var domainEvent = AssertDomainEventWasPublished<UserRegisteredDomainEvent>(user);
 
-		domainEvent.UserId.Should().Be(user.Id);
+		domainEvent.UserId.ShouldBe(user.Id);
 	}
 
 	[Fact]
@@ -44,8 +45,8 @@ public class UserTests : BaseTest
 		// Assert
 		var domainEvent = AssertDomainEventWasPublished<UserProfileUpdatedDomainEvent>(user);
 
-		domainEvent.UserId.Should().Be(user.Id);
-		domainEvent.Settings.Should().Be(user.Settings);
+		domainEvent.UserId.ShouldBe(user.Id);
+		domainEvent.Settings.ShouldBe(user.Settings);
 	}
 
 	[Fact]
@@ -60,6 +61,6 @@ public class UserTests : BaseTest
 		user.Update(user.Settings);
 
 		// Assert
-		user.DomainEvents.Should().BeEmpty();
+		user.DomainEvents.ShouldBeEmpty();
 	}
 }

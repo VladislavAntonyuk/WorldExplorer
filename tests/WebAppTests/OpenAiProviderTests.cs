@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using OpenAI;
 using WorldExplorer.Modules.Places.Application.Abstractions;
 using WorldExplorer.Modules.Places.Infrastructure.AI;
-using Xunit.Abstractions;
 
 public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiProviderTests(testOutputHelper)
 {

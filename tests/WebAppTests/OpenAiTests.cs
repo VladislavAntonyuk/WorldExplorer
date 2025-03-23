@@ -1,11 +1,10 @@
 ﻿namespace WebAppTests;
 
 using System.ClientModel;
-using FluentAssertions;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using OpenAI;
-using Xunit.Abstractions;
+using Shouldly;
 using ChatMessage = Microsoft.Extensions.AI.ChatMessage;
 
 public class OpenAiTests(ITestOutputHelper testOutputHelper)
@@ -24,9 +23,9 @@ public class OpenAiTests(ITestOutputHelper testOutputHelper)
 		{
 			Endpoint = new Uri(url)
 		}), model);
-		var result = await client.GetResponseAsync([new ChatMessage(ChatRole.User, "hello")]);
-		var content = result.Message.Text;
+		var result = await client.GetResponseAsync([new ChatMessage(ChatRole.User, "hello")], cancellationToken: TestContext.Current.CancellationToken);
+		var content = result.Text;
 		testOutputHelper.WriteLine(content);
-		content.Should().NotBeEmpty();
+		content.ShouldNotBeEmpty();
 	}
 }

@@ -4,6 +4,7 @@ using Abstractions;
 using Common.Application.Messaging;
 using FluentValidation;
 using NetArchTest.Rules;
+using Xunit;
 
 public class ApplicationTests : BaseTest
 {

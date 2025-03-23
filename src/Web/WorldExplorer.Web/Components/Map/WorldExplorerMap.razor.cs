@@ -90,6 +90,7 @@ public sealed partial class WorldExplorerMap(
 		{
 			currentLocation = location;
 			isLoading = false;
+			errorMessage = null;
 			StateHasChanged();
 			StatusCode statusCode;
 			do
@@ -104,6 +105,7 @@ public sealed partial class WorldExplorerMap(
 	public void UpdatePositionError(string message)
 	{
 		errorMessage = message;
+		StateHasChanged();
 	}
 
 	[JSInvokable]

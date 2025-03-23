@@ -69,7 +69,7 @@ public class AiService(IChatClient client, ILogger<AiService> logger) : IAiServi
 				new ChatMessage(ChatRole.User, request)
 			], options, cancellationToken);
 
-			return result.Message.Text;
+			return result.Text;
 		}
 		catch (Exception e)
 		{

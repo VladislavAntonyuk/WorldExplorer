@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 [ExtendObjectType("Travellers")]
 public sealed class GetVisitsHandler(TravellersDbContext context)
 {
-	[UseOffsetPaging]
+	[UsePaging]
 	[UseFiltering]
 	[UseSorting]
 	public IQueryable<Visit> GetVisitsByTravellerId(Guid travellerId, CancellationToken ct = default)
@@ -19,7 +19,7 @@ public sealed class GetVisitsHandler(TravellersDbContext context)
 					  .ThenBy(t => t.Id);
 	}
 
-	[UseOffsetPaging]
+	[UsePaging]
 	[UseFiltering]
 	[UseSorting]
 	public IQueryable<Visit> GetVisitsByPlaceId(Guid placeId, CancellationToken ct = default)

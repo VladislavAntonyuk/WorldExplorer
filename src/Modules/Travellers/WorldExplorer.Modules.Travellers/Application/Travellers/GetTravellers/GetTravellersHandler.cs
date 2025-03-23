@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 [ExtendObjectType("Travellers")]
 public sealed class GetTravellersHandler(TravellersDbContext context)
 {
-	[UseOffsetPaging]
+	[UsePaging]
 	[UseFiltering]
 	[UseSorting]
 	public IQueryable<Traveller> GetTravellers(CancellationToken ct = default)

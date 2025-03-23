@@ -3,8 +3,9 @@
 using System.Net;
 using System.Net.Http.Json;
 using Abstractions;
-using FluentAssertions;
 using Presentation.Users;
+using Shouldly;
+using Xunit;
 
 public class RegisterUserTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
@@ -30,10 +31,10 @@ public class RegisterUserTests(IntegrationTestWebAppFactory factory) : BaseInteg
 		};
 
         // Act
-        HttpResponseMessage response = await HttpClient.PostAsJsonAsync("users/register", request);
+        HttpResponseMessage response = await HttpClient.PostAsJsonAsync("users/register", request, TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
 
@@ -46,10 +47,10 @@ public class RegisterUserTests(IntegrationTestWebAppFactory factory) : BaseInteg
 		RegisterUser.Request? request = null;
 
         // Act
-        HttpResponseMessage response = await HttpClient.PostAsJsonAsync("users/register", request);
+        HttpResponseMessage response = await HttpClient.PostAsJsonAsync("users/register", request, TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -65,9 +66,9 @@ public class RegisterUserTests(IntegrationTestWebAppFactory factory) : BaseInteg
         };
 
         // Act
-        HttpResponseMessage response = await HttpClient.PostAsJsonAsync("users/register", request);
+        HttpResponseMessage response = await HttpClient.PostAsJsonAsync("users/register", request, TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

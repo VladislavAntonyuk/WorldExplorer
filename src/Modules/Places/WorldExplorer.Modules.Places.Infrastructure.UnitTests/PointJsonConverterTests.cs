@@ -1,8 +1,8 @@
 ﻿namespace WorldExplorer.Modules.Places.Infrastructure.UnitTests;
 
 using System.Text.Json;
-using FluentAssertions;
 using NetTopologySuite.Geometries;
+using Shouldly;
 using Xunit;
 
 public class PointJsonConverterTests
@@ -21,6 +21,6 @@ public class PointJsonConverterTests
 		var point = new Point(1, 2) { SRID = 3 };
 		var json = JsonSerializer.Serialize(point, jsonSerializerOptions);
 		var result = JsonSerializer.Deserialize<Point>(json, jsonSerializerOptions);
-		result.Should().Be(point);
+		result.ShouldBe(point);
 	}
 }

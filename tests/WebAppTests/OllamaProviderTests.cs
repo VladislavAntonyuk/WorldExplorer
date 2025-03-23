@@ -5,7 +5,6 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging.Abstractions;
 using WorldExplorer.Modules.Places.Application.Abstractions;
 using WorldExplorer.Modules.Places.Infrastructure.AI;
-using Xunit.Abstractions;
 
 public class OllamaProviderTests(ITestOutputHelper testOutputHelper) : BaseAiProviderTests(testOutputHelper)
 {

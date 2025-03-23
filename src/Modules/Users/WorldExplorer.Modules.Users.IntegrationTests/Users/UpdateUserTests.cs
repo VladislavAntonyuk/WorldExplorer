@@ -6,7 +6,8 @@ using Application.Users.UpdateUser;
 using AutoFixture;
 using Common.Domain;
 using Domain.Users;
-using FluentAssertions;
+using Shouldly;
+using Xunit;
 
 public class UpdateUserTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
@@ -20,11 +21,11 @@ public class UpdateUserTests(IntegrationTestWebAppFactory factory) : BaseIntegra
     public async Task Should_ReturnError_WhenCommandIsNotValid(UpdateUserCommand command)
     {
         // Act
-        Result result = await Sender.Send(command);
+        Result result = await Sender.Send(command, TestContext.Current.CancellationToken);
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Type.Should().Be(ErrorType.Validation);
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.Validation);
     }
 
     [Fact]
@@ -34,26 +35,24 @@ public class UpdateUserTests(IntegrationTestWebAppFactory factory) : BaseIntegra
         var userId = Guid.NewGuid();
 
         // Act
-        Result updateResult = await Sender.Send(
-            new UpdateUserCommand(userId, Faker.Create<bool>()));
+        Result updateResult = await Sender.Send(new UpdateUserCommand(userId, Faker.Create<bool>()), TestContext.Current.CancellationToken);
 
         // Assert
-        updateResult.Error.Should().Be(UserErrors.NotFound(userId));
+        updateResult.Error.ShouldBe(UserErrors.NotFound(userId));
     }
 
     [Fact]
     public async Task Should_ReturnSuccess_WhenUserExists()
     {
         // Arrange
-        var result = await Sender.Send(new RegisterUserCommand(Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6")));
+        var result = await Sender.Send(new RegisterUserCommand(Guid.Parse("19d3b2c7-8714-4851-ac73-95aeecfba3a6")), TestContext.Current.CancellationToken);
 
         Guid userId = result.Value.Id;
 
         // Act
-        Result updateResult = await Sender.Send(
-            new UpdateUserCommand(userId, Faker.Create<bool>()));
+        Result updateResult = await Sender.Send(new UpdateUserCommand(userId, Faker.Create<bool>()), TestContext.Current.CancellationToken);
 
         // Assert
-        updateResult.IsSuccess.Should().BeTrue();
+        updateResult.IsSuccess.ShouldBeTrue();
     }
 }

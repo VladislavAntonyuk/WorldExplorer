@@ -3,6 +3,7 @@
 using Abstractions;
 using Common.Application.EventBus;
 using NetArchTest.Rules;
+using Xunit;
 
 public class PresentationTests : BaseTest
 {

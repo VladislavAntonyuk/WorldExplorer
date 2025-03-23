@@ -3,8 +3,9 @@
 using System.Reflection;
 using Abstractions;
 using Common.Domain;
-using FluentAssertions;
 using NetArchTest.Rules;
+using Shouldly;
+using Xunit;
 
 public class DomainTests : BaseTest
 {
@@ -52,7 +53,7 @@ public class DomainTests : BaseTest
 			}
 		}
 
-		failingTypes.Should().BeEmpty();
+		failingTypes.ShouldBeEmpty();
 	}
 
 	[Fact]
@@ -71,6 +72,6 @@ public class DomainTests : BaseTest
 			}
 		}
 
-		failingTypes.Should().BeEmpty();
+		failingTypes.ShouldBeEmpty();
 	}
 }

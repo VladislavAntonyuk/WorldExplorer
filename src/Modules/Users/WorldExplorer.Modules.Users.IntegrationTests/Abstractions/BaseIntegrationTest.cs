@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Xunit;
 
 [Collection(nameof(IntegrationTestCollection))]
 public abstract class BaseIntegrationTest : IDisposable

@@ -2,6 +2,7 @@
 
 using Abstractions;
 using NetArchTest.Rules;
+using Xunit;
 
 public class LayerTests : BaseTest
 {
