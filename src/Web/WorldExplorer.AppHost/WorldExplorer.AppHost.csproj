@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Sdk Name="Aspire.AppHost.Sdk" Version="9.1.0" />
 
@@ -19,7 +19,7 @@
 		<PackageReference Include="Aspire.Hosting.Azure.Sql" Version="9.1.0" />
 		<PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.1.0" />
 		<PackageReference Include="Aspire.Hosting.Redis" Version="9.1.0" />
-		<PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" Version="9.3.1-beta.241" />
+		<PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" Version="9.3.1-beta.244" />
 	</ItemGroup>
 
 </Project>
