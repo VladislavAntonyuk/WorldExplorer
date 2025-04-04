@@ -2,6 +2,7 @@
 
 using System.Reflection;
 using CommunityToolkit.Maui;
+using Maui.Android.InAppUpdates;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Maui.Handlers;
@@ -28,6 +29,7 @@ public static class MauiProgram
 			   .ConfigureSyncfusionToolkit()
 			   .UseMauiCommunityToolkitCamera()
 			   .UseSkiaSharp()
+			   .UseAndroidInAppUpdates()
 			   .ConfigureMauiHandlers(handlers =>
 			   {
 #if ANDROID || IOS
