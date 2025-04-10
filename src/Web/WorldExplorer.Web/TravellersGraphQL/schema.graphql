@@ -4,10 +4,10 @@ schema {
 }
 
 type Travellers {
-  travellers(skip: Int take: Int where: TravellerFilterInput order: [TravellerSortInput!]): TravellersCollectionSegment
+  travellers("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: TravellerFilterInput order: [TravellerSortInput!]): TravellersConnection
   byId(id: UUID!): Traveller
-  visitsByTravellerId(skip: Int take: Int travellerId: UUID! where: VisitFilterInput order: [VisitSortInput!]): VisitsByTravellerIdCollectionSegment
-  visitsByPlaceId(skip: Int take: Int placeId: UUID! where: VisitFilterInput order: [VisitSortInput!]): VisitsByPlaceIdCollectionSegment
+  visitsByTravellerId(travellerId: UUID! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: VisitFilterInput order: [VisitSortInput!]): VisitsByTravellerIdConnection
+  visitsByPlaceId(placeId: UUID! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: VisitFilterInput order: [VisitSortInput!]): VisitsByPlaceIdConnection
 }
 
 "Defines when a policy shall be executed."
@@ -37,12 +37,14 @@ input TravellerSortInput {
   name: SortEnumType
 }
 
-"A segment of a collection."
-type TravellersCollectionSegment {
+"A connection to a list of items."
+type TravellersConnection {
   "Information to aid in pagination."
-  pageInfo: CollectionSegmentInfo!
-  "A flattened list of the items."
-  items: [Traveller!]
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [TravellersEdge!]
+  "A flattened list of the nodes."
+  nodes: [Traveller!]
 }
 
 input VisitFilterInput {
@@ -65,20 +67,24 @@ input VisitSortInput {
   review: ReviewSortInput
 }
 
-"A segment of a collection."
-type VisitsByTravellerIdCollectionSegment {
+"A connection to a list of items."
+type VisitsByTravellerIdConnection {
   "Information to aid in pagination."
-  pageInfo: CollectionSegmentInfo!
-  "A flattened list of the items."
-  items: [Visit!]
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [VisitsByTravellerIdEdge!]
+  "A flattened list of the nodes."
+  nodes: [Visit!]
 }
 
-"A segment of a collection."
-type VisitsByPlaceIdCollectionSegment {
+"A connection to a list of items."
+type VisitsByPlaceIdConnection {
   "Information to aid in pagination."
-  pageInfo: CollectionSegmentInfo!
-  "A flattened list of the items."
-  items: [Visit!]
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [VisitsByPlaceIdEdge!]
+  "A flattened list of the nodes."
+  nodes: [Visit!]
 }
 
 input UuidOperationFilterInput {
@@ -123,12 +129,24 @@ enum SortEnumType {
   DESC
 }
 
-"Information about the offset pagination."
-type CollectionSegmentInfo {
-  "Indicates whether more items exist following the set defined by the clients arguments."
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
   hasNextPage: Boolean!
-  "Indicates whether more items exist prior the set defined by the clients arguments."
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
   hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+"An edge in a connection."
+type TravellersEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Traveller!
 }
 
 input DateTimeOperationFilterInput {
@@ -160,6 +178,22 @@ input ReviewSortInput {
   rating: SortEnumType
   comment: SortEnumType
   visitId: SortEnumType
+}
+
+"An edge in a connection."
+type VisitsByTravellerIdEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Visit!
+}
+
+"An edge in a connection."
+type VisitsByPlaceIdEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Visit!
 }
 
 scalar UUID

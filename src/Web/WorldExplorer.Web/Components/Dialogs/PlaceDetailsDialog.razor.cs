@@ -41,7 +41,7 @@ public partial class PlaceDetailsDialog(
 				var reviewResponse = await travellersClient.GetVisitsByPlaceId.ExecuteAsync(place.Id);
 				if (reviewResponse.IsSuccessResult())
 				{
-					reviews = reviewResponse.Data?.VisitsByPlaceId?.Items?.Select(x => new ReviewResponse
+					reviews = reviewResponse.Data?.VisitsByPlaceId?.Nodes?.Select(x => new ReviewResponse
 					{
 						Comment = x.Review?.Comment,
 						Rating = x.Review?.Rating ?? 0,

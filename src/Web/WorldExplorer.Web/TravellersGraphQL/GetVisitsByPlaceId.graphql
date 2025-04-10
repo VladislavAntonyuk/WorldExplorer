@@ -1,6 +1,6 @@
 query GetVisitsByPlaceId($id:UUID!) {
   visitsByPlaceId(placeId: $id) {
-    items {
+    nodes {
       id
       placeId
       traveller {

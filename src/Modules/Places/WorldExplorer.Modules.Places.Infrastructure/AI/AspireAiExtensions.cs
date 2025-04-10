@@ -11,7 +11,7 @@ public static class AspireAiExtensions
 	public static void AddOpenAiClient(this IHostApplicationBuilder builder, string model)
 	{
 		builder.AddOpenAIClient("openai");
-		builder.AddChatClient(sp => new OpenAIChatClient(sp.GetRequiredService<OpenAIClient>(), model));
+		builder.AddChatClient(sp => sp.GetRequiredService<OpenAIClient>().GetChatClient(model).AsIChatClient());
 	}
 
 	public static void AddOllamaChatClient(this IHostApplicationBuilder builder, string connectionName)

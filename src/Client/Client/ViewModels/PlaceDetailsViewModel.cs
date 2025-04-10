@@ -66,7 +66,7 @@ public sealed partial class PlaceDetailsViewModel(
 				var reviews = new List<Review>();
 				if (placeReviews.IsSuccessResult())
 				{
-					reviews.AddRange(placeReviews.Data?.VisitsByPlaceId?.Items?.Select(x => new Review
+					reviews.AddRange(placeReviews.Data?.VisitsByPlaceId?.Nodes?.Select(x => new Review
 					{
 						Comment = x.Review?.Comment,
 						Rating = x.Review?.Rating ?? 0,

@@ -20,6 +20,6 @@ public class OpenAiProviderTests(ITestOutputHelper testOutputHelper) : BaseAiPro
 		{
 			Endpoint = new Uri($"{configuration["OpenAiEndpoint"]}")
 		});
-		return Task.FromResult<IAiService>(new AiService(new OpenAIChatClient(client, "gpt-4o-mini"), new NullLogger<AiService>()));
+		return Task.FromResult<IAiService>(new AiService(client.GetChatClient("gpt-4o-mini").AsIChatClient(), new NullLogger<AiService>()));
 	}
 }

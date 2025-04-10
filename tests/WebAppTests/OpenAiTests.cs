@@ -18,11 +18,11 @@ public class OpenAiTests(ITestOutputHelper testOutputHelper)
 		                    .AddJsonFile("settings.json", false)
 		                    .AddJsonFile("settings.Development.json", true)
 		                    .Build();
-
-		var client = new OpenAIChatClient(new OpenAIClient(new ApiKeyCredential($"{configuration[key]}"), new OpenAIClientOptions
+		
+		var client = new OpenAIClient(new ApiKeyCredential($"{configuration[key]}"), new OpenAIClientOptions
 		{
 			Endpoint = new Uri(url)
-		}), model);
+		}).GetChatClient(model).AsIChatClient();
 		var result = await client.GetResponseAsync([new ChatMessage(ChatRole.User, "hello")], cancellationToken: TestContext.Current.CancellationToken);
 		var content = result.Text;
 		testOutputHelper.WriteLine(content);
