@@ -13,8 +13,8 @@
 		<PackageReference Include="xunit.v3" Version="2.0.1" />
 		<PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.2" />
 		<PackageReference Include="AutoFixture" Version="5.0.0-preview0012" />
-		<PackageReference Include="Testcontainers.MsSql" Version="4.3.0" />
-		<PackageReference Include="Testcontainers.Redis" Version="4.3.0" />
+		<PackageReference Include="Testcontainers.MsSql" Version="4.4.0" />
+		<PackageReference Include="Testcontainers.Redis" Version="4.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
