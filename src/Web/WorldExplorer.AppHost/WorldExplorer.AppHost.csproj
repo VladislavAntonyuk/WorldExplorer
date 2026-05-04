@@ -20,6 +20,8 @@
 		<PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.2.0" />
 		<PackageReference Include="Aspire.Hosting.Redis" Version="9.2.0" />
 		<PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" Version="9.3.1-beta.259" />
+	<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
+	<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.7" />
 	</ItemGroup>
 
 </Project>
